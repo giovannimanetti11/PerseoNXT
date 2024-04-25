@@ -1,6 +1,6 @@
 <template>
   <header class="fixed top-5 left-1/2 transform -translate-x-1/2 w-4/5 z-50">
-    <div :class="['flex justify-between items-center bg-white py-4 px-6 rounded-2xl', {'radius-bottom-none': menuOpen || mailingListMenuOpen}]">
+    <div :class="['flex justify-between items-center bg-white py-4 px-6 shadow-lg rounded-2xl', {'radius-bottom-none': menuOpen || mailingListMenuOpen}]">
       <div class="flex items-center">
         <img :src="logoUrl" alt="WikiHerbalist Logo" class="h-8 mr-2" v-if="logoUrl">
       </div>

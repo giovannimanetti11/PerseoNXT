@@ -23,7 +23,7 @@ export default defineNuxtConfig ({
   },
   googleFonts: {
     families: {
-      Lato: [300, 500, 700, 900],
+      Lato: [300, 400, 700, 900],
     },
     display: 'swap'
   },
