@@ -1,9 +1,10 @@
 PerseoNXT
 =====================
 
-Version: 1.0.0
-Tech: Vue.js/Nuxt.js
+Version: 1.0.0  
+Tech: Vue.js 3 / Nuxt.js 3  
 Author: Giovanni Manetti ( @GioManetti11 / perseodesign.com )
+
 
 Summary
 -------
