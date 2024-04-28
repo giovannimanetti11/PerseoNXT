@@ -1,5 +1,5 @@
 <template>
-    <div class="relative w-full max-w-lg">
+    <div class="relative w-full">
       <div class="rounded-2xl h-14 bg-white flex items-center border border-sky-500 overflow-hidden">
         <Icon name="heroicons:magnifying-glass-16-solid" class="ml-5 text-sky-500 text-2xl" />
         <input

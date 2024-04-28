@@ -11,13 +11,13 @@
 
   <!-- Search Field -->
   <div class="relative w-full flex justify-center items-center -mt-4">
-      <searchfield />
+    <searchfield class="w-8/12" />
   </div>
 
   <!-- Section by letter -->
   <section class="-mt-4 py-10 w-11/12 m-auto rounded-2xl alphabet-section">
     <div class="container mx-auto px-4 mt-4">
-      <h3 class="text-5xl font-bold text-center text-black">Sfoglia le monografie, lettera per lettera</h3>
+      <h3 class="text-4xl font-bold text-center text-black">Sfoglia le <span class="text-blue-500">monografie</span>, lettera per lettera</h3>
       <div class="flex justify-center mt-8">
         <!-- Alphabet -->
         <div class="flex justify-center">
