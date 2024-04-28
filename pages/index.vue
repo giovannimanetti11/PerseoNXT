@@ -3,7 +3,7 @@
     <div class="content">
       <h3 class="mt-24 text-base text-black text-center">
         In sviluppo con <Icon name="logos:nuxt-icon" style="vertical-align: middle;" size="1.5em" />
-        Nuxt 3 <Icon name="emojione:red-heart" style="vertical-align: middle;" size="1.5em" />
+        <a href="https://nuxt.com/">Nuxt 3</a> <Icon name="emojione:red-heart" style="vertical-align: middle;" size="1.5em" />
       </h3>
     </div>
   </template>
@@ -18,6 +18,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+
+  .content h3 a {
+    color: #0DA6A4;
   }
   
   .icon {
