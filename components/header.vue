@@ -31,14 +31,41 @@
     </div>
 
     <!-- Mega menu Mailing List -->
+    <div v-if="mailingListMenuOpen" class="menu-container w-full bg-white p-6 rounded-bl-2xl rounded-br-2xl transition-all duration-500 ease-out">
+      <div class="container mx-auto px-4">
+        <div class="flex">
+          <!-- Left col -->
+          <div class="w-1/3">
+            <p class="text-gray-700 text-lg">
+              Amplia le tue conoscenze erboristiche, iscriviti alla <span class="text-blue-500">mailing list</span> di Wikiherbalist
+            </p>
+          </div>
 
-    <div v-if="mailingListMenuOpen" class="w-full bg-white h-60 rounded-bl-2xl rounded-br-2xl transition-all duration-500 ease-out">
+          <!-- Right col -->
+          <div class="w-2/3 flex justify-end items-center p-2">
+            <div class="w-2/3 h-14 flex items-center border border-sky-500 rounded-2xl overflow-hidden py-2 px-4">
+              <input
+                type="email"
+                placeholder="La tua email"
+                class="flex-grow focus:outline-none"
+              />
+              <Icon name="tabler:mail-filled" class="text-sky-500 text-5xl pr-4" />
+            </div>
+          </div>
+
+
+
+          
+          
+        </div>
+      </div>
     </div>
 
   </header>
 </template>
 
 <script setup>
+import { Icon } from '#components';
 import { ref, onMounted, onUnmounted } from 'vue';
 
 const logoUrl = ref('');
@@ -66,6 +93,7 @@ const toggleMenu = () => {
 };
 
 const toggleMailingListMenu = () => {
+  console.log('Toggling mailing list menu');
   mailingListMenuOpen.value = !mailingListMenuOpen.value;
   if (mailingListMenuOpen.value) menuOpen.value = false;
 };

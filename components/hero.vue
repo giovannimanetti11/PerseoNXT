@@ -11,7 +11,7 @@
 
   <!-- Search Field -->
   <div class="relative w-full flex justify-center items-center -mt-4">
-    <searchfield class="w-8/12" />
+    <searchfield class="w-1/2" />
   </div>
 
   <!-- Section by letter -->
