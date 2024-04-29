@@ -28,7 +28,7 @@ export default defineNuxtConfig ({
     display: 'swap'
   },
   css: ['~/assets/css/main.css'],
-  plugins: ['~/plugins/wp-api.js', '~/plugins/seo.js'],
+  plugins: ['~/plugins/wp-api.js'],
   postcss: {
     plugins: {
       tailwindcss: {},
