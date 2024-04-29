@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+
+const colors = require('tailwindcss/colors');
+
 module.exports = {
     content: [
       './components/**/*.{js,vue,ts}',
@@ -9,7 +12,14 @@ module.exports = {
       './app.vue',
     ],
     theme: {
-      extend: {},
+      extend: {
+        colors: {
+          celeste: '#5E9EF4',
+          verde: '#0DA6A4',
+          blu: '#036297'
+        }
+      },
     },
-    plugins: [],
+    plugins: [
+    ],
   };
