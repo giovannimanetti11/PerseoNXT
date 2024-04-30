@@ -21,7 +21,8 @@ export default defineNuxtPlugin(nuxtApp => {
       const response = await $fetch(`${apiConfig.baseUrl}${endpoint}`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${apiConfig.jwtToken}`
+          'Authorization': `Bearer ${apiConfig.jwtToken}`,
+          'Content-Type': 'application/json'
         }
       });
 
