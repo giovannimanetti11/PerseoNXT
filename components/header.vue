@@ -147,7 +147,6 @@ const toggleMenu = () => {
 };
 
 const toggleMailingListMenu = () => {
-  console.log('Toggling mailing list menu');
   mailingListMenuOpen.value = !mailingListMenuOpen.value;
   if (mailingListMenuOpen.value) menuOpen.value = false;
 };
