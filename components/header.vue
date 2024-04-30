@@ -26,9 +26,67 @@
     </div>
 
     <!-- Mega menu Hamburger -->
-
     <div v-if="menuOpen" class="w-full bg-white h-60 rounded-bl-2xl rounded-br-2xl transition-all duration-500 ease-out">
+      <div class="container mx-auto px-4">
+        <div class="flex">
+          <!-- Left col -->
+          <div class="w-1/3 mt-6">
+            <p class="text-gray-700 font-bold text-lg">
+              Seguici
+            </p>
+            <div class="flex space-x-2 mt-4">
+              <div class="bg-blu p-2 rounded-2xl transition-colors duration-300 hover:bg-verde hover:cursor-pointer">
+                <Icon name="uil:facebook-f" class="text-white text-3xl" />
+              </div>
+              <div class="bg-blu p-2 rounded-2xl transition-colors duration-300 hover:bg-verde hover:cursor-pointer">
+                <Icon name="uil:instagram" class="text-white text-3xl" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Right col -->
+          <div class="w-2/3 flex justify-start items-center p-2">
+            <div class="w-full grid grid-cols-2 gap-4">
+              <div class="p-2">
+                <button class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out hover:bg-verde before:absolute before:inset-0 before:bg-verde before: border before:rounded-lg before:transition-width before:duration-300 before:ease-linear before:origin-left before:scale-x-0 hover:before:scale-x-100">
+                  <div class="absolute left-2 top-1/2 w-12 h-12 -translate-y-1/2 bg-white p-2 rounded-2xl border border-transparent">
+                    <Icon name="mdi:event" class="inner-icon text-celeste text-3xl" />
+                  </div>
+                  <span class="absolute text-white top-1/2 -translate-y-1/2">Prossimi eventi</span>
+                </button>
+              </div>
+              <div class="p-2">
+                <button class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out hover:bg-verde before:absolute before:inset-0 before:bg-verde before: border before:rounded-lg before:transition-width before:duration-300 before:ease-linear before:origin-left before:scale-x-0 hover:before:scale-x-100">
+                  <div class="absolute left-2 top-1/2 w-12 h-12 -translate-y-1/2 bg-white p-2 rounded-2xl border border-transparent">
+                    <Icon name="mdi:contact-mail" class="inner-icon text-celeste text-3xl" />
+                  </div>
+                  <span class="absolute text-white top-1/2 -translate-y-1/2">Contattaci</span>
+                </button>
+              </div>
+              <div class="p-2">
+                <button class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out hover:bg-verde before:absolute before:inset-0 before:bg-verde before: border before:rounded-lg before:transition-width before:duration-300 before:ease-linear before:origin-left before:scale-x-0 hover:before:scale-x-100">
+                  <div class="absolute left-2 top-1/2 w-12 h-12 -translate-y-1/2 bg-white p-2 rounded-2xl border border-transparent">
+                    <Icon name="mdi:book-open-variant" class="inner-icon text-celeste text-3xl" />
+                  </div>
+                  <span class="absolute text-white top-1/2 -translate-y-1/2">Monografie</span>
+                </button>
+              </div>
+              <div class="p-2">
+                <button class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out hover:bg-verde before:absolute before:inset-0 before:bg-verde before: border before:rounded-lg before:transition-width before:duration-300 before:ease-linear before:origin-left before:scale-x-0 hover:before:scale-x-100">
+                  <div class="absolute left-2 top-1/2 w-12 h-12 -translate-y-1/2 bg-white p-2 rounded-2xl border border-transparent">
+                    <Icon name="mdi:handshake" class="inner-icon text-celeste text-3xl" />
+                  </div>
+                  <span class="absolute text-white top-1/2 -translate-y-1/2">Collabora con noi</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
+
+
 
     <!-- Mega menu Mailing List -->
     <div v-if="mailingListMenuOpen" class="menu-container w-full bg-white p-6 rounded-bl-2xl rounded-br-2xl transition-all duration-500 ease-out">
@@ -43,20 +101,16 @@
 
           <!-- Right col -->
           <div class="w-2/3 flex justify-end items-center p-2">
-            <div class="w-2/3 h-14 flex items-center border border-sky-500 rounded-2xl overflow-hidden py-2 px-4">
+            <div class="w-2/3 h-14 flex items-center border border-celeste rounded-2xl overflow-hidden py-2 px-4">
               <input
                 type="email"
                 placeholder="La tua email"
                 class="flex-grow focus:outline-none"
               />
-              <Icon name="tabler:mail-filled" class="text-sky-500 text-5xl pr-4" />
+              <Icon name="tabler:mail-filled" class="text-celeste text-5xl pr-4" />
             </div>
           </div>
 
-
-
-          
-          
         </div>
       </div>
     </div>
@@ -156,6 +210,14 @@ nav a:hover {
 .radius-bottom-none {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
+}
+
+.mega-menu-button:hover .inner-icon {
+  color: #0DA6A4;
+}
+
+.mega-menu-button span {
+  left: 40%;
 }
 
 
