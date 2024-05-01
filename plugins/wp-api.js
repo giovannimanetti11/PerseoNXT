@@ -2,18 +2,15 @@
 import LRU from 'lru-cache';
 import { apiConfig } from '../config.js';
 
-// Create a new cache object with a specified size and expiration time
 const apiCache = new LRU({
-  max: 100,                 // Cache up to 100 items
-  maxAge: 1000 * 60 * 15    // Items expire after 15 minutes
+  max: 500,                 // Cache up to 100 items
+  maxAge: 1000 * 60 * 60    // Items expire after 60 minutes
 });
 
-// Export the fetchWP function to be used across the application
 export default defineNuxtPlugin(nuxtApp => {
-  nuxtApp.provide('fetchWP', async (endpoint) => {
+  nuxtApp.provide('fetchWP', async (endpoint, { useCache = true } = {}) => {
     const cacheKey = endpoint;
-    // Check the cache first
-    if (apiCache.has(cacheKey)) {
+    if (useCache && apiCache.has(cacheKey)) {
       return apiCache.get(cacheKey);
     }
 
@@ -26,8 +23,9 @@ export default defineNuxtPlugin(nuxtApp => {
         }
       });
 
-      // Cache the fetched response
-      apiCache.set(cacheKey, response);
+      if (useCache) {
+        apiCache.set(cacheKey, response);
+      }
       return response;
     } catch (error) {
       console.error('Error fetching data from WordPress:', error);
