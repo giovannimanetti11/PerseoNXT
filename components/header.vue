@@ -95,7 +95,7 @@
           <!-- Left col -->
           <div class="w-1/3">
             <p class="text-gray-700 text-lg">
-              Amplia le tue conoscenze erboristiche, iscriviti alla <span class="text-blue-500">mailing list</span> di Wikiherbalist
+              Amplia le tue conoscenze erboristiche, iscriviti alla <span class="text-blu">mailing list</span> di Wikiherbalist
             </p>
           </div>
 
