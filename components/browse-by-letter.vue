@@ -22,9 +22,11 @@
           <icon name="iconamoon:arrow-right-2" class="text-5xl text-celeste hover:text-white hover:bg-verde hover:border hover:rounded-full hover:border-verde" />
         </button>
       </div>
-      <!-- cards -->
       <div class="w-9/12 mx-auto flex overflow-x-auto mt-10 gap-4 px-4 pb-6" style="scroll-padding-right: 30px;">
-        <div v-for="post in posts" :key="post.id" class="flex-none w-64 h-auto p-4 bg-white rounded-lg shadow">
+        <div v-if="loading" class="w-full h-full flex items-center justify-center">
+          <icon name="eos-icons:three-dots-loading" class="text-5xl text-celeste" />
+        </div>
+        <div v-else v-for="post in posts" :key="post.id" class="flex-none w-64 h-auto p-4 bg-white rounded-lg shadow">
           <img :src="post.featured_image_src" alt="Featured Image" class="w-full h-32 object-cover rounded-lg">
           <h2 class="mt-4 font-bold">{{ post.title.rendered }}</h2>
           <h3 class="italic text-gray-400">{{ post.meta_box_nome_scientifico }}</h3>
@@ -39,15 +41,19 @@
 import { ref, onMounted } from 'vue';
 import { useNuxtApp } from '#app';
 
+
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 const selectedLetter = ref('A');
 const posts = ref([]);
 const alphabetContainer = ref(null);
 
+const loading = ref(false);
+
 const nuxtApp = useNuxtApp();
 const fetchWP = nuxtApp.$fetchWP;
 
 async function fetchPosts(letter) {
+  loading.value = true;
   selectedLetter.value = letter;
   const endpoint = `/wp/v2/posts?orderby=title&order=asc&filter[s]='${letter}'&per_page=100&_embed`;
   const fetchedPosts = await fetchWP(endpoint);
@@ -62,6 +68,7 @@ async function fetchPosts(letter) {
   } else {
     posts.value = [];
   }
+  loading.value = false;
 }
 
 function scrollAlphabet(direction) {
