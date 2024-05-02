@@ -3,7 +3,7 @@
     <div class="container mx-auto px-4 mt-24">
       <h2 class="text-5xl font-bold text-center text-black">Enciclopedia di erbe aromatiche e medicinali</h2>
       <p class="text-center text-lg mt-2 text-black">
-        Le schede monografiche delle 61 erbe presenti su WikiHerbalist illustrano erbe officinali e erbe aromatiche.
+        Amplia le tue conoscenze erboristiche.
       </p>
     </div>
   </section>
