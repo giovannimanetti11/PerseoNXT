@@ -27,7 +27,7 @@
           <icon name="eos-icons:three-dots-loading" class="text-5xl text-celeste" />
         </div>
         <div v-else v-for="post in posts" :key="post.id" class="flex-none w-64 h-auto p-4 bg-white rounded-lg shadow">
-          <img :src="post.featured_image_src" alt="Featured Image" class="w-full h-32 object-cover rounded-lg">
+          <img :src="post.featured_image_src" :alt="post.alt_text" class="w-full h-32 object-cover rounded-lg">
           <h2 class="mt-4 font-bold">{{ post.title }}</h2>
           <h3 class="italic text-gray-400">{{ post.meta_box_nome_scientifico }}</h3>
         </div>
@@ -63,6 +63,7 @@ const FETCH_ALL_POSTS = gql`
         featuredImage {
           node {
             sourceUrl
+            altText
           }
         }
       }
@@ -81,10 +82,10 @@ async function fetchAllPosts() {
           id: post.id,
           title: post.title,
           featured_image_src: post.featuredImage.node.sourceUrl,
+          alt_text: post.featuredImage.node.altText,
           meta_box_nome_scientifico: post.nomeScientifico
         }));
         console.log("Post ricevuti:", allPosts.value);
-        // Filtra i post per la lettera selezionata
         posts.value = filterPostsByLetter(selectedLetter.value);
       } else {
         allPosts.value = [];

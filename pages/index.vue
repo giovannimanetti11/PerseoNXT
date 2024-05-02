@@ -2,6 +2,7 @@
     <hero />
     <searchfield />
     <browse-by-letter />
+    <section-blog />
     <div class="content">
       <h3 class="mt-24 text-base text-black text-center">
         In sviluppo con <Icon name="logos:nuxt-icon" style="vertical-align: middle;" size="1.5em" />
@@ -13,8 +14,9 @@
   <script setup>
     import { Icon } from '#components'
     import hero from '~/components/hero.vue';
-    import browseByLetter from '~/components/browse-by-letter.vue';
     import Searchfield from '~/components/searchfield.vue';
+    import browseByLetter from '~/components/browse-by-letter.vue';
+    import sectionBlog from '~/components/section-blog.vue';
   </script>
 
 
