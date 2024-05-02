@@ -2,7 +2,7 @@
   <header class="fixed top-5 left-1/2 transform -translate-x-1/2 w-4/5 z-50">
     <div :class="['flex justify-between items-center bg-white py-4 px-6 shadow-lg rounded-2xl', {'radius-bottom-none': menuOpen || mailingListMenuOpen}]">
       <div class="flex items-center">
-        <img :src="logoUrl" alt="WikiHerbalist Logo" class="h-8 mr-2" v-if="logoUrl">
+        <img src="/media/logo_wikiherbalist.svg" alt="WikiHerbalist Logo" class="h-8 mr-2">
       </div>
 
       <div class="flex-grow">
@@ -119,24 +119,7 @@
 </template>
 
 <script setup>
-import { Icon } from '#components';
-import { ref, onMounted, onUnmounted } from 'vue';
-
-const logoUrl = ref('');
-
-onMounted(async () => {
-  try {
-    const settings = await useNuxtApp().$fetchWP('/wp/v2/settings');
-    if (settings.site_logo) {
-      const media = await useNuxtApp().$fetchWP(`/wp/v2/media/${settings.site_logo}`);
-      logoUrl.value = media.source_url;
-    } else {
-      logoUrl.value = settings.site_icon_url;
-    }
-  } catch (error) {
-    console.error('Error fetching data from WordPress:', error);
-  }
-});
+import { ref } from 'vue';
 
 const menuOpen = ref(false);
 const mailingListMenuOpen = ref(false);
