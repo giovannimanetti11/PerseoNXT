@@ -28,7 +28,7 @@
         </div>
         <div v-else v-for="post in posts" :key="post.id" class="flex-none w-64 h-auto p-4 bg-white rounded-lg shadow">
           <img :src="post.featured_image_src" alt="Featured Image" class="w-full h-32 object-cover rounded-lg">
-          <h2 class="mt-4 font-bold">{{ post.title.rendered }}</h2>
+          <h2 class="mt-4 font-bold">{{ post.title }}</h2>
           <h3 class="italic text-gray-400">{{ post.meta_box_nome_scientifico }}</h3>
         </div>
       </div>
@@ -38,52 +38,95 @@
 
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watchEffect } from 'vue';
+import { useQuery } from '@vue/apollo-composable';
 import { useNuxtApp } from '#app';
+import gql from 'graphql-tag';
 
+const { apollo } = useNuxtApp();
 
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 const selectedLetter = ref('A');
+const allPosts = ref([]);
 const posts = ref([]);
 const alphabetContainer = ref(null);
-
 const loading = ref(false);
 
-const nuxtApp = useNuxtApp();
-const fetchWP = nuxtApp.$fetchWP;
 
-async function fetchPosts(letter) {
-  loading.value = true;
-  selectedLetter.value = letter;
-  const endpoint = `/wp/v2/posts?orderby=title&order=asc&filter[s]='${letter}'&per_page=100&_embed`;
-  const fetchedPosts = await fetchWP(endpoint);
-
-  if (fetchedPosts) {
-    posts.value = fetchedPosts.map(post => ({
-      id: post.id,
-      title: post.title,
-      featured_image_src: post._embedded['wp:featuredmedia'][0].source_url,
-      meta_box_nome_scientifico: post['meta-box-nome-scientifico']
-    })).filter(post => post.title.rendered.startsWith(letter));
-  } else {
-    posts.value = [];
+const FETCH_ALL_POSTS = gql`
+  query FetchAllPosts {
+    posts(first: 100) {
+      nodes {
+        id
+        title
+        nomeScientifico
+        featuredImage {
+          node {
+            sourceUrl
+          }
+        }
+      }
+    }
   }
-  loading.value = false;
+`;
+
+async function fetchAllPosts() {
+  loading.value = true;
+  try {
+    const { result, loading: queryLoading, error } = useQuery(FETCH_ALL_POSTS, {}, { client: apollo });
+
+    watchEffect(() => {
+      if (result.value && result.value.posts) {
+        allPosts.value = result.value.posts.nodes.map(post => ({
+          id: post.id,
+          title: post.title,
+          featured_image_src: post.featuredImage.node.sourceUrl,
+          meta_box_nome_scientifico: post.nomeScientifico
+        }));
+        console.log("Post ricevuti:", allPosts.value);
+        // Filtra i post per la lettera selezionata
+        posts.value = filterPostsByLetter(selectedLetter.value);
+      } else {
+        allPosts.value = [];
+        console.log("Nessun post trovato, risposta:", result.value);
+      }
+    });
+
+    watchEffect(() => {
+      loading.value = queryLoading.value;
+    });
+    
+    if (error.value) {
+      console.error('Error fetching posts:', error.value);
+      console.log(error.value);
+    }
+  } catch (e) {
+    console.error('Error in fetchAllPosts method:', e);
+    allPosts.value = [];
+  }
+}
+
+function filterPostsByLetter(letter) {
+  return allPosts.value.filter(post => post.title.startsWith(letter.toUpperCase()));
+}
+
+function fetchPosts(letter) {
+  selectedLetter.value = letter;
+  posts.value = filterPostsByLetter(letter);
 }
 
 function scrollAlphabet(direction) {
-  const container = alphabetContainer.value;
-  if (container) {
-    const scrollAmount = 100;
-    const currentScroll = container.scrollLeft;
-    container.scrollLeft = direction === 'left' ? currentScroll - scrollAmount : currentScroll + scrollAmount;
+  if (direction === 'left') {
+    alphabetContainer.value.scrollLeft -= 100;
+  } else {
+    alphabetContainer.value.scrollLeft += 100;
   }
 }
 
-onMounted(() => {
-  fetchPosts(selectedLetter.value);
-});
+onMounted(fetchAllPosts);
 </script>
+
+
 
 <style scoped>
 .alphabet-section {
