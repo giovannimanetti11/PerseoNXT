@@ -85,24 +85,16 @@ async function fetchAllPosts() {
           alt_text: post.featuredImage.node.altText,
           meta_box_nome_scientifico: post.nomeScientifico
         }));
-        console.log("Post ricevuti:", allPosts.value);
         posts.value = filterPostsByLetter(selectedLetter.value);
       } else {
         allPosts.value = [];
-        console.log("Nessun post trovato, risposta:", result.value);
       }
     });
 
     watchEffect(() => {
       loading.value = queryLoading.value;
     });
-    
-    if (error.value) {
-      console.error('Error fetching posts:', error.value);
-      console.log(error.value);
-    }
   } catch (e) {
-    console.error('Error in fetchAllPosts method:', e);
     allPosts.value = [];
   }
 }

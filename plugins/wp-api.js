@@ -20,5 +20,4 @@ export default defineNuxtPlugin(nuxtApp => {
 
   provideApolloClient(apolloClient);
 
-  console.log("Apollo Client:", apolloClient);
 });
