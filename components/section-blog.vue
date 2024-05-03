@@ -1,5 +1,5 @@
 <template>
-  <section class="py-10 mt-6 w-11/12 mx-auto rounded-2xl section-blog flex" :style="{ height: activeHeight }"> 
+  <section class="py-10 mt-6 w-11/12 mx-auto rounded-2xl section-blog flex"> 
       <!-- Left column -->
       <div class="w-2/5 p-8 ml-6">
           <h3 class="text-3xl font-bold mb-4">Blog</h3>
@@ -13,7 +13,9 @@
       <!-- Right column -->
       <div class="w-3/5 flex flex-wrap justify-around">
           <div class="w-full flex flex-wrap justify-around">
-              <div v-for="post in posts" :key="post.uri" @click="toggleActive(post.uri)" :class="['blog-card w-7/12 shadow flex flex-row rounded-2xl shadow-lg m-4 cursor-pointer transition duration-300 ease-in-out transform', post.uri === activePost ? 'active bg-celeste text-white scale-110 z-10' : 'bg-white text-black hover:bg-celeste hover:text-white']">
+            <div v-for="(post, index) in posts" :key="post.uri" @click="toggleActive(post.uri)"
+              :class="['blog-card w-7/12 shadow flex flex-row rounded-2xl shadow-lg m-4 cursor-pointer', post.uri === activePost ? 'active bg-celeste text-white scale-110 z-10' : 'bg-white text-black hover:bg-celeste hover:text-white']"
+              :style="{ transform: getTransformation(post, index) }">
                   <div class="px-6 py-4 flex flex-col justify-between items-start h-full w-2/4">
                       <div class="font-bold text-xl mb-auto">{{ post.title }}</div>
                       <div class="text-gray-500 blog-details">{{ post.authorName }}</div>
@@ -84,9 +86,43 @@ if (newValue?.blogPosts?.nodes) {
 }
 });
 
+// Define ref for active transformations
+const transformations = ref({
+  first: 'translateX(40px)',
+  second: 'translate(-80px, -100px)',
+  last: 'translate(90px, -270px)'
+});
+
 const toggleActive = (uri) => {
-  activePost.value = uri;
+  if (activePost.value === uri) {
+    activePost.value = null;
+    transformations.value = {
+      first: 'translateX(40px)',
+      second: 'translate(-80px, -100px)',
+      last: 'translate(90px, -270px)'
+    };
+  } else {
+    activePost.value = uri;
+    const idx = posts.value.findIndex(p => p.uri === uri);
+    transformations.value = {
+      first: idx === 0 ? 'translateX(140px)' : 'translateX(-60px)',
+      second: idx === 1 ? 'translate(20px, -100px)' : 'translate(-180px, -100px)',
+      last: idx === 2 ? 'translate(140px, -270px)' : 'translate(-10px, -270px)'
+    };
+  }
 };
+
+
+const getTransformation = (post, index) => {
+  switch (index) {
+    case 0: return transformations.value.first;
+    case 1: return transformations.value.second;
+    case 2: return transformations.value.last;
+    default: return ''; 
+  }
+};
+
+
 
 
 </script>
