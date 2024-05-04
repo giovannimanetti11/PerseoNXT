@@ -26,7 +26,13 @@
         <div v-if="loading" class="w-full h-full flex items-center justify-center">
           <icon name="eos-icons:three-dots-loading" class="text-5xl text-celeste" />
         </div>
-        <div v-else v-for="post in posts" :key="post.id" class="flex-none w-64 h-auto p-4 bg-white rounded-lg shadow">
+        <div
+          v-else
+          v-for="post in posts"
+          :key="post.id"
+          class="card flex-none w-64 h-auto p-4 bg-white rounded-lg shadow"
+          @click="goToPost(post.uri)"
+        >
           <img :src="post.featured_image_src" :alt="post.alt_text" class="w-full h-32 object-cover rounded-lg">
           <h2 class="mt-4 font-bold">{{ post.title }}</h2>
           <h3 class="italic text-gray-400">{{ post.meta_box_nome_scientifico }}</h3>
@@ -41,6 +47,7 @@
 import { ref, onMounted, watchEffect } from 'vue';
 import { useQuery } from '@vue/apollo-composable';
 import { useNuxtApp } from '#app';
+import { useRouter } from 'vue-router';
 import gql from 'graphql-tag';
 
 const { apollo } = useNuxtApp();
@@ -51,6 +58,7 @@ const allPosts = ref([]);
 const posts = ref([]);
 const alphabetContainer = ref(null);
 const loading = ref(false);
+const router = useRouter();
 
 
 const FETCH_ALL_POSTS = gql`
@@ -60,6 +68,7 @@ const FETCH_ALL_POSTS = gql`
         id
         title
         nomeScientifico
+        uri
         featuredImage {
           node {
             sourceUrl
@@ -70,6 +79,7 @@ const FETCH_ALL_POSTS = gql`
     }
   }
 `;
+
 
 async function fetchAllPosts() {
   loading.value = true;
@@ -83,7 +93,8 @@ async function fetchAllPosts() {
           title: post.title,
           featured_image_src: post.featuredImage.node.sourceUrl,
           alt_text: post.featuredImage.node.altText,
-          meta_box_nome_scientifico: post.nomeScientifico
+          meta_box_nome_scientifico: post.nomeScientifico,
+          uri: post.uri
         }));
         posts.value = filterPostsByLetter(selectedLetter.value);
       } else {
@@ -114,6 +125,10 @@ function scrollAlphabet(direction) {
   } else {
     alphabetContainer.value.scrollLeft += 100;
   }
+}
+
+function goToPost(uri) {
+  router.push(`${uri}`);
 }
 
 onMounted(fetchAllPosts);
