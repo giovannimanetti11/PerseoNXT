@@ -22,22 +22,22 @@
 
   
   <style scoped>
-  .content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+    .content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-  .content h3 a {
-    color: #0DA6A4;
-  }
-  
-  .icon {
-    margin: 0 10px;
-  }
-  
-  .Icon {
-    vertical-align: middle;
-  }
+    .content h3 a {
+      color: #0DA6A4;
+    }
+    
+    .icon {
+      margin: 0 10px;
+    }
+    
+    .Icon {
+      vertical-align: middle;
+    }
   </style>
   
