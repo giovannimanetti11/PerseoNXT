@@ -1,5 +1,5 @@
 <template>
-  <section class="post-section flex flex-row py-10 w-10/12 mx-auto rounded-2xl" v-if="post.data">
+  <section class="post-section flex flex-row py-10 px-10 w-10/12 mx-auto rounded-2xl" v-if="post.data">
     <div class="mt-40 container mx-auto w-2/5 px-4">
       <PostInfo 
         :title="post.data.title"
@@ -10,12 +10,17 @@
       />
 
     </div>
-    <div class="w-3/5">
-      <div v-if="post.data.featuredImage && post.additionalImagesFiltered.length > 0">
-        <Slideshow 
-          :featured-image="post.data.featuredImage"
-          :additional-images="post.additionalImagesFiltered"
-        />
+    <div class="flex flex-col w-3/5">
+      <div>
+        <div v-if="post.data.featuredImage && post.additionalImagesFiltered.length > 0">
+          <Slideshow 
+            :featured-image="post.data.featuredImage"
+            :additional-images="post.additionalImagesFiltered"
+          />
+        </div>
+      </div>
+      <div>
+        <ObservationsMap :nomeScientifico="post.data.nomeScientifico" />
       </div>
     </div>
   </section>
@@ -29,6 +34,7 @@ import { useQuery } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 import Slideshow from '@/components/posts/slideshow.vue';
 import PostInfo from '@/components/posts/postinfo.vue';
+import ObservationsMap from '@/components/posts/observationsMap.vue';
 
 const route = useRoute();
 const { apollo } = useNuxtApp();
