@@ -33,7 +33,7 @@
         </a> pubblicazioni
       </div>
     </div>
-    <div v-if="classification" class="mt-4">
+    <div v-if="classification" class="mt-6">
       <ul>
         <li v-for="(item, key) in classification" :key="key" class="px-4 py-2 mt-1.5 bg-white border rounded-lg shadow">
           <span class="text-black">{{ key }}:</span> <a :href="item.link" class="text-blu hover:text-celeste" target="_blank">{{ item.name }}</a>
