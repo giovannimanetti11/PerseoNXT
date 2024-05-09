@@ -1,6 +1,11 @@
 <template>
   <div class="flex flex-col">
-    <h1 class="text-3xl font-bold">{{ title }}</h1>
+    <div class="flex flex-row">
+      <h1 class="text-3xl font-bold">{{ title }}</h1>
+      <button @click="speakTitle" class="flex text-5xl ml-4 mb-2 shadow text-white bg-blu rounded-full w-12 h-12 justify-center items-center hover:bg-white hover:text-blu">
+          <icon name="f7:speaker-1-fill" class="text-4xl" />
+      </button>
+    </div>
     <p class="text-xl italic text-gray-700">{{ nomeScientifico }}</p>
     <div class="postinfo-buttons flex mt-4">
       <button class="group flex items-center mr-4 py-2 px-4 bg-white shadow text-blu border rounded-lg hover:bg-blu hover:text-white">
@@ -34,7 +39,7 @@
       </div>
     </div>
     <div v-if="classification" class="mt-6">
-      <ul>
+      <ul class="max-w-96">
         <li v-for="(item, key) in classification" :key="key" class="px-4 py-2 mt-1.5 bg-white border rounded-lg shadow">
           <span class="text-black">{{ key }}:</span> <a :href="item.link" class="text-blu hover:text-celeste" target="_blank">{{ item.name }}</a>
         </li>
@@ -47,6 +52,8 @@
 import { ref, computed, onMounted } from 'vue';
 import { apiConfig } from '../config';
 import { useFetch } from '#app';
+
+
 
 const props = defineProps({
   title: String,
@@ -116,4 +123,16 @@ const formattedPublishDate = getFormattedDate(props.publishDate);
 const formattedUpdateDate = getFormattedDate(props.updateDate);
 const wordCount = props.content.split(/\s+/).length;
 const readingTime = Math.ceil(wordCount / 200); // Calculate reading time based on word count
+
+
+function speakTitle() {
+  if ('speechSynthesis' in window) {
+    const utterance = new SpeechSynthesisUtterance(props.title);
+    utterance.lang = 'it-IT';
+    window.speechSynthesis.speak(utterance);
+  } else {
+    alert('La sintesi vocale non è supportata in questo browser.');
+  }
+}
+
 </script>
