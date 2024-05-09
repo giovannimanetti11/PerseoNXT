@@ -30,7 +30,7 @@
           v-else
           v-for="post in posts"
           :key="post.id"
-          class="card flex-none w-64 h-auto p-4 bg-white rounded-lg shadow"
+          class="card flex-none w-64 h-auto p-4 bg-white rounded-2xl shadow"
           @click="goToPost(post.uri)"
         >
           <img :src="post.featured_image_src" :alt="post.alt_text" class="w-full h-32 object-cover rounded-lg">
