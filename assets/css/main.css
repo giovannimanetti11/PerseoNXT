@@ -2,8 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
 
 body {
     font-family: 'Lato', sans-serif;
     font-weight: 400;
+}
+
+
+/* Post styles */
+
+#post h3 {
+    font-size: 1.875rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+  }
+
+#post h4 {
+    font-weight: bold;
+    color: #5E9EF4;
+  }
+
+#post ol {
+    list-style-type: decimal;
 }
