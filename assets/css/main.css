@@ -7,24 +7,31 @@ html {
 }
 
 body {
-    font-family: 'Lato', sans-serif;
-    font-weight: 400;
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
 }
 
 
 /* Post styles */
 
 #post h3 {
-    font-size: 1.875rem;
-    margin-bottom: 1rem;
-    font-weight: bold;
-  }
+  font-size: 1.875rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
 
 #post h4 {
-    font-weight: bold;
-    color: #5E9EF4;
-  }
+  font-weight: bold;
+  color: #5E9EF4;
+}
 
 #post ol {
-    list-style-type: decimal;
+  list-style-type: decimal;
+}
+
+/* General */
+
+.radius-bottom-none {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }
