@@ -191,11 +191,6 @@ nav a:hover {
   color: #0DA6A4;
 }
 
-.radius-bottom-none {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-}
-
 .mega-menu-button:hover .inner-icon {
   color: #0DA6A4;
 }
