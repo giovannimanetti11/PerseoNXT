@@ -29,7 +29,8 @@ export default defineNuxtConfig ({
   },
   css: ['~/assets/css/main.css'],
   plugins: [
-    '~/plugins/wp-api.js'
+    '~/plugins/wp-api.js',
+    '~/plugins/algolia.js'
   ],
   postcss: {
     plugins: {
