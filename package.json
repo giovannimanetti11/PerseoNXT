@@ -11,6 +11,7 @@
     "start": "nuxt start"
   },
   "dependencies": {
+    "@algolia/client-search": "^4.23.3",
     "@apollo/client": "^3.10.1",
     "@nuxt/devtools": "^1.1.5",
     "@nuxtjs/google-fonts": "^3.2.0",
@@ -18,10 +19,13 @@
     "@nuxtjs/sitemap": "^5.1.4",
     "@nuxtjs/tailwindcss": "^6.11.4",
     "@vue/apollo-composable": "^4.0.2",
+    "algoliasearch": "^4.23.3",
     "cheerio": "^1.0.0-rc.12",
     "graphql": "^16.8.1",
+    "graphql-request": "^7.0.0",
     "graphql-tag": "^2.12.6",
     "h3": "^1.11.1",
+    "instantsearch.js": "^4.68.1",
     "nuxt": "^3.11.2",
     "ol": "^9.1.0",
     "vue": "^3.4.21",
