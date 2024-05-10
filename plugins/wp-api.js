@@ -1,7 +1,7 @@
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client/core';
 import { provideApolloClient } from '@vue/apollo-composable';
 import { defineNuxtPlugin } from '#app';
-import { apiConfig } from '~/config';
+import { apiConfig } from '~/config.js';
 
 export default defineNuxtPlugin(nuxtApp => {
   const httpLink = createHttpLink({
@@ -19,5 +19,6 @@ export default defineNuxtPlugin(nuxtApp => {
   });
 
   provideApolloClient(apolloClient);
+  nuxtApp.provide('apolloClient', apolloClient);
 
 });
