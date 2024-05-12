@@ -111,7 +111,9 @@ async function fetchAllPosts() {
 }
 
 function filterPostsByLetter(letter) {
-  return allPosts.value.filter(post => post.title.startsWith(letter.toUpperCase()));
+  return allPosts.value
+    .filter(post => post.title.toUpperCase().startsWith(letter))
+    .sort((a, b) => a.title.localeCompare(b.title));
 }
 
 function fetchPosts(letter) {
