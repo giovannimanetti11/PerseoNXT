@@ -3,11 +3,14 @@
     <searchfield />
     <browse-by-letter />
     <section-blog />
-    <div class="content">
-      <h3 class="mt-24 text-base text-black text-center">
+    <div class="content flex flex-col">
+      <p class="mt-24 text-base text-black text-center">
         In sviluppo con <Icon name="logos:nuxt-icon" style="vertical-align: middle;" size="1.5em" />
-        <a href="https://nuxt.com/">Nuxt 3</a> <Icon name="emojione:red-heart" style="vertical-align: middle;" size="1.5em" />
-      </h3>
+        <a href="https://nuxt.com/">Nuxt 3</a>
+      </p>
+      <p>by Samuele, Giovanni & Gregorio Manetti<Icon name="emojione:red-heart" style="vertical-align: middle;" size="1.5em" /></p>
+
+
     </div>
   </template>
 
