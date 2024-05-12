@@ -44,7 +44,7 @@
         <h3>Proprietà terapeutiche</h3>
       </div>
       <ul class="mt-8 flex flex-wrap justify-items-start gap-4">
-        <li v-for="tag in post.data.tags.nodes" :key="tag.name" class="text-center py-4 px-4 bg-white text-blu rounded-xl m-1 text-sm hover:bg-blu hover:text-white cursor-pointer w-1/5 flex-grow-0 flex-shrink-0">
+        <li v-for="tag in post.data.tags.nodes" :key="tag.name" class="hover:bg-blu hover:text-white text-center py-4 px-4 bg-white text-blu rounded-xl m-1 text-sm cursor-pointer w-1/5 flex-grow-0 flex-shrink-0">
           {{ tag.name }}
         </li>
       </ul>
@@ -56,7 +56,7 @@
             <div class="circle flex items-center justify-center w-12 h-12 mb-4 mr-2 bg-blu text-white rounded-full text-lg font-bold">2</div>
             <h3>Nome scientifico</h3>
           </div>
-          <p class="text-center mt-4 py-4 px-4 bg-white text-blu rounded-xl text-sm hover:bg-blu hover:text-white cursor-pointer w-2/5">{{ post.data.nomeScientifico }}</p>
+          <p class="text-center italic mt-4 py-4 px-4 bg-white text-blu rounded-xl text-sm cursor-pointer w-2/5">{{ post.data.nomeScientifico }}</p>
         </section>
         <section class="post-section-parti-usate flex flex-col w-full py-20 px-10 mx-auto rounded-2xl mr-4 mt-4" id="section3" v-if="post.data.partiUsate">
           <div class="flex items-center">
@@ -64,7 +64,7 @@
             <h3>Parti usate</h3>
           </div>
           <div class="flex flex-row gap-4">
-            <p v-for="parte in partiUsateArray" :key="parte" class="text-center mt-4 py-4 px-4 bg-white text-blu rounded-xl text-sm hover:bg-blu hover:text-white cursor-pointer w-2/5">{{ parte }}</p>
+            <p v-for="parte in partiUsateArray" :key="parte" class="text-center mt-4 py-4 px-4 bg-white text-blu rounded-xl text-sm cursor-pointer w-2/5">{{ parte }}</p>
           </div>
         </section>
       </div>
@@ -73,7 +73,7 @@
           <div class="circle flex items-center justify-center w-12 h-12 mb-4 mr-2 bg-blu text-white rounded-full text-lg font-bold">4</div>
           <h3>Nome comune</h3>
         </div>
-        <p class="text-center mt-4 py-4 px-4 bg-white text-blu rounded-xl text-sm hover:bg-blu hover:text-white cursor-pointer w-2/5">{{ post.data.nomeComune }}</p>
+        <p v-for="nome in nomeComuneArray" :key="nome" class="text-center mt-4 py-4 px-4 bg-white text-blu rounded-xl text-sm cursor-pointer w-2/5">{{ nome }}</p>
       </div>
     </div>
     <section class="post-section-fitochimica flex flex-col py-20 px-10 w-10/12 mx-auto rounded-2xl mt-4" id="section5" v-if="post.data.costituenti">
@@ -135,10 +135,19 @@ const smoothScroll = (target) => {
   }
 };
 
-// Split partiUsate string into an array
+
+// Split partiUsate and nomeComune strings into an array
 const partiUsateArray = computed(() => {
   if (post.data && post.data.partiUsate) {
-    return post.data.partiUsate.split(';').map(parte => parte.trim()).filter(parte => parte.length > 0);
+    // Regex to split by comma or semicolon with optional surrounding whitespaces
+    return post.data.partiUsate.split(/[\s]*[;,][\s]*/).filter(parte => parte.length > 0);
+  }
+  return [];
+});
+
+const nomeComuneArray = computed(() => {
+  if (post.data && post.data.nomeComune) {
+    return post.data.nomeComune.split(/[\s]*[;,][\s]*/).filter(nome => nome.length > 0);
   }
   return [];
 });
