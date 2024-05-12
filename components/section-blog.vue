@@ -14,7 +14,7 @@
       <div class="w-3/5 flex flex-wrap justify-around">
           <div class="w-full flex flex-wrap justify-around">
             <div v-for="(post, index) in posts" :key="post.uri" @click="toggleActive(post.uri)"
-              :class="['blog-card w-7/12 shadow flex flex-row rounded-2xl shadow-lg m-4 cursor-pointer', post.uri === activePost ? 'active bg-celeste text-white z-10' : 'bg-white text-black hover:bg-celeste hover:text-white']"
+              :class="['blog-card w-7/12 flex flex-row rounded-2xl shadow transition-all m-4 cursor-pointer', post.uri === activePost ? 'active bg-celeste text-white z-10' : 'bg-white shadow text-black hover:bg-celeste hover:text-white']"
               :style="{ transform: getTransformation(post, index) }">
                   <div class="px-6 py-4 flex flex-col justify-between items-start h-full w-2/4">
                       <div class="font-bold text-xl mb-auto">{{ post.title }}</div>
@@ -23,7 +23,7 @@
                   </div>
                   <div class="flex-col w-2/4 m-auto text-center">
                       <img :src="post.featuredImage" :alt="post.altText" class="rounded-2xl w-11/12 mt-4 m-auto h-auto max-h-32 object-cover">
-                      <button class="blog-card-button py-4 bg-verde text-white hover:bg-blu w-11/12 rounded-xl mt-4 mb-4">
+                      <button class="blog-card-button py-4 bg-verde text-white w-11/12 rounded-xl mt-4 mb-4">
                           Leggi di più  →
                       </button>
                   </div>
