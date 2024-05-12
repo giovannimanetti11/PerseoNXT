@@ -11,7 +11,6 @@
           v-model="searchTerm"
           @input="handleInput"
         />
-        <button v-if="searchTerm" @click="search" class="ml-2 bg-celeste text-white px-4 py-1 rounded-lg hover:opacity-85">Cerca</button>
         <div v-if="searchTerm" @click="resetSearch" class="ml-2 hover:cursor-pointer">
           <Icon name="ic:baseline-close" class="text-2xl text-celeste mr-4" />
         </div>
@@ -19,7 +18,7 @@
     </div>
     <!-- results -->
     <div v-if="searchResults.length" class="flex-col w-3/5 m-auto bg-white border border-t-0 border-celeste rounded-b-lg">
-      <div v-for="result in searchResults" :key="result.objectID" class="flex items-center py-2 hover:bg-gray-100 hover:rounded-b-lg hover:cursor-pointer">
+      <div v-for="result in searchResults" :key="result.objectID" class="flex items-center py-2 hover:bg-gray-100 hover:rounded-b-lg hover:cursor-pointer" @click="goToPost(result.uri)">
         <img :src="result.featuredImage.sourceUrl" alt="result.title" class="rounded-lg w-20 h-20 max-w-[80px] max-h-[80px] object-cover ml-2 mr-4">
         <div>
           <h3 class="text-lg font-bold">{{ result.title }}</h3>
@@ -37,20 +36,16 @@
 </template>
 
 
-<style scoped>
-</style>
-
-
-
-
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { Icon } from '#components';
 import _debounce from 'lodash/debounce';
 import algoliasearch from 'algoliasearch/lite';
 import { apiConfig } from '~/config.js';
 
+const router = useRouter();
 const algoliaClient = algoliasearch(apiConfig.algoliaAppId, apiConfig.algoliaSearchAPIKey);
 const searchIndex = algoliaClient.initIndex('posts');
 
@@ -94,7 +89,11 @@ function resetSearch() {
   console.log("Search reset.");
 }
 
+function goToPost(uri) {
+  router.push(uri);
+}
 </script>
+
 
 
 
