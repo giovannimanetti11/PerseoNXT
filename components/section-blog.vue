@@ -22,7 +22,7 @@
                       <div class="text-gray-500 blog-details">{{ post.date }}</div>
                   </div>
                   <div class="flex-col w-2/4 m-auto text-center">
-                      <img :src="post.featuredImage" :alt="post.altText" class="rounded-2xl w-11/12 mt-4 m-auto h-auto max-h-32 object-cover">
+                      <NuxtImg :src="post.featuredImage" :alt="post.altText" class="rounded-2xl w-11/12 mt-4 m-auto h-auto max-h-32 object-cover" />
                       <button class="blog-card-button py-4 bg-verde text-white w-11/12 rounded-xl mt-4 mb-4">
                           Leggi di più  →
                       </button>
@@ -35,7 +35,7 @@
 
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { onMounted, watch } from 'vue';
 import { useQuery } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 
