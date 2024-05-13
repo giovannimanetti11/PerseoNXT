@@ -42,7 +42,7 @@
           class="card flex-none w-64 h-auto p-4 bg-white rounded-2xl shadow transition-all hover:scale-105 hover:shadow-md hover:cursor-pointer"
           @click="goToPost(post.uri)"
         >
-          <img :src="post.featured_image_src" :alt="post.alt_text" class="w-full h-32 object-cover rounded-lg" loading="lazy">
+          <NuxtImg :src="post.featured_image_src" :alt="post.alt_text" class="w-full h-32 object-cover rounded-lg" />
           <h2 class="mt-4 font-bold">{{ post.title }}</h2>
           <h3 class="italic text-gray-400">{{ post.meta_box_nome_scientifico }}</h3>
         </div>
