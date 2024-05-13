@@ -1,7 +1,7 @@
 <template>
   <div id="post" v-if="post.data">
     <!-- Main upper post container -->
-    <section class="post-info-section flex flex-row py-20 px-10 w-10/12 mx-auto rounded-2xl">
+    <section class="post-info-section flex flex-row py-20 px-10 w-11/12 mx-auto rounded-2xl">
       <!-- Container for main post information -->
       <div class="mt-40 container mx-auto w-2/5 px-4">
         <PostInfo 
@@ -24,9 +24,9 @@
       </div>
     </section>
     <!-- Index section with dynamic headings list -->
-    <section class="post-index-section flex flex-col py-20 px-10 w-10/12 mx-auto rounded-2xl mt-4">
-      <div class="font-bold text-xl">
-        <icon name="ic:twotone-list" class="text-3xl text-black" /> Indice
+    <section class="post-index-section flex flex-col py-20 px-10 w-11/12 mx-auto rounded-2xl mt-4">
+      <div class="font-bold text-2xl">
+        <icon name="ic:twotone-list" class="text-3xl text-black rounded-full mr-2" /> Indice
       </div>
       <ul class="mt-8 flex flex-wrap justify-items-start gap-4">
         <li v-for="(heading, index) in post.headings" :key="index" class="text-center py-4 px-4 bg-verde text-white rounded-xl m-1 text-sm hover:bg-celeste cursor-pointer w-1/5 flex-grow-0 flex-shrink-0">
@@ -38,7 +38,7 @@
       </ul>
     </section>
 
-    <section class="post-section-proprieta flex flex-col py-20 px-10 w-10/12 mx-auto rounded-2xl mt-4" id="section1" v-if="post.data.tags && post.data.tags.nodes.length > 0">
+    <section class="post-section-proprieta flex flex-col py-20 px-10 w-11/12 mx-auto rounded-2xl mt-4" id="section1" v-if="post.data.tags && post.data.tags.nodes.length > 0">
       <div class="flex items-center">
         <div class="circle flex items-center justify-center w-12 h-12 mb-4 mr-2 bg-blu text-white rounded-full text-lg font-bold">1</div>
         <h3>Proprietà terapeutiche</h3>
@@ -49,7 +49,8 @@
         </li>
       </ul>
     </section>
-    <div class="flex flex-row w-10/12 mx-auto">
+
+    <div class="flex flex-row w-11/12 mx-auto">
       <div class="flex flex-col w-1/2 mx-auto">
         <section class="post-section-nome-scientifico flex flex-col w-full py-20 px-10 mx-auto rounded-2xl mr-4 mt-4" id="section2" v-if="post.data.nomeScientifico">
           <div class="flex items-center">
@@ -73,10 +74,12 @@
           <div class="circle flex items-center justify-center w-12 h-12 mb-4 mr-2 bg-blu text-white rounded-full text-lg font-bold">4</div>
           <h3>Nome comune</h3>
         </div>
-        <p v-for="nome in nomeComuneArray" :key="nome" class="text-center mt-4 py-4 px-4 bg-white text-blu rounded-xl text-sm cursor-pointer w-2/5">{{ nome }}</p>
+        <div class="flex flex-wrap">
+          <p v-for="nome in nomeComuneArray" :key="nome" class="text-center mr-4 mt-4 py-4 px-4 bg-white text-blu rounded-xl text-sm cursor-pointer w-2/5">{{ nome }}</p>
+        </div>
       </div>
     </div>
-    <section class="post-section-fitochimica flex flex-col py-20 px-10 w-10/12 mx-auto rounded-2xl mt-4" id="section5" v-if="post.data.costituenti">
+    <section class="post-section-fitochimica flex flex-col py-20 px-10 w-11/12 mx-auto rounded-2xl mt-4" id="section5" v-if="post.data.costituenti">
       <div class="flex items-center">
         <div class="circle flex items-center justify-center w-12 h-12 mb-4 mr-2 bg-blu text-white rounded-full text-lg font-bold">5</div>
         <h3>Fitochimica</h3>
@@ -85,7 +88,7 @@
     </section>
     <!-- Dynamic content sections generated from structured content based on <h3> elements -->
     <section v-for="(section, index) in post.structuredContent"
-             :class="['flex flex-col py-20 px-10 w-10/12 mx-auto rounded-2xl mt-4', section.className]"
+             :class="['flex flex-col py-20 px-10 w-11/12 mx-auto rounded-2xl mt-4', section.className]"
              :id="'section' + (5 + index + 1)"
              :key="section.title">
       <div class="flex items-center">
