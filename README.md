@@ -1,6 +1,6 @@
 # PerseoNXT
 
-PerseoNXT is a custom Nuxt3-based theme designed specifically for headless WordPress websites, tailored for the project wikiherbalist.com. This repository is currently under development, and contributions are welcome from the community.
+PerseoNXT is a custom Nuxt3-based theme designed specifically for headless WordPress websites, tailored for the project [wikiherbalist.com](https://wikiherbalist.com). This repository is currently under development, and contributions are welcome from the community.
 
 ## Features
 
@@ -41,7 +41,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 ## Contact
 
-For any inquiries or further information, please contact the project maintainer at giovanni@perseodesign.com.
+For any inquiries or further information, please contact the project maintainer at [giovanni@perseodesign.com](giovanni@perseodesign.com).
 
 ---
 
