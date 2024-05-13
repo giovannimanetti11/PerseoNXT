@@ -3,7 +3,7 @@
     <div :class="['flex justify-between items-center bg-white py-4 px-6 shadow-lg rounded-2xl', {'radius-bottom-none': menuOpen || mailingListMenuOpen}]">
       <div class="flex items-center">
         <a href="https://wikinutritionals.com">
-          <img src="/media/logo_wikiherbalist.svg" alt="WikiHerbalist Logo" class="h-8 mr-2">
+          <NuxtImg src="/media/logo_wikiherbalist.svg" alt="WikiHerbalist Logo" class="h-8 mr-2" />
         </a>
       </div>
 
