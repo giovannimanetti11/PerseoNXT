@@ -10,7 +10,7 @@
         <!-- alphabet -->
         <div class="flex overflow-hidden" ref="alphabetContainer">
           <button 
-            v-for="letter in alphabet" :key="letter" 
+            v-for="letter in alphabet" :key="letter" :v-memo="[letter === selectedLetter, letter]"
             class="px-4 py-2 rounded-full mx-1 whitespace-nowrap"
             :class="{'bg-celeste text-white': letter === selectedLetter, 'text-black font-bold hover:bg-celeste hover:text-white': letter !== selectedLetter}"
             @click="fetchPosts(letter)">
@@ -21,6 +21,15 @@
         <button class="ml-2" @click="scrollAlphabet('right')">
           <icon name="iconamoon:arrow-right-2" class="text-5xl text-celeste hover:text-white hover:bg-verde hover:border hover:rounded-full hover:border-verde" />
         </button>
+      </div>
+      <!-- post count -->
+      <div class="text-center mt-4">
+        <p v-if="posts.length === 1">
+          {{ posts.length }} erba che inizia per {{ selectedLetter }}
+        </p>
+        <p v-else>
+          {{ posts.length }} erbe che iniziano per {{ selectedLetter }}
+        </p>
       </div>
       <div class="w-9/12 mx-auto flex overflow-x-auto mt-10 gap-4 px-4 pb-6" style="scroll-padding-right: 30px;">
         <div v-if="loading" class="w-full h-full flex items-center justify-center">
@@ -33,7 +42,7 @@
           class="card flex-none w-64 h-auto p-4 bg-white rounded-2xl shadow transition-all hover:scale-105 hover:shadow-md hover:cursor-pointer"
           @click="goToPost(post.uri)"
         >
-          <img :src="post.featured_image_src" :alt="post.alt_text" class="w-full h-32 object-cover rounded-lg">
+          <img :src="post.featured_image_src" :alt="post.alt_text" class="w-full h-32 object-cover rounded-lg" loading="lazy">
           <h2 class="mt-4 font-bold">{{ post.title }}</h2>
           <h3 class="italic text-gray-400">{{ post.meta_box_nome_scientifico }}</h3>
         </div>
