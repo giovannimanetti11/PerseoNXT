@@ -9,7 +9,8 @@ export default defineNuxtConfig ({
     '@nuxt/devtools',
     'nuxt-icon',
     '@nuxtjs/sitemap',
-    '@nuxtjs/robots'
+    '@nuxtjs/robots',
+    '@nuxt/image'
   ],
   sitemap: {
     hostname: 'https://wikiherbalist.com',
