@@ -19,7 +19,7 @@
     <!-- results -->
     <div v-if="searchResults.length" class="flex-col w-3/5 m-auto bg-white border border-t-0 border-celeste rounded-b-lg">
       <div v-for="result in searchResults" :key="result.objectID" class="flex items-center py-2 hover:bg-gray-100 hover:rounded-b-lg hover:cursor-pointer" @click="goToPost(result.uri)">
-        <img :src="result.featuredImage.sourceUrl" alt="result.title" class="rounded-lg w-20 h-20 max-w-[80px] max-h-[80px] object-cover ml-2 mr-4">
+        <NuxtImg :src="result.featuredImage.sourceUrl" alt="result.title" class="rounded-lg w-20 h-20 max-w-[80px] max-h-[80px] object-cover ml-2 mr-4" />
         <div>
           <h3 class="text-lg font-bold">{{ result.title }}</h3>
           <p class="italic">{{ result.nomeScientifico }}</p>
@@ -27,8 +27,8 @@
       </div>
     </div>
     <div v-else-if="searchMade && !searchResults.length" class="w-3/5 m-auto bg-white border border-celeste rounded-b-lg">
-      <div class="flex flex-col p-10 w-4/5 m-auto">
-        <p class="text-red-500 border border-red-500 p-2">Nessun risultato trovato. Prova con parole chiave diverse.</p>
+      <div class="flex flex-col p-10 w-auto m-auto">
+        <p class="text-red-500 border border-red-500 rounded-lg p-2">Nessun risultato trovato. Prova con parole chiave diverse.</p>
         <p class="text-xs text-gray-600 mt-2">Non trovi la voce che cerchi? Segnalacelo! La inseriremo al più presto</p>
       </div>
     </div>
