@@ -1,7 +1,9 @@
 <template>
   <section class="py-10 w-11/12 mx-auto rounded-2xl alphabet-section">
     <div class="container mx-auto px-4 mt-4">
-      <h3 class="text-4xl font-bold text-center text-black">Sfoglia le <span class="text-blu">monografie</span>, lettera per lettera</h3>
+      <h3 class="text-4xl font-bold text-center text-black">
+        Sfoglia le <span class="text-blu">monografie</span>, lettera per lettera
+      </h3>
       <div class="w-9/12 mx-auto flex justify-center mt-8 items-center">
         <!-- left arrow -->
         <button class="mr-2" @click="scrollAlphabet('left')">
@@ -23,7 +25,7 @@
         </button>
       </div>
       <!-- post count -->
-      <div class="text-center mt-4">
+      <div class="text-center mt-4" v-if="!loading && posts.length > 0">
         <p v-if="posts.length === 1">
           {{ posts.length }} erba che inizia per {{ selectedLetter }}
         </p>
@@ -51,7 +53,6 @@
   </section>
 </template>
 
-
 <script setup>
 import { ref, onMounted, watchEffect } from 'vue';
 import { useQuery } from '@vue/apollo-composable';
@@ -68,7 +69,6 @@ const posts = ref([]);
 const alphabetContainer = ref(null);
 const loading = ref(false);
 const router = useRouter();
-
 
 const FETCH_ALL_POSTS = gql`
   query FetchAllPosts {
@@ -88,7 +88,6 @@ const FETCH_ALL_POSTS = gql`
     }
   }
 `;
-
 
 async function fetchAllPosts() {
   loading.value = true;
@@ -114,9 +113,15 @@ async function fetchAllPosts() {
     watchEffect(() => {
       loading.value = queryLoading.value;
     });
+
+    if (error) {
+      console.error("Error fetching posts:", error);
+    }
   } catch (e) {
+    console.error("Error during fetchAllPosts:", e);
     allPosts.value = [];
   }
+  loading.value = false;
 }
 
 function filterPostsByLetter(letter) {
@@ -144,8 +149,6 @@ function goToPost(uri) {
 
 onMounted(fetchAllPosts);
 </script>
-
-
 
 <style scoped>
 .alphabet-section {
