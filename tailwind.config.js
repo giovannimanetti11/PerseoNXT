@@ -16,7 +16,8 @@ module.exports = {
         colors: {
           celeste: '#5E9EF4',
           verde: '#0DA6A4',
-          blu: '#036297'
+          blu: '#036297',
+          ghiaccio: '#DFEDFD'
         }
       },
       borderWidth: {
