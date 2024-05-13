@@ -3,7 +3,7 @@
         <!-- Left col -->
         <div class="col-start-1 col-span-3 flex flex-col ml-6">
             <a href="https://wikinutritionals.com" class="flex flex-col m-auto text-center">
-                <img src="/media/logo_wikiherbalist.svg" alt="WikiHerbalist Logo" class="h-auto w-full mb-4">
+                <NuxtImg src="/media/logo_wikiherbalist.svg" alt="WikiHerbalist Logo" class="h-auto w-full mb-4" />
                 <p class="mt-4 text-lg font-semibold text-center">Supporta la nostra attività di divulgazione</p>
                 <button class="mt-4 bg-red-500 text-white py-2 px-4 rounded hover:bg-white hover:text-red-500 transition duration-300">
                     <Icon name="ph:heart" class="text-3xl" />
