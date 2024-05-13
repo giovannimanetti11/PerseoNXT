@@ -1,27 +1,27 @@
 <template>
   <div class="mt-24 flex flex-col float-right">
     <div v-if="currentImage" class="relative h-auto w-96 float-right">
-      <img :src="currentImage" class="m-auto h-60 w-auto border rounded-2xl transition-all duration-300 ease-in-out" :alt="currentAltText">
+      <NuxtImg :src="currentImage" class="m-auto h-60 w-auto border rounded-2xl transition-all duration-300 ease-in-out" :alt="currentAltText" />
     </div>
 
     <div v-if="additionalImages.length > 0" class="w-full mt-1.5 flex flex-wrap justify-center">
-      <img 
+      <NuxtImg 
         v-if="featuredImage && featuredImage.node && featuredImage.node.sourceUrl"
         :src="featuredImage.node.sourceUrl" 
         :class="thumbnailClass(featuredImage.node.sourceUrl)"
         @click="setCurrentImage(featuredImage.node.sourceUrl, featuredImage.node.altText)"
         @mouseover="setCurrentImage(featuredImage.node.sourceUrl, featuredImage.node.altText)"
         :alt="featuredImage.node.altText"
-      >
+      />
       <!-- Filter and display only images with valid URLs -->
       <div v-for="(image, index) in additionalImages.filter(img => img.url)" :key="index" class="h-16">
-        <img 
+        <NuxtImg 
           :src="image.url" 
           :class="thumbnailClass(image.url)"
           @click="setCurrentImage(image.url, image.altText)"
           @mouseover="setCurrentImage(image.url, image.altText)"
           :alt="image.altText"
-        >
+        />
       </div>
     </div>
   </div>
