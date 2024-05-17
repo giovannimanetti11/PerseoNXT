@@ -19,6 +19,14 @@ node_modules
 logs
 *.log
 
+# Editor directories and files
+.vscode
+.idea
+*.sublime-project
+*.sublime-workspace
+*.swp
+*~
+
 # Misc
 .DS_Store
 .fleet
@@ -28,3 +36,11 @@ logs
 .env
 .env.*
 !.env.example
+
+# System files
+Thumbs.db
+Desktop.ini
+
+# Temporary files
+tmp
+temp
