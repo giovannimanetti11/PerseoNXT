@@ -4,7 +4,6 @@
       <div class="flex items-center">
         <a href="https://wikinutritionals.com">
           <img src="/media/logo_wikiherbalist.svg" alt="WikiHerbalist Logo" class="h-8 mr-2" loading="lazy">
-
         </a>
       </div>
 
@@ -51,7 +50,7 @@
           <div class="w-2/3 flex justify-start items-center p-2">
             <div class="w-full grid grid-cols-2 gap-4">
               <div class="p-2">
-                <button class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out hover:bg-verde before:absolute before:inset-0 before:bg-verde before: border before:rounded-lg before:transition-width before:duration-300 before:ease-linear before:origin-left before:scale-x-0 hover:before:scale-x-100">
+                <button class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out hover:bg-verde before:absolute before:inset-0 before:bg-verde before:border before:rounded-lg before:transition-width before:duration-300 before:ease-linear before:origin-left before:scale-x-0 hover:before:scale-x-100">
                   <div class="absolute left-2 top-1/2 w-12 h-12 -translate-y-1/2 bg-white p-2 rounded-2xl border border-transparent">
                     <Icon name="mdi:event" class="inner-icon text-celeste text-3xl" />
                   </div>
@@ -59,7 +58,7 @@
                 </button>
               </div>
               <div class="p-2">
-                <button class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out hover:bg-verde before:absolute before:inset-0 before:bg-verde before: border before:rounded-lg before:transition-width before:duration-300 before:ease-linear before:origin-left before:scale-x-0 hover:before:scale-x-100">
+                <button class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out hover:bg-verde before:absolute before:inset-0 before:bg-verde before:border before:rounded-lg before:transition-width before:duration-300 before:ease-linear before:origin-left before:scale-x-0 hover:before:scale-x-100">
                   <div class="absolute left-2 top-1/2 w-12 h-12 -translate-y-1/2 bg-white p-2 rounded-2xl border border-transparent">
                     <Icon name="mdi:contact-mail" class="inner-icon text-celeste text-3xl" />
                   </div>
@@ -67,7 +66,7 @@
                 </button>
               </div>
               <div class="p-2">
-                <button class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out hover:bg-verde before:absolute before:inset-0 before:bg-verde before: border before:rounded-lg before:transition-width before:duration-300 before:ease-linear before:origin-left before:scale-x-0 hover:before:scale-x-100">
+                <button class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out hover:bg-verde before:absolute before:inset-0 before:bg-verde before:border before:rounded-lg before:transition-width before:duration-300 before:ease-linear before:origin-left before:scale-x-0 hover:before:scale-x-100">
                   <div class="absolute left-2 top-1/2 w-12 h-12 -translate-y-1/2 bg-white p-2 rounded-2xl border border-transparent">
                     <Icon name="mdi:book-open-variant" class="inner-icon text-celeste text-3xl" />
                   </div>
@@ -75,7 +74,7 @@
                 </button>
               </div>
               <div class="p-2">
-                <button class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out hover:bg-verde before:absolute before:inset-0 before:bg-verde before: border before:rounded-lg before:transition-width before:duration-300 before:ease-linear before:origin-left before:scale-x-0 hover:before:scale-x-100">
+                <button class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out hover:bg-verde before:absolute before:inset-0 before:bg-verde before:border before:rounded-lg before:transition-width before:duration-300 before:ease-linear before:origin-left before:scale-x-0 hover:before:scale-x-100">
                   <div class="absolute left-2 top-1/2 w-12 h-12 -translate-y-1/2 bg-white p-2 rounded-2xl border border-transparent">
                     <Icon name="mdi:handshake" class="inner-icon text-celeste text-3xl" />
                   </div>
@@ -87,9 +86,6 @@
         </div>
       </div>
     </div>
-
-
-
 
     <!-- Mega menu Mailing List -->
     <div v-if="mailingListMenuOpen" class="menu-container w-full bg-white p-6 rounded-bl-2xl rounded-br-2xl transition-all duration-500 ease-out">
@@ -113,16 +109,14 @@
               <Icon name="tabler:mail-filled" class="text-celeste text-5xl pr-4" />
             </div>
           </div>
-
         </div>
       </div>
     </div>
-
   </header>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 
 const menuOpen = ref(false);
 const mailingListMenuOpen = ref(false);
@@ -138,16 +132,22 @@ const toggleMailingListMenu = () => {
 };
 
 const closeMenus = (event) => {
-  if (!event.target.closest('.menu-container')) {
+  if (!event.target.closest('.menu-container') && !event.target.closest('.hamburger-menu') && !event.target.closest('.buttonMailing')) {
     menuOpen.value = false;
     mailingListMenuOpen.value = false;
   }
 };
 
+onMounted(() => {
+  document.addEventListener('click', closeMenus);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', closeMenus);
+});
 </script>
 
 <style scoped>
-
 .bar {
   background-color: #a2b4c0;
   width: 6px;
@@ -199,6 +199,4 @@ nav a:hover {
 .mega-menu-button span {
   left: 40%;
 }
-
-
 </style>
