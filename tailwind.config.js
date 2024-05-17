@@ -17,7 +17,9 @@ module.exports = {
           celeste: '#5E9EF4',
           verde: '#0DA6A4',
           blu: '#036297',
-          ghiaccio: '#DFEDFD'
+          ghiaccio: '#DFEDFD',
+          'scrollbar-bg': '#f5f5f5',
+          'scrollbar-thumb-bg': 'rgba(224,237,253,1)'
         }
       },
       borderWidth: {
