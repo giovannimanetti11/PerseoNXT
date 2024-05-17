@@ -8,7 +8,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "start": "nuxt start"
+    "start": "nuxt start",
+    "lint": "eslint ."
   },
   "dependencies": {
     "@algolia/client-search": "^4.23.3",
@@ -34,10 +35,16 @@
   },
   "devDependencies": {
     "@nuxtjs/seo": "^2.0.0-rc.10",
+    "@typescript-eslint/eslint-plugin": "^7.9.0",
+    "@typescript-eslint/parser": "^7.9.0",
     "autoprefixer": "^10.4.19",
+    "eslint": "^8.57.0",
+    "eslint-plugin-unicorn": "^53.0.0",
+    "eslint-plugin-vue": "^9.26.0",
     "nuxt-icon": "^0.6.10",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",
+    "vue-eslint-parser": "^9.4.2",
     "webpack-bundle-analyzer": "^4.10.2"
   }
 }
