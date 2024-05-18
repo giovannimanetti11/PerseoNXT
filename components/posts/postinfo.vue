@@ -2,13 +2,13 @@
   <div class="flex flex-col">
     <div class="flex flex-row">
       <h1 class="text-3xl font-bold">{{ title }}</h1>
-      <button @click="speakTitle" class="flex text-5xl ml-4 mb-2 shadow text-white bg-blu rounded-full w-12 h-12 justify-center items-center hover:bg-white hover:text-blu">
+      <button @click="speakTitle" class="flex text-5xl ml-4 mb-2 shadow text-white bg-blu rounded-full w-12 h-12 justify-center items-center hover:bg-white hover:text-blu print:hidden">
           <icon name="f7:speaker-1-fill" class="text-4xl" />
       </button>
     </div>
     <p class="text-xl italic text-gray-700">{{ nomeScientifico }}</p>
-    <div class="postinfo-buttons flex mt-4">
-      <button class="group flex items-center mr-4 py-2 px-4 bg-white shadow text-blu border rounded-lg hover:bg-blu hover:text-white">
+    <div class="postinfo-buttons flex mt-4 print:hidden">
+      <button @click="printPost" class="group flex items-center mr-4 py-2 px-4 bg-white shadow text-blu border rounded-lg hover:bg-blu hover:text-white">
         <icon name="mingcute:print-fill" class="text-3xl group-hover:text-white" />
         <span class="ml-2 text-base">Stampa</span>
       </button>
@@ -53,6 +53,20 @@ import { ref, computed, onMounted } from 'vue';
 import { apiConfig } from '../config';
 import { useFetch } from '#app';
 
+
+const printPost = () => {
+  const printContents = document.getElementById('post').innerHTML;
+  const originalContents = document.body.innerHTML;
+
+  document.body.innerHTML = printContents;
+  window.print();
+  document.body.innerHTML = originalContents;
+};
+
+onMounted(() => {
+  console.log('Publish Date:', props.publishDate);
+  console.log('Update Date:', props.updateDate);
+});
 
 
 const props = defineProps({
