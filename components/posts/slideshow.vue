@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-24 flex flex-col float-right">
+  <div class="mt-24 flex flex-col float-right print:mt-8">
     <!-- Image section that triggers lightbox on click -->
     <div v-show="currentImage" class="relative h-auto w-96 float-right">
       <NuxtImg

@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-10/12 h-96 mt-4 ml-auto">
+  <div class="relative w-10/12 h-96 mt-4 ml-auto print:hidden">
     <div ref="mapElement" class="w-full h-full border rounded-2xl"></div>
     <div v-if="loading" class="absolute top-0 left-0 w-full h-full flex items-center justify-center">
       <icon name="eos-icons:three-dots-loading" class="text-5xl text-celeste" />

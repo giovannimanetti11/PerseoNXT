@@ -1,5 +1,5 @@
 <template>
-    <div class="footer-section flex grid grid-cols-12 gap-x-4 bg-ghiaccio text-black mt-6 py-14 w-11/12 m-auto rounded-2xl">
+    <div class="footer-section flex grid grid-cols-12 gap-x-4 bg-ghiaccio text-black mt-6 py-14 w-11/12 m-auto rounded-2xl print:hidden">
         <!-- Left col -->
         <div class="col-start-1 col-span-3 flex flex-col ml-6">
             <a href="https://wikinutritionals.com" class="flex flex-col m-auto text-center">
