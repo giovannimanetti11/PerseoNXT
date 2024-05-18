@@ -10,8 +10,19 @@
       />
     </div>
 
-    <!-- Thumbnails of additional images -->
-    <div v-show="additionalImages.length > 0" class="w-full mt-1.5 flex flex-wrap justify-center">
+    <!-- Thumbnails of additional images, including featured image -->
+    <div v-show="additionalImages.length > 0 || featuredImage" class="w-full mt-1.5 flex flex-wrap justify-center">
+      <!-- Featured image thumbnail -->
+      <div v-if="featuredImage && featuredImage.node && featuredImage.node.sourceUrl" class="h-16">
+        <NuxtImg
+          :src="featuredImage.node.sourceUrl"
+          :class="thumbnailClass(featuredImage.node.sourceUrl)"
+          @click="setCurrentImage(featuredImage.node.sourceUrl, featuredImage.node.altText)"
+          @mouseover="setCurrentImage(featuredImage.node.sourceUrl, featuredImage.node.altText)"
+          :alt="featuredImage.node.altText"
+        />
+      </div>
+      <!-- Other images thumbnails -->
       <div v-for="(image, index) in validAdditionalImages" :key="index" class="h-16">
         <NuxtImg 
           :src="image.url"
@@ -42,14 +53,13 @@ const props = defineProps({
   additionalImages: Array
 });
 
-
 const currentImage = ref(props.featuredImage?.node?.sourceUrl || null);
 const currentAltText = ref(props.featuredImage?.node?.altText || '');
 
 const lightboxVisible = ref(false);
 
-// Compute array of all image URLs for the lightbox
-const allImages = computed(() => [props.featuredImage.node.sourceUrl, ...props.additionalImages.map(img => img.url)]);
+// Compute array of all image URLs for the lightbox, ensuring the featured image is included first
+const allImages = computed(() => [props.featuredImage.node.sourceUrl, ...props.additionalImages.map(img => img.url).filter(url => url !== props.featuredImage.node.sourceUrl)]);
 
 // Compute current index of the displayed image within the lightbox
 const currentImageIndex = computed(() => allImages.value.indexOf(currentImage.value));
