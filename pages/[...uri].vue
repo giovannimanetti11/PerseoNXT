@@ -1,15 +1,16 @@
 <template>
   <div id="post" v-if="post.data">
     <!-- Main upper post container -->
-    <section class="post-info-section flex flex-row py-20 px-10 w-11/12 mx-auto rounded-2xl">
+    <section class="post-info-section flex flex-row py-20 px-10 w-11/12 mx-auto rounded-2xl print:py-2 print:px-2">
       <!-- Container for main post information -->
-      <div class="mt-40 container mx-auto w-2/5 px-4">
+      <div class="mt-40 container mx-auto w-2/5 px-4 print:mt-8">
         <PostInfo 
           :title="post.data.title"
           :nomeScientifico="post.data.nomeScientifico"
           :publishDate="post.data.date"
           :updateDate="post.data.modified"
           :content="post.data.content"
+          :authorName="post.data.authorName"
         />
       </div>
       <!-- Container for slideshow and scientific name map -->
@@ -24,7 +25,7 @@
       </div>
     </section>
     <!-- Index section with dynamic headings list -->
-    <section class="post-index-section flex flex-col py-20 px-10 w-11/12 mx-auto rounded-2xl mt-4">
+    <section class="post-index-section flex flex-col py-20 px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-2">
       <div class="font-bold text-2xl">
         <icon name="ic:twotone-list" class="text-3xl text-black rounded-full mr-2" /> Indice
       </div>
@@ -98,8 +99,8 @@
       <div v-html="section.content" class="mt-4"></div>
     </section>
   </div>
-  <div v-else>
-    <icon name="eos-icons:three-dots-loading" class="text-5xl text-celeste" />
+  <div v-else class="post-info-section flex flex-row py-20 px-10 w-11/12 mx-auto rounded-2xl">
+    <icon name="eos-icons:three-dots-loading" class="text-5xl text-celeste text-center mt-10 mx-auto" />
   </div>
 </template>
 
