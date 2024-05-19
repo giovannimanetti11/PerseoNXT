@@ -24,6 +24,9 @@
     <p class="mt-4 text-xs text-gray-500">
       Scheda pubblicata il {{ formattedPublishDate }} e aggiornata il {{ formattedUpdateDate }}
     </p>
+    <p class="text-xs text-gray-500 mt-2">
+      Di: {{ authorName === 'wh_admin' ? 'Editors of Wikiherbalist' : authorName }}
+    </p>
     <div class="flex items-center mt-2 text-xs text-gray-500">
       <icon name="ph:clock-fill" class="text-sm text-gray-600 mr-1.5" />
       <span>Tempo di lettura: {{ readingTime }} min</span>
@@ -74,7 +77,8 @@ const props = defineProps({
   nomeScientifico: String,
   publishDate: String,
   updateDate: String,
-  content: String
+  content: String,
+  authorName: String
 });
 
 const publicationCount = ref(null);
