@@ -29,9 +29,22 @@ body {
   list-style-type: decimal;
 }
 
+
 /* General */
 
 .radius-bottom-none {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
+}
+
+/* Print css */ 
+@media print {
+  body:after {
+    content: "@wikiherbalist";
+    position: fixed;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+  }
 }
