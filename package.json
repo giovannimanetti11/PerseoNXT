@@ -32,6 +32,7 @@
     "ol": "^9.1.0",
     "vue": "^3.4.21",
     "vue-easy-lightbox": "^1.19.0",
+    "vue-html-to-paper": "^2.0.3",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
