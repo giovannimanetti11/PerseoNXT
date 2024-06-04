@@ -12,7 +12,7 @@
           <a href="https://wikinutritionals.com" class="no-underline py-2 px-2">Home</a>
           <a href="#" class="no-underline py-2 px-2">About</a>
           <a href="#" class="no-underline py-2 px-2">Piante medicinali</a>
-          <a href="#" class="no-underline py-2 px-2">Glossario</a>
+          <a href="/glossario" class="no-underline py-2 px-2">Glossario</a>
           <a href="#" class="no-underline py-2 px-2">Blog</a>
         </nav>
       </div>
