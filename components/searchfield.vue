@@ -18,11 +18,11 @@
     </div>
     <!-- results -->
     <div v-if="searchResults.length" class="flex-col w-3/5 m-auto bg-white border border-t-0 border-celeste rounded-b-lg">
-      <div v-for="result in searchResults" :key="result.objectID" class="flex items-center py-2 hover:bg-gray-100 hover:rounded-b-lg hover:cursor-pointer" @click="goToPost(result.uri)">
-        <NuxtImg :src="result.featuredImage.sourceUrl" alt="result.title" class="rounded-lg w-20 h-20 max-w-[80px] max-h-[80px] object-cover ml-2 mr-4" />
+      <div v-for="result in searchResults" :key="result.objectID" class="flex items-center py-2 hover:bg-gray-100 hover:rounded-b-lg hover:cursor-pointer" @click="goToPost(result.uri || result.slug)">
+        <NuxtImg :src="result.featuredImage ? result.featuredImage.sourceUrl : result.imageUrl" :alt="result.title" class="rounded-lg w-20 h-20 max-w-[80px] max-h-[80px] object-cover ml-2 mr-4" />
         <div>
           <h3 class="text-lg font-bold">{{ result.title }}</h3>
-          <p class="italic">{{ result.nomeScientifico }}</p>
+          <p class="italic">{{ result.nomeScientifico || '' }}</p>
         </div>
       </div>
     </div>
@@ -47,32 +47,40 @@ import { apiConfig } from '~/config.js';
 
 const router = useRouter();
 const algoliaClient = algoliasearch(apiConfig.algoliaAppId, apiConfig.algoliaSearchAPIKey);
-const searchIndex = algoliaClient.initIndex('posts');
+const postsIndex = algoliaClient.initIndex('posts');
+const glossaryIndex = algoliaClient.initIndex('glossary');
 
 const searchTerm = ref('');
 const searchResults = ref([]);
 const searchMade = ref(false); 
 
-const debouncedSearch = _debounce(() => {
+const debouncedSearch = _debounce(async () => {
   if (searchTerm.value.trim().length >= 3) {
-    performSearch();
+    await performSearch();
   } else {
     searchResults.value = [];
   }
 }, 300);
 
 async function performSearch() {
-  searchMade.value = true; 
+  searchMade.value = true;
   try {
     console.log("Performing search for:", searchTerm.value);
-    const { hits } = await searchIndex.search(searchTerm.value);
-    searchResults.value = hits;
-    console.log("Hits received:", hits.length);
+    const postSearchPromise = postsIndex.search(searchTerm.value);
+    const glossarySearchPromise = glossaryIndex.search(searchTerm.value);
+
+
+    const [postResults, glossaryResults] = await Promise.all([postSearchPromise, glossarySearchPromise]);
+
+
+    searchResults.value = [...postResults.hits, ...glossaryResults.hits];
+    console.log("Hits received from both indexes:", searchResults.value.length);
   } catch (error) {
     console.error("Error during search:", error);
     searchResults.value = [];
   }
 }
+
 
 function handleInput() {
   if (!searchTerm.value.trim()) {
@@ -93,6 +101,7 @@ function goToPost(uri) {
   router.push(uri);
 }
 </script>
+
 
 
 
