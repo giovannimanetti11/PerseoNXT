@@ -1,7 +1,7 @@
 <template>
   <div class="mt-24 flex flex-col float-right print:mt-8">
     <!-- Image section that triggers lightbox on click -->
-    <div v-show="currentImage" class="relative h-auto w-96 float-right">
+    <div v-show="currentImage" class="relative h-auto w-96 float-right hover:cursor-pointer hover:opacity-85">
       <NuxtImg
         :src="currentImage"
         class="m-auto h-60 w-auto border rounded-2xl transition-all duration-300 ease-in-out"
