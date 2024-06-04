@@ -59,18 +59,15 @@ import { useFetch } from '#app';
 
 const printPost = () => {
   const printContents = document.getElementById('post').innerHTML;
-  const originalContents = document.body.innerHTML;
+  const headContent = document.getElementsByTagName('head')[0].innerHTML;
 
-  document.body.innerHTML = printContents;
-  window.print();
-  document.body.innerHTML = originalContents;
+  const newWindow = window.open('', '_blank');
+  newWindow.document.write(`<html><head>${headContent}</head><body>${printContents}</body></html>`);
+  newWindow.document.close();
+  newWindow.focus();
+  newWindow.print();
+  newWindow.close();
 };
-
-onMounted(() => {
-  console.log('Publish Date:', props.publishDate);
-  console.log('Update Date:', props.updateDate);
-});
-
 
 const props = defineProps({
   title: String,
