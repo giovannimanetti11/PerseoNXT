@@ -3,6 +3,7 @@
     <searchfield />
     <browse-by-letter />
     <section-blog />
+    <contacts />
   </template>
 
   <script setup>
@@ -10,6 +11,7 @@
     import Searchfield from '~/components/searchfield.vue';
     import browseByLetter from '~/components/browse-by-letter.vue';
     import sectionBlog from '~/components/section-blog.vue';
+    import sectionContact from "~/components/contacts.vue";
   </script>
 
 
