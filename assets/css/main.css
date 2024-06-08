@@ -23,6 +23,7 @@ body {
 #post h4 {
   font-weight: bold;
   color: #5E9EF4;
+  margin-top: 20px;
 }
 
 #post ol {
