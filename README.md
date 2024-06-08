@@ -12,10 +12,10 @@ PerseoNXT is a custom Nuxt3-based theme designed specifically for headless WordP
 
 ## Features
 
+- **Vue3**: built with Vue3, leveraging its Composition API, reactivity system, and improved performance.
 - **Nuxt3**: utilizes the latest Nuxt3 framework for server-side rendering, static site generation, and client-side navigation.
 - **GraphQL and Apollo**: makes use of GraphQL with Apollo for efficient data fetching, offering real-time updates and flexible querying capabilities.
-- **Vue3**: built with Vue3, leveraging its composition API, reactivity system, and improved performance.
-- **Tailwind CSS**: integrates Tailwind CSS for utility-first, responsive, and highly customizable styling.
+- **Tailwind**: integrates Tailwind CSS for utility-first, responsive, and highly customizable styling.
 - **ESLint**: ensures code quality and consistency with ESLint configurations.
 
 ## Installation
@@ -53,4 +53,4 @@ For any inquiries or further information, please contact the project maintainer 
 
 ---
 
-We invite you to be a part of this project and help enhance the theme for wikiherbalist.com, a open-source and not for profit project. Happy coding!
+We invite you to be a part of this project and help enhance the theme for wikiherbalist.com, an open-source and not-for-profit project. Happy coding!
