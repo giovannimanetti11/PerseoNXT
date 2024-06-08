@@ -39,6 +39,9 @@ export default defineNuxtConfig ({
       autoprefixer: {},
     },
   },
+  alias: {
+    '@config': '/var/www/wikinutritionals.com/config.js'
+  },
   build: {
     extend(config, { isClient }) {
         if (isClient) {
