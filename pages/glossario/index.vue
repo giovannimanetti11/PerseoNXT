@@ -21,7 +21,7 @@
           <icon name="eos-icons:three-dots-loading" class="text-5xl text-celeste text-center mt-10 mx-auto" />
       </div>
     </section>
-    <contacts />
+    <Contacts />
 </template>
 
 
@@ -31,7 +31,7 @@ import { ref, onMounted, computed } from 'vue';
 import { useQuery } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 import Searchfield from '~/components/searchfield.vue';
-import sectionContact from "~/components/contacts.vue";
+import Contacts from "~/components/contacts.vue";
 
 const glossaryTerms = ref([]);
 const loading = ref(false);
