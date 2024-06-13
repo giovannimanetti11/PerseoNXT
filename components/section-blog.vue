@@ -23,9 +23,11 @@
                   </div>
                   <div class="flex-col w-2/4 m-auto text-center">
                       <NuxtImg :src="post.featuredImage" :alt="post.altText" class="rounded-2xl w-11/12 mt-4 m-auto h-auto max-h-32 object-cover" />
-                      <button class="blog-card-button py-4 bg-verde text-white w-11/12 rounded-xl mt-4 mb-4">
-                          Leggi di più  →
-                      </button>
+                      <nuxt-link :to="post.uri">
+                          <button class="blog-card-button py-4 bg-verde text-white w-11/12 rounded-xl mt-4 mb-4">
+                              Leggi di più  →
+                          </button>
+                      </nuxt-link>
                   </div>
               </div>
           </div>
@@ -33,9 +35,8 @@
   </section>
 </template>
 
-
 <script setup>
-import { onMounted, watch } from 'vue';
+import { ref, watch } from 'vue';
 import { useQuery } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 
@@ -69,21 +70,21 @@ const { result } = useQuery(BLOG_POSTS_QUERY);
 
 // Watch for changes in result
 watch(result, (newValue) => {
-if (newValue?.blogPosts?.nodes) {
-  posts.value = newValue.blogPosts.nodes.map(post => ({
-    authorName: post.authorName,
-    featuredImage: post.featuredImage.node.sourceUrl,
-    altText: post.featuredImage.node.altText,
-    title: post.title,
-    uri: post.uri,
-    date: new Date(post.date).toLocaleDateString('it-IT', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      })
+  if (newValue?.blogPosts?.nodes) {
+    posts.value = newValue.blogPosts.nodes.map(post => ({
+      authorName: post.authorName,
+      featuredImage: post.featuredImage.node.sourceUrl,
+      altText: post.featuredImage.node.altText,
+      title: post.title,
+      uri: post.uri,
+      date: new Date(post.date).toLocaleDateString('it-IT', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric'
+        })
     }));
     activePost.value = posts.value[0]?.uri;
-}
+  }
 });
 
 // Define ref for active transformations
@@ -112,7 +113,6 @@ const toggleActive = (uri) => {
   }
 };
 
-
 const getTransformation = (post, index) => {
   switch (index) {
     case 0: return transformations.value.first;
@@ -121,12 +121,7 @@ const getTransformation = (post, index) => {
     default: return ''; 
   }
 };
-
-
-
-
 </script>
-
 
 <style scoped>
   .section-blog {
@@ -164,5 +159,4 @@ const getTransformation = (post, index) => {
     z-index: 10;
     animation: bounce 0.5s forwards;
   }
-
 </style>
