@@ -43,7 +43,7 @@ const props = defineProps({
   updateDate: String,
   content: String,
   authorName: String,
-  readingTime: Number // Aggiunta di questa prop
+  readingTime: Number
 });
 
 const printPost = () => {
