@@ -20,6 +20,11 @@ module.exports = {
           ghiaccio: '#DFEDFD',
           'scrollbar-bg': '#f5f5f5',
           'scrollbar-thumb-bg': 'rgba(224,237,253,1)'
+        },
+        ringWidth: {
+          '1': '1px',
+          '2': '2px',
+          '3': '3px',
         }
       },
       borderWidth: {
