@@ -27,6 +27,7 @@
     "@vuelidate/validators": "^2.0.4",
     "algoliasearch": "^4.23.3",
     "cheerio": "^1.0.0-rc.12",
+    "dompurify": "^3.1.5",
     "graphql": "^16.8.1",
     "graphql-request": "^7.0.0",
     "graphql-tag": "^2.12.6",
