@@ -24,7 +24,7 @@
         <ObservationsMap :nomeScientifico="post.data.nomeScientifico" />
       </div>
     </section>
-    <!-- Index section with dynamic headings list -->
+    <!-- Index section -->
     <section class="post-index-section flex flex-col py-20 px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full">
       <div class="font-bold text-2xl">
         <icon name="ic:twotone-list" class="text-3xl text-black rounded-full mr-2" /> Indice
@@ -38,7 +38,7 @@
         </li>
       </ul>
     </section>
-
+    <!-- Start of "static" sections -->
     <section class="post-section-proprieta flex flex-col py-20 px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full" id="section1" v-if="post.data.tags && post.data.tags.nodes.length > 0">
       <div class="flex items-center">
         <div class="circle flex items-center justify-center w-12 h-12 mb-4 mr-2 bg-blu text-white rounded-full text-lg font-bold print:mb-0 print:mr-0.5">1</div>
@@ -87,16 +87,17 @@
       </div>
       <p class="mt-4">{{ post.data.costituenti }}</p>
     </section>
-    <!-- Dynamic content sections generated from structured content based on <h3> elements -->
+    <!-- "Dynamic" content sections -->
     <section v-for="(section, index) in post.structuredContent"
-             :class="['flex flex-col py-20 px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full', section.className]"
+             :class="['post-content-section flex flex-col py-20 px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full', section.className]"
              :id="'section' + (5 + index + 1)"
              :key="section.title">
-      <div class="flex items-center">
+      <div class="flex items-center" v-if="section.title !== 'Riferimenti'">
         <div class="circle flex items-center justify-center w-12 h-12 mb-4 mr-2 bg-blu text-white rounded-full text-lg font-bold print:mb-0 print:mr-0.5">{{ 5 + index + 1 }}</div>
         <h3>{{ section.title }}</h3>
       </div>
-      <div v-html="section.content" class="mt-4"></div>
+      <h3 v-else class="mb-4">{{ section.title }}</h3>
+      <div v-html="sanitizedContent(section.content)" class="mt-4"></div>
     </section>
   </div>
   <div v-else class="post-info-section flex flex-row py-20 px-10 w-11/12 mx-auto rounded-2xl">
@@ -104,21 +105,22 @@
   </div>
 </template>
 
-
-
 <script setup>
-import { ref, reactive, onMounted, watch, nextTick } from 'vue';
+import { reactive, onMounted, watch, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
-import { useNuxtApp } from '#app';
 import { useQuery } from '@vue/apollo-composable';
 import cheerio from 'cheerio';
 import gql from 'graphql-tag';
 import Slideshow from '@/components/posts/slideshow.vue';
 import PostInfo from '@/components/posts/postinfo.vue';
 import ObservationsMap from '@/components/posts/observationsMap.vue';
+import DOMPurify from 'dompurify';
+
+const sanitizedContent = (content) => {
+  return DOMPurify.sanitize(content);
+};
 
 const route = useRoute();
-const { apollo } = useNuxtApp();
 const post = reactive({
   data: null,
   loading: true,
@@ -127,7 +129,6 @@ const post = reactive({
   structuredContent: [],
   error: null
 });
-
 
 const smoothScroll = (target) => {
   const location = document.querySelector(target);
@@ -139,11 +140,9 @@ const smoothScroll = (target) => {
   }
 };
 
-
 // Split partiUsate and nomeComune strings into an array
 const partiUsateArray = computed(() => {
   if (post.data && post.data.partiUsate) {
-    // Regex to split by comma or semicolon with optional surrounding whitespaces
     return post.data.partiUsate.split(/[\s]*[;,][\s]*/).filter(parte => parte.length > 0);
   }
   return [];
@@ -156,7 +155,7 @@ const nomeComuneArray = computed(() => {
   return [];
 });
 
-// GraphQL query to fetch post data by URI (slug)
+// Define GraphQL query
 const FETCH_POST_BY_URI = gql`
   query FetchPostByUri($uri: String!) {
     postBy(uri: $uri) {
@@ -233,36 +232,34 @@ async function fetchPost() {
 
         const sections = [];
         $('h3, p').each(function() {
-        const element = $(this);
-        const title = element.text().trim();
-        if (element.is('p') && title === "Riferimenti") {
-          const contentHtml = $('<div>').append(element.nextAll().clone()).html();
-          sections.push({
-            title: title,
-            content: contentHtml,
-            className: `post-section-${title.toLowerCase().replace(/[\s,\'\`]+/g, '-').replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e').replace(/[ìíîï]/g, 'i').replace(/[òóôõö]/g, 'o').replace(/[ùúûü]/g, 'u')}`
-          });
-        } else if (element.is('h3')) {
-          const contentHtml = $('<div>').append(element.nextUntil('h3, p:contains("Riferimenti")').clone()).html();
-          sections.push({
-            title: title,
-            content: contentHtml,
-            className: `post-section-${title.toLowerCase().replace(/[\s,\'\`]+/g, '-').replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e').replace(/[ìíîï]/g, 'i').replace(/[òóôõö]/g, 'o').replace(/[ùúûü]/g, 'u')}`
-          });
-        }
-      });
+          const element = $(this);
+          const title = element.text().trim();
+          if (element.is('p') && title === "Riferimenti") {
+            const contentHtml = $('<div>').append(element.nextAll().clone()).html();
+            sections.push({
+              title: title,
+              content: contentHtml,
+              className: `post-section-${title.toLowerCase().replace(/[\s,\'\`]+/g, '-').replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e').replace(/[ìíîï]/g, 'i').replace(/[òóôõö]/g, 'o').replace(/[ùúûü]/g, 'u')}`
+            });
+            return false; // Stop iteration after "Riferimenti"
+          } else if (element.is('h3')) {
+            const contentHtml = $('<div>').append(element.nextUntil('h3, p:contains("Riferimenti")').clone()).html();
+            sections.push({
+              title: title,
+              content: contentHtml,
+              className: `post-section-${title.toLowerCase().replace(/[\s,\'\`]+/g, '-').replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e').replace(/[ìíîï]/g, 'i').replace(/[òóôõö]/g, 'o').replace(/[ùúûü]/g, 'u')}`
+            });
+          }
+        });
 
         post.structuredContent = sections;
       });
     }
   });
-
 }
 
 onMounted(fetchPost);
 </script>
-
-
 
 <style scoped>
 .post-info-section {
@@ -279,4 +276,3 @@ onMounted(fetchPost);
   background: linear-gradient(180deg, rgba(245,245,245,1) 0%, rgba(224,237,253,1) 100%);
 }
 </style>
-

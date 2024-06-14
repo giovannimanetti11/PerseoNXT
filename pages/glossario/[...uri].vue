@@ -1,6 +1,8 @@
 <template>
   <div id="post" v-if="glossaryTerm">
+    <!-- Main upper term container -->
     <section class="postGlossario-info-section flex flex-row py-20 px-10 w-11/12 mx-auto rounded-2xl print:py-2 print:px-0 print:w-full">
+      <!-- Container for main term information -->
       <div class="mt-40 container mx-auto w-3/5 px-4 print:mt-8 print:px-0">
         <GlossarioInfo 
           :title="glossaryTerm.title"
@@ -10,16 +12,17 @@
           :readingTime="readingTime"
         />
       </div>
+      <!-- Container for featured image -->
       <div class="flex flex-col w-2/5">
         <NuxtImg v-if="glossaryTerm.featuredImage" class="m-auto h-60 w-auto border rounded-2xl transition-all duration-300 ease-in-out shadow-lg mb-4" :src="glossaryTerm.featuredImage.node.sourceUrl" :alt="glossaryTerm.featuredImage.node.altText" />
       </div>
     </section>
-    <!-- Sezione indice -->
+    <!-- Index section -->
     <section class="postGlossario-index-section flex flex-col py-20 px-10 w-11/12 mx-auto mt-4 rounded-2xl">
       <div class="font-bold text-2xl">
         <icon name="ic:twotone-list" class="text-3xl text-black rounded-full mr-2" /> Indice
       </div>
-      <ul class="mt-8 flex flex-wrap justify-items-start gap-4">
+      <ul class="mt-8 flex flex-wrap justify-items-start gap-4  print:gap-0 print:mt-2">
         <li v-for="(heading, index) in headings" :key="index" class="text-center py-4 px-4 bg-verde text-white rounded-xl m-1 text-sm hover:bg-celeste cursor-pointer w-1/5 flex-grow-0 flex-shrink-0">
           <a :href="'#section' + (index + 1)" class="flex items-center group" @click.prevent="smoothScroll('#section' + (index + 1))">
             <div class="circle flex items-center justify-center w-8 h-8 bg-white text-verde rounded-full mr-2 text-lg font-bold group-hover:text-celeste">{{ index + 1 }}</div>
@@ -28,16 +31,17 @@
         </li>
       </ul>
     </section>
-    <!-- Sezioni del contenuto -->
+    <!-- Start of content sections -->
     <section v-for="(section, index) in sections"
              :class="['term-section flex flex-col py-20 px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full', section.className]"
              :id="'section' + (index + 1)"
              :key="section.heading">
-      <div class="flex items-center">
+      <div class="flex items-center" v-if="section.heading !== 'Riferimenti'">
         <div class="circle flex items-center justify-center w-12 h-12 mb-4 mr-2 bg-blu text-white rounded-full text-lg font-bold print:mb-0 print:mr-0.5">{{ index + 1 }}</div>
         <h3>{{ section.heading }}</h3>
       </div>
-      <div v-html="section.content" class="mt-4"></div>
+      <h3 v-else class="mb-4">{{ section.heading }}</h3>
+      <div v-html="sanitizedContent(section.content)" class="mt-4"></div>
     </section>
   </div>
   <div v-else class="flex flex-row py-20 px-10 w-11/12 mx-auto rounded-2xl">
@@ -52,12 +56,17 @@ import { useQuery } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 import cheerio from 'cheerio';
 import GlossarioInfo from '@/components/glossario/glossarioinfo.vue';
-import { useNuxtApp } from '#app';
+
+import DOMPurify from 'dompurify';
+
+const sanitizedContent = (content) => {
+  return DOMPurify.sanitize(content);
+};
 
 const route = useRoute();
-const slug = ref(route.params.uri[0]);
+const slug = ref(route.params.uri instanceof Array ? route.params.uri[0] : route.params.uri);
 
-// Definisci la query GraphQL
+// Define GraphQL query
 const FETCH_GLOSSARY_TERM_BY_SLUG = gql`
 query GetGlossaryTermBySlug($slug: String!) {
   glossaryTermBy(slug: $slug) {
@@ -76,11 +85,7 @@ query GetGlossaryTermBySlug($slug: String!) {
 }
 `;
 
-const { result, loading, error } = useQuery(FETCH_GLOSSARY_TERM_BY_SLUG, { slug: slug.value });
-watch(result, (newVal) => {
-  console.log("Query result:", newVal);
-  console.log("Glossary term loaded:", newVal?.glossaryTermBy);
-}, { deep: true });
+const { result, error } = useQuery(FETCH_GLOSSARY_TERM_BY_SLUG, { slug: slug.value });
 
 const glossaryTerm = computed(() => result.value?.glossaryTermBy || {});
 
@@ -94,7 +99,6 @@ watchEffect(() => {
   }
 
   if (glossaryTerm.value && glossaryTerm.value.content) {
-    console.log("Glossary term fully loaded:", glossaryTerm.value);
     const $ = cheerio.load(glossaryTerm.value.content);
     const extractedHeadings = [];
     const extractedSections = [];
@@ -106,22 +110,32 @@ watchEffect(() => {
       $(this).attr('id', headingId);
 
       extractedHeadings.push(headingText);
-      const sectionContent = $(this).nextUntil('h3').html();
+      const sectionContent = $(this).nextUntil('h3, p:contains("Riferimenti")').toArray().map(el => $.html(el)).join('');
       extractedSections.push({
         heading: headingText,
         content: sectionContent,
         className: `post-section-${headingText.toLowerCase().replace(/[\s,\'\`]+/g, '-').replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e').replace(/[ìíîï]/g, 'i').replace(/[òóôõö]/g, 'o').replace(/[ùúûü]/g, 'u')}`
       });
 
-      // Aggiungi il conteggio delle parole per il titolo e il contenuto della sezione
+      // Add words count for title and content
       wordCount += headingText.split(/\s+/).length;
       wordCount += sectionContent ? sectionContent.replace(/<[^>]*>/g, '').split(/\s+/).length : 0;
     });
 
+    // Extract "Riferimenti" section
+    const referencesElement = $('p:contains("Riferimenti")');
+    if (referencesElement.length) {
+      const referencesContent = $('<div>').append(referencesElement.nextAll().clone()).html();
+      extractedSections.push({
+        heading: "Riferimenti",
+        content: referencesContent,
+        className: "post-section-riferimenti"
+      });
+    }
+
     headings.value = extractedHeadings;
     sections.value = extractedSections;
-    readingTime.value = Math.ceil(glossaryTerm.value.content.split(/\s+/).length / 200); // Calcolo del tempo di lettura
-    console.log("Headings and sections extracted and set:", headings.value, sections.value, "Reading time:", readingTime.value);
+    readingTime.value = Math.ceil(wordCount / 200); // Reading time calculation
   }
 });
 
