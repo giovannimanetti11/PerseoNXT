@@ -114,6 +114,15 @@ body {
   border-bottom-right-radius: 0;
 }
 
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* Print css */ 
 @media print {
   body:after {
