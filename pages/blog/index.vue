@@ -8,10 +8,10 @@
     <div v-if="error" class="text-red-500 text-center">
       Errore nel caricamento dei dati.
     </div>
-    <div v-if="featuredPost" class="featured-post flex flex-col mb-6 w-11/12 md:w-2/3 m-auto mt-12 bg-white rounded-2xl p-4">
+    <div v-if="featuredPost" class="featured-post flex flex-col mb-6 w-11/12 md:w-2/3 m-auto mt-24 bg-white rounded-2xl p-4">
       <div class="flex flex-col md:flex-row w-full">
-        <img :src="featuredPost.featuredImage.node.sourceUrl" :alt="featuredPost.featuredImage.node.altText" class="mr-2 w-full md:w-1/2 h-64 object-cover rounded-lg mb-4">
-        <div class="flex flex-col w-full md:w-1/2 ml-2">
+        <NuxtImg :src="featuredPost.featuredImage.node.sourceUrl" :alt="featuredPost.featuredImage.node.altText" class="mr-4 w-full md:w-1/2 h-64 object-cover rounded-lg mb-4" />
+        <div class="flex flex-col w-full md:w-1/2 ml-4">
           <h2 class="text-3xl font-semibold text-left mb-2">{{ featuredPost.title }}</h2>
           <p class="text-gray-600 mb-4">di {{ featuredPost.authorName }} - {{ formatDate(featuredPost.date) }}</p>
           <div v-html="featuredPost.excerpt" class="text-gray-700 mb-4 pb-12"></div>
@@ -21,7 +21,7 @@
     </div>
     <div v-if="otherPosts.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-11/12 md:w-2/3 m-auto">
       <div v-for="post in otherPosts" :key="post.databaseId" class="bg-white rounded-lg shadow-lg px-6 pb-20 pt-6 relative">
-        <img :src="post.featuredImage.node.sourceUrl" :alt="post.featuredImage.node.altText" class="w-full h-48 object-cover rounded-lg mb-4">
+        <NuxtImg :src="post.featuredImage.node.sourceUrl" :alt="post.featuredImage.node.altText" class="w-full h-48 object-cover rounded-lg mb-4" />
         <h3 class="text-2xl font-semibold mb-2">{{ post.title }}</h3>
         <p class="text-gray-600 mb-4">{{ post.authorName }} - {{ formatDate(post.date) }}</p>
         <nuxt-link :to="'/blog/' + post.slug" class="bg-verde block border absolute bottom-6 left-1/2 transform -translate-x-1/2 w-11/12 md:w-4/5 text-white text-center rounded-xl py-2 hover:border-verde hover:border hover:text-verde hover:bg-white">Leggi di più</nuxt-link>
