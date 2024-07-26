@@ -1,12 +1,12 @@
 <template>
-  <div class="relative w-10/12 h-96 mt-4 ml-auto print:hidden">
+  <div class="relative w-full md:w-10/12 h-96 mt-4 ml-auto print:hidden">
     <div ref="mapElement" class="w-full h-full border rounded-2xl"></div>
     <div v-if="loading" class="absolute top-0 left-0 w-full h-full flex items-center justify-center">
       <icon name="eos-icons:three-dots-loading" class="text-5xl text-celeste" />
     </div>
-    <div class="flex justify-between w-full py-2 px-4 bg-white">
-          <p class="text-base">Osservazioni di <span class="font-bold italic">{{ nomeScientifico }}</span> nel 2023.</p>
-          <p class="text-xs"> Credits: <a href="https://www.gbif.org/" target="_blank" class="text-blu hover:text-celeste">GBIF</a> | <a href="https://www.openstreetmap.org/" target="_blank" class="text-blu hover:text-celeste">OpenStreetMap</a></p>
+    <div class="flex flex-col md:flex-row justify-between w-full py-2 px-2 md:px-4 bg-white">
+          <p class="text-center md:text-left text-base">Osservazioni di <span class="font-bold italic">{{ nomeScientifico }}</span> nel 2023.</p>
+          <p class="text-center md:text-left text-xs"> Credits: <a href="https://www.gbif.org/" target="_blank" class="text-blu hover:text-celeste">GBIF</a> | <a href="https://www.openstreetmap.org/" target="_blank" class="text-blu hover:text-celeste">OpenStreetMap</a></p>
     </div>
   </div>
 </template>
