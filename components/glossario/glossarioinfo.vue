@@ -9,15 +9,15 @@
     <p class="text-xl italic text-gray-700">{{ nomeScientifico }}</p>
     <div class="postinfo-buttons flex mt-4 print:hidden">
       <button @click="printPost" class="group flex items-center mr-4 py-2 px-4 bg-white shadow text-blu border rounded-lg hover:bg-blu hover:text-white">
-        <icon name="mingcute:print-fill" class="text-3xl group-hover:text-white" />
+        <icon name="mingcute:print-fill" class="text-xl md:text-3xl group-hover:text-white" />
         <span class="ml-2 text-base">Stampa</span>
       </button>
       <button class="group flex items-center mr-4 py-2 px-4 bg-white shadow text-blu border rounded-lg hover:bg-blu hover:text-white">
-        <icon name="ic:round-share" class="text-3xl group-hover:text-white" />
+        <icon name="ic:round-share" class="text-xl md:text-3xl group-hover:text-white" />
         <span class="ml-2 text-base">Condividi</span>
       </button>
       <button class="group flex items-center py-2 px-4 bg-white shadow text-blu border rounded-lg hover:bg-blu hover:text-white">
-        <icon name="bi:quote" class="text-3xl group-hover:text-white" />
+        <icon name="bi:quote" class="text-xl md:text-3xl group-hover:text-white" />
         <span class="ml-2 text-base">Cita</span>
       </button>
     </div>
