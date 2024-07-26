@@ -11,11 +11,11 @@
       <!-- Desktop menu -->
       <div class="hidden lg:block flex-grow">
         <nav class="flex justify-center space-x-1 xl:space-x-4 text-black text-sm xl:text-base">
-          <a href="https://wikinutritionals.com" class="no-underline py-2 px-1 xl:px-2">Home</a>
-          <a href="/about" class="no-underline py-2 px-1 xl:px-2">About</a>
-          <a href="/piante-medicinali" class="no-underline py-2 px-1 xl:px-2 whitespace-nowrap">Piante medicinali</a>
-          <a href="/glossario" class="no-underline py-2 px-1 xl:px-2">Glossario</a>
-          <a href="/blog" class="no-underline py-2 px-1 xl:px-2">Blog</a>
+          <a href="https://wikinutritionals.com" class="no-underline py-2 px-1 xl:px-2 hover:text-verde transition-colors duration-300">Home</a>
+          <a href="/about" class="no-underline py-2 px-1 xl:px-2 hover:text-verde transition-colors duration-300">About</a>
+          <a href="/piante-medicinali" class="no-underline py-2 px-1 xl:px-2 hover:text-verde transition-colors duration-300">Piante medicinali</a>
+          <a href="/glossario" class="no-underline py-2 px-1 xl:px-2 hover:text-verde transition-colors duration-300">Glossario</a>
+          <a href="/blog" class="no-underline py-2 px-1 xl:px-2 hover:text-verde transition-colors duration-300">Blog</a>
         </nav>
       </div>
       
@@ -39,7 +39,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <!-- Mobile-only menu items -->
               <div class="lg:hidden">
-                <a href="https://wikinutritionals.com" class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde before:absolute before:inset-0 before:bg-verde before:border before:rounded-lg before:transition-all before:duration-300 before:ease-linear before:origin-left before:scale-x-0 hover:before:scale-x-100 flex items-center">
+                <a href="https://wikinutritionals.com" class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde overflow-hidden flex items-center">
                   <div class="absolute left-2 top-1/2 w-12 h-12 -translate-y-1/2 bg-white p-2 rounded-2xl border border-transparent flex justify-center items-center">
                     <Icon name="mdi:home" class="inner-icon text-celeste text-3xl group-hover:text-verde" />
                   </div>
@@ -47,15 +47,15 @@
                 </a>
               </div>
               <div class="lg:hidden">
-                <a href="/about" class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde before:absolute before:inset-0 before:bg-verde before:border before:rounded-lg before:transition-all before:duration-300 before:ease-linear before:origin-left before:scale-x-0 hover:before:scale-x-100 flex items-center">
+                <a href="/about" class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde overflow-hidden flex items-center">
                   <div class="absolute left-2 top-1/2 w-12 h-12 -translate-y-1/2 bg-white p-2 rounded-2xl border border-transparent flex justify-center items-center">
                     <Icon name="mdi:information" class="inner-icon text-celeste text-3xl group-hover:text-verde" />
                   </div>
                   <span class="absolute left-16 right-4 text-center">About</span>
                 </a>
               </div>
-              <div>
-                <a href="/piante-medicinali" class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde before:absolute before:inset-0 before:bg-verde before:border before:rounded-lg before:transition-all before:duration-300 before:ease-linear before:origin-left before:scale-x-0 hover:before:scale-x-100 flex items-center">
+              <div class="lg:hidden">
+                <a href="/piante-medicinali" class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde overflow-hidden flex items-center">
                   <div class="absolute left-2 top-1/2 w-12 h-12 -translate-y-1/2 bg-white p-2 rounded-2xl border border-transparent flex justify-center items-center">
                     <Icon name="mdi:flower" class="inner-icon text-celeste text-3xl group-hover:text-verde" />
                   </div>
@@ -63,7 +63,7 @@
                 </a>
               </div>
               <div class="lg:hidden">
-                <a href="/glossario" class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde before:absolute before:inset-0 before:bg-verde before:border before:rounded-lg before:transition-all before:duration-300 before:ease-linear before:origin-left before:scale-x-0 hover:before:scale-x-100 flex items-center">
+                <a href="/glossario" class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde overflow-hidden flex items-center">
                   <div class="absolute left-2 top-1/2 w-12 h-12 -translate-y-1/2 bg-white p-2 rounded-2xl border border-transparent flex justify-center items-center">
                     <Icon name="mdi:book-open-page-variant" class="inner-icon text-celeste text-3xl group-hover:text-verde" />
                   </div>
@@ -71,7 +71,7 @@
                 </a>
               </div>
               <div class="lg:hidden">
-                <a href="/blog" class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde before:absolute before:inset-0 before:bg-verde before:border before:rounded-lg before:transition-all before:duration-300 before:ease-linear before:origin-left before:scale-x-0 hover:before:scale-x-100 flex items-center">
+                <a href="/blog" class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde overflow-hidden flex items-center">
                   <div class="absolute left-2 top-1/2 w-12 h-12 -translate-y-1/2 bg-white p-2 rounded-2xl border border-transparent flex justify-center items-center">
                     <Icon name="mdi:post" class="inner-icon text-celeste text-3xl group-hover:text-verde" />
                   </div>
@@ -81,7 +81,7 @@
               
               <!-- Original menu items -->
               <div>
-                <button class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde before:absolute before:inset-0 before:bg-verde before:border before:rounded-lg before:transition-all before:duration-300 before:ease-linear before:origin-left before:scale-x-0 hover:before:scale-x-100 flex items-center">
+                <button class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde overflow-hidden flex items-center">
                   <div class="absolute left-2 top-1/2 w-12 h-12 -translate-y-1/2 bg-white p-2 rounded-2xl border border-transparent flex justify-center items-center">
                     <Icon name="mdi:event" class="inner-icon text-celeste text-3xl group-hover:text-verde" />
                   </div>
@@ -89,7 +89,7 @@
                 </button>
               </div>
               <div>
-                <button class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde before:absolute before:inset-0 before:bg-verde before:border before:rounded-lg before:transition-all before:duration-300 before:ease-linear before:origin-left before:scale-x-0 hover:before:scale-x-100 flex items-center">
+                <button class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde overflow-hidden flex items-center">
                   <div class="absolute left-2 top-1/2 w-12 h-12 -translate-y-1/2 bg-white p-2 rounded-2xl border border-transparent flex justify-center items-center">
                     <Icon name="mdi:contact-mail" class="inner-icon text-celeste text-3xl group-hover:text-verde" />
                   </div>
@@ -97,7 +97,7 @@
                 </button>
               </div>
               <div class="hidden lg:block">
-                <a href="/piante-medicinali" class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde before:absolute before:inset-0 before:bg-verde before:border before:rounded-lg before:transition-all before:duration-300 before:ease-linear before:origin-left before:scale-x-0 hover:before:scale-x-100 flex items-center">
+                <a href="/piante-medicinali" class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde overflow-hidden flex items-center">
                   <div class="absolute left-2 top-1/2 w-12 h-12 -translate-y-1/2 bg-white p-2 rounded-2xl border border-transparent flex justify-center items-center">
                     <Icon name="mdi:book-open-variant" class="inner-icon text-celeste text-3xl group-hover:text-verde" />
                   </div>
@@ -105,7 +105,7 @@
                 </a>
               </div>
               <div>
-                <button class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde before:absolute before:inset-0 before:bg-verde before:border before:rounded-lg before:transition-all before:duration-300 before:ease-linear before:origin-left before:scale-x-0 hover:before:scale-x-100 flex items-center">
+                <button class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde overflow-hidden flex items-center">
                   <div class="absolute left-2 top-1/2 w-12 h-12 -translate-y-1/2 bg-white p-2 rounded-2xl border border-transparent flex justify-center items-center">
                     <Icon name="mdi:handshake" class="inner-icon text-celeste text-3xl group-hover:text-verde" />
                   </div>
@@ -132,7 +132,6 @@
         </div>
       </div>
     </div>
-
 
     <!-- Mega menu Mailing List -->
     <MailingList v-if="mailingListMenuOpen" @close="mailingListMenuOpen = false" />
