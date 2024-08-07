@@ -1,38 +1,32 @@
-  <template>
-    <hero />
-    <searchfield />
-    <browse-by-letter />
-    <section-blog />
-    <contacts />
-  </template>
+<template>
+  <div>
+    <h1 class="sr-only">Wikiherbalist - Enciclopedia di erbe aromatiche e medicinali</h1>
+    <Hero />
+    <Searchfield />
+    <BrowseByLetter />
+    <Suspense>
+      <template #default>
+        <LazyTagsPosts />
+      </template>
+      <template #fallback>
+        <div v-if="loading" class="w-full h-64 flex items-center justify-center">
+          <Icon name="eos-icons:three-dots-loading" class="text-5xl text-celeste" />
+        </div>
+      </template>
+    </Suspense>
+    <LazySectionBlog />
+    <LazyContacts />
+  </div>
+</template>
 
-  <script setup>
-    import hero from '~/components/hero.vue';
-    import Searchfield from '~/components/searchfield.vue';
-    import browseByLetter from '~/components/browse-by-letter.vue';
-    import sectionBlog from '~/components/section-blog.vue';
-    import sectionContact from "~/components/contacts.vue";
-  </script>
+<script setup>
+import { defineAsyncComponent } from 'vue'
+import Hero from '~/components/hero.vue'
+import Searchfield from '~/components/searchfield.vue'
+import BrowseByLetter from '~/components/browse-by-letter.vue'
 
 
-  
-  <style scoped>
-    .content {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+const LazyTagsPosts = defineAsyncComponent(() => import('~/components/tags-posts.vue'))
 
-    .content h3 a {
-      color: #0DA6A4;
-    }
-    
-    .icon {
-      margin: 0 10px;
-    }
-    
-    .Icon {
-      vertical-align: middle;
-    }
-  </style>
-  
+
+</script>
