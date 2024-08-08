@@ -34,7 +34,7 @@
 <script setup>
 import { reactive } from 'vue';
 import useVuelidate from '@vuelidate/core';
-import { required, email, helpers } from '@vuelidate/validators';
+import { required, email } from '@vuelidate/validators';
 import { useNuxtApp } from '#app';
 
 const { $recaptcha } = useNuxtApp();
