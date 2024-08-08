@@ -1,6 +1,5 @@
 <template>
   <div class="flex flex-col relative w-11/12 m-auto -my-4">
-    <!-- Input and results wrapper -->
     <div 
       :class="[
         'w-4/5 md:w-3/5 m-auto bg-white overflow-hidden rounded-2xl border-2',
@@ -9,7 +8,6 @@
           : 'border-celeste'
       ]"
     >
-      <!-- Input -->
       <div 
         :class="[
           'h-12 md:h-14 flex items-center',
@@ -31,7 +29,6 @@
         </div>
       </div>
       
-      <!-- Results -->
       <div v-if="searchResults.length" class="border-t border-celeste">
         <div v-for="result in searchResults" :key="result.objectID" class="flex items-center py-2 hover:bg-gray-100 hover:cursor-pointer" @click="goToPost(result.uri || result.slug)">
           <NuxtImg :src="result.featuredImage ? result.featuredImage.sourceUrl : result.imageUrl" :alt="result.title" class="rounded-lg w-20 h-20 max-w-[80px] max-h-[80px] object-cover ml-2 mr-4" />
@@ -51,12 +48,11 @@
   </div>
 </template>
 
-
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { Icon } from '#components';
-import _debounce from 'lodash/debounce';
+import { useDebounceFn } from '@vueuse/core';
 import algoliasearch from 'algoliasearch/lite';
 import { apiConfig } from '~/config.js';
 
@@ -71,7 +67,7 @@ const searchTerm = ref('');
 const searchResults = ref([]);
 const searchMade = ref(false); 
 
-const debouncedSearch = _debounce(async () => {
+const debouncedSearch = useDebounceFn(async () => {
   if (searchTerm.value.trim().length >= 3) {
     await performSearch();
   } else {
@@ -82,22 +78,16 @@ const debouncedSearch = _debounce(async () => {
 async function performSearch() {
   searchMade.value = true;
   try {
-    console.log("Performing search for:", searchTerm.value);
     const postSearchPromise = postsIndex.search(searchTerm.value);
     const glossarySearchPromise = glossaryIndex.search(searchTerm.value);
 
-
     const [postResults, glossaryResults] = await Promise.all([postSearchPromise, glossarySearchPromise]);
 
-
     searchResults.value = [...postResults.hits, ...glossaryResults.hits];
-    console.log("Hits received from both indexes:", searchResults.value.length);
   } catch (error) {
-    console.error("Error during search:", error);
     searchResults.value = [];
   }
 }
-
 
 function handleInput() {
   if (!searchTerm.value.trim()) {
@@ -110,19 +100,10 @@ function handleInput() {
 function resetSearch() {
   searchTerm.value = '';
   searchResults.value = [];
-  searchMade.value = false;  
-  console.log("Search reset.");
+  searchMade.value = false;
 }
 
 function goToPost(uri) {
   router.push(uri);
 }
 </script>
-
-
-
-
-
-<style scoped>
-
-</style>
