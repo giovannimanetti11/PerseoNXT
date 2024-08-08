@@ -9,7 +9,7 @@
             <div class="letter-heading flex text-xl font-bold w-16 h-16 rounded-full bg-celeste text-center"><span class="m-auto content-center text-white">{{ letter }}</span></div>
             <ul class="ml-4 flex flex-col flex-wrap gap-4">
               <li v-for="post in posts" :key="post.id" class="flex flex-row">
-                <nuxt-link :to="`/posts/${post.slug}`" class="text-black hover:text-blu">
+                <nuxt-link :to="`/${post.slug}`" class="text-black hover:text-blu">
                   <h2>{{ post.title }}</h2>
                   <h3 class="italic">{{ post.nomeScientifico }}</h3>
                 </nuxt-link>
