@@ -67,20 +67,17 @@ const handleBlur = () => {
 const subscribe = async () => {
   v$.value.$validate();
   if (!v$.value.$error) {
-    const { data, error } = await useFetch('/api/mailchimp', {
-      method: 'POST',
-      body: JSON.stringify({ email: email.value }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    try {
+      await useFetch('/api/mailchimp', {
+        method: 'POST',
+        body: { email: email.value },
+      });
 
-    if (error.value) {
-      message.value = 'Errore durante l\'iscrizione.';
-      messageClass.value = 'text-red-500';
-    } else {
       message.value = 'Iscrizione avvenuta con successo!';
       messageClass.value = 'text-verde';
+    } catch (error) {
+      message.value = 'Errore durante l\'iscrizione.';
+      messageClass.value = 'text-red-500';
     }
   } else {
     message.value = 'Inserisci un\'email valida.';
@@ -97,6 +94,4 @@ const subscribe = async () => {
 input:focus + .iconClass {
   color: #036297;
 }
-
-
 </style>
