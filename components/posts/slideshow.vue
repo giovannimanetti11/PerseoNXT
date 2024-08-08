@@ -7,6 +7,10 @@
         class="m-auto h-60 w-auto border rounded-2xl transition-all duration-300 ease-in-out"
         :alt="currentAltText"
         @click="openLightbox"
+        width="384"
+        height="240"
+        format="webp"
+        loading="lazy"
       />
     </div>
 
@@ -20,6 +24,10 @@
           @click="setCurrentImage(featuredImage.node.sourceUrl, featuredImage.node.altText)"
           @mouseover="setCurrentImage(featuredImage.node.sourceUrl, featuredImage.node.altText)"
           :alt="featuredImage.node.altText"
+          width="64"
+          height="64"
+          format="webp"
+          loading="lazy"
         />
       </div>
       <!-- Other images thumbnails -->
@@ -30,6 +38,10 @@
           @click="setCurrentImage(image.url, image.altText)"
           @mouseover="setCurrentImage(image.url, image.altText)"
           :alt="image.altText"
+          width="64"
+          height="64"
+          format="webp"
+          loading="lazy"
         />
       </div>
     </div>
@@ -58,32 +70,25 @@ const currentAltText = ref(props.featuredImage?.node?.altText || '');
 
 const lightboxVisible = ref(false);
 
-// Compute array of all image URLs for the lightbox, ensuring the featured image is included first
 const allImages = computed(() => [props.featuredImage.node.sourceUrl, ...props.additionalImages.map(img => img.url).filter(url => url !== props.featuredImage.node.sourceUrl)]);
 
-// Compute current index of the displayed image within the lightbox
 const currentImageIndex = computed(() => allImages.value.indexOf(currentImage.value));
 
-// Set current image
 const setCurrentImage = (imageUrl, altText) => {
   currentImage.value = imageUrl;
   currentAltText.value = altText;
 };
 
-// Open the lightbox
 const openLightbox = () => {
   lightboxVisible.value = true;
 };
 
-// Close the lightbox
 const closeLightbox = () => {
   lightboxVisible.value = false;
 };
 
-// Filter valid additional images (prevent blank images if url is null)
 const validAdditionalImages = computed(() => props.additionalImages.filter(image => image?.url));
 
-// Thumbnail class based on current image
 const thumbnailClass = (imageUrl) => [
   'cursor-pointer rounded-2xl transition-all duration-300 ease-in-out mx-0.5',
   currentImage.value === imageUrl ? 'w-16 h-16 border-3 border-blue' : 'w-14 h-14 border-3 border-light-blue'
