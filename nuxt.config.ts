@@ -1,10 +1,9 @@
 import { defineNuxtConfig } from 'nuxt/config'
 
 export default defineNuxtConfig({
-
   // Configure image domains and modifiers for image handling
   image: {
-    domains: ['wikinutritionals.com'],
+    domains: ['wikiherbalist.com'],
     alias: {
       media: '/media',
     },
@@ -20,23 +19,25 @@ export default defineNuxtConfig({
 
   // Enable server-side rendering
   ssr: true,
+
   nitro: {
+    port: 3001,
     prerender: {
       crawlLinks: true, // Allow automatic crawling of links for pre-rendering
       routes: ['/'] // Define routes to pre-render
     },
     compressPublicAssets: true,
   },
+
   site: {
     url: 'https://wikiherbalist.com',
   },
+
   app: {
     head: {
       htmlAttrs: {
         lang: 'it',
       },
-      title: 'Wikiherbalist - Enciclopedia di erbe aromatiche e medicinali',
-      titleTemplate: '%s - Wikiherbalist',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -48,14 +49,33 @@ export default defineNuxtConfig({
         { hid: 'og:image', property: 'og:image', content: '/media/og-image.jpg' },
         { hid: 'og:url', property: 'og:url', content: 'https://wikiherbalist.com' },
         { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'robots', content: 'index, follow' },
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
         { rel: 'canonical', href: 'https://wikiherbalist.com' },
       ],
+      script: [
+        {
+          src: 'https://www.googletagmanager.com/gtag/js?id=G-GZ4J8CZ4CW',
+          async: true
+        },
+        {
+          innerHTML: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-GZ4J8CZ4CW');
+          `,
+          type: 'text/javascript'
+        },
+      ]
     },
   },
-  target: 'static', // Set deployment target to static hosting
+  
+  // Set deployment target to static hosting
+  target: 'static',
+
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxtjs/google-fonts',
@@ -64,17 +84,21 @@ export default defineNuxtConfig({
     '@nuxtjs/sitemap',
     '@nuxt/image',
     '@nuxtjs/seo',
+    "nuxt-schema-org"
   ],
+
   sitemap: {
     hostname: 'https://wikiherbalist.com',
     gzip: true,
   },
+
   robots: {
     UserAgent: '*',
     Allow: '/',
     Disallow: '',
     Sitemap: 'https://wikiherbalist.com/sitemap.xml',
   },
+
   googleFonts: {
     families: {
       Lato: [300, 400, 700, 900],
@@ -83,21 +107,28 @@ export default defineNuxtConfig({
     preload: true,
     preconnect: true,
     useStylesheet: true,
+    download: true,
+    base64: false,
   },
+
   css: ['~/assets/css/main.css'],
+
   plugins: [
     '~/plugins/wp-api.js', // Wordpress API integration
     '~/plugins/algolia.js', // Algolia search integration
   ],
+
   postcss: {
     plugins: {
       tailwindcss: {},
       autoprefixer: {},
     },
   },
+
   alias: {
-    '@config': '/var/www/wikinutritionals.com/config.js',
+    '@config': '/var/www/wikiherbalist.com/nuxt-app/config.js',
   },
+
   build: {
     transpile: ['vue-easy-lightbox'],
     optimization: {
@@ -120,7 +151,14 @@ export default defineNuxtConfig({
       },
     },
   },
+
   vite: {
+    server: {
+      hmr: {
+        protocol: 'ws',
+        host: 'localhost'
+      }
+    },
     optimizeDeps: {
       include: ['vue', 'vue-router', '@vueuse/core'],
     },
@@ -140,10 +178,18 @@ export default defineNuxtConfig({
       },
     },
   },
+
   seo: {
     baseUrl: 'https://wikiherbalist.com',
     name: 'Wikiherbalist',
-    templateTitle: '%s - Wikiherbalist',
     description: 'Enciclopedia online di erbe aromatiche e medicinali. Scopri proprietà, usi e benefici delle piante.',
   },
+
+  hooks: {
+    'render:setupMiddleware'(app) {
+      app.use(compression());
+    }
+  },
+
+  compatibilityDate: '2024-08-14'
 });
