@@ -1,25 +1,51 @@
 <template>
-  <div>
+  <div @click="handleOutsideClick" @touchstart="handleOutsideClick">
     <!-- Container for the processed content -->
     <div ref="contentContainer" v-html="processedContent"></div>
     
     <!-- Tooltip for displaying additional information -->
-    <div v-if="activeTooltip" 
-         class="keywordsTooltip fixed z-50 bg-white border border-blu rounded-lg shadow-lg text-sm text-gray-700"
-         :style="tooltipStyle">
-      <div class="p-6">
-        <h4 class="text-2xl font-bold text-blu mb-4 mt-0">{{ activeTooltip.title }}</h4>
-        <p v-html="activeTooltip.excerpt"></p>
+    <Teleport to="body">
+      <div v-if="activeTooltip" 
+           class="keywordsTooltip fixed z-50 bg-white border border-blu rounded-lg shadow-lg text-sm text-gray-700"
+           :style="tooltipStyle" 
+           @mouseenter="keepTooltipVisible" 
+           @mouseleave="handleMouseLeave"
+           @touchstart.stop="keepTooltipVisible">
+        <div class="p-6 relative">
+          <button v-if="isSmallScreen" @click="hideTooltip" @touchstart.stop="hideTooltip" class="absolute top-2 right-2 text-blu hover:text-celeste">
+            <span class="sr-only">Chiudi</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <h4 class="text-2xl font-bold text-blu mb-4 mt-0">{{ activeTooltip.title }}</h4>
+          <p v-html="activeTooltip.excerpt"></p>
+          <button 
+            v-if="isSmallScreen"
+            @click="goToPost"
+            @touchstart.stop="goToPost"
+            class="mt-4 w-full bg-verde text-white font-bold py-2 px-4 rounded-xl hover:bg-celeste transition-colors duration-300"
+          >
+            Vai al post
+          </button>
+        </div>
       </div>
-    </div>
+    </Teleport>
+
+    <Teleport to="body">
+      <div v-if="activeTooltip && isSmallScreen" class="fixed inset-0 bg-black bg-opacity-50 z-40" @click="hideTooltip" @touchstart="hideTooltip"></div>
+    </Teleport>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch, computed } from 'vue';
+import { ref, onMounted, onUnmounted, watch, nextTick, computed } from 'vue';
 import { useQuery } from '@vue/apollo-composable';
+import { useRouter } from 'vue-router';
 import gql from 'graphql-tag';
 import DOMPurify from 'dompurify';
+
+const router = useRouter();
 
 // Props definition
 const props = defineProps({
@@ -42,6 +68,8 @@ const contentContainer = ref(null);
 const activeTooltip = ref(null);
 const tooltipPosition = ref({ x: 0, y: 0 });
 const processedContent = ref('');
+const isSmallScreen = ref(false);
+let hideTimeout = null;
 
 // GraphQL query to fetch all posts and glossary terms
 const FETCH_ALL_POSTS_AND_TERMS = gql`
@@ -98,6 +126,7 @@ const processContent = () => {
   processedContent.value = DOMPurify.sanitize(tempDiv.innerHTML);
 };
 
+// Function to process individual nodes in the DOM tree
 const processNode = (node, allKeys) => {
   if (node.nodeType === Node.TEXT_NODE) {
     const originalContent = node.textContent;
@@ -136,18 +165,21 @@ const processNode = (node, allKeys) => {
   }
 };
 
+// Function to create the HTML string for internal links
 const createLinkString = (item, text) => {
   const href = item.isGlossary ? `/glossario/${item.slug}` : `/${item.slug}`;
-  const tooltip = encodeURIComponent(JSON.stringify({ title: item.title, excerpt: item.excerpt }));
+  const tooltip = encodeURIComponent(JSON.stringify({ title: item.title, excerpt: item.excerpt, slug: item.slug, isGlossary: item.isGlossary }));
   return `<a href="${href}" class="text-blu hover:text-celeste internal-link" data-tooltip="${tooltip}">${text}</a>`;
 };
 
+// Function to escape special characters in regular expressions
 function escapeRegExp(string) {
   return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-};
+}
 
 // Function to show tooltip
 const showTooltip = (event) => {
+  clearTimeout(hideTimeout);
   const target = event.target.closest('.internal-link');
   if (target) {
     const tooltipData = JSON.parse(decodeURIComponent(target.dataset.tooltip));
@@ -155,10 +187,12 @@ const showTooltip = (event) => {
     
     const rect = target.getBoundingClientRect();
     const viewportWidth = window.innerWidth;
-    const tooltipWidth = 600;
+    const tooltipWidth = isSmallScreen.value ? viewportWidth * 0.9 : 600;
 
-    let left = rect.left + window.scrollX + rect.width / 2;
-    if (left < tooltipWidth / 2) {
+    let left = rect.left + window.pageXOffset + rect.width / 2;
+    if (isSmallScreen.value) {
+      left = viewportWidth / 2;
+    } else if (left < tooltipWidth / 2) {
       left = tooltipWidth / 2;
     } else if (left + tooltipWidth / 2 > viewportWidth) {
       left = viewportWidth - tooltipWidth / 2;
@@ -166,8 +200,27 @@ const showTooltip = (event) => {
 
     tooltipPosition.value = {
       x: left,
-      y: rect.bottom + window.scrollY
+      y: rect.bottom + window.pageYOffset + 10
     };
+  }
+};
+
+// Function to handle mouse leave
+const handleMouseLeave = () => {
+  if (!isSmallScreen.value) {
+    startHideTooltipTimer();
+  }
+};
+
+// Function to start the hide tooltip timer
+const startHideTooltipTimer = () => {
+  hideTimeout = setTimeout(hideTooltip, 300);
+};
+
+// Function to handle outside click
+const handleOutsideClick = (event) => {
+  if (activeTooltip.value && !event.target.closest('.tooltip-custom') && !event.target.closest('.internal-link')) {
+    hideTooltip();
   }
 };
 
@@ -176,33 +229,77 @@ const hideTooltip = () => {
   activeTooltip.value = null;
 };
 
+// Function to keep tooltip visible
+const keepTooltipVisible = () => {
+  clearTimeout(hideTimeout);
+};
+
 // Computed property for tooltip style
 const tooltipStyle = computed(() => {
   return {
     position: 'absolute',
     top: `${tooltipPosition.value.y}px`,
-    left: `${tooltipPosition.value.x}px`,
-    transform: 'translate(-50%, 10px)',
-    width: '600px',
+    left: isSmallScreen.value ? '50%' : `${tooltipPosition.value.x}px`,
+    transform: isSmallScreen.value ? 'translate(-50%, 0)' : 'translate(-50%, 10px)',
+    width: isSmallScreen.value ? '90vw' : '600px',
     maxWidth: '90vw',
-    zIndex: 1000
+    maxHeight: '80vh',
+    overflowY: 'auto',
+    zIndex: 1001
   };
 });
 
+// Function to check if the screen is small (mobile or reduced desktop)
+const checkScreenSize = () => {
+  isSmallScreen.value = window.innerWidth < 768;
+};
+
+// Function to navigate to the post
+const goToPost = () => {
+  if (activeTooltip.value) {
+    const path = activeTooltip.value.isGlossary ? `/glossario/${activeTooltip.value.slug}` : `/${activeTooltip.value.slug}`;
+    hideTooltip();
+    router.push(path);
+  }
+};
+
 // Lifecycle hooks
 onMounted(() => {
+  checkScreenSize();
+  window.addEventListener('resize', checkScreenSize);
   processContent();
+  
+  const handleInteraction = (event) => {
+    const target = event.target.closest('.internal-link');
+    if (target) {
+      event.preventDefault();
+      if (isSmallScreen.value || event.type === 'click' || event.type === 'touchstart') {
+        showTooltip(event);
+      } else if (event.type === 'mouseenter') {
+        showTooltip(event);
+      }
+    }
+  };
+
   if (contentContainer.value) {
-    contentContainer.value.addEventListener('mouseover', showTooltip);
-    contentContainer.value.addEventListener('mouseout', hideTooltip);
+    contentContainer.value.addEventListener('click', handleInteraction);
+    contentContainer.value.addEventListener('touchstart', handleInteraction);
+    contentContainer.value.addEventListener('mouseenter', handleInteraction, true);
   }
+
+  document.addEventListener('click', handleOutsideClick);
+  document.addEventListener('touchstart', handleOutsideClick);
 });
 
 onUnmounted(() => {
+  window.removeEventListener('resize', checkScreenSize);
   if (contentContainer.value) {
-    contentContainer.value.removeEventListener('mouseover', showTooltip);
-    contentContainer.value.removeEventListener('mouseout', hideTooltip);
+    contentContainer.value.removeEventListener('click', handleInteraction);
+    contentContainer.value.removeEventListener('touchstart', handleInteraction);
+    contentContainer.value.removeEventListener('mouseenter', handleInteraction, true);
   }
+  document.removeEventListener('click', handleOutsideClick);
+  document.removeEventListener('touchstart', handleOutsideClick);
 });
 
 // Watch for changes in props and query result
@@ -216,7 +313,7 @@ watch(result, processContent);
 }
 
 .keywordsTooltip {
-  max-height: 90vh;
+  max-height: 80vh;
   overflow-y: auto;
 }
 
