@@ -1,42 +1,9 @@
 <template>
-  <section class="tags-posts-section py-14 mt-6 w-11/12 m-auto rounded-2xl" @click="closeTooltipOnOutsideClick">
-    <div class="container mx-auto px-4">
-      <h2 class="text-3xl md:text-4xl font-bold text-center text-black mb-10">
-        <span class="text-blu">Proprietà terapeutiche</span> delle erbe medicinali
-      </h2>
-      
-      <!-- Search input -->
-      <div class="flex flex-col relative w-11/12 m-auto -my-4">
-        <div class="w-4/5 md:w-3/5 m-auto bg-white overflow-hidden rounded-2xl border-2"
-             :class="isFocused ? 'border-blu' : 'border-celeste'">
-          <div class="h-12 md:h-14 flex items-center">
-            <Icon name="heroicons:magnifying-glass-16-solid" class="ml-5 text-celeste text-2xl" />
-            <input
-              type="search"
-              placeholder="Cerca una proprietà terapeutica"
-              class="w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none"
-              v-model="searchQuery"
-              @input="handleSearch"
-              @focus="isFocused = true"
-              @blur="isFocused = false"
-            />
-            <div v-if="searchQuery" @click="resetSearch" class="ml-2 hover:cursor-pointer">
-              <Icon name="ic:baseline-close" class="text-2xl text-celeste mr-4" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div v-if="loading" class="flex justify-center items-center h-64">
-        <Icon name="eos-icons:three-dots-loading" class="text-5xl text-celeste" />
-      </div>
-      <div v-else-if="error" class="text-center text-red-500 mt-4">
-        Si è verificato un errore: {{ error }}
-      </div>
-      <div v-else>
-        <!-- Alphabet filter -->
-        <div v-if="!isSearchActive" class="w-11/12 md:w-9/12 mx-auto flex justify-center mt-8 items-center">
-        <button class="mr-2" @click="scrollAlphabet('left')">
+  <section class="tags-posts-section py-2 w-11/12 m-auto rounded-2xl">
+    <div class="container mx-auto px-0 md:px-4 mt-4">
+      <!-- Alphabet filter -->
+      <div class="w-full mx-auto flex justify-center mt-8 items-center">
+        <button class="mr-2" @click="scrollAlphabet('left')" aria-label="Scroll left">
           <Icon name="iconamoon:arrow-left-2" class="text-5xl text-celeste hover:text-white hover:bg-verde hover:rounded-full hover:border-verde" />
         </button>
         <div class="flex overflow-hidden alphabet-container" ref="alphabetContainer">
@@ -44,41 +11,56 @@
             v-for="letter in alphabet" 
             :key="letter"
             @click="fetchTagsByLetter(letter)"
-            :class="letterClass(letter)"
+            :class="['px-4 py-2 rounded-full mx-1 whitespace-nowrap', 
+              selectedLetter === letter ? 'bg-celeste text-white' : 'text-black font-bold hover:bg-celeste hover:text-white']"
           >
             {{ letter }}
           </button>
         </div>
-        <button class="ml-2" @click="scrollAlphabet('right')">
+        <button class="ml-2" @click="scrollAlphabet('right')" aria-label="Scroll right">
           <Icon name="iconamoon:arrow-right-2" class="text-5xl text-celeste hover:text-white hover:bg-verde hover:border hover:rounded-full hover:border-verde" />
         </button>
       </div>
 
-        <!-- Tag count -->
+      <!-- Loading indicator -->
+      <div v-if="loading" class="flex justify-center text-center w-full items-center h-64">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
+      </div>
+
+      <!-- Error message -->
+      <div v-else-if="error" class="text-center text-red-500 mt-4">
+        Si è verificato un errore: {{ error }}
+      </div>
+
+      <div v-else>
+        <!-- Tag count display -->
         <div class="text-center mt-4" v-if="!loading && filteredTags.length > 0">
           <p v-if="filteredTags.length === 1">
-            {{ filteredTags.length }} proprietà trovata{{ isSearchActive ? ' per la ricerca "' + searchQuery + '"' : ' che inizia per ' + selectedLetter }}
+            {{ filteredTags.length }} proprietà trovata{{ searchTerm ? ' per la ricerca "' + searchTerm + '"' : '' }}
           </p>
           <p v-else>
-            {{ filteredTags.length }} proprietà trovate{{ isSearchActive ? ' per la ricerca "' + searchQuery + '"' : ' che iniziano per ' + selectedLetter }}
+            {{ filteredTags.length }} proprietà trovate{{ searchTerm ? ' per la ricerca "' + searchTerm + '"' : '' }}
           </p>
         </div>
 
         <!-- No results message -->
         <div v-if="filteredTags.length === 0" class="text-center mt-8 text-gray-600">
-          Nessuna proprietà trovata{{ isSearchActive ? ' per la ricerca "' + searchQuery + '"' : ' per la lettera ' + selectedLetter }}
+          Nessuna proprietà trovata{{ searchTerm ? ' per la ricerca "' + searchTerm + '"' : '' }}
         </div>
 
         <!-- Tags display -->
         <div class="mt-8" ref="tagsContainer">
           <div v-for="letter in uniqueLetters" :key="letter" class="mb-6">
+            <!-- Letter heading -->
             <div class="letter-heading flex text-xl font-bold w-16 h-16 rounded-full bg-celeste text-center mb-4">
               <span class="m-auto content-center text-white">{{ letter }}</span>
             </div>
+            <!-- Tags grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
               <div v-for="tag in getVisibleTagsByLetter(letter)" :key="tag.id" class="mb-4">
                 <h3 class="font-semibold text-lg text-blu mb-2 flex items-center">
                   {{ tag.name }}
+                  <!-- Info icon and tooltip -->
                   <div class="relative ml-2">
                     <Icon 
                       name="mdi:information-outline" 
@@ -88,14 +70,8 @@
                     />
                     <div 
                       v-if="activeTooltip === tag.id" 
-                      class="tooltip-custom fixed z-50 bg-white border border-blu rounded-lg shadow-lg text-sm text-gray-700"
-                      :style="{ 
-                        width: '600px', 
-                        maxWidth: '90vw', 
-                        top: '50%', 
-                        left: '50%', 
-                        transform: 'translate(-50%, -50%)'
-                      }"
+                      class="tooltip-custom fixed z-50 bg-white rounded-lg shadow-lg text-sm text-gray-700"
+                      :style="tooltipStyle"
                       @click.stop
                     >
                       <div class="p-6">
@@ -108,6 +84,7 @@
                     </div>
                   </div>
                 </h3>
+                <!-- Associated posts -->
                 <p class="text-sm">
                   <template v-for="(post, index) in tag.posts" :key="post.id">
                     <NuxtLink :to="post.uri" class="text-black hover:text-blu">{{ post.title }}</NuxtLink><span v-if="index < tag.posts.length - 1">, </span>
@@ -130,51 +107,32 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch, nextTick, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue';
 import { useQuery } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
-import { useAlphabet } from '~/composables/useAlphabet';
 
-const { 
-  alphabet, 
-  selectedLetter, 
-  alphabetContainer, 
-  setSelectedLetter, 
-  scrollAlphabet, 
-  letterClass 
-} = useAlphabet();
+// Props definition
+const props = defineProps({
+  searchTerm: {
+    type: String,
+    default: ''
+  }
+});
 
-const searchQuery = ref('');
+// Constants and reactive references
+const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+const selectedLetter = ref('A');
 const tagsToShow = ref(18);
 const activeTooltip = ref(null);
-const isFocused = ref(false);
+const alphabetContainer = ref(null);
 const tagsContainer = ref(null);
 const loading = ref(true);
 const error = ref(null);
-const isSearchActive = ref(false);
 
-const FETCH_TAGS_BY_LETTER = gql`
-  query FetchTagsByLetter($letter: String!) {
-    tags(first: 100, where: { search: $letter }) {
-      nodes {
-        id
-        name
-        description
-        posts {
-          nodes {
-            id
-            title
-            uri
-          }
-        }
-      }
-    }
-  }
-`;
-
+// GraphQL query to fetch all tags
 const FETCH_ALL_TAGS = gql`
   query FetchAllTags {
-    tags(first: 100) {
+    tags(first: 1000) {
       nodes {
         id
         name
@@ -191,65 +149,64 @@ const FETCH_ALL_TAGS = gql`
   }
 `;
 
-const { result: tagsByLetterResult, loading: tagsByLetterLoading, error: tagsByLetterError, refetch: refetchTagsByLetter } = useQuery(FETCH_TAGS_BY_LETTER, { letter: selectedLetter.value });
-const { result: allTagsResult, loading: allTagsLoading, error: allTagsError, refetch: refetchAllTags } = useQuery(FETCH_ALL_TAGS, { enabled: false });
+// Execute the GraphQL query
+const { result: allTagsResult, loading: allTagsLoading, error: allTagsError } = useQuery(FETCH_ALL_TAGS);
 
-const tagsCache = ref({});
+// Computed property to get all tags from the query result
+const allTags = computed(() => allTagsResult.value?.tags.nodes || []);
 
+// Filter tags based on the search term and selected letter
 const filteredTags = computed(() => {
-  let tags = isSearchActive.value ? allTagsResult.value?.tags.nodes : tagsByLetterResult.value?.tags.nodes;
-  if (!tags) return [];
-  return tags
-    .filter(tag => 
-      tag.posts.nodes.length > 0 &&
-      (isSearchActive.value
-        ? tag.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-        : tag.name.charAt(0).toUpperCase() === selectedLetter.value)
-    )
-    .map(tag => ({
-      ...tag,
-      posts: tag.posts.nodes
-    }));
+  return allTags.value.filter(tag => 
+    tag.name.toLowerCase().includes(props.searchTerm.toLowerCase()) &&
+    (props.searchTerm || tag.name.charAt(0).toUpperCase() === selectedLetter.value) &&
+    tag.posts.nodes.length > 0
+  ).map(tag => ({
+    ...tag,
+    posts: tag.posts.nodes
+  }));
 });
 
+// Get unique first letters of filtered tags
 const uniqueLetters = computed(() => {
   const letters = new Set(filteredTags.value.map(tag => tag.name.charAt(0).toUpperCase()));
   return Array.from(letters).sort();
 });
 
+// Get visible tags based on the current tagsToShow value
 const visibleFilteredTags = computed(() => {
   return filteredTags.value.slice(0, tagsToShow.value);
 });
 
+// Determine if the "Show more" button should be displayed
 const shouldShowMoreButton = computed(() => {
   return filteredTags.value.length > tagsToShow.value;
 });
 
-async function fetchTagsByLetter(letter) {
-  setSelectedLetter(letter);
-  isSearchActive.value = false;
-  if (tagsCache.value[letter]) {
-    tagsByLetterResult.value = { tags: { nodes: tagsCache.value[letter] } };
-    return;
-  }
-  loading.value = true;
-  try {
-    const { data } = await refetchTagsByLetter({ letter });
-    tagsCache.value[letter] = data.tags.nodes;
-    loading.value = false;
-  } catch (err) {
-    console.error('Error fetching tags:', err);
-    error.value = 'Errore nel caricamento dei dati';
-    loading.value = false;
-  }
-}
+// Tooltip style
+const tooltipStyle = computed(() => ({
+  width: '600px', 
+  maxWidth: '90vw', 
+  top: '50%', 
+  left: '50%', 
+  transform: 'translate(-50%, -50%)'
+}));
 
+// Get visible tags for a specific letter
 const getVisibleTagsByLetter = (letter) => {
   return filteredTags.value
     .filter(tag => tag.name.charAt(0).toUpperCase() === letter)
     .slice(0, tagsToShow.value);
 };
 
+// Fetch tags for a specific letter
+const fetchTagsByLetter = (letter) => {
+  selectedLetter.value = letter;
+  tagsToShow.value = 18;
+  updateContainerHeight();
+};
+
+// Load more tags
 const loadMoreTags = () => {
   tagsToShow.value += 18;
   nextTick(() => {
@@ -257,109 +214,84 @@ const loadMoreTags = () => {
   });
 };
 
+// Toggle tooltip visibility
 const toggleTooltip = (tagId) => {
-  activeTooltip.value = activeTooltip.value === tagId ? null : tagId;
+  if (activeTooltip.value === tagId) {
+    hideTooltip();
+  } else {
+    showTooltip(tagId);
+  }
 };
 
+// Show tooltip
 const showTooltip = (tagId) => {
   activeTooltip.value = tagId;
 };
 
+// Hide tooltip
 const hideTooltip = () => {
   activeTooltip.value = null;
 };
 
+// Close tooltip when clicking outside
 const closeTooltipOnOutsideClick = (event) => {
   if (activeTooltip.value !== null && !event.target.closest('.tooltip-custom')) {
     hideTooltip();
   }
 };
 
-const handleGlobalClick = (event) => {
-  if (!event.target.closest('.tags-posts-section')) {
-    hideTooltip();
+// Scroll alphabet
+const scrollAlphabet = (direction) => {
+  if (alphabetContainer.value) {
+    alphabetContainer.value.scrollLeft += direction === 'left' ? -100 : 100;
   }
 };
 
-const resetSearch = () => {
-  searchQuery.value = '';
-  isSearchActive.value = false;
-  selectedLetter.value = 'A';
-  tagsToShow.value = 18;
-  fetchTagsByLetter('A');
-};
-
+// Update the height of the tags container
 const updateContainerHeight = () => {
   if (tagsContainer.value) {
     tagsContainer.value.style.height = 'auto';
   }
 };
 
-const handleSearch = async () => {
-  if (searchQuery.value.length >= 3) {
-    isSearchActive.value = true;
-    loading.value = true;
-    try {
-      await refetchAllTags();
-      loading.value = false;
-    } catch (err) {
-      console.error('Error fetching all tags:', err);
-      error.value = 'Errore nel caricamento dei dati';
-      loading.value = false;
-    }
-  } else if (searchQuery.value.length === 0) {
-    resetSearch();
-  }
-};
-
-const handleEscKey = (event) => {
-  if (event.key === 'Escape' && activeTooltip.value !== null) {
-    hideTooltip();
-  }
-};
-
+// Lifecycle hooks
 onMounted(() => {
-  document.addEventListener('keydown', handleEscKey);
-  document.addEventListener('click', handleGlobalClick);
   updateContainerHeight();
   window.addEventListener('resize', updateContainerHeight);
-  fetchTagsByLetter('A');
+  // Add event listener to close tooltip when clicking outside
+  document.addEventListener('click', closeTooltipOnOutsideClick);
 });
 
 onUnmounted(() => {
-  document.removeEventListener('keydown', handleEscKey);
-  document.removeEventListener('click', handleGlobalClick);
   window.removeEventListener('resize', updateContainerHeight);
+  // Remove event listener when component is unmounted
+  document.removeEventListener('click', closeTooltipOnOutsideClick);
 });
 
-watch([searchQuery, selectedLetter], () => {
+// Watch for changes in search term
+watch(() => props.searchTerm, () => {
+  if (props.searchTerm) {
+    selectedLetter.value = '';
+  } else {
+    selectedLetter.value = 'A';
+  }
   tagsToShow.value = 18;
-  nextTick(() => {
-    updateContainerHeight();
-  });
+  updateContainerHeight();
 });
 
+// Watch for changes in filtered tags and update container height
 watch(visibleFilteredTags, () => {
   nextTick(() => {
     updateContainerHeight();
   });
 });
 
-watch(tagsByLetterLoading, (newLoading) => {
-  loading.value = newLoading;
-});
-
+// Watch for loading state changes
 watch(allTagsLoading, (newLoading) => {
   loading.value = newLoading;
 });
 
-watch(tagsByLetterError, (newError) => {
-  if (newError) {
-    console.error('GraphQL error:', newError);
-    error.value = 'Si è verificato un errore durante il caricamento dei dati.';
-  }
-});
-
+// Watch for error state changes
 watch(allTagsError, (newError) => {
   if (newError) {
     console.error('GraphQL error:', newError);
@@ -367,7 +299,6 @@ watch(allTagsError, (newError) => {
   }
 });
 </script>
-
 
 <style scoped>
 .tags-posts-section {
@@ -384,6 +315,15 @@ watch(allTagsError, (newError) => {
   .tooltip-custom {
     width: 90vw !important;
   }
+}
+
+.alphabet-container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.alphabet-container::-webkit-scrollbar {
+  display: none;
 }
 
 .alphabet-container button {
