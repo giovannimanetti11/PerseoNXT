@@ -2,31 +2,36 @@
   <div>
     <h1 class="sr-only">Wikiherbalist - Enciclopedia di erbe aromatiche e medicinali</h1>
     <Hero />
-    <Searchfield />
-    <BrowseByLetter />
-    <Suspense>
-      <template #default>
-        <LazyTagsPosts />
-      </template>
-      <template #fallback>
-        <div v-if="loading" class="w-full h-64 flex items-center justify-center">
-          <Icon name="eos-icons:three-dots-loading" class="text-5xl text-celeste" />
-        </div>
-      </template>
-    </Suspense>
+    <Searchfield v-if="currentView === 'monographs'" />
+    <SearchProperty v-else @search="handleSearch" />
+    <BrowseContent @viewChange="handleViewChange" :currentView="currentView" :searchTerm="searchTerm" />
     <LazySectionBlog />
     <LazyContacts />
   </div>
 </template>
 
 <script setup>
-import { defineAsyncComponent } from 'vue'
+import { ref, defineAsyncComponent } from 'vue'
 import Hero from '~/components/hero.vue'
 import Searchfield from '~/components/searchfield.vue'
-import BrowseByLetter from '~/components/browse-by-letter.vue'
+import SearchProperty from '~/components/searchProperty.vue'
+import BrowseContent from '~/components/browseContent.vue'
 
+// Use defineAsyncComponent for lazy-loaded components
+const LazySectionBlog = defineAsyncComponent(() => import('~/components/section-blog.vue'))
+const LazyContacts = defineAsyncComponent(() => import('~/components/contacts.vue'))
 
-const LazyTagsPosts = defineAsyncComponent(() => import('~/components/tags-posts.vue'))
+const currentView = ref('monographs')
+const searchTerm = ref('')
 
+const handleViewChange = (view) => {
+  currentView.value = view
+  if (view === 'monographs') {
+    searchTerm.value = ''
+  }
+}
 
+const handleSearch = (term) => {
+  searchTerm.value = term
+}
 </script>
