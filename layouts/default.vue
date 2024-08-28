@@ -3,12 +3,7 @@
     <Header />
     <slot />
     <Footer />
-    <ScrollToTopButton />
+    <ScrollToTop />
+    <FeedbackWidget />
   </div>
 </template>
-
-<script setup>
-import Header from '~/components/header.vue';
-import Footer from '~/components/footer.vue';
-import ScrollToTopButton from '~/components/scrollToTop.vue';
-</script>
