@@ -146,14 +146,110 @@ body {
 }
 
 
-/* Print css */ 
+/* Print css */
 @media print {
+  body {
+    color: #000;
+    background: #fff;
+    font-size: 12pt;
+  }
   body:after {
-    content: "@wikiherbalist";
-    position: fixed;
-    bottom: 0px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 12px;
+    content: none !important;
+  }
+  header, footer, nav, .pagination, .date-info, .sinonimi, .additional-images,
+  .print\\:hidden, .hidden, [class*="print:hidden"],
+  #header, #footer, .header, .footer, 
+  .scroll-to-top, .feedbackWidget, .recaptcha-badge,
+  [id^="rcta-"], [class^="rcta-"], 
+  [id*="recaptcha"], [class*="recaptcha"],
+  [id*="captcha"], [class*="captcha"],
+  [style*="z-index: 2147483647"] {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  @page {
+    margin: 2cm;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+    page-break-inside: avoid;
+  }
+  img, table, figure {
+    page-break-inside: avoid;
+    max-width: 100% !important;
+  }
+  p, h2, h3 {
+    orphans: 3;
+    widows: 3;
+  }
+  .post-index-section ul {
+    column-count: 2;
+    column-gap: 2em;
+  }
+  .post-index-section ul li {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 0.5em;
+  }
+  .post-index-section ul li a {
+    display: flex;
+    align-items: center;
+  }
+  .post-index-section .circle {
+    width: 1.5em !important;
+    height: 1.5em !important;
+    border-radius: 50% !important;
+    border: 1pt solid black !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-right: 0.5em !important;
+  }
+  a {
+    text-decoration: none;
+    word-wrap: break-word;
+  }
+  a[href^="#"]:after {
+    display: none;
+  }
+  .featured-image {
+    display: block;
+    max-width: 50%;
+    margin: 1cm auto;
+  }
+  [class*="text-center"], [class*="text-blu"], [class*="bg-white"], [class*="rounded-xl"] {
+    text-align: left !important;
+    color: black !important;
+    background: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    margin: 0.5em 0 !important;
+  }
+  .circle {
+    border: 1pt solid black !important;
+    color: black !important;
+    border-radius: 50% !important;
+    width: 1.5em !important;
+    height: 1.5em !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-right: 0.5em !important;
+  }
+  .post-content-section, .term-section, .blogpost-content-section {
+    page-break-before: always;
+  }
+  
+  /* Ensure no fixed elements are visible */
+  * {
+    position: static !important;
+    float: none !important;
+    overflow: visible !important;
+  }
+  
+  /* Remove all shadows */
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
   }
 }
