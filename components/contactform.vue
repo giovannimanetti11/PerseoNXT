@@ -89,7 +89,7 @@ const sendEmail = async () => {
 
       const data = await response.json();
       if (data.success) {
-        message.header = 'Sent!';
+        message.header = 'Inviato!';
         message.content = data.message;
         message.type = 'text-green-800 bg-green-50 dark:text-green-400';
       } else {
@@ -97,8 +97,8 @@ const sendEmail = async () => {
       }
     } catch (error) {
       console.error('Error sending email', error);
-      message.header = 'Error!';
-      message.content = `Error submitting request: ${error.message}`;
+      message.header = 'Errore!';
+      message.content = `Errore nell'invio della richiesta: ${error.message}`;
       message.type = 'text-red-800 bg-red-50 dark:text-red-400';
     }
   } else {
@@ -109,12 +109,12 @@ const sendEmail = async () => {
 // Update message based on validation errors
 const updateMessageForValidationErrors = () => {
   if (v$.value.email.$error) {
-    message.header = 'Error!';
-    message.content = 'Please enter a valid email address.';
+    message.header = 'Errore!';
+    message.content = 'Inserisci un indirizzo email valido';
     message.type = 'text-red-800 bg-red-50 dark:text-red-400';
   } else if (v$.value.richiesta.$error) {
-    message.header = 'Error!';
-    message.content = 'Please write a message.';
+    message.header = 'Errore!';
+    message.content = 'Scrivi un messaggio.';
     message.type = 'text-red-800 bg-red-50 dark:text-red-400';
   }
 };
