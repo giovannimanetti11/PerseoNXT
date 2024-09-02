@@ -3,15 +3,22 @@
     <div :class="['flex justify-between items-center bg-white py-2 px-2 md:py-4 md:px-6 shadow-lg rounded-2xl', {'radius-bottom-none': menuOpen || mailingListMenuOpen}]">
       <!-- Logo -->
       <div class="flex items-center">
-        <a href="https://wikinutritionals.com" aria-label="Home">
-          <img src="/media/logo_wikiherbalist.svg" alt="Wikiherbalist Logo" class="w-28 lg:w-32 xl:w-36 h-auto mr-2" loading="lazy" width="144" height="48">
+        <a href="https://wikiherbalist.com">
+          <img 
+            src="/media/logo_wikiherbalist.svg" 
+            alt="Wikiherbalist Logo" 
+            width="144" 
+            height="18.53" 
+            class="w-28 lg:w-32 xl:w-36 mr-2" 
+            loading="lazy"
+          />
         </a>
       </div>
 
       <!-- Desktop menu -->
       <div class="hidden lg:block flex-grow">
-        <nav aria-label="Menu principale" class="flex justify-center space-x-1 xl:space-x-4 text-black text-sm xl:text-base">
-          <a href="https://wikinutritionals.com" class="no-underline py-2 px-1 xl:px-2 hover:text-verde transition-colors duration-300">Home</a>
+        <nav class="flex justify-center space-x-1 xl:space-x-4 text-black text-sm xl:text-base">
+          <a href="https://wikiherbalist.com" class="no-underline py-2 px-1 xl:px-2 hover:text-verde transition-colors duration-300">Home</a>
           <a href="/about" class="no-underline py-2 px-1 xl:px-2 hover:text-verde transition-colors duration-300">About</a>
           <a href="/piante-medicinali" class="no-underline py-2 px-1 xl:px-2 hover:text-verde transition-colors duration-300">Piante medicinali</a>
           <a href="/glossario" class="no-underline py-2 px-1 xl:px-2 hover:text-verde transition-colors duration-300">Glossario</a>
@@ -22,17 +29,16 @@
       <!-- Hamburger e Mailing List button -->
       <div class="flex items-center">
         <button class="hidden md:block max-w-full buttonMailing py-1 px-5 mr-4 bg-white text-verde border border-verde hover:text-blu hover:border-blu rounded-md" @click="toggleMailingListMenu">Mailing List</button>
-        <button class="hamburger-menu cursor-pointer flex flex-row items-center gap-1.5 md:ml-2" :class="{ 'active': menuOpen }" @click="toggleMenu" aria-label="Toggle menu" :aria-expanded="menuOpen">
-          <span class="sr-only">Menu</span>
+        <div class="hamburger-menu cursor-pointer flex flex-row items-center gap-1.5 md:ml-2" :class="{ 'active': menuOpen }" @click="toggleMenu" aria-label="Menu">
           <div class="bar w-1.5 h-7 m-0.5 transition-all rounded-lg" :class="{ 'transform -translate-x-0.5 rotate-30': menuOpen }"></div>
           <div class="bar w-1.5 h-5 m-0.5 transition-all rounded-lg" :class="{ 'mt-1': menuOpen }"></div>
           <div class="bar w-1.5 h-7 m-0.5 transition-all rounded-lg" :class="{ 'transform translate-x-0.5 rotate-30': menuOpen }"></div>
-        </button>
+        </div>
       </div>
     </div>
 
-   <!-- Hamburger mega menu -->
-   <div v-if="menuOpen" class="w-full bg-white rounded-bl-2xl rounded-br-2xl transition-all duration-500 ease-out max-h-[calc(100vh-100px)] overflow-y-auto scrollbar-hide" aria-label="Menu mobile">
+    <!-- Hamburger mega menu -->
+    <div v-if="menuOpen" class="w-full bg-white rounded-bl-2xl rounded-br-2xl transition-all duration-500 ease-out max-h-[calc(100vh-100px)] overflow-y-auto scrollbar-hide">
       <div class="container mx-auto px-4 py-6">
         <div class="flex flex-col md:flex-row">
           <!-- Right col (on desktop, full width on mobile) -->
@@ -40,7 +46,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <!-- Mobile-only menu items -->
               <div class="lg:hidden">
-                <a href="https://wikinutritionals.com" class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde overflow-hidden flex items-center">
+                <a href="https://wikiherbalist.com" class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde overflow-hidden flex items-center">
                   <div class="absolute left-2 top-1/2 w-12 h-12 -translate-y-1/2 bg-white p-2 rounded-2xl border border-transparent flex justify-center items-center">
                     <Icon name="mdi:home" class="inner-icon text-celeste text-3xl group-hover:text-verde" />
                   </div>
@@ -87,14 +93,7 @@
                     <Icon name="mdi:event" class="inner-icon text-celeste text-3xl group-hover:text-verde" />
                   </div>
                   <span class="absolute left-16 right-4 text-center">Prossimi eventi</span>
-                </button>
-              </div>
-              <div>
-                <button class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde overflow-hidden flex items-center" aria-label="Contattaci">
-                  <div class="absolute left-2 top-1/2 w-12 h-12 -translate-y-1/2 bg-white p-2 rounded-2xl border border-transparent flex justify-center items-center">
-                    <Icon name="mdi:contact-mail" class="inner-icon text-celeste text-3xl group-hover:text-verde" />
-                  </div>
-                  <span class="absolute left-16 right-4 text-center">Contattaci</span>
+                  <img src="@/assets/coming_soon.svg" alt="Coming Soon" class="absolute top-0 right-0 w-16 h-auto mt-1 mr-1" />
                 </button>
               </div>
               <div class="hidden lg:block">
@@ -111,7 +110,16 @@
                     <Icon name="mdi:handshake" class="inner-icon text-celeste text-3xl group-hover:text-verde" />
                   </div>
                   <span class="absolute left-16 right-4 text-center">Collabora con noi</span>
+                  <img src="@/assets/coming_soon.svg" alt="Coming Soon" class="absolute top-0 right-0 w-16 h-auto mt-1 mr-1" />
                 </button>
+              </div>
+              <div>
+                <a href="/#section-contacts" class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde overflow-hidden flex items-center" aria-label="Contattaci">
+                  <div class="absolute left-2 top-1/2 w-12 h-12 -translate-y-1/2 bg-white p-2 rounded-2xl border border-transparent flex justify-center items-center">
+                    <Icon name="mdi:contact-mail" class="inner-icon text-celeste text-3xl group-hover:text-verde" />
+                  </div>
+                  <span class="absolute left-16 right-4 text-center">Contattaci</span>
+                </a>
               </div>
             </div>
           </div>
@@ -143,35 +151,40 @@
   </header>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 import MailingList from './mailinglist.vue';
 
-const menuOpen = ref(false);
-const mailingListMenuOpen = ref(false);
+const menuOpen = ref<boolean>(false);
+const mailingListMenuOpen = ref<boolean>(false);
 
-const toggleMenu = () => {
+const toggleMenu = (): void => {
   menuOpen.value = !menuOpen.value;
   if (menuOpen.value) mailingListMenuOpen.value = false;
 };
 
-const toggleMailingListMenu = () => {
+const toggleMailingListMenu = (): void => {
   mailingListMenuOpen.value = !mailingListMenuOpen.value;
   if (mailingListMenuOpen.value) menuOpen.value = false;
 };
 
-const closeMenus = (event) => {
-  if (!event.target.closest('.menu-container') && !event.target.closest('.hamburger-menu') && !event.target.closest('.buttonMailing')) {
+const closeMenus = (event: MouseEvent): void => {
+  const target = event.target as HTMLElement;
+  if (
+    !target.closest('.menu-container') &&
+    !target.closest('.hamburger-menu') &&
+    !target.closest('.buttonMailing')
+  ) {
     menuOpen.value = false;
     mailingListMenuOpen.value = false;
   }
 };
 
-onMounted(() => {
+onMounted((): void => {
   document.addEventListener('click', closeMenus);
 });
 
-onUnmounted(() => {
+onUnmounted((): void => {
   document.removeEventListener('click', closeMenus);
 });
 </script>
