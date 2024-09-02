@@ -167,7 +167,6 @@
     import { ref, reactive, onMounted, watch, nextTick, computed, defineAsyncComponent } from 'vue';
     import { useRoute } from 'vue-router';
     import { useQuery } from '@vue/apollo-composable';
-    import cheerio from 'cheerio';
     import gql from 'graphql-tag';
 
     // Lazy loading dei componenti
@@ -288,49 +287,50 @@
     });
 
     // Process post content to extract headings and sections
-    const processPostContent = () => {
-      const content = post.data.content;
-      const $ = cheerio.load(content);
-      const headings = [];
-      const sections = [];
-      let currentSection = null;
+    const processPostContent = async () => {
+    const content = post.data.content;
+    const cheerio = await import('cheerio');
+    const $ = cheerio.load(content);
+    const headings = [];
+    const sections = [];
+    let currentSection = null;
 
-      $('h3, p, ol, ul').each(function(i, elem) {
-        const $elem = $(elem);
-        if ($elem.is('h3')) {
+    $('h3, p, ol, ul').each(function(i, elem) {
+      const $elem = $(elem);
+      if ($elem.is('h3')) {
+        if (currentSection) {
+          sections.push(currentSection);
+        }
+        const title = $elem.text().trim();
+        headings.push(title);
+        currentSection = {
+          title: title,
+          content: '',
+          className: `post-section-${title.toLowerCase().replace(/[\s,\'\`]+/g, '-').replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e').replace(/[ìíîï]/g, 'i').replace(/[òóôõö]/g, 'o').replace(/[ùúûü]/g, 'u')}`
+        };
+      } else {
+        if ($elem.is('p') && $elem.text().trim() === "Riferimenti") {
           if (currentSection) {
             sections.push(currentSection);
           }
-          const title = $elem.text().trim();
-          headings.push(title);
           currentSection = {
-            title: title,
+            title: "Riferimenti",
             content: '',
-            className: `post-section-${title.toLowerCase().replace(/[\s,\'\`]+/g, '-').replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e').replace(/[ìíîï]/g, 'i').replace(/[òóôõö]/g, 'o').replace(/[ùúûü]/g, 'u')}`
+            className: 'post-section-riferimenti'
           };
-        } else {
-          if ($elem.is('p') && $elem.text().trim() === "Riferimenti") {
-            if (currentSection) {
-              sections.push(currentSection);
-            }
-            currentSection = {
-              title: "Riferimenti",
-              content: '',
-              className: 'post-section-riferimenti'
-            };
-          } else if (currentSection) {
-            currentSection.content += $.html($elem);
-          }
+        } else if (currentSection) {
+          currentSection.content += $.html($elem);
         }
-      });
-
-      if (currentSection) {
-        sections.push(currentSection);
       }
+    });
 
-      post.headings = headings;
-      post.structuredContent = sections;
-    };
+    if (currentSection) {
+      sections.push(currentSection);
+    }
+
+    post.headings = headings;
+    post.structuredContent = sections;
+  };
 
     const smoothScroll = (target) => {
       const location = document.querySelector(target);
@@ -363,8 +363,8 @@
 
     watch(() => post.data, () => {
       if (post.data) {
-        nextTick(() => {
-          processPostContent();
+        nextTick(async () => {
+          await processPostContent();
           globalLinkedWords.value.clear(); // Reset globalLinkedWords for each new post
         });
       }
