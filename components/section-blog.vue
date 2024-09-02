@@ -11,7 +11,7 @@
           come le piante possono contribuire al benessere naturale.
         </p>
         <NuxtLink to="/blog" class="inline-block bg-transparent text-blu py-2 px-4 border border-blu rounded-xl hover:text-verde hover:border-verde transition-colors duration-300">
-          Esplora gli articoli
+          Vai al blog
         </NuxtLink>
       </div>
       <!-- Right column -->
@@ -20,8 +20,9 @@
           <div v-for="(post, index) in posts" :key="post.uri"
                :class="[
                  'blog-card w-11/12 xl:w-7/12 flex flex-col xl:flex-row rounded-2xl shadow transition-all duration-500 ease-in-out m-auto my-2 xl:m-0 cursor-pointer',
-                 'md:hover:bg-celeste md:hover:text-white',
-                 post.uri === activePost ? 'xl:z-10 bg-celeste text-white' : 'bg-white text-black',
+                 'md:hover:bg-celeste md:hover:text-white group',
+                 { 'xl:z-10 bg-celeste text-white': isXLScreen && post.uri === activePost },
+                 { 'bg-white': !isXLScreen || post.uri !== activePost },
                  'xl:absolute'
                ]"
                :style="getTransformation(post, index)"
@@ -29,9 +30,9 @@
                :aria-label="`Post del blog: ${post.title}`"
                role="article">
             <div class="px-6 py-4 flex flex-col justify-between items-start h-full w-full xl:w-2/4">
-              <h4 class="font-bold text-xl mb-auto">{{ post.title }}</h4>
-              <p :class="['blog-details', post.uri === activePost || 'md:group-hover:text-white' ? 'text-white' : 'text-gray-500']">{{ post.authorName }}</p>
-              <p :class="['blog-details', post.uri === activePost || 'md:group-hover:text-white' ? 'text-white' : 'text-gray-500']">{{ post.date }}</p>
+              <h4 class="font-bold text-xl mb-auto" :class="{ 'text-black md:group-hover:text-white': !isXLScreen || post.uri !== activePost }">{{ post.title }}</h4>
+              <p :class="['blog-details', { 'text-gray-500 md:group-hover:text-white': !isXLScreen || post.uri !== activePost }]">{{ post.authorName }}</p>
+              <p :class="['blog-details', { 'text-gray-500 md:group-hover:text-white': !isXLScreen || post.uri !== activePost }]">{{ post.date }}</p>
             </div>
             <div class="flex-col w-full xl:w-2/4 m-auto text-center">
               <NuxtImg 
@@ -46,7 +47,7 @@
               <NuxtLink :to="post.uri" class="block w-11/12 mt-4 mb-4 mx-auto">
                 <button :class="[
                   'blog-card-button py-4 w-full rounded-xl transition-colors duration-300',
-                  post.uri === activePost ? 'bg-white text-celeste' : 'bg-verde text-white md:hover:bg-blu'
+                  (isXLScreen && post.uri === activePost) ? 'bg-white text-celeste hover:bg-blu hover:text-white' : 'bg-verde text-white hover:bg-blu'
                 ]">
                   Leggi di più  →
                 </button>
@@ -60,15 +61,14 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from 'vue';
+import { ref, watch, onMounted, onUnmounted } from 'vue';
 import { useQuery } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 
-// State for blog posts and currently active post
 const posts = ref([]);
 const activePost = ref(null);
+const isXLScreen = ref(false);
 
-// GraphQL query to fetch blog posts
 const BLOG_POSTS_QUERY = gql`
   query BlogPosts {
     blogPosts(first: 3, where: {orderby: {field: DATE, order: DESC}}) {
@@ -88,7 +88,6 @@ const BLOG_POSTS_QUERY = gql`
   }
 `;
 
-// Execute query and update state
 const { result } = useQuery(BLOG_POSTS_QUERY);
 
 watch(result, (newValue) => {
@@ -105,16 +104,14 @@ watch(result, (newValue) => {
         year: 'numeric'
       })
     }));
-    activePost.value = posts.value[0]?.uri;
+    // Remove initial active state
+    activePost.value = null;
   }
 });
 
-const isXLScreen = computed(() => {
-  if (typeof window !== 'undefined') {
-    return window.innerWidth >= 1280; // Tailwind's XL breakpoint
-  }
-  return false;
-});
+const updateScreenSize = () => {
+  isXLScreen.value = window.innerWidth >= 1280;
+};
 
 const transformations = ref({
   first: 'translate(240px, 0px)',
@@ -122,7 +119,6 @@ const transformations = ref({
   last: 'translate(290px, 200px)'
 });
 
-// Handle activation and positioning of blog cards
 const toggleActive = (uri) => {
   if (!isXLScreen.value) return;
   
@@ -145,15 +141,26 @@ const toggleActive = (uri) => {
 };
 
 const getTransformation = (post, index) => {
-  if (!isXLScreen.value) return '';
+  if (!isXLScreen.value) return {};
   
+  let transform = '';
   switch (index) {
-    case 0: return { transform: transformations.value.first };
-    case 1: return { transform: transformations.value.second };
-    case 2: return { transform: transformations.value.last };
-    default: return {}; 
+    case 0: transform = transformations.value.first; break;
+    case 1: transform = transformations.value.second; break;
+    case 2: transform = transformations.value.last; break;
   }
+  
+  return { transform };
 };
+
+onMounted(() => {
+  updateScreenSize();
+  window.addEventListener('resize', updateScreenSize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateScreenSize);
+});
 </script>
 
 <style scoped>
@@ -184,5 +191,18 @@ const getTransformation = (post, index) => {
   0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
   40% {transform: translateY(-30px);}
   60% {transform: translateY(-15px);}
+}
+
+/* Responsive adjustments */
+@media (max-width: 1279px) {
+  .blog-card {
+    position: static !important;
+    transform: none !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  .blog-card:last-child {
+    margin-bottom: 0 !important;
+  }
 }
 </style>
