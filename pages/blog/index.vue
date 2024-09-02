@@ -2,8 +2,8 @@
   <section class="blog-page-section py-14 w-11/12 m-auto rounded-2xl">
     <h1 class="text-5xl font-bold text-center text-black mb-10 mt-12 py-4">Blog</h1>
     <Searchfield />
-    <div v-if="loading" class="flex justify-center py-20">
-      <icon name="eos-icons:three-dots-loading" class="text-5xl text-celeste text-center mt-10 mx-auto" />
+    <div v-if="loading" class="flex justify-center text-center w-full items-center h-64">
+      <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
     </div>
     <div v-if="error" class="text-red-500 text-center">
       Errore nel caricamento dei dati.
@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, computed } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useQuery } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 import Searchfield from '~/components/searchfield.vue';
@@ -64,7 +64,7 @@ const { result, loading: queryLoading, error: queryError } = useQuery(FETCH_BLOG
 
 const featuredPost = ref(null);
 const otherPosts = ref([]);
-const loading = ref(false);
+const loading = ref(true);
 const error = ref(null);
 
 onMounted(() => {
@@ -84,6 +84,7 @@ onMounted(() => {
   watch(queryError, (newError) => {
     if (newError) {
       error.value = newError;
+      loading.value = false;
     }
   });
 });
