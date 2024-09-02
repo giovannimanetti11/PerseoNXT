@@ -9,13 +9,13 @@
 
 <script setup>
 import { ref, watch, onMounted } from 'vue'
-import { useRoute, useHead, useNuxtApp } from '#app'
+import { useRoute, useHead, useSeoMeta } from '#app'
 import gql from 'graphql-tag'
 
 const route = useRoute()
 const nuxtApp = useNuxtApp()
 
-// GraphQL queries remain the same
+// GraphQL queries
 const GET_POST_SEO_DATA = gql`
   query GetPostWithSEO($slug: ID!) {
     post(id: $slug, idType: SLUG) {
@@ -52,7 +52,7 @@ const GET_PAGE_SEO_DATA = gql`
   }
 `
 
-// Function to fetch SEO data remains the same
+// Function to fetch SEO data
 const getSeoData = async (slug, isPost = true) => {
   if (!nuxtApp.$apolloClient) {
     console.error('Apollo client not available')
@@ -106,21 +106,31 @@ const updateSeoData = async () => {
 // Function to update head metadata
 const updateHead = (data) => {
   const seo = data?.seo || {}
-  let title = seo.title || 'Wikiherbalist' // Fallback title if GraphQL doesn't provide one
-
+  const isHomepage = route.name === 'index'
+  const title = isHomepage ? (seo.title || 'Wikiherbalist') : (seo.title || 'Pagina')
   const metaDescription = seo.metaDesc || 'Enciclopedia online di erbe aromatiche e medicinali'
+  
   useHead({
-    title,
-    meta: [
-      { name: 'description', content: metaDescription },
-      { property: 'og:title', content: title },
-      { property: 'og:description', content: metaDescription },
-      { property: 'og:url', content: `https://wikiherbalist.com${route.path}` },
-      { name: 'twitter:card', content: 'summary_large_image' },
-    ],
+    titleTemplate: (titleChunk) => {
+      if (isHomepage) {
+        return titleChunk
+      }
+      return titleChunk ? `${titleChunk} | Wikiherbalist` : 'Wikiherbalist'
+    },
+    title: title,
     link: [
       { rel: 'canonical', href: `https://wikiherbalist.com${route.path}` },
     ],
+  })
+
+  useSeoMeta({
+    title: title,
+    ogTitle: title,
+    description: metaDescription,
+    ogDescription: metaDescription,
+    ogUrl: `https://wikiherbalist.com${route.path}`,
+    ogImage: '/media/og-image.jpg',
+    twitterCard: 'summary_large_image',
   })
 }
 
