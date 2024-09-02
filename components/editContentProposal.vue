@@ -2,7 +2,7 @@
     <div>
       <button
         @click="openModal"
-        class="fixed bottom-32 right-6 bg-verde hover:bg-celeste text-white rounded-full p-2 shadow-lg transition-all duration-300 z-50"
+        class="fixed bottom-36 right-6 bg-verde hover:bg-celeste text-white rounded-full p-2 w-12 h-12 shadow-lg transition-all duration-300 z-50 flex items-center justify-center"
         aria-label="Proponi modifica"
       >
         <Icon name="mdi:pencil" class="w-6 h-6" />
@@ -10,7 +10,7 @@
   
       <Teleport to="body">
         <Transition name="fade">
-          <div v-if="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" @click="closeModal">
+          <div v-if="showModal" class="fixed inset-0 w-11/12 m-auto bg-black bg-opacity-50 flex items-center justify-center z-50" @click="closeModal">
             <div class="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative" @click.stop>
               <button @click="closeModal" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
                 <Icon name="mdi:close" class="w-6 h-6" />
