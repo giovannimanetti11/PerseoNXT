@@ -3,7 +3,7 @@
     <div class="flex flex-row">
       <h1 class="text-3xl font-bold">{{ title }}</h1>
       <button @click="speakTitle" class="flex text-5xl ml-4 mb-2 shadow text-white bg-blu rounded-full w-12 h-12 justify-center items-center hover:bg-white hover:text-blu print:hidden">
-        <icon name="f7:speaker-1-fill" class="text-4xl" />
+        <Icon name="f7:speaker-1-fill" class="text-4xl" />
       </button>
     </div>
     <p class="text-xl italic text-gray-700">{{ nomeScientifico }}</p>
@@ -12,7 +12,7 @@
     <div v-if="basionym" class="mt-4">
       <div class="relative inline-block mr-1">
         <span class="text-black">Basionimo</span>
-        <icon 
+        <Icon 
           name="mdi:information-outline" 
           class="text-blu ml-1 cursor-pointer"
           @mouseenter="showBasionymTooltip = true"
@@ -29,9 +29,9 @@
       <span class="text-black">:</span>
       <span class="italic ml-2 text-gray-700">{{ basionym }}</span>
     </div>
-    <div v-if="synonyms.length > 0" class="relative mt-2">
+    <div v-if="synonyms.length > 0" class="relative mt-2 sinonimi">
       <button @click="toggleSynonyms" class="group flex items-center py-2 px-4 bg-white shadow text-blu border rounded-lg hover:bg-blu hover:text-white transition duration-300">
-        <icon name="bi:list" class="text-xl md:text-3xl group-hover:text-white mr-2" />
+        <Icon name="bi:list" class="text-xl md:text-3xl group-hover:text-white mr-2" />
         <span class="ml-2 text-base">Sinonimi ({{ synonyms.length }})</span>
       </button>
       <transition name="slide-fade">
@@ -47,17 +47,17 @@
 
     <!-- Print, Share, Cite buttons -->
     <div class="postinfo-buttons flex mt-4 print:hidden">
-      <button @click="printPost" class="group flex items-center mr-4 py-2 px-4 bg-white shadow text-blu border rounded-lg hover:bg-blu hover:text-white transition duration-300">
-        <icon name="mingcute:print-fill" class="text-xl md:text-3xl group-hover:text-white" />
-        <span class="ml-2 text-base">Stampa</span>
+      <button @click="printPost" class="group flex items-center mr-2 py-2 px-3 md:px-4 bg-white shadow text-blu border rounded-lg hover:bg-blu hover:text-white transition duration-300 hidden sm:flex">
+        <Icon name="mingcute:print-fill" class="text-lg md:text-xl group-hover:text-white" />
+        <span class="ml-1 md:ml-2 text-base">Stampa</span>
       </button>
-      <button @click="openShareModal" class="group flex items-center mr-4 py-2 px-4 bg-white shadow text-blu border rounded-lg hover:bg-blu hover:text-white transition duration-300">
-        <icon name="ic:round-share" class="text-xl md:text-3xl group-hover:text-white" />
-        <span class="ml-2 text-base">Condividi</span>
+      <button @click="openShareModal" class="group flex items-center mr-2 py-2 px-3 md:px-4 bg-white shadow text-blu border rounded-lg hover:bg-blu hover:text-white transition duration-300">
+        <Icon name="ic:round-share" class="text-lg md:text-xl group-hover:text-white" />
+        <span class="ml-1 md:ml-2 text-base">Condividi</span>
       </button>
-      <button @click="openCiteModal" class="group flex items-center py-2 px-4 bg-white shadow text-blu border rounded-lg hover:bg-blu hover:text-white transition duration-300">
-        <icon name="bi:quote" class="text-xl md:text-3xl group-hover:text-white" />
-        <span class="ml-2 text-base">Cita</span>
+      <button @click="openCiteModal" class="group flex items-center py-2 px-3 md:px-4 bg-white shadow text-blu border rounded-lg hover:bg-blu hover:text-white transition duration-300">
+        <Icon name="bi:quote" class="text-lg md:text-xl group-hover:text-white" />
+        <span class="ml-1 md:ml-2 text-base">Cita</span>
       </button>
     </div>
     <p class="mt-4 text-xs text-gray-500">
@@ -67,7 +67,7 @@
       Di: {{ authorName === 'wh_admin' ? 'Editors of Wikiherbalist' : authorName }}
     </p>
     <div class="flex items-center mt-2 text-xs text-gray-500">
-      <icon name="ph:clock-fill" class="text-sm text-gray-600 mr-1.5" />
+      <Icon name="ph:clock-fill" class="text-sm text-gray-600 mr-1.5" />
       <span>Tempo di lettura: {{ readingTime }} min</span>
     </div>
     <div v-if="publicationCount > 0" class="flex flex-row mt-4">
@@ -96,21 +96,28 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useShare } from '~/composables/useShare';
 import { useCite } from '~/composables/useCite';
 import { useFetch } from '#app';
 import { apiConfig } from '~/config';
 
-const props = defineProps({
-  title: String,
-  nomeScientifico: String,
-  publishDate: String,
-  content: String,
-  authorName: String
-});
+interface Props {
+  title: string;
+  nomeScientifico: string;
+  publishDate: string;
+  content: string;
+  authorName: string;
+}
 
+const props = withDefaults(defineProps<Props>(), {
+  title: '',
+  nomeScientifico: '',
+  publishDate: '',
+  content: '',
+  authorName: ''
+});
 
 // Share composable
 const { openShareModal, renderShareModal } = useShare();
@@ -120,26 +127,25 @@ const { openCiteModal, renderCiteModal } = useCite(props.title, props.authorName
 
 const showBasionymTooltip = ref(false);
 const basionym = ref('');
-const synonyms = ref([]);
+const synonyms = ref<string[]>([]);
 const showSynonyms = ref(false);
-const synonymsList = ref(null);
+const synonymsList = ref<HTMLElement | null>(null);
 
 const publicationCount = ref(0);
-const classification = ref(null);
+const classification = ref<Record<string, { name: string; link: string }> | null>(null);
 
 const binomialName = computed(() => props.nomeScientifico.split(' ').slice(0, 2).join(' '));
 const pubmedUrl = computed(() => `https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(binomialName.value)}`);
 
-
 const readingTime = computed(() => Math.ceil(props.content.split(/\s+/).length / 200));
 
 const formattedPublishDate = computed(() => getFormattedDate(props.publishDate));
-const getFormattedDate = dateStr => {
+const getFormattedDate = (dateStr: string): string => {
   const date = new Date(dateStr);
   return isNaN(date.getTime()) ? 'data non disponibile' : date.toLocaleDateString('it-IT', { day: '2-digit', month: 'long', year: 'numeric' });
 };
 
-function speakTitle() {
+function speakTitle(): void {
   if ('speechSynthesis' in window) {
     const utterance = new SpeechSynthesisUtterance(props.title);
     utterance.lang = 'it-IT';
@@ -149,38 +155,40 @@ function speakTitle() {
   }
 }
 
-const printPost = () => {
-  window.print();
+const printPost = (): void => {
+  if (window.innerWidth >= 640) { 
+    window.print();
+  }
 };
 
-const toggleSynonyms = () => {
+const toggleSynonyms = (): void => {
   showSynonyms.value = !showSynonyms.value;
 };
 
 // Fetch GBIF data for basionym and synonyms
-const fetchGBIFData = async () => {
+const fetchGBIFData = async (): Promise<void> => {
   try {
     console.log('Fetching data for:', props.nomeScientifico);
-    const { data: matchData } = await useFetch(`https://api.gbif.org/v1/species/match?name=${encodeURIComponent(props.nomeScientifico)}`);
+    const { data: matchData } = await useFetch<{ usageKey: number }>(`https://api.gbif.org/v1/species/match?name=${encodeURIComponent(props.nomeScientifico)}`);
     console.log('Match data:', matchData.value);
     
-    if (matchData.value.usageKey) {
-      const { data: detailsData } = await useFetch(`https://api.gbif.org/v1/species/${matchData.value.usageKey}`);
+    if (matchData.value?.usageKey) {
+      const { data: detailsData } = await useFetch<{ basionym?: string }>(`https://api.gbif.org/v1/species/${matchData.value.usageKey}`);
       console.log('Details data:', detailsData.value);
       
-      if (detailsData.value.basionym) {
+      if (detailsData.value?.basionym) {
         basionym.value = detailsData.value.basionym;
         console.log('Basionym set to:', basionym.value);
       } else {
         console.log('No basionym found in the details data');
       }
 
-      const { data: synonymsData } = await useFetch(`https://api.gbif.org/v1/species/${matchData.value.usageKey}/synonyms`);
+      const { data: synonymsData } = await useFetch<{ results: Array<{ taxonomicStatus: string; scientificName: string; canonicalName: string }> }>(`https://api.gbif.org/v1/species/${matchData.value.usageKey}/synonyms`);
       console.log('Synonyms data:', synonymsData.value);
       
-      synonyms.value = synonymsData.value.results
+      synonyms.value = synonymsData.value?.results
         .filter(s => s.taxonomicStatus === 'SYNONYM')
-        .map(s => s.scientificName || s.canonicalName);
+        .map(s => s.scientificName || s.canonicalName) || [];
       console.log('Synonyms set to:', synonyms.value);
     }
   } catch (error) {
@@ -188,8 +196,8 @@ const fetchGBIFData = async () => {
   }
 };
 
-const handleClickOutside = (event) => {
-  if (synonymsList.value && !synonymsList.value.contains(event.target) && !event.target.closest('button')) {
+const handleClickOutside = (event: MouseEvent): void => {
+  if (synonymsList.value && !synonymsList.value.contains(event.target as Node) && !event.target?.closest('button')) {
     showSynonyms.value = false;
   }
   showBasionymTooltip.value = false;
@@ -200,7 +208,7 @@ onMounted(async () => {
   document.addEventListener('click', handleClickOutside);
   
   try {
-    const { data: pubMedData } = await useFetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi`, {
+    const { data: pubMedData } = await useFetch<{ esearchresult: { count: number } }>(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi`, {
       params: {
         db: 'pubmed',
         term: binomialName.value,
@@ -209,15 +217,15 @@ onMounted(async () => {
       }
     });
 
-    publicationCount.value = pubMedData.value.esearchresult.count;
+    publicationCount.value = pubMedData.value?.esearchresult.count || 0;
   } catch (error) {
     console.error('Error fetching data from PubMed:', error);
-    publicationCount.value = 'Nessuna pubblicazione trovata';
+    publicationCount.value = 0;
   }
 
   try {
-    const { data: classificationData } = await useFetch(`https://api.gbif.org/v1/species/match?name=${encodeURIComponent(props.nomeScientifico)}`);
-    classification.value = formatClassification(classificationData.value);
+    const { data: classificationData } = await useFetch<Record<string, string>>(`https://api.gbif.org/v1/species/match?name=${encodeURIComponent(props.nomeScientifico)}`);
+    classification.value = formatClassification(classificationData.value || {});
   } catch (error) {
     console.error('Error fetching classification data:', error);
   }
@@ -227,8 +235,8 @@ onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside);
 });
 
-function formatClassification(data) {
-  const taxonomyMap = {
+function formatClassification(data: Record<string, string>): Record<string, { name: string; link: string }> {
+  const taxonomyMap: Record<string, string> = {
     kingdom: 'Regno',
     phylum: 'Phylum',
     class: 'Classe',
@@ -237,7 +245,7 @@ function formatClassification(data) {
     genus: 'Genere',
     species: 'Specie',
   };
-  const formatted = {};
+  const formatted: Record<string, { name: string; link: string }> = {};
   Object.keys(taxonomyMap).forEach(key => {
     if (data[key]) {
       const wikiLink = `https://it.wikipedia.org/wiki/${encodeURIComponent(data[key])}`;
