@@ -18,8 +18,8 @@
           </div>
         </div>
       </div>
-      <div v-else class="flex flex-row py-20 px-10 w-11/12 mx-auto rounded-2xl">
-        <icon name="eos-icons:three-dots-loading" class="text-5xl text-celeste text-center mt-10 mx-auto" />
+      <div v-else class="flex justify-center text-center w-full items-center h-64">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
       </div>
     </section>
     <Contacts />
@@ -80,10 +80,9 @@
       }
       groups[letter].push(post);
     });
-    const sortedGroups = Object.keys(groups).sort().reduce((acc, letter) => {
-      acc[letter] = groups[letter];
-      return acc;
-    }, {});
+    const sortedGroups = Object.fromEntries(
+      Object.entries(groups).sort(([a], [b]) => a.localeCompare(b))
+    );
     return sortedGroups;
   });
   </script>
