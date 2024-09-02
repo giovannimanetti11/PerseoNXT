@@ -1,66 +1,65 @@
 import { apiConfig } from '@config';
-import { readBody, eventHandler } from 'h3';
+import mailchimp from '@mailchimp/mailchimp_marketing';
 
-export default eventHandler(async (event) => {
-  if (event.req.method === 'POST') {
-    try {
-      const body = await readBody(event);
-      const { email } = body;
-      console.log('Email ricevuta per l\'iscrizione:', email);
+export default defineEventHandler(async (event) => {
+  try {
+    const body = await readBody(event);
 
-      if (!apiConfig.MailchimpAPIKey || !apiConfig.MailchimpListID) {
-        console.error('Le chiavi di configurazione Mailchimp non sono presenti.');
-        throw new Error('Le chiavi di configurazione Mailchimp non sono presenti.');
-      }
 
-      console.log('Chiavi di configurazione Mailchimp:', {
-        apiKey: apiConfig.MailchimpAPIKey,
-        listID: apiConfig.MailchimpListID
-      });
-
-      const url = `https://us17.api.mailchimp.com/3.0/lists/${apiConfig.MailchimpListID}/members`;
-      const apiKey = apiConfig.MailchimpAPIKey;
-      const data = {
-        email_address: email,
-        status: 'subscribed'
-      };
-
-      console.log('Dati da inviare a MailChimp:', JSON.stringify(data));
-
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Authorization': `apikey ${apiKey}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
-
-      console.log('Stato della risposta:', response.status);
-      const result = await response.json();
-      console.log('Risposta da MailChimp:', result);
-
-      if (!response.ok) {
-        console.error('Errore nella risposta da MailChimp:', result);
-        throw new Error(result.detail || 'Errore durante l\'iscrizione a MailChimp');
-      }
-
-      return { statusCode: 200, body: result };
-    } catch (error) {
-      console.error('Errore durante la chiamata a MailChimp API:', error.message);
-      return {
-        statusCode: 500,
-        body: {
-          error: 'Errore durante la chiamata a MailChimp API',
-          message: error.message
-        }
-      };
+    if (!apiConfig.MailchimpAPIKey || !apiConfig.MailchimpServerPrefix || !apiConfig.MailchimpListID) {
+      throw new Error('Configurazione Mailchimp incompleta');
     }
-  } else {
-    event.res.setHeader('Allow', ['POST']);
-    return {
-      statusCode: 405,
-      body: { error: 'Metodo non consentito' }
+
+    mailchimp.setConfig({
+      apiKey: apiConfig.MailchimpAPIKey,
+      server: apiConfig.MailchimpServerPrefix
+    });
+
+    const listId = apiConfig.MailchimpListID;
+
+    const searchResponse = await mailchimp.searchMembers.search(body.email);
+
+    if (searchResponse.exact_matches.total_items > 0) {
+      const updateResponse = await mailchimp.lists.updateListMember(
+        listId,
+        body.email,
+        {
+          merge_fields: {
+            FNAME: body.firstName,
+            LNAME: body.lastName
+          }
+        }
+      );
+      return { success: true, status: 'updated', message: 'Profilo aggiornato con successo' };
+    } else {
+      const addResponse = await mailchimp.lists.addListMember(listId, {
+        email_address: body.email,
+        status: 'subscribed',
+        merge_fields: {
+          FNAME: body.firstName,
+          LNAME: body.lastName
+        }
+      });
+      return { success: true, status: 'subscribed', message: 'Iscrizione completata con successo' };
+    }
+  } catch (error) {
+    console.error('Errore dettagliato:', error);
+    console.error('Stack trace:', error.stack);
+    
+    let errorDetails = 'Nessun dettaglio disponibile';
+    if (error.response) {
+      try {
+        errorDetails = JSON.stringify(error.response.data);
+      } catch (e) {
+        errorDetails = error.response.text || error.response.statusText;
+      }
+    }
+    
+    // Return the error
+    return { 
+      success: false, 
+      message: `Errore durante l'operazione: ${error.message}`,
+      details: errorDetails
     };
   }
 });
