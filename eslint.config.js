@@ -27,8 +27,12 @@ export default [
       'vue/no-unused-vars': 'error',
       'vue/require-prop-types': 'error',
       'unicorn/prefer-at': 'error',
-      '@typescript-eslint/no-unused-vars': 'error',
-      'unicorn/no-array-reduce': 'error',
+      '@typescript-eslint/no-unused-vars': ['error', { 
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "ignoreRestSiblings": true 
+      }],
+      'unicorn/no-array-reduce': 'warn',
     },
   },
 ];
