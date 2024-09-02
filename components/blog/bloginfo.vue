@@ -3,18 +3,19 @@
     <div class="flex flex-row">
       <h1 class="text-3xl font-bold">{{ title }}</h1>
     </div>
+    <!-- Print, Share, Cite buttons -->
     <div class="postinfo-buttons flex mt-4 print:hidden">
-      <button @click="printPost" class="group flex items-center mr-4 py-2 px-4 bg-white shadow text-blu border border-blu rounded-lg hover:bg-blu hover:text-white transition duration-300">
-        <Icon name="mingcute:print-fill" class="text-xl md:text-3xl group-hover:text-white" />
-        <span class="ml-2 text-base">Stampa</span>
+      <button @click="printPost" class="group flex items-center mr-2 py-2 px-3 md:px-4 bg-white shadow text-blu border rounded-lg hover:bg-blu hover:text-white transition duration-300 hidden sm:flex">
+        <icon name="mingcute:print-fill" class="text-lg md:text-xl group-hover:text-white" />
+        <span class="ml-1 md:ml-2 text-base">Stampa</span>
       </button>
-      <button @click="openShareModal" class="group flex items-center mr-4 py-2 px-4 bg-white shadow text-blu border border-blu rounded-lg hover:bg-blu hover:text-white transition duration-300">
-        <Icon name="ic:round-share" class="text-xl md:text-3xl group-hover:text-white" />
-        <span class="ml-2 text-base">Condividi</span>
+      <button @click="openShareModal" class="group flex items-center mr-2 py-2 px-3 md:px-4 bg-white shadow text-blu border rounded-lg hover:bg-blu hover:text-white transition duration-300">
+        <icon name="ic:round-share" class="text-lg md:text-xl group-hover:text-white" />
+        <span class="ml-1 md:ml-2 text-base">Condividi</span>
       </button>
-      <button @click="openCiteModal" class="group flex items-center py-2 px-4 bg-white shadow text-blu border border-blu rounded-lg hover:bg-blu hover:text-white transition duration-300">
-        <Icon name="bi:quote" class="text-xl md:text-3xl group-hover:text-white" />
-        <span class="ml-2 text-base">Cita</span>
+      <button @click="openCiteModal" class="group flex items-center py-2 px-3 md:px-4 bg-white shadow text-blu border rounded-lg hover:bg-blu hover:text-white transition duration-300">
+        <icon name="bi:quote" class="text-lg md:text-xl group-hover:text-white" />
+        <span class="ml-1 md:ml-2 text-base">Cita</span>
       </button>
     </div>
     <p class="mt-4 text-xs text-gray-500">
@@ -77,7 +78,7 @@ function formatDate(dateStr) {
 }
 
 const printPost = () => {
-  if (process.client) {
+  if (window.innerWidth >= 640) { 
     window.print();
   }
 };
