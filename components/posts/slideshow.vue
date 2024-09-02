@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-4 md:mt-24 flex flex-col md:float-right print:mt-8 content-center">
+  <div class="mt-4 md:mt-24 flex flex-col md:float-right print:mt-8 content-center" v-if="hasSlideshowContent">
     <!-- Image section that triggers lightbox on click -->
     <div v-show="currentImage" class="relative h-auto w-full md:w-96 md:float-right hover:cursor-pointer hover:opacity-85">
       <NuxtImg
@@ -13,17 +13,16 @@
         loading="lazy"
       />
     </div>
-
     <!-- Thumbnails of additional images, including featured image -->
-    <div v-show="additionalImages.length > 0 || featuredImage" class="w-full mt-1.5 flex flex-wrap justify-center">
+    <div v-show="hasThumbnails" class="additional-images w-full mt-1.5 flex flex-wrap justify-center">
       <!-- Featured image thumbnail -->
-      <div v-if="featuredImage && featuredImage.node && featuredImage.node.sourceUrl" class="h-16">
+      <div v-if="featuredImageSrc" class="h-16">
         <NuxtImg
-          :src="featuredImage.node.sourceUrl"
-          :class="thumbnailClass(featuredImage.node.sourceUrl)"
-          @click="setCurrentImage(featuredImage.node.sourceUrl, featuredImage.node.altText)"
-          @mouseover="setCurrentImage(featuredImage.node.sourceUrl, featuredImage.node.altText)"
-          :alt="featuredImage.node.altText"
+          :src="featuredImageSrc"
+          :class="thumbnailClass(featuredImageSrc)"
+          @click="setCurrentImage(featuredImageSrc, featuredImageAlt)"
+          @mouseover="setCurrentImage(featuredImageSrc, featuredImageAlt)"
+          :alt="featuredImageAlt"
           width="64"
           height="64"
           format="webp"
@@ -32,7 +31,7 @@
       </div>
       <!-- Other images thumbnails -->
       <div v-for="(image, index) in validAdditionalImages" :key="index" class="h-16">
-        <NuxtImg 
+        <NuxtImg
           :src="image.url"
           :class="thumbnailClass(image.url)"
           @click="setCurrentImage(image.url, image.altText)"
@@ -45,7 +44,6 @@
         />
       </div>
     </div>
-
     <!-- Lightbox component from vue-easy-lightbox -->
     <vue-easy-lightbox
       :visible="lightboxVisible"
@@ -57,20 +55,56 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import VueEasyLightbox from 'vue-easy-lightbox';
 
 const props = defineProps({
-  featuredImage: Object,
-  additionalImages: Array
+  featuredImage: {
+    type: Object,
+    default: () => null
+  },
+  additionalImages: {
+    type: Array,
+    default: () => []
+  }
 });
 
-const currentImage = ref(props.featuredImage?.node?.sourceUrl || null);
-const currentAltText = ref(props.featuredImage?.node?.altText || '');
+const featuredImageSrc = computed(() => {
+  const src = props.featuredImage?.sourceUrl || null;
+  return src;
+});
 
+const featuredImageAlt = computed(() => {
+  const alt = props.featuredImage?.altText || '';
+  return alt;
+});
+
+const hasSlideshowContent = computed(() => {
+  const result = !!featuredImageSrc.value || props.additionalImages.length > 0;
+  return result;
+});
+
+const hasThumbnails = computed(() => {
+  const result = !!featuredImageSrc.value || validAdditionalImages.value.length > 0;
+  return result;
+});
+
+const currentImage = ref(featuredImageSrc.value);
+const currentAltText = ref(featuredImageAlt.value);
 const lightboxVisible = ref(false);
 
-const allImages = computed(() => [props.featuredImage.node.sourceUrl, ...props.additionalImages.map(img => img.url).filter(url => url !== props.featuredImage.node.sourceUrl)]);
+const validAdditionalImages = computed(() => {
+  const images = props.additionalImages.filter(image => image?.url);
+  return images;
+});
+
+const allImages = computed(() => {
+  const images = [
+    ...(featuredImageSrc.value ? [featuredImageSrc.value] : []),
+    ...validAdditionalImages.value.map(img => img.url)
+  ];
+  return images;
+});
 
 const currentImageIndex = computed(() => allImages.value.indexOf(currentImage.value));
 
@@ -86,8 +120,6 @@ const openLightbox = () => {
 const closeLightbox = () => {
   lightboxVisible.value = false;
 };
-
-const validAdditionalImages = computed(() => props.additionalImages.filter(image => image?.url));
 
 const thumbnailClass = (imageUrl) => [
   'cursor-pointer rounded-2xl transition-all duration-300 ease-in-out mx-0.5',
