@@ -1,9 +1,10 @@
 {
   "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
-    "target": "esnext",
+    "target": "ES2020",
     "module": "esnext",
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "strict": true,
     "jsx": "preserve",
     "importHelpers": true,
