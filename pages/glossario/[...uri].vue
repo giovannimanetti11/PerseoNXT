@@ -1,5 +1,6 @@
 <template>
   <div id="post" v-if="glossaryTerm">
+    <schemaMarkup :glossaryTerm="glossaryTerm" />
     <!-- Main upper term container -->
     <section class="postGlossario-info-section flex flex-col md:flex-row py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl print:py-2 print:px-0 print:w-full">
       <!-- Container for main term information -->
@@ -55,8 +56,8 @@
       </div>
     </section>
   </div>
-  <div v-else class="flex flex-row py-20 px-10 w-11/12 mx-auto rounded-2xl">
-    <icon name="eos-icons:three-dots-loading" class="text-5xl text-celeste text-center mt-10 mx-auto" />
+  <div v-else class="flex justify-center text-center w-full items-center h-64">
+    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
   </div>
 </template>
 
@@ -65,7 +66,6 @@ import { ref, computed, watch, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useQuery } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
-import cheerio from 'cheerio';
 import GlossarioInfo from '@/components/glossario/glossarioinfo.vue';
 import InternalLinking from '@/components/internalLinking.vue';
 
@@ -75,23 +75,23 @@ const slug = ref(route.params.uri instanceof Array ? route.params.uri[0] : route
 const globalLinkedWords = ref(new Set());
 
 const FETCH_GLOSSARY_TERM_BY_SLUG = gql`
-query GetGlossaryTermBySlug($slug: String!) {
-  glossaryTermBy(slug: $slug) {
-    title
-    authorName
-    date
-    modified
-    content
-    slug
-    featuredImage {
-      node {
-        altText
-        caption
-        sourceUrl
+  query GetGlossaryTermBySlug($slug: String!) {
+    glossaryTermBy(slug: $slug) {
+      title
+      authorName
+      date
+      modified
+      content
+      slug
+      featuredImage {
+        node {
+          altText
+          caption
+          sourceUrl
+        }
       }
     }
   }
-}
 `;
 
 const FETCH_ALL_POSTS_AND_TERMS = gql`
@@ -114,7 +114,8 @@ const FETCH_ALL_POSTS_AND_TERMS = gql`
   }
 `;
 
-const { result: termResult, error: termError, loading: termLoading } = useQuery(FETCH_GLOSSARY_TERM_BY_SLUG, { slug: slug.value });
+
+const { result: termResult} = useQuery(FETCH_GLOSSARY_TERM_BY_SLUG, { slug: slug.value });
 const { result: allItemsResult } = useQuery(FETCH_ALL_POSTS_AND_TERMS);
 
 const glossaryTerm = computed(() => termResult.value?.glossaryTermBy || null);
@@ -129,8 +130,6 @@ const sections = ref([]);
 const readingTime = ref(0);
 
 const updateGlobalLinkedWords = (newWords) => {
-  console.log('Before update - globalLinkedWords:', new Set(globalLinkedWords.value));
-  console.log('Updating globalLinkedWords with:', newWords);
   newWords.forEach(word => {
     const lowercaseWord = word.toLowerCase();
     if (!globalLinkedWords.value.has(lowercaseWord)) {
@@ -146,14 +145,12 @@ const updateGlobalLinkedWords = (newWords) => {
       }
     }
   });
-  console.log('After update - globalLinkedWords:', new Set(globalLinkedWords.value));
 };
 
-const processContent = (content) => {
-  console.log('Processing new glossary term content');
-  console.log('Current slug:', glossaryTerm.value.slug);
-  
-  const $ = cheerio.load(content);
+
+const processContent = async (content) => {
+  const { load } = await import('cheerio');
+  const $ = load(content);
   const extractedHeadings = [];
   const extractedSections = [];
   let wordCount = 0;
@@ -189,17 +186,14 @@ const processContent = (content) => {
   headings.value = extractedHeadings;
   sections.value = extractedSections;
   readingTime.value = Math.ceil(wordCount / 200);
-
-  console.log('Extracted sections:', extractedSections.map(s => s.heading));
 };
 
-watch(() => glossaryTerm.value, (newTerm, oldTerm) => {
+watch(() => glossaryTerm.value, async (newTerm, oldTerm) => {
   if (newTerm && newTerm.content) {
     if (!oldTerm || newTerm.slug !== oldTerm.slug) {
       globalLinkedWords.value = new Set();
-      console.log('New term, reset globalLinkedWords:', new Set(globalLinkedWords.value));
     }
-    processContent(newTerm.content);
+    await processContent(newTerm.content);
   }
 }, { immediate: true });
 
