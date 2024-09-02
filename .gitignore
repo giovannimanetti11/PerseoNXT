@@ -1,6 +1,10 @@
 # Config/AUTH
 config.js
 
+#pm2
+
+ecosystem.config.cjs
+
 #.htaccess
 .htaccess
 
