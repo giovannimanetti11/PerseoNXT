@@ -1,5 +1,6 @@
 import { defineNuxtConfig } from 'nuxt/config'
 
+
 export default defineNuxtConfig({
   // Configure image domains and modifiers for image handling
   image: {
@@ -35,6 +36,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      titleTemplate: '%s | Wikiherbalist',
       htmlAttrs: {
         lang: 'it',
       },
@@ -73,24 +75,18 @@ export default defineNuxtConfig({
     },
   },
   
-  // Set deployment target to static hosting
-  target: 'static',
+  // Set deployment target to server
+  target: 'server',
 
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxtjs/google-fonts',
     '@nuxt/devtools',
     'nuxt-icon',
-    '@nuxtjs/sitemap',
     '@nuxt/image',
     '@nuxtjs/seo',
     "nuxt-schema-org"
   ],
-
-  sitemap: {
-    hostname: 'https://wikiherbalist.com',
-    gzip: true,
-  },
 
   robots: {
     UserAgent: '*',
@@ -182,6 +178,7 @@ export default defineNuxtConfig({
   seo: {
     baseUrl: 'https://wikiherbalist.com',
     name: 'Wikiherbalist',
+    title: 'Enciclopedia di erbe aromatiche e medicinali',
     description: 'Enciclopedia online di erbe aromatiche e medicinali. Scopri proprietà, usi e benefici delle piante.',
   },
 
