@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="sr-only">{{ post.data?.title || 'Dettaglio pianta' }}</h1>
+    <h1 class="sr-only">{{ post.data?.title || 'Scheda monografica' }}</h1>
     <div v-if="post.loading" class="flex justify-center text-center w-full items-center h-64 mt-12" aria-live="polite" aria-busy="true">
       <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu" aria-label="Caricamento"></div>
     </div>
