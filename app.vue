@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, computed } from 'vue'
 import { useRoute, useHead, useSeoMeta } from '#app'
 import gql from 'graphql-tag'
 
@@ -80,6 +80,15 @@ const staticTitles = {
   'cookie-policy': 'Cookie Policy'
 }
 
+// Computed property for canonical url
+const canonicalUrl = computed(() => {
+  const baseUrl = 'https://wikiherbalist.com'
+  return route.path === '/' ? baseUrl : `${baseUrl}${route.path}`
+})
+
+// Computed property to check if is homepage
+const isHomepage = computed(() => route.path === '/')
+
 // Function to update SEO data
 const updateSeoData = async () => {
   const routeName = route.name
@@ -106,20 +115,19 @@ const updateSeoData = async () => {
 // Function to update head metadata
 const updateHead = (data) => {
   const seo = data?.seo || {}
-  const isHomepage = route.name === 'index'
-  const title = isHomepage ? (seo.title || 'Wikiherbalist') : (seo.title || 'Pagina')
+  const title = isHomepage.value ? (seo.title || 'Wikiherbalist') : (seo.title || 'Pagina')
   const metaDescription = seo.metaDesc || 'Enciclopedia online di erbe aromatiche e medicinali'
-  
+ 
   useHead({
     titleTemplate: (titleChunk) => {
-      if (isHomepage) {
+      if (isHomepage.value) {
         return titleChunk
       }
       return titleChunk ? `${titleChunk} | Wikiherbalist` : 'Wikiherbalist'
     },
     title: title,
     link: [
-      { rel: 'canonical', href: `https://wikiherbalist.com${route.path}` },
+      { rel: 'canonical', href: canonicalUrl.value },
     ],
   })
 
@@ -128,7 +136,7 @@ const updateHead = (data) => {
     ogTitle: title,
     description: metaDescription,
     ogDescription: metaDescription,
-    ogUrl: `https://wikiherbalist.com${route.path}`,
+    ogUrl: canonicalUrl.value,
     ogImage: '/media/og-image.jpg',
     twitterCard: 'summary_large_image',
   })
@@ -149,3 +157,16 @@ onMounted(() => {
   updateSeoData()
 })
 </script>
+
+<style scoped>
+.debug-info {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px;
+  font-size: 12px;
+  z-index: 9999;
+}
+</style>
