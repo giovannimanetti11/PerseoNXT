@@ -9,8 +9,8 @@
         @click="openLightbox"
         width="384"
         height="240"
+        loading="eager"
         format="webp"
-        loading="lazy"
       />
     </div>
     <!-- Thumbnails of additional images, including featured image -->
@@ -25,8 +25,8 @@
           :alt="featuredImageAlt"
           width="64"
           height="64"
+          loading="eager"
           format="webp"
-          loading="lazy"
         />
       </div>
       <!-- Other images thumbnails -->
