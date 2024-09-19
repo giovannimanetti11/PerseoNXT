@@ -168,28 +168,21 @@ const toggleSynonyms = (): void => {
 // Fetch GBIF data for basionym and synonyms
 const fetchGBIFData = async (): Promise<void> => {
   try {
-    console.log('Fetching data for:', props.nomeScientifico);
     const { data: matchData } = await useFetch<{ usageKey: number }>(`https://api.gbif.org/v1/species/match?name=${encodeURIComponent(props.nomeScientifico)}`);
-    console.log('Match data:', matchData.value);
     
     if (matchData.value?.usageKey) {
       const { data: detailsData } = await useFetch<{ basionym?: string }>(`https://api.gbif.org/v1/species/${matchData.value.usageKey}`);
-      console.log('Details data:', detailsData.value);
       
       if (detailsData.value?.basionym) {
         basionym.value = detailsData.value.basionym;
-        console.log('Basionym set to:', basionym.value);
       } else {
-        console.log('No basionym found in the details data');
       }
 
       const { data: synonymsData } = await useFetch<{ results: Array<{ taxonomicStatus: string; scientificName: string; canonicalName: string }> }>(`https://api.gbif.org/v1/species/${matchData.value.usageKey}/synonyms`);
-      console.log('Synonyms data:', synonymsData.value);
       
       synonyms.value = synonymsData.value?.results
         .filter(s => s.taxonomicStatus === 'SYNONYM')
         .map(s => s.scientificName || s.canonicalName) || [];
-      console.log('Synonyms set to:', synonyms.value);
     }
   } catch (error) {
     console.error('Error fetching GBIF data:', error);
