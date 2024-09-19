@@ -5,7 +5,7 @@
       <div class="mb-6 flex justify-center">
         <div class="bg-white rounded-lg shadow-md p-1 inline-flex">
           <button 
-            @click="setView('monographs')" 
+            @click="changeView('monographs')" 
             class="px-4 py-2 text-sm font-medium rounded-md transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blu focus:ring-offset-2"
             :class="currentView === 'monographs' ? 'bg-blu text-white' : 'text-blu hover:bg-gray-100'"
             :aria-pressed="(currentView === 'monographs').toString()"
@@ -14,7 +14,7 @@
             Monografie
           </button>
           <button 
-            @click="setView('properties')" 
+            @click="changeView('properties')" 
             class="px-4 py-2 text-sm font-medium rounded-md transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blu focus:ring-offset-2 ml-1"
             :class="currentView === 'properties' ? 'bg-blu text-white' : 'text-blu hover:bg-gray-100'"
             :aria-pressed="(currentView === 'properties').toString()"
@@ -35,18 +35,18 @@
       </h2>
 
       <!-- Content area -->
-      <Suspense>
+      <div v-if="isLoading" class="w-full h-64 flex items-center justify-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
+      </div>
+      <Suspense v-else>
         <template #default>
-          <div v-if="currentView === 'monographs'">
-            <BrowseByLetter />
-          </div>
-          <div v-else>
-            <TagsPosts :searchTerm="searchTerm" />
-          </div>
+          <KeepAlive>
+            <component :is="currentComponent" :key="currentView" :searchTerm="searchTerm" />
+          </KeepAlive>
         </template>
         <template #fallback>
           <div class="w-full h-64 flex items-center justify-center">
-            <Icon name="eos-icons:three-dots-loading" class="text-5xl text-celeste" />
+            <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
           </div>
         </template>
       </Suspense>
@@ -55,9 +55,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import BrowseByLetter from '~/components/browse-by-letter.vue';
-import TagsPosts from '~/components/tags-posts.vue';
+import { ref, computed, defineAsyncComponent, nextTick } from 'vue';
+
+const BrowseByLetter = defineAsyncComponent(() => import('~/components/browse-by-letter.vue'));
+const TagsPosts = defineAsyncComponent(() => import('~/components/tags-posts.vue'));
 
 const props = defineProps({
   currentView: {
@@ -72,7 +73,20 @@ const props = defineProps({
 
 const emit = defineEmits(['viewChange']);
 
-const setView = (view) => {
-  emit('viewChange', view);
+const isLoading = ref(false);
+
+const currentComponent = computed(() => {
+  return props.currentView === 'monographs' ? BrowseByLetter : TagsPosts;
+});
+
+const changeView = async (view) => {
+  if (view !== props.currentView) {
+    isLoading.value = true;
+    emit('viewChange', view);
+    await nextTick();
+    setTimeout(() => {
+      isLoading.value = false;
+    }, 250); // short delay to show a fluid transition
+  }
 };
 </script>
