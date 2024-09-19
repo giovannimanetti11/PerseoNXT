@@ -7,6 +7,10 @@
 
 PerseoNXT is a custom Nuxt3-based theme designed specifically for headless WordPress websites, tailored for the project [wikiherbalist.com](https://wikiherbalist.com). This theme is now live and can be seen in action at [wikiherbalist.com](https://wikiherbalist.com).
 
+<p align="center">
+<img src="https://github.com/user-attachments/assets/1b48f4bd-8628-4e8f-bea2-8e28bf12b7d6" alt="homepage" width="300">
+</p>
+
 ## Features
 
 - **Vue3**: built with Vue3, Composition API, reactivity system;
@@ -98,7 +102,7 @@ Contributions to PerseoNXT are welcome and appreciated. Whether you're fixing bu
 2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+5. Open a Pull request
 
 Please make sure to update tests as appropriate and adhere to the existing coding style.
 
@@ -112,7 +116,7 @@ For any inquiries or further information, please contact the project maintainer:
 
 Giovanni Manetti - [giovanni@perseodesign.com](mailto:giovanni@perseodesign.com)
 
-Project Link: [https://github.com/giovannimanetti11/PerseoNXT](https://github.com/giovannimanetti11/PerseoNXT)
+Project link: [https://github.com/giovannimanetti11/PerseoNXT](https://github.com/giovannimanetti11/PerseoNXT)
 
 ---
 
