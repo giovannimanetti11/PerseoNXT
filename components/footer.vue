@@ -17,13 +17,13 @@
         <!-- Menu (2 columns) -->
         <div class="grid grid-cols-2 gap-2 text-center mt-8 mb-8">
           <NuxtLink to="/glossario" class="hover:underline">Glossario</NuxtLink>
-          <NuxtLink to="/newsletter" class="hover:underline">Newsletter</NuxtLink>
-          <NuxtLink to="/#section-contacts" class="hover:underline">Contattaci</NuxtLink>
-          <NuxtLink to="/lavora-con-noi" class="hover:underline">Lavora con Noi</NuxtLink>
-          <NuxtLink to="/eventi" class="hover:underline">Prossimi Eventi</NuxtLink>
+          <NuxtLink to="/piante-medicinali" class="hover:underline">Piante medicinali</NuxtLink>
           <NuxtLink to="/blog" class="hover:underline">Blog</NuxtLink>
           <NuxtLink to="/about" class="hover:underline">About</NuxtLink>
-          <NuxtLink to="/piante-medicinali" class="hover:underline">Piante medicinali</NuxtLink>
+          <NuxtLink to="/#section-contacts" class="hover:underline">Contattaci</NuxtLink>
+          <span class="hover:underline">Lavora con Noi</span>
+          <span class="hover:underline">Prossimi Eventi</span>
+          <span class="hover:underline">Newsletter</span>
           <NuxtLink to="/disclaimer" class="hover:underline">Disclaimer</NuxtLink>
         </div>
         
@@ -92,15 +92,15 @@
             <div class="w-1/3 px-4 flex justify-center">
               <div class="flex flex-col space-y-2 items-center">
                 <div class="relative">
-                  <span class="hover:underline">Lavora con Noi</span>
+                  <span class="text-gray-600">Lavora con Noi</span>
                   <img src="@/assets/coming_soon.svg" alt="Coming Soon" class="absolute top-0 -right-16 w-16 h-auto" />
                 </div>
                 <div class="relative">
-                  <span class="hover:underline whitespace-nowrap">Prossimi Eventi</span>
+                  <span class="text-gray-600">Prossimi Eventi</span>
                   <img src="@/assets/coming_soon.svg" alt="Coming Soon" class="absolute top-0 -right-16 w-16 h-auto" />
                 </div>
                 <div class="relative">
-                  <span class="hover:underline">Newsletter</span>
+                  <span class="text-gray-600">Newsletter</span>
                   <img src="@/assets/coming_soon.svg" alt="Coming Soon" class="absolute top-0 -right-16 w-16 h-auto" />
                 </div>
                 <NuxtLink to="/#section-contacts" class="hover:underline">Contattaci</NuxtLink>
