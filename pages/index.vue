@@ -34,4 +34,8 @@ const handleViewChange = (view) => {
 const handleSearch = (term) => {
   searchTerm.value = term
 }
+
+useHead({
+  title: 'Home'
+})
 </script>
