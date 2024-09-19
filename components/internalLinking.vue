@@ -6,7 +6,7 @@
     <!-- Tooltip for displaying additional information -->
     <Teleport to="body">
       <div v-if="activeTooltip" 
-           class="keywordsTooltip fixed z-50 bg-white border border-blu rounded-lg shadow-lg text-sm text-gray-700"
+           class="keywordsTooltip fixed z-50 bg-white rounded-lg shadow-lg text-sm text-gray-700"
            :style="tooltipStyle" 
            @mouseenter="keepTooltipVisible" 
            @mouseleave="handleMouseLeave"
