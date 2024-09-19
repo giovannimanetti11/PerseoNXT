@@ -1,3 +1,4 @@
+<!-- New version -->
 <template>
   <section class="py-2 w-11/12 mx-auto rounded-2xl alphabet-section">
     <div class="container mx-auto px-0 md:px-4 mt-4">
@@ -59,8 +60,8 @@
   </section>
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue';
+<script setup async>
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAlphabet } from '~/composables/useAlphabet';
 import { useApolloClient } from '@vue/apollo-composable';
@@ -148,10 +149,8 @@ function goToPost(uri) {
   router.push(uri);
 }
 
-// Automatically fetch posts for 'A' on component mount
-onMounted(() => {
-  fetchPostsByLetter('A');
-});
+// Fetch initial data server-side
+await fetchPostsByLetter('A');
 </script>
 
 <style scoped>
