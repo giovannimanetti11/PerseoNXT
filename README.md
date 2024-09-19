@@ -9,14 +9,14 @@ PerseoNXT is a custom Nuxt3-based theme designed specifically for headless WordP
 
 ## Features
 
-- **Vue3**: Built with Vue3, leveraging its Composition API, reactivity system, and improved performance.
-- **Nuxt3**: Utilizes the latest Nuxt3 framework for server-side rendering, static site generation, and client-side navigation.
-- **GraphQL and Apollo**: Makes use of GraphQL with Apollo for efficient data fetching, offering real-time updates and flexible querying capabilities.
-- **Tailwind CSS**: Integrates Tailwind CSS for utility-first, responsive, and highly customizable styling.
-- **ESLint**: Ensures code quality and consistency with ESLint configurations.
-- **Responsive Design**: Fully responsive layout that works seamlessly across desktop, tablet, and mobile devices.
-- **SEO Optimized**: Implements best practices for search engine optimization.
-- **Performance Focused**: Optimized for fast loading times and efficient resource usage.
+- **Vue3**: built with Vue3, Composition API, reactivity system;
+- **Nuxt3**: latest Nuxt3 framework for server-side rendering, static site generation, and client-side navigation;
+- **GraphQL and Apollo**: GraphQL with Apollo for efficient data fetching, real-time updates and flexible querying capabilities;
+- **Tailwind CSS**: integrates Tailwind CSS for utility-first, responsive, and highly customizable styling;
+- **ESLint**: ensures code quality and consistency with ESLint configurations;
+- **Responsive design**: fully responsive layout that works seamlessly across desktop, tablet, and mobile devices;
+- **SEO optimized**: implements best practices for search engine optimization;
+- **Performance focused**: optimized for fast loading times and efficient resource usage.
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/1ba482cb-f808-4e3b-b42b-7ae20b2c8d58" alt="Page Speed Insights" width="300">
