@@ -154,4 +154,8 @@ onMounted(async () => {
     }
   });
 });
+
+useHead({
+  title: 'About'
+})
 </script>
