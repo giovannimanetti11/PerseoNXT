@@ -16,7 +16,13 @@
       </div>
       <!-- Right column -->
       <div class="w-full xl:w-3/5 xl:relative xl:h-[625px]">
-        <div class="w-full flex flex-col xl:absolute xl:inset-0">
+        <div v-if="loading" class="flex justify-center items-center h-full">
+          <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
+        </div>
+        <div v-else-if="error" class="text-red-500 text-center">
+          Si è verificato un errore: {{ error }}
+        </div>
+        <div v-else class="w-full flex flex-col xl:absolute xl:inset-0">
           <div v-for="(post, index) in posts" :key="post.uri"
                :class="[
                  'blog-card w-11/12 xl:w-7/12 flex flex-col xl:flex-row rounded-2xl shadow transition-all duration-500 ease-in-out m-auto my-2 xl:m-0 cursor-pointer',
@@ -32,12 +38,12 @@
             <div class="px-6 py-4 flex flex-col justify-between items-start h-full w-full xl:w-2/4">
               <h4 class="font-bold text-xl mb-auto" :class="{ 'text-black md:group-hover:text-white': !isXLScreen || post.uri !== activePost }">{{ post.title }}</h4>
               <p :class="['blog-details', { 'text-gray-500 md:group-hover:text-white': !isXLScreen || post.uri !== activePost }]">{{ post.authorName }}</p>
-              <p :class="['blog-details', { 'text-gray-500 md:group-hover:text-white': !isXLScreen || post.uri !== activePost }]">{{ post.date }}</p>
+              <p :class="['blog-details', { 'text-gray-500 md:group-hover:text-white': !isXLScreen || post.uri !== activePost }]">{{ formatDate(post.date) }}</p>
             </div>
             <div class="flex-col w-full xl:w-2/4 m-auto text-center">
               <NuxtImg 
                 :src="post.featuredImage" 
-                :alt="post.altText" 
+                :alt="post.title" 
                 class="rounded-2xl w-11/12 mt-4 m-auto h-auto max-h-32 object-cover"
                 width="300"
                 height="200"
@@ -60,14 +66,19 @@
   </section>
 </template>
 
-<script setup>
-import { ref, watch, onMounted, onUnmounted } from 'vue';
-import { useQuery } from '@vue/apollo-composable';
+<script setup async>
+import { ref, computed } from 'vue';
+import { useApolloClient } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 
 const posts = ref([]);
 const activePost = ref(null);
 const isXLScreen = ref(false);
+const loading = ref(true);
+const error = ref(null);
+
+const { resolveClient } = useApolloClient();
+const apolloClient = resolveClient();
 
 const BLOG_POSTS_QUERY = gql`
   query BlogPosts {
@@ -88,30 +99,22 @@ const BLOG_POSTS_QUERY = gql`
   }
 `;
 
-const { result } = useQuery(BLOG_POSTS_QUERY);
-
-watch(result, (newValue) => {
-  if (newValue?.blogPosts?.nodes) {
-    posts.value = newValue.blogPosts.nodes.map(post => ({
-      authorName: post.authorName,
-      featuredImage: post.featuredImage.node.sourceUrl,
-      altText: post.featuredImage.node.altText,
-      title: post.title,
-      uri: post.uri,
-      date: new Date(post.date).toLocaleDateString('it-IT', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      })
+try {
+  loading.value = true;
+  const { data } = await apolloClient.query({ query: BLOG_POSTS_QUERY });
+  if (data && data.blogPosts && data.blogPosts.nodes) {
+    posts.value = data.blogPosts.nodes.map(post => ({
+      ...post,
+      featuredImage: post.featuredImage?.node?.sourceUrl || '',
+      altText: post.featuredImage?.node?.altText || ''
     }));
-    // Remove initial active state
-    activePost.value = null;
   }
-});
-
-const updateScreenSize = () => {
-  isXLScreen.value = window.innerWidth >= 1280;
-};
+  loading.value = false;
+} catch (err) {
+  console.error('Error fetching blog posts:', err);
+  error.value = err.message;
+  loading.value = false;
+}
 
 const transformations = ref({
   first: 'translate(240px, 0px)',
@@ -153,14 +156,19 @@ const getTransformation = (post, index) => {
   return { transform };
 };
 
-onMounted(() => {
+const updateScreenSize = () => {
+  isXLScreen.value = window.innerWidth >= 1280;
+};
+
+if (process.client) {
   updateScreenSize();
   window.addEventListener('resize', updateScreenSize);
-});
+}
 
-onUnmounted(() => {
-  window.removeEventListener('resize', updateScreenSize);
-});
+const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('it-IT', { year: 'numeric', month: 'long', day: 'numeric' });
+};
 </script>
 
 <style scoped>
