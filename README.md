@@ -5,22 +5,22 @@
 ![language](https://img.shields.io/github/languages/top/giovannimanetti11/PerseoNXT)
 ![release](https://img.shields.io/github/v/release/giovannimanetti11/PerseoNXT?include_prereleases)
 
-PerseoNXT is a custom Nuxt3-based theme designed specifically for headless WordPress websites, tailored for the not-for-profit project Wikiherbalist.
-This theme is now live and can be seen in action at [wikiherbalist.com](https://wikiherbalist.com).
+PerseoNXT is a custom Nuxt3-based theme designed specifically for headless WordPress websites, tailored for the project [wikiherbalist.com](https://wikiherbalist.com). This theme is now live and can be seen in action at [wikiherbalist.com](https://wikiherbalist.com).
 
 ## Features
 
-- **Vue3**: built with Vue3, Composition API, reactivity system;
-- **Nuxt3**: latest Nuxt3 framework for server-side rendering, static site generation, and client-side navigation;
-- **GraphQL and Apollo**: makes use of GraphQL with Apollo for efficient data fetching, offering real-time updates and flexible querying capabilities;
-- **Tailwind CSS**: integrates Tailwind CSS for utility-first, responsive, and highly customizable styling;
-- **ESLint**: ensures code quality and consistency with ESLint configurations;
-- **Responsive Design**: fully responsive layout that works seamlessly across desktop, tablet, and mobile devices;
-- **SEO Optimized**: implements best practices for search engine optimization;
-- **Performance Focused**: optimized for fast loading times and efficient resource usage.
+- **Vue3**: Built with Vue3, leveraging its Composition API, reactivity system, and improved performance.
+- **Nuxt3**: Utilizes the latest Nuxt3 framework for server-side rendering, static site generation, and client-side navigation.
+- **GraphQL and Apollo**: Makes use of GraphQL with Apollo for efficient data fetching, offering real-time updates and flexible querying capabilities.
+- **Tailwind CSS**: Integrates Tailwind CSS for utility-first, responsive, and highly customizable styling.
+- **ESLint**: Ensures code quality and consistency with ESLint configurations.
+- **Responsive Design**: Fully responsive layout that works seamlessly across desktop, tablet, and mobile devices.
+- **SEO Optimized**: Implements best practices for search engine optimization.
+- **Performance Focused**: Optimized for fast loading times and efficient resource usage.
 
-  ![immagine](https://github.com/user-attachments/assets/1ba482cb-f808-4e3b-b42b-7ae20b2c8d58)
-
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/1ba482cb-f808-4e3b-b42b-7ae20b2c8d58" alt="Page Speed Insights" width="300">
+</p>
 
 ## Installation
 
@@ -41,14 +41,54 @@ To get started with PerseoNXT, follow these steps:
    npm install
    ```
 
-4. **Run the development server**:
+4. **Set up configuration** (see Configuration section below)
+
+5. **Run the development server**:
    ```bash
    npm run dev
    ```
 
+## Configuration
+
+Before running the project, you need to set up a `config.js` file in the root directory with your API keys and other configuration details. Create a file named `config.js` with the following structure:
+
+```javascript
+export const apiConfig = {
+  baseUrl: 'GRAPHQL_URL',
+  appPassword: 'WORDPRESS_APP_PASSWORD',
+  username: 'YOUR_WORDPRESS_USERNAME',
+  pubMedApiKey: '',
+  amazonPollyAccess: '',
+  amazonPollySecret: '',
+  algoliaAppId: '',
+  algoliaSearchAPIKey: '',
+  algoliaWriteAPIKey: '',
+  algoliaAdminAPIKey: '',
+  algoliaUsageAPIKey: '',
+  algoliaMonitoringAPIKey: '',
+  sendGridApiKey: '',
+  recaptchaPublicKey: '',
+  recaptchaSecretKey: '',
+  MailchimpAPIKey: '',
+  MailchimpListID: '',
+  MailchimpServerPrefix: '',
+  dbHost: 'YOUR_DATABASE_HOST',
+  dbUser: 'YOUR_DATABASE_USER',
+  dbPassword: 'YOUR_DATABASE_PASSWORD',
+  dbName: 'YOUR_DATABASE_NAME',
+  name: 'WEBSITE_NAME',
+  url: 'WEBSITE_URL',
+  description: 'WEBSITE_DESCRIPTION'
+};
+```
+
+Replace the placeholder values with your actual API keys and configuration details. This file is crucial for the proper functioning of various features in PerseoNXT.
+
+**Note**: Make sure to add `config.js` to your `.gitignore` file to avoid exposing sensitive information in your repository.
+
 ## Usage
 
-After installation, you can start developing your own headless WordPress site using PerseoNXT as a base. Customize the theme to fit your specific needs and design preferences.
+After installation and configuration, you can start developing your own headless WordPress site using PerseoNXT as a base. Customize the theme to fit your specific needs and design preferences.
 
 ## Contributing
 
@@ -76,4 +116,4 @@ Project Link: [https://github.com/giovannimanetti11/PerseoNXT](https://github.co
 
 ---
 
-We invite you to be a part of this project and help to further develop the theme for wikiherbalist.com, an open-source and not-for-profit project. Your contributions can make a real difference for this project and you can contribute to the open source software.
+We invite you to be a part of this project and help enhance the theme for wikiherbalist.com, an open-source and not-for-profit project. Your contributions can make a real difference in creating a robust and feature-rich theme for headless WordPress sites.
