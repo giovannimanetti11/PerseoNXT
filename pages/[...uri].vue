@@ -30,8 +30,10 @@
             :title="post.data.title"
             :nomeScientifico="post.data.nomeScientifico"
             :publishDate="post.data.date"
+            :modifiedDate="post.data.modified"
             :content="post.data.content"
             :authorName="post.data.authorName"
+            :revisionData="post.data.revisionData"
           />
         </div>
 
@@ -197,6 +199,10 @@ const FETCH_POST_BY_SLUG = gql`
       partiUsate
       nomeComune
       costituenti
+      modified
+      revisionData {
+        date
+      }
       featuredImage {
         node {
           altText
