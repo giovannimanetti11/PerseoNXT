@@ -6,8 +6,17 @@
   <div v-else-if="post.data" id="post">
     <SchemaMarkup :post="post.data" :tag="null" />
     <section class="post-info-section flex flex-col md:flex-row py-20 px-2 md:px-10 w-11/12 mx-auto rounded-2xl print:py-2 print:px-0 print:w-full">
+
       <!-- Container for post information -->
       <div class="w-full md:w-3/5 md:mt-28 container mx-auto px-2 print:mt-8 print:px-0 order-2 md:order-1">
+        <!-- Breadcrumbs -->
+        <div class="mb-12">
+          <Breadcrumbs 
+            :currentPageName="post.data.title" 
+            parentPath="/blog" 
+            parentName="Blog" 
+          />
+        </div>
         <BlogInfo 
           :title="post.data.title"
           :publishDate="post.data.date"
@@ -76,6 +85,7 @@ import { useRoute } from 'vue-router';
 import { useQuery } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 
+const Breadcrumbs = defineAsyncComponent(() => import('@/components/breadcrumbs.vue'));
 const BlogInfo = defineAsyncComponent(() => import('@/components/blog/bloginfo.vue'));
 const InternalLinking = defineAsyncComponent(() => import('@/components/internalLinking.vue'));
 const EditContentProposal = defineAsyncComponent(() => import('@/components/editContentProposal.vue'));
