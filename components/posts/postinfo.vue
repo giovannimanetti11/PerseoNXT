@@ -1,9 +1,24 @@
 <template>
   <div class="flex flex-col relative">
-    <div class="flex flex-row">
+    <div class="flex flex-row items-center">
       <h1 class="text-3xl font-bold">{{ title }}</h1>
-      <button @click="speakTitle" class="flex text-5xl ml-4 mb-2 shadow text-white bg-blu rounded-full w-12 h-12 justify-center items-center hover:bg-white hover:text-blu print:hidden">
-        <Icon name="f7:speaker-1-fill" class="text-4xl" />
+      <div v-if="isVerified" class="relative ml-2">
+        <img
+          src="/media/icon_verified.svg"
+          alt="Verified"
+          class="w-6 h-6 cursor-help"
+          @mouseenter="showVerifiedTooltip = true"
+          @mouseleave="showVerifiedTooltip = false"
+        />
+        <div
+          v-if="showVerifiedTooltip"
+          class="absolute z-20 bg-white border border-blu rounded-lg shadow-lg p-2 text-sm text-gray-700 w-48 left-1/2 transform -translate-x-1/2 mt-2"
+        >
+          Ultima revisione: {{ formattedRevisionDate }}
+        </div>
+      </div>
+      <button @click="speakTitle" class="flex ml-2 shadow text-white bg-blu rounded-full w-6 h-6 justify-center items-center hover:bg-white hover:text-blu print:hidden">
+        <Icon name="f7:speaker-1-fill" class="text-xl" />
       </button>
     </div>
     <p class="text-xl italic text-gray-700">{{ nomeScientifico }}</p>
@@ -64,7 +79,7 @@
       Scheda pubblicata il {{ formattedPublishDate }}
     </p>
     <p class="text-xs text-gray-500 mt-2">
-      Di: {{ authorName === 'wh_admin' ? 'Editors of Wikiherbalist' : authorName }}
+      Di: {{ displayAuthorName }}
     </p>
     <div class="flex items-center mt-2 text-xs text-gray-500">
       <Icon name="ph:clock-fill" class="text-sm text-gray-600 mr-1.5" />
@@ -117,6 +132,13 @@ const props = withDefaults(defineProps<Props>(), {
   publishDate: '',
   content: '',
   authorName: ''
+});
+
+const displayAuthorName = computed(() => {
+  if (props.authorName === 'wh_admin') {
+    return 'Editors of Wikiherbalist';
+  }
+  return props.authorName.replace(/&#8217;/g, "'");
 });
 
 // Share composable
