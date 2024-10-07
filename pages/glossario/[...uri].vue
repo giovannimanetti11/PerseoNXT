@@ -3,8 +3,17 @@
     <schemaMarkup :glossaryTerm="glossaryTerm" />
     <!-- Main upper term container -->
     <section class="postGlossario-info-section flex flex-col md:flex-row py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl print:py-2 print:px-0 print:w-full">
+
       <!-- Container for main term information -->
       <div class="mt-10 md:mt-20 container mx-auto w-full md:w-3/5 px-2 md:px-4 print:mt-8 print:px-0">
+        <!-- Breadcrumbs -->
+        <div class="mb-12">
+          <Breadcrumbs 
+            :currentPageName="glossaryTerm.title" 
+            parentPath="/glossario" 
+            parentName="Glossario" 
+          />
+        </div>
         <GlossarioInfo 
           :title="glossaryTerm.title"
           :publishDate="glossaryTerm.date"
@@ -68,6 +77,7 @@ import { useQuery } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 import GlossarioInfo from '@/components/glossario/glossarioinfo.vue';
 import InternalLinking from '@/components/internalLinking.vue';
+import Breadcrumbs from '~/components/breadcrumbs.vue';
 
 const route = useRoute();
 const slug = ref(route.params.uri instanceof Array ? route.params.uri[0] : route.params.uri);
