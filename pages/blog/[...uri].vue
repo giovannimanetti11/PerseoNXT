@@ -22,6 +22,7 @@
           :publishDate="post.data.date"
           :content="post.data.content"
           :authorName="post.data.authorName"
+          :revisionData="post.data.revisionData"
         />
       </div>
 
@@ -84,6 +85,8 @@ import { ref, reactive, onMounted, watch, nextTick, computed, defineAsyncCompone
 import { useRoute } from 'vue-router';
 import { useQuery } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
+import { useYoastSeo } from '~/composables/useYoastSeo';
+import { useRuntimeConfig } from '#app';
 
 const Breadcrumbs = defineAsyncComponent(() => import('@/components/breadcrumbs.vue'));
 const BlogInfo = defineAsyncComponent(() => import('@/components/blog/bloginfo.vue'));
@@ -91,6 +94,7 @@ const InternalLinking = defineAsyncComponent(() => import('@/components/internal
 const EditContentProposal = defineAsyncComponent(() => import('@/components/editContentProposal.vue'));
 const SchemaMarkup = defineAsyncComponent(() => import('@/components/schemaMarkup.vue'));
 
+const config = useRuntimeConfig();
 const route = useRoute();
 const post = reactive({
   data: null,
@@ -108,16 +112,28 @@ const FETCH_BLOG_POST_BY_SLUG = gql`
       content
       slug
       date
+      modified
       authorName
+      excerpt
       featuredImage {
         node {
           altText
           sourceUrl
         }
       }
+      seo {
+        title
+        metaDesc
+        opengraphTitle
+        opengraphDescription
+        opengraphImage {
+          sourceUrl
+        }
+      }
     }
   }
 `;
+
 
 const featuredImage = computed(() => {
   if (post.data?.featuredImage?.node) {
@@ -127,6 +143,13 @@ const featuredImage = computed(() => {
     };
   }
   return null;
+});
+
+const openGraphImage = computed(() => {
+  if (featuredImage.value && featuredImage.value.sourceUrl) {
+    return featuredImage.value.sourceUrl;
+  }
+  return 'https://wikiherbalist.com/images/default-og-image.jpg';
 });
 
 const fetchPost = async () => {
@@ -214,14 +237,33 @@ onMounted(() => {
   fetchPost();
 });
 
-watch(() => post.data, () => {
-  if (post.data) {
-    nextTick(async () => {
-      await processPostContent();
-      globalLinkedWords.value.clear();
-    });
+
+const yoastData = ref(null);
+
+watch(() => post.data, async (newPostData) => {
+  if (newPostData) {
+    await nextTick();
+    await processPostContent();
+    globalLinkedWords.value.clear();
+    
+    const fullUrl = `https://wikiherbalist.com${route.fullPath}`;
+    
+    yoastData.value = {
+      ...newPostData.seo,
+      siteName: config.public.siteName,
+      url: fullUrl,
+      type: 'article',
+      image: newPostData.seo.opengraphImage?.sourceUrl || newPostData.featuredImage?.node?.sourceUrl || openGraphImage.value,
+      publishedTime: newPostData.date,
+      modifiedTime: newPostData.modified || newPostData.date,
+      author: newPostData.authorName,
+    };
+
+    useYoastSeo(yoastData);
   }
-});
+}, { immediate: true });
+
+
 </script>
 
 <style scoped>
