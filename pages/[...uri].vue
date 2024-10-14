@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1 class="sr-only">{{ post.data?.title || 'Scheda monografica' }}</h1>
     <div v-if="post.loading" class="flex justify-center text-center w-full items-center h-64 mt-12" aria-live="polite" aria-busy="true">
       <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu" aria-label="Caricamento"></div>
     </div>
@@ -102,9 +101,9 @@
               @mouseenter="showTooltip(tag.id)">
             {{ tag.name }}
             <div v-if="activeTooltip === tag.id" 
-                 class="tooltip-custom fixed z-50 bg-white rounded-lg shadow-lg text-sm text-gray-700"
-                 :style="tooltipStyle"
-                 @click.stop>
+                class="tooltip-custom fixed z-50 bg-white rounded-lg shadow-lg text-sm text-gray-700"
+                :style="tooltipStyle"
+                @click.stop>
               <div class="p-6">
                 <h4 class="text-2xl font-bold text-blu text-left mb-4">{{ tag.name }}</h4>
                 <button @click.stop="hideTooltip" class="absolute top-2 right-2 text-blu hover:text-celeste" aria-label="Chiudi tooltip">
@@ -164,12 +163,23 @@
           <h3 class="text-xl md:text-2xl mt-1 md:mt-0">{{ section.title }}</h3>
         </div>
         <h3 v-else class="text-xl md:text-2xl mb-4 mt-1 md:mt-0">{{ section.title }}</h3>
+        
         <InternalLinking 
           :content="section.content" 
           :current-slug="post.data?.slug || ''"
           :global-linked-words="globalLinkedWords"
           @update:globalLinkedWords="updateGlobalLinkedWords"
         />
+        
+        <div v-for="(subSection, subIndex) in section.subSections" :key="subIndex" class="mt-6">
+          <h4 class="text-lg md:text-xl font-semibold mb-2">{{ subSection.title }}</h4>
+          <InternalLinking 
+            :content="subSection.content" 
+            :current-slug="post.data?.slug || ''"
+            :global-linked-words="globalLinkedWords"
+            @update:globalLinkedWords="updateGlobalLinkedWords"
+          />
+        </div>
       </section>
       <EditContentProposal :sections="allHeadings" />
     </div>
@@ -181,8 +191,10 @@ import { ref, reactive, watch, nextTick, computed, defineAsyncComponent, onMount
 import { useRoute } from 'vue-router';
 import { useApolloClient } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
+import { useRuntimeConfig } from '#app';
+import { useYoastSeo } from '~/composables/useYoastSeo';
 
-// Lazy load components for better performance
+// Lazy load components
 const Breadcrumbs = defineAsyncComponent(() => import('@/components/breadcrumbs.vue'));
 const Slideshow = defineAsyncComponent(() => import('@/components/posts/slideshow.vue'));
 const PostInfo = defineAsyncComponent(() => import('@/components/posts/postinfo.vue'));
@@ -191,6 +203,7 @@ const InternalLinking = defineAsyncComponent(() => import('@/components/internal
 const EditContentProposal = defineAsyncComponent(() => import('@/components/editContentProposal.vue'));
 const SchemaMarkup = defineAsyncComponent(() => import('@/components/schemaMarkup.vue'));
 
+const config = useRuntimeConfig();
 const route = useRoute();
 const { resolveClient } = useApolloClient();
 const apolloClient = resolveClient();
@@ -210,6 +223,15 @@ const FETCH_POST_BY_SLUG = gql`
       nomeComune
       costituenti
       modified
+      seo {
+        title
+        metaDesc
+        opengraphTitle
+        opengraphDescription
+        opengraphImage {
+          sourceUrl
+        }
+      }
       revisionData {
         date
       }
@@ -261,6 +283,14 @@ const featuredImage = computed(() => {
   return null;
 });
 
+const openGraphImage = computed(() => {
+  if (featuredImage.value && featuredImage.value.sourceUrl) {
+    return featuredImage.value.sourceUrl;
+  }
+  return 'https://wikiherbalist.com/images/default-plant-og-image.jpg';
+});
+
+
 const additionalImages = computed(() => {
   if (post.data?.additionalImages) {
     return post.data.additionalImages.map(img => ({
@@ -284,33 +314,62 @@ const processPostContent = async () => {
   const headings = [];
   const sections = [];
   let currentSection = null;
+  let currentSubSection = null;
 
-  $('h3, p, ol, ul').each(function(i, elem) {
+  $('h3, h4, p, ol, ul').each(function(i, elem) {
     const $elem = $(elem);
     if ($elem.is('h3')) {
-      if (currentSection) sections.push(currentSection);
+      if (currentSection) {
+        if (currentSubSection) {
+          currentSection.subSections.push(currentSubSection);
+          currentSubSection = null;
+        }
+        sections.push(currentSection);
+      }
       const title = $elem.text().trim();
       headings.push(title);
       currentSection = {
-        title,
+        title: title,
         content: '',
+        subSections: [],
         className: `post-section-${title.toLowerCase().replace(/[\s,\'\`]+/g, '-').replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e').replace(/[ìíîï]/g, 'i').replace(/[òóôõö]/g, 'o').replace(/[ùúûü]/g, 'u')}`
+      };
+    } else if ($elem.is('h4')) {
+      if (currentSubSection) {
+        currentSection.subSections.push(currentSubSection);
+      }
+      currentSubSection = {
+        title: $elem.text().trim(),
+        content: ''
       };
     } else {
       if ($elem.is('p') && $elem.text().trim() === "Riferimenti") {
-        if (currentSection) sections.push(currentSection);
+        if (currentSection) {
+          if (currentSubSection) {
+            currentSection.subSections.push(currentSubSection);
+            currentSubSection = null;
+          }
+          sections.push(currentSection);
+        }
         currentSection = {
           title: "Riferimenti",
           content: '',
           className: 'post-section-riferimenti'
         };
+      } else if (currentSubSection) {
+        currentSubSection.content += $.html($elem);
       } else if (currentSection) {
         currentSection.content += $.html($elem);
       }
     }
   });
 
-  if (currentSection) sections.push(currentSection);
+  if (currentSection) {
+    if (currentSubSection) {
+      currentSection.subSections.push(currentSubSection);
+    }
+    sections.push(currentSection);
+  }
 
   post.headings = headings;
   post.structuredContent = sections;
@@ -361,7 +420,13 @@ const nomeComuneArray = computed(() => parseStringToArray(post.data?.nomeComune)
 // Tooltip interaction functions
 const showTooltip = (tagId) => activeTooltip.value = tagId;
 const hideTooltip = () => activeTooltip.value = null;
-const toggleTooltip = (tagId) => activeTooltip.value = activeTooltip.value === tagId ? null : tagId;
+const toggleTooltip = (tagId) => {
+  if (activeTooltip.value === tagId) {
+    hideTooltip();
+  } else {
+    showTooltip(tagId);
+  }
+};
 
 // Computed styles for tooltip
 const tooltipStyle = computed(() => ({
@@ -377,8 +442,13 @@ const tooltipStyle = computed(() => ({
 
 // Event handler for clicks outside the tooltip
 const handleClickOutside = (event) => {
-  if (activeTooltip.value !== null && !event.target.closest('.tooltip-custom')) {
-    hideTooltip();
+  if (activeTooltip.value !== null) {
+    const tooltipElement = document.querySelector('.tooltip-custom');
+    if (tooltipElement && !tooltipElement.contains(event.target) && !event.target.closest('.tooltip-trigger')) {
+      nextTick(() => {
+        hideTooltip();
+      });
+    }
   }
 };
 
@@ -393,18 +463,53 @@ const smoothScroll = (targetId) => {
 // Lifecycle hooks
 onMounted(() => {
   fetchPostData();
-  document.addEventListener('click', handleClickOutside);
+  nextTick(() => {
+    window.addEventListener('click', handleClickOutside);
+  });
 });
 
 onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside);
+  window.removeEventListener('click', handleClickOutside);
 });
+
+const yoastData = ref(null);
+
+watch(() => post.data, async (newPostData) => {
+  if (newPostData) {
+    await nextTick();
+    await processPostContent();
+    globalLinkedWords.value.clear();
+    
+    const fullUrl = `https://wikiherbalist.com${route.fullPath}`;
+    
+    yoastData.value = {
+      ...newPostData.seo,
+      siteName: config.public.siteName,
+      url: fullUrl,
+      type: 'article',
+      image: newPostData.seo.opengraphImage?.sourceUrl || featuredImage.value?.sourceUrl || openGraphImage.value,
+      keywords: `${newPostData.nomeScientifico}, ${newPostData.nomeComune}, ${newPostData.partiUsate}`.trim(),
+      publishedTime: newPostData.date,
+      modifiedTime: newPostData.modified || newPostData.date,
+      author: newPostData.authorName,
+    };
+
+    useYoastSeo(yoastData);
+  }
+}, { immediate: true });
+
 </script>
 
 <style scoped>
 .post-info-section, .post-index-section {
   background: rgb(245,245,245);
   background: linear-gradient(180deg, rgba(224,237,253,1) 0%, rgba(245,245,245,1) 100%);
+}
+
+.post-content-section h4 {
+  color: #036297;
+  font-size: 1.1rem;
+  font-weight: bold;
 }
 
 section[class*="post-section-"],
