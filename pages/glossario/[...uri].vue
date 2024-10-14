@@ -17,9 +17,9 @@
         <GlossarioInfo 
           :title="glossaryTerm.title"
           :publishDate="glossaryTerm.date"
-          :updateDate="glossaryTerm.modified"
           :authorName="glossaryTerm.authorName"
           :readingTime="readingTime"
+          :revisionData="glossaryTerm.revisionData"
         />
       </div>
       <!-- Container for featured image -->
@@ -78,7 +78,10 @@ import gql from 'graphql-tag';
 import GlossarioInfo from '@/components/glossario/glossarioinfo.vue';
 import InternalLinking from '@/components/internalLinking.vue';
 import Breadcrumbs from '~/components/breadcrumbs.vue';
+import { useYoastSeo } from '~/composables/useYoastSeo';
+import { useRuntimeConfig } from '#app';
 
+const config = useRuntimeConfig();
 const route = useRoute();
 const slug = ref(route.params.uri instanceof Array ? route.params.uri[0] : route.params.uri);
 
@@ -90,9 +93,17 @@ const FETCH_GLOSSARY_TERM_BY_SLUG = gql`
       title
       authorName
       date
-      modified
       content
       slug
+      seo {
+        title
+        metaDesc
+        opengraphTitle
+        opengraphDescription
+        opengraphImage {
+          sourceUrl
+        }
+      }
       featuredImage {
         node {
           altText
@@ -103,6 +114,7 @@ const FETCH_GLOSSARY_TERM_BY_SLUG = gql`
     }
   }
 `;
+
 
 const FETCH_ALL_POSTS_AND_TERMS = gql`
   query FetchAllPostsAndTerms {
@@ -198,12 +210,29 @@ const processContent = async (content) => {
   readingTime.value = Math.ceil(wordCount / 200);
 };
 
-watch(() => glossaryTerm.value, async (newTerm, oldTerm) => {
-  if (newTerm && newTerm.content) {
-    if (!oldTerm || newTerm.slug !== oldTerm.slug) {
-      globalLinkedWords.value = new Set();
+const yoastData = ref(null);
+
+watch(() => glossaryTerm.value, async (newTerm) => {
+  if (newTerm) {
+    const fullUrl = `https://wikiherbalist.com${route.fullPath}`;
+
+    if (newTerm.content) {
+      await processContent(newTerm.content);
     }
-    await processContent(newTerm.content);
+
+    yoastData.value = {
+      ...newTerm.seo,
+      siteName: config.public.siteName,
+      url: fullUrl,
+      type: 'article',
+      image: newTerm.seo.opengraphImage?.sourceUrl || featuredImage.value?.sourceUrl || openGraphImage.value,
+      keywords: newTerm.title,
+      publishedTime: newTerm.date,
+      modifiedTime: newTerm.modified || newTerm.date,
+      author: newTerm.authorName,
+    };
+
+    useYoastSeo(yoastData);
   }
 }, { immediate: true });
 
