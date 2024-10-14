@@ -99,8 +99,9 @@ const { result } = useQuery(FETCH_ALL_POSTS_AND_TERMS);
 const processContent = () => {
   if (!result.value) return;
 
-  const posts = result.value.posts?.nodes || [];
-  const glossaryTerms = result.value.glossaryTerms?.nodes || [];
+  // Map posts and glossary terms, adding isGlossary property
+  const posts = result.value.posts?.nodes.map(item => ({ ...item, isGlossary: false })) || [];
+  const glossaryTerms = result.value.glossaryTerms?.nodes.map(item => ({ ...item, isGlossary: true })) || [];
   const allItems = [...posts, ...glossaryTerms];
 
   let allKeys = allItems
@@ -111,7 +112,7 @@ const processContent = () => {
       slug: item.slug,
       title: item.title,
       excerpt: item.excerpt,
-      isGlossary: !!item.plurale
+      isGlossary: item.isGlossary
     }))
     .sort((a, b) => b.singular.length - a.singular.length);
 
@@ -137,7 +138,7 @@ const processNode = (node, allKeys) => {
       const regexPlural = item.plural ? new RegExp(`\\b${escapeRegExp(item.plural)}\\b`, 'gi') : null;
 
       // Process both singular and plural forms
-      [regexSingular, regexPlural].forEach((regex, index) => {
+      [regexSingular, regexPlural].forEach((regex) => {
         if (regex) {
           modifiedContent = modifiedContent.replace(regex, (match) => {
             // Check if either singular or plural form has been linked
@@ -219,7 +220,7 @@ const startHideTooltipTimer = () => {
 
 // Function to handle outside click
 const handleOutsideClick = (event) => {
-  if (activeTooltip.value && !event.target.closest('.tooltip-custom') && !event.target.closest('.internal-link')) {
+  if (activeTooltip.value && !event.target.closest('.keywordsTooltip') && !event.target.closest('.internal-link')) {
     hideTooltip();
   }
 };
@@ -272,19 +273,24 @@ onMounted(() => {
   const handleInteraction = (event) => {
     const target = event.target.closest('.internal-link');
     if (target) {
-      event.preventDefault();
-      if (isSmallScreen.value || event.type === 'click' || event.type === 'touchstart') {
+      if (isSmallScreen.value) {
+        // On mobile, prevent default and show tooltip
+        event.preventDefault();
         showTooltip(event);
       } else if (event.type === 'mouseenter') {
+        // On desktop, show tooltip on hover
         showTooltip(event);
       }
     }
   };
 
   if (contentContainer.value) {
-    contentContainer.value.addEventListener('click', handleInteraction);
-    contentContainer.value.addEventListener('touchstart', handleInteraction);
-    contentContainer.value.addEventListener('mouseenter', handleInteraction, true);
+    if (isSmallScreen.value) {
+      contentContainer.value.addEventListener('click', handleInteraction);
+      contentContainer.value.addEventListener('touchstart', handleInteraction);
+    } else {
+      contentContainer.value.addEventListener('mouseenter', handleInteraction, true);
+    }
   }
 
   document.addEventListener('click', handleOutsideClick);
