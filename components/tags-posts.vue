@@ -9,31 +9,49 @@
     </div>
     
     <div v-else>
-      <!-- Tag count display -->
-      <div class="text-center mt-4" v-if="filteredTags.length > 0">
-        <p v-if="filteredTags.length === 1">
-          {{ filteredTags.length }} proprietà trovata{{ searchTerm ? ' per la ricerca "' + searchTerm + '"' : '' }}
-        </p>
-        <p v-else>
-          {{ filteredTags.length }} proprietà trovate{{ searchTerm ? ' per la ricerca "' + searchTerm + '"' : '' }}
-        </p>
+      <!-- Alphabet navigation -->
+      <div class="w-full mx-auto flex justify-center mt-8 items-center">
+        <button class="mr-2" @click="scrollAlphabet('left')" aria-label="Scorri a sinistra">
+          <Icon name="iconamoon:arrow-left-2" class="text-5xl text-celeste hover:text-white hover:bg-verde hover:rounded-full hover:border-verde" />
+        </button>
+        <div class="flex overflow-hidden alphabet-container" ref="alphabetContainer">
+          <button 
+            v-for="letter in alphabet" 
+            :key="letter" 
+            @click="fetchTagsByLetter(letter)"
+            :class="letterClass(letter)"
+          >
+            {{ letter }}
+          </button>
+        </div>
+        <button class="ml-2" @click="scrollAlphabet('right')" aria-label="Scorri a destra">
+          <Icon name="iconamoon:arrow-right-2" class="text-5xl text-celeste hover:text-white hover:bg-verde hover:border hover:rounded-full hover:border-verde" />
+        </button>
       </div>
 
-      <!-- No results message -->
-      <div v-if="filteredTags.length === 0" class="text-center mt-8 text-gray-600">
-        Nessuna proprietà trovata{{ searchTerm ? ' per la ricerca "' + searchTerm + '"' : '' }}
+      <!-- Tag count display -->
+      <div class="text-center mt-4">
+        <p v-if="filteredTags.length === 1">
+          {{ filteredTags.length }} proprietà trovata per la lettera {{ selectedLetter }}{{ searchTerm ? ' e la ricerca "' + searchTerm + '"' : '' }}
+        </p>
+        <p v-else-if="filteredTags.length > 1">
+          {{ filteredTags.length }} proprietà trovate per la lettera {{ selectedLetter }}{{ searchTerm ? ' e la ricerca "' + searchTerm + '"' : '' }}
+        </p>
+        <p v-else>
+          Nessuna proprietà trovata per la lettera {{ selectedLetter }}{{ searchTerm ? ' e la ricerca "' + searchTerm + '"' : '' }}
+        </p>
       </div>
 
       <!-- Tags display -->
       <div class="mt-8" ref="tagsContainer">
-        <div v-for="letter in visibleLetters" :key="letter" class="mb-6">
+        <div v-if="filteredTags.length > 0" class="mb-6">
           <!-- Letter heading -->
           <div class="letter-heading flex text-xl font-bold w-16 h-16 rounded-full bg-celeste text-center mb-4">
-            <span class="m-auto content-center text-white">{{ letter }}</span>
+            <span class="m-auto content-center text-white">{{ selectedLetter }}</span>
           </div>
           <!-- Tags grid -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            <div v-for="tag in getVisibleTagsByLetter(letter)" :key="tag.id" class="mb-4">
+            <div v-for="tag in visibleTags" :key="tag.id" class="mb-4">
               <h3 class="font-semibold text-lg text-blu mb-2 flex items-center">
                 {{ tag.name }}
                 <!-- Info icon and tooltip -->
@@ -72,7 +90,7 @@
       </div>
 
       <!-- Load more button -->
-      <div class="text-center mt-8" v-if="shouldShowMoreButton">
+      <div class="text-center mt-8" v-if="hasMoreTags">
         <button @click="loadMoreTags" class="bg-transparent text-blu py-2 px-4 border border-blu rounded-xl hover:text-verde hover:border-verde">
           Mostra più proprietà
         </button>
@@ -81,9 +99,10 @@
   </div>
 </template>
 
-<script setup async>
-import { ref, computed, watch, nextTick } from 'vue';
+<script setup>
+import { ref, computed, watch } from 'vue';
 import { useApolloClient } from '@vue/apollo-composable';
+import { useAlphabet } from '~/composables/useAlphabet';
 import gql from 'graphql-tag';
 
 const props = defineProps({
@@ -96,16 +115,27 @@ const props = defineProps({
 const { resolveClient } = useApolloClient();
 const apolloClient = resolveClient();
 
+const { 
+  alphabet, 
+  selectedLetter, 
+  alphabetContainer, 
+  setSelectedLetter, 
+  scrollAlphabet, 
+  letterClass 
+} = useAlphabet();
+
 const allTags = ref([]);
+const visibleTags = ref([]);
 const loading = ref(true);
 const error = ref(null);
 const activeTooltip = ref(null);
 const tagsContainer = ref(null);
-const visibleTagsCount = ref(18);
+const pageSize = 18;
+const currentPage = ref(1);
 
-const FETCH_ALL_TAGS = gql`
-  query FetchAllTags {
-    tags(first: 1000) {
+const FETCH_TAGS_BY_LETTER = gql`
+  query FetchTagsByLetter($letter: String!) {
+    tags(first: 1000, where: { search: $letter }) {
       nodes {
         id
         name
@@ -122,37 +152,48 @@ const FETCH_ALL_TAGS = gql`
   }
 `;
 
-try {
-  const { data } = await apolloClient.query({ query: FETCH_ALL_TAGS });
-  allTags.value = data.tags.nodes.map(tag => ({
-    ...tag,
-    posts: tag.posts.nodes
-  }));
-  loading.value = false;
-} catch (err) {
-  console.error('Error fetching tags:', err);
-  error.value = 'Si è verificato un errore nel caricamento dei dati.';
-  loading.value = false;
-}
+const fetchTagsByLetter = async (letter) => {
+  loading.value = true;
+  error.value = null;
+  setSelectedLetter(letter);
+  currentPage.value = 1;
+
+  try {
+    const { data } = await apolloClient.query({
+      query: FETCH_TAGS_BY_LETTER,
+      variables: { letter }
+    });
+
+    allTags.value = data.tags.nodes.filter(tag => tag.name.charAt(0).toLowerCase() === letter.toLowerCase());
+    updateVisibleTags();
+  } catch (err) {
+    console.error('Error fetching tags:', err);
+    error.value = 'Si è verificato un errore nel caricamento dei dati.';
+  } finally {
+    loading.value = false;
+  }
+};
+
+const updateVisibleTags = () => {
+  const startIndex = 0;
+  const endIndex = currentPage.value * pageSize;
+  visibleTags.value = filteredTags.value.slice(startIndex, endIndex);
+};
+
+const loadMoreTags = () => {
+  currentPage.value++;
+  updateVisibleTags();
+};
+
+const hasMoreTags = computed(() => {
+  return visibleTags.value.length < filteredTags.value.length;
+});
 
 const filteredTags = computed(() => {
   return allTags.value.filter(tag => 
     tag.name.toLowerCase().includes(props.searchTerm.toLowerCase()) &&
-    tag.posts.length > 0
+    tag.posts.nodes.length > 0
   );
-});
-
-const visibleTags = computed(() => {
-  return filteredTags.value.slice(0, visibleTagsCount.value);
-});
-
-const visibleLetters = computed(() => {
-  const letters = new Set(visibleTags.value.map(tag => tag.name.charAt(0).toUpperCase()));
-  return Array.from(letters).sort();
-});
-
-const shouldShowMoreButton = computed(() => {
-  return filteredTags.value.length > visibleTagsCount.value;
 });
 
 const tooltipStyle = computed(() => ({
@@ -162,17 +203,6 @@ const tooltipStyle = computed(() => ({
   left: '50%', 
   transform: 'translate(-50%, -50%)'
 }));
-
-const getVisibleTagsByLetter = (letter) => {
-  return visibleTags.value.filter(tag => tag.name.charAt(0).toUpperCase() === letter);
-};
-
-const loadMoreTags = () => {
-  visibleTagsCount.value += 18;
-  nextTick(() => {
-    updateContainerHeight();
-  });
-};
 
 const toggleTooltip = (tagId) => {
   if (activeTooltip.value === tagId) {
@@ -190,30 +220,17 @@ const hideTooltip = () => {
   activeTooltip.value = null;
 };
 
-const updateContainerHeight = () => {
-  if (process.client && tagsContainer.value) {
-    tagsContainer.value.style.height = 'auto';
-  }
-};
+watch(() => props.searchTerm, () => {
+  currentPage.value = 1;
+  updateVisibleTags();
+});
 
-if (process.client) {
-  watch(visibleTags, () => {
-    nextTick(() => {
-      updateContainerHeight();
-    });
-  });
+onMounted(() => {
+  fetchTagsByLetter('A');
+});
 
-  watch(() => props.searchTerm, () => {
-    visibleTagsCount.value = 18;
-    updateContainerHeight();
-  });
-}
-
-// Lifecycle hooks
 onMounted(() => {
   if (process.client) {
-    updateContainerHeight();
-    window.addEventListener('resize', updateContainerHeight);
     document.addEventListener('click', (event) => {
       if (activeTooltip.value !== null && !event.target.closest('.tooltip-custom')) {
         hideTooltip();
@@ -224,12 +241,10 @@ onMounted(() => {
 
 onUnmounted(() => {
   if (process.client) {
-    window.removeEventListener('resize', updateContainerHeight);
     document.removeEventListener('click', hideTooltip);
   }
 });
 </script>
-
 
 <style scoped>
 .tags-posts-section {
