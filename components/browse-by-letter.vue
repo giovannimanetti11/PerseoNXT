@@ -1,4 +1,3 @@
-<!-- New version -->
 <template>
   <section class="py-2 w-11/12 mx-auto rounded-2xl alphabet-section">
     <div class="container mx-auto px-0 md:px-4 mt-4">
@@ -21,15 +20,15 @@
         </button>
       </div>
       <div aria-live="polite" class="text-center mt-4">
-        <p v-if="!loading && currentPosts.length > 0">
+        <p v-if="!pending && currentPosts.length > 0">
           {{ currentPosts.length }} {{ currentPosts.length === 1 ? 'erba' : 'erbe' }} che inizia{{ currentPosts.length === 1 ? '' : 'no' }} per {{ selectedLetter }}
         </p>
-        <p v-else-if="!loading && currentPosts.length === 0">
+        <p v-else-if="!pending && currentPosts.length === 0">
           Nessun risultato trovato per la lettera {{ selectedLetter }}
         </p>
       </div>
       <div class="w-full mx-auto flex overflow-x-auto mt-10 gap-4 px-4 pb-6 posts-container" style="scroll-padding-right: 30px;">
-        <div v-if="loading" class="w-full h-64 flex items-center justify-center">
+        <div v-if="pending" class="w-full h-64 flex items-center justify-center">
           <Icon name="eos-icons:three-dots-loading" class="text-5xl text-celeste" />
         </div>
         <div v-else-if="error" class="w-full text-center text-red-500">
@@ -50,6 +49,7 @@
               height="128" 
               loading="lazy"
               format="webp"
+              quality="90"
             />
             <h2 class="mt-4 font-bold text-sm sm:text-base">{{ post.title }}</h2>
             <h3 class="italic text-gray-400 text-xs sm:text-sm">{{ post.nomeScientifico }}</h3>
@@ -60,8 +60,8 @@
   </section>
 </template>
 
-<script setup async>
-import { ref } from 'vue';
+<script setup lang="ts">
+import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAlphabet } from '~/composables/useAlphabet';
 import { useApolloClient } from '@vue/apollo-composable';
@@ -81,12 +81,23 @@ const {
   letterClass 
 } = useAlphabet();
 
-const loading = ref(true);
-const error = ref(null);
-const currentPosts = useState('currentPosts', () => []);
+interface Post {
+  id: string;
+  title: string;
+  nomeScientifico: string;
+  uri: string;
+  featuredImage?: {
+    node: {
+      sourceUrl: string;
+      altText: string;
+    };
+  };
+}
+
+const currentPosts = ref<Post[]>([]);
 
 // Cache to store fetched posts by letter
-const postsCache = useState('postsCache', () => ({}));
+const postsCache = ref<Record<string, Post[]>>({});
 
 // GraphQL query to fetch posts based on the initial letter of their title
 const FETCH_POSTS_BY_LETTER = gql`
@@ -99,7 +110,7 @@ const FETCH_POSTS_BY_LETTER = gql`
         uri
         featuredImage {
           node {
-            sourceUrl(size: THUMBNAIL)
+            sourceUrl(size: MEDIUM)
             altText
           }
         }
@@ -109,48 +120,45 @@ const FETCH_POSTS_BY_LETTER = gql`
 `;
 
 // Function to fetch posts for a given letter, uses Apollo client for GraphQL query execution
-async function fetchPostsByLetter(letter) {
+const fetchPostsByLetter = async (letter: string) => {
   setSelectedLetter(letter);
   
   // Use cache if available to reduce unnecessary network requests
   if (postsCache.value[letter]) {
     currentPosts.value = postsCache.value[letter];
-    loading.value = false;
     return;
   }
 
-  // Fetch data from server
-  loading.value = true;
-  error.value = null;
-
-  try {
-    const { data } = await apolloClient.query({
-      query: FETCH_POSTS_BY_LETTER,
-      variables: { letter }
-    });
-
-    // Filter posts that start with the selected letter and update the local state
-    if (data && data.posts) {
-      const fetchedPosts = data.posts.nodes.filter(post => post.title.charAt(0).toLowerCase() === letter.toLowerCase());
-      postsCache.value[letter] = fetchedPosts;
-      currentPosts.value = fetchedPosts;
+  const { data, pending, error } = await useAsyncData(
+    `posts-${letter}`,
+    async () => {
+      const { data } = await apolloClient.query({
+        query: FETCH_POSTS_BY_LETTER,
+        variables: { letter }
+      });
+      return data.posts.nodes;
     }
-  } catch (err) {
-    console.error(`Error fetching posts for letter: ${letter}`, err);
-    error.value = err.message;
-  } finally {
-    loading.value = false;
+  );
+
+  if (error.value) {
+    console.error(`Error fetching posts for letter: ${letter}`, error.value);
+  } else if (data.value) {
+    const fetchedPosts = data.value.filter((post: Post) => 
+      post.title.charAt(0).toLowerCase() === letter.toLowerCase()
+    );
+    postsCache.value[letter] = fetchedPosts;
+    currentPosts.value = fetchedPosts;
   }
-}
+};
 
 // Navigation function to route to the post detail page
-function goToPost(uri) {
+const goToPost = (uri: string) => {
   console.log(`Navigating to post with URI: ${uri}`);
   router.push(uri);
-}
+};
 
-// Fetch initial data server-side
-await fetchPostsByLetter('A');
+// Fetch initial data
+fetchPostsByLetter('A');
 </script>
 
 <style scoped>
