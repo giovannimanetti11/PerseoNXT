@@ -186,12 +186,12 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, reactive, watch, nextTick, computed, defineAsyncComponent, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useApolloClient } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
-import { useRuntimeConfig } from '#app';
+import { useRuntimeConfig, useAsyncData } from '#app';
 import { useYoastSeo } from '~/composables/useYoastSeo';
 
 // Lazy load components
@@ -259,18 +259,42 @@ const FETCH_POST_BY_SLUG = gql`
 
 // Reactive state for post data
 const post = reactive({
-  data: null,
-  loading: true,
-  error: null,
-  headings: [],
-  structuredContent: []
+  data: null as any,
+  headings: [] as string[],
+  structuredContent: [] as any[]
 });
 
 // Global linked words set
-const globalLinkedWords = ref(new Set());
+const globalLinkedWords = ref(new Set<string>());
 
 // Active tooltip state
-const activeTooltip = ref(null);
+const activeTooltip = ref<string | null>(null);
+
+// Fetch post data using useAsyncData
+const { data: postData, pending, error } = useAsyncData(
+  'postData',
+  async () => {
+    const slug = Array.isArray(route.params.uri) ? route.params.uri[0] : route.params.uri;
+    const { data } = await apolloClient.query({
+      query: FETCH_POST_BY_SLUG,
+      variables: { slug }
+    });
+    return data.postBy;
+  },
+  {
+    watch: [() => route.params.uri]
+  }
+);
+
+// Watch for changes in postData and update post reactive object
+watch(postData, async (newPostData) => {
+  if (newPostData) {
+    post.data = newPostData;
+    await nextTick();
+    processPostContent();
+    globalLinkedWords.value.clear();
+  }
+}, { immediate: true });
 
 // Computed properties for images
 const featuredImage = computed(() => {
@@ -290,7 +314,6 @@ const openGraphImage = computed(() => {
   return 'https://wikiherbalist.com/images/default-plant-og-image.jpg';
 });
 
-
 const additionalImages = computed(() => {
   if (post.data?.additionalImages) {
     return post.data.additionalImages.map(img => ({
@@ -307,18 +330,19 @@ const hasImages = computed(() => {
 });
 
 // Function to process post content and extract headings and sections
-const processPostContent = async () => {
-  const content = post.data.content;
-  const cheerio = await import('cheerio');
-  const $ = cheerio.load(content);
-  const headings = [];
-  const sections = [];
-  let currentSection = null;
-  let currentSubSection = null;
+const processPostContent = () => {
+  if (!post.data || !post.data.content) return;
 
-  $('h3, h4, p, ol, ul').each(function(i, elem) {
-    const $elem = $(elem);
-    if ($elem.is('h3')) {
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = post.data.content;
+
+  const headings: string[] = [];
+  const sections: any[] = [];
+  let currentSection: any = null;
+  let currentSubSection: any = null;
+
+  Array.from(tempDiv.children).forEach((elem) => {
+    if (elem.tagName === 'H3') {
       if (currentSection) {
         if (currentSubSection) {
           currentSection.subSections.push(currentSubSection);
@@ -326,7 +350,7 @@ const processPostContent = async () => {
         }
         sections.push(currentSection);
       }
-      const title = $elem.text().trim();
+      const title = elem.textContent?.trim() || '';
       headings.push(title);
       currentSection = {
         title: title,
@@ -334,16 +358,16 @@ const processPostContent = async () => {
         subSections: [],
         className: `post-section-${title.toLowerCase().replace(/[\s,\'\`]+/g, '-').replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e').replace(/[ìíîï]/g, 'i').replace(/[òóôõö]/g, 'o').replace(/[ùúûü]/g, 'u')}`
       };
-    } else if ($elem.is('h4')) {
+    } else if (elem.tagName === 'H4') {
       if (currentSubSection) {
         currentSection.subSections.push(currentSubSection);
       }
       currentSubSection = {
-        title: $elem.text().trim(),
+        title: elem.textContent?.trim() || '',
         content: ''
       };
     } else {
-      if ($elem.is('p') && $elem.text().trim() === "Riferimenti") {
+      if (elem.tagName === 'P' && elem.textContent?.trim() === "Riferimenti") {
         if (currentSection) {
           if (currentSubSection) {
             currentSection.subSections.push(currentSubSection);
@@ -357,9 +381,9 @@ const processPostContent = async () => {
           className: 'post-section-riferimenti'
         };
       } else if (currentSubSection) {
-        currentSubSection.content += $.html($elem);
+        currentSubSection.content += elem.outerHTML;
       } else if (currentSection) {
-        currentSection.content += $.html($elem);
+        currentSection.content += elem.outerHTML;
       }
     }
   });
@@ -375,32 +399,8 @@ const processPostContent = async () => {
   post.structuredContent = sections;
 };
 
-// Fetch post data
-const fetchPostData = async () => {
-  const slug = Array.isArray(route.params.uri) ? route.params.uri[0] : route.params.uri;
-  try {
-    post.loading = true;
-    const { data } = await apolloClient.query({
-      query: FETCH_POST_BY_SLUG,
-      variables: { slug }
-    });
-
-    if (data?.postBy) {
-      post.data = data.postBy;
-      await nextTick();
-      await processPostContent();
-    } else {
-      throw new Error('Post not found');
-    }
-  } catch (err) {
-    post.error = err;
-  } finally {
-    post.loading = false;
-  }
-};
-
 // Update global linked words
-const updateGlobalLinkedWords = (newWords) => {
+const updateGlobalLinkedWords = (newWords: string[]) => {
   newWords.forEach(word => globalLinkedWords.value.add(word));
 };
 
@@ -411,16 +411,16 @@ const allHeadings = computed(() => {
 });
 
 // Parse comma-separated string into array
-const parseStringToArray = (str) => str?.split(/[\s]*[;,][\s]*/).filter(Boolean) || [];
+const parseStringToArray = (str?: string): string[] => str?.split(/[\s]*[;,][\s]*/).filter(Boolean) || [];
 
 // Computed properties for parsed arrays
 const partiUsateArray = computed(() => parseStringToArray(post.data?.partiUsate));
 const nomeComuneArray = computed(() => parseStringToArray(post.data?.nomeComune));
 
 // Tooltip interaction functions
-const showTooltip = (tagId) => activeTooltip.value = tagId;
+const showTooltip = (tagId: string) => activeTooltip.value = tagId;
 const hideTooltip = () => activeTooltip.value = null;
-const toggleTooltip = (tagId) => {
+const toggleTooltip = (tagId: string) => {
   if (activeTooltip.value === tagId) {
     hideTooltip();
   } else {
@@ -441,10 +441,10 @@ const tooltipStyle = computed(() => ({
 }));
 
 // Event handler for clicks outside the tooltip
-const handleClickOutside = (event) => {
-  if (activeTooltip.value !== null) {
+const handleClickOutside = (event: MouseEvent) => {
+  if (process.client && activeTooltip.value !== null) {
     const tooltipElement = document.querySelector('.tooltip-custom');
-    if (tooltipElement && !tooltipElement.contains(event.target) && !event.target.closest('.tooltip-trigger')) {
+    if (tooltipElement && !tooltipElement.contains(event.target as Node) && !(event.target as Element).closest('.tooltip-trigger')) {
       nextTick(() => {
         hideTooltip();
       });
@@ -453,23 +453,27 @@ const handleClickOutside = (event) => {
 };
 
 // Smooth scroll function
-const smoothScroll = (targetId) => {
-  const targetElement = document.querySelector(targetId);
-  if (targetElement) {
-    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+const smoothScroll = (targetId: string) => {
+  if (process.client) {
+    const targetElement = document.querySelector(targetId);
+    if (targetElement) {
+      targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 };
 
 // Lifecycle hooks
 onMounted(() => {
-  fetchPostData();
-  nextTick(() => {
+  if (process.client) {
     window.addEventListener('click', handleClickOutside);
-  });
+    processPostContent(); // Ensure content is processed after mount
+  }
 });
 
 onUnmounted(() => {
-  window.removeEventListener('click', handleClickOutside);
+  if (process.client) {
+    window.removeEventListener('click', handleClickOutside);
+  }
 });
 
 const yoastData = ref(null);
@@ -477,7 +481,7 @@ const yoastData = ref(null);
 watch(() => post.data, async (newPostData) => {
   if (newPostData) {
     await nextTick();
-    await processPostContent();
+    processPostContent();
     globalLinkedWords.value.clear();
     
     const fullUrl = `https://wikiherbalist.com${route.fullPath}`;
@@ -497,7 +501,6 @@ watch(() => post.data, async (newPostData) => {
     useYoastSeo(yoastData);
   }
 }, { immediate: true });
-
 </script>
 
 <style scoped>
