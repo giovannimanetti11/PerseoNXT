@@ -16,7 +16,7 @@
       </div>
       <!-- Right column -->
       <div class="w-full xl:w-3/5 xl:relative xl:h-[625px]">
-        <div v-if="loading" class="flex justify-center items-center h-full">
+        <div v-if="pending" class="flex justify-center items-center h-full">
           <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
         </div>
         <div v-else-if="error" class="text-red-500 text-center">
@@ -66,19 +66,18 @@
   </section>
 </template>
 
-<script setup async>
-import { ref, computed } from 'vue';
+<script setup lang="ts">
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useApolloClient } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 
-const posts = ref([]);
-const activePost = ref(null);
-const isXLScreen = ref(false);
-const loading = ref(true);
-const error = ref(null);
-
-const { resolveClient } = useApolloClient();
-const apolloClient = resolveClient();
+interface BlogPost {
+  authorName: string;
+  featuredImage: string;
+  title: string;
+  uri: string;
+  date: string;
+}
 
 const BLOG_POSTS_QUERY = gql`
   query BlogPosts {
@@ -99,22 +98,21 @@ const BLOG_POSTS_QUERY = gql`
   }
 `;
 
-try {
-  loading.value = true;
+const { resolveClient } = useApolloClient();
+const apolloClient = resolveClient();
+
+const { data: blogData, pending, error } = await useAsyncData('blogPosts', async () => {
   const { data } = await apolloClient.query({ query: BLOG_POSTS_QUERY });
-  if (data && data.blogPosts && data.blogPosts.nodes) {
-    posts.value = data.blogPosts.nodes.map(post => ({
-      ...post,
-      featuredImage: post.featuredImage?.node?.sourceUrl || '',
-      altText: post.featuredImage?.node?.altText || ''
-    }));
-  }
-  loading.value = false;
-} catch (err) {
-  console.error('Error fetching blog posts:', err);
-  error.value = err.message;
-  loading.value = false;
-}
+  return data.blogPosts.nodes.map((post: any) => ({
+    ...post,
+    featuredImage: post.featuredImage?.node?.sourceUrl || '',
+  }));
+});
+
+const posts = computed<BlogPost[]>(() => blogData.value || []);
+
+const activePost = ref<string | null>(null);
+const isXLScreen = ref(false);
 
 const transformations = ref({
   first: 'translate(240px, 0px)',
@@ -122,7 +120,7 @@ const transformations = ref({
   last: 'translate(290px, 200px)'
 });
 
-const toggleActive = (uri) => {
+const toggleActive = (uri: string) => {
   if (!isXLScreen.value) return;
   
   if (activePost.value === uri) {
@@ -143,7 +141,7 @@ const toggleActive = (uri) => {
   }
 };
 
-const getTransformation = (post, index) => {
+const getTransformation = (post: BlogPost, index: number): { transform: string } => {
   if (!isXLScreen.value) return {};
   
   let transform = '';
@@ -160,12 +158,20 @@ const updateScreenSize = () => {
   isXLScreen.value = window.innerWidth >= 1280;
 };
 
-if (process.client) {
-  updateScreenSize();
-  window.addEventListener('resize', updateScreenSize);
-}
+onMounted(() => {
+  if (process.client) {
+    updateScreenSize();
+    window.addEventListener('resize', updateScreenSize);
+  }
+});
 
-const formatDate = (dateString) => {
+onUnmounted(() => {
+  if (process.client) {
+    window.removeEventListener('resize', updateScreenSize);
+  }
+});
+
+const formatDate = (dateString: string): string => {
   const date = new Date(dateString);
   return date.toLocaleDateString('it-IT', { year: 'numeric', month: 'long', day: 'numeric' });
 };
