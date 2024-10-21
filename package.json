@@ -40,7 +40,7 @@
     "nuxt-schema-org": "^3.3.9",
     "ol": "^9.1.0",
     "typescript": "~5.5.0",
-    "vue": "^3.5.12",
+    "vue": "^3.5.10",
     "vue-easy-lightbox": "^1.19.0",
     "vue-html-to-paper": "^2.0.3",
     "vue-i18n": "^10.0.4",
