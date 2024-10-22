@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="['app-loading', { 'app-loaded': isLoaded }]">
     <NuxtLayout>
       <NuxtLoadingIndicator />
       <NuxtPage />
@@ -7,13 +7,39 @@
   </div>
 </template>
 
-<script setup>
-import { ref, watch, onMounted, computed } from 'vue'
-import { useRoute, useHead, useSeoMeta } from '#app'
+<script setup lang="ts">
+import { ref, watch, onMounted, computed, nextTick } from 'vue'
+import { useRoute, useHead, useSeoMeta, useNuxtApp, useAsyncData } from '#app'
 import gql from 'graphql-tag'
 
-const route = useRoute()
-const nuxtApp = useNuxtApp()
+// Types
+interface SeoData {
+  seo?: {
+    title?: string
+    metaDesc?: string
+  }
+  title?: string
+}
+
+interface Author {
+  node: {
+    name: string
+  }
+}
+
+interface PostData extends SeoData {
+  id: string
+  slug: string
+  content: string
+  date: string
+  modified: string
+  author: Author
+}
+
+interface PageData extends SeoData {
+  id: string
+  slug: string
+}
 
 // GraphQL queries
 const GET_POST_SEO_DATA = gql`
@@ -52,69 +78,83 @@ const GET_PAGE_SEO_DATA = gql`
   }
 `
 
-// Function to fetch SEO data
-const getSeoData = async (slug, isPost = true) => {
-  if (!nuxtApp.$apolloClient) {
-    console.error('Apollo client not available')
-    return null
-  }
-  try {
-    const { data } = await nuxtApp.$apolloClient.query({
-      query: isPost ? GET_POST_SEO_DATA : GET_PAGE_SEO_DATA,
-      variables: { slug: isPost ? slug : slug || '/' }
-    })
-    return isPost ? data.post : data.page
-  } catch (error) {
-    console.error('GraphQL query error:', error)
-    return null
-  }
-}
+// State and setup
+const route = useRoute()
+const nuxtApp = useNuxtApp()
+const isLoaded = ref(false)
 
-// Reactive reference for SEO data
-const seoData = ref(null)
-
-// Static titles for specific pages
-const staticTitles = {
+// Static titles mapping
+const staticTitles: Record<string, string> = {
   'disclaimer': 'Disclaimer',
   'privacy-policy': 'Privacy Policy',
   'cookie-policy': 'Cookie Policy'
 }
 
-// Computed property for canonical url
+// Computed properties
 const canonicalUrl = computed(() => {
   const baseUrl = 'https://wikiherbalist.com'
   return route.path === '/' ? baseUrl : `${baseUrl}${route.path}`
 })
 
-// Computed property to check if is homepage
 const isHomepage = computed(() => route.path === '/')
 
-// Function to update SEO data
-const updateSeoData = async () => {
-  const routeName = route.name
-
-  if (routeName === 'index') {
-    // For the home page, fetch the SEO data from GraphQL
-    seoData.value = await getSeoData('/', false)
-  } else if (staticTitles[routeName]) {
-    seoData.value = {
-      seo: {
-        title: staticTitles[routeName],
-        metaDesc: 'Enciclopedia online di erbe aromatiche e medicinali'
-      }
+// Async data fetching with useAsyncData
+const { data: seoData } = useAsyncData(
+  'seoData',
+  async () => {
+    const routeName = route.name as string
+    
+    if (!nuxtApp.$apolloClient) {
+      console.error('Apollo client not available')
+      return null
     }
-  } else {
-    const isPost = !['about'].includes(routeName)
-    const slug = isPost 
-      ? (Array.isArray(route.params.uri) ? route.params.uri[0] : route.path.split('/').pop())
-      : route.path
-    seoData.value = await getSeoData(slug, isPost)
-  }
-}
 
-// Function to update head metadata
-const updateHead = (data) => {
-  const seo = data?.seo || {}
+    try {
+      if (routeName === 'index') {
+        const { data } = await nuxtApp.$apolloClient.query({
+          query: GET_PAGE_SEO_DATA,
+          variables: { uri: '/' }
+        })
+        return data.page
+      } 
+      
+      if (staticTitles[routeName]) {
+        return {
+          seo: {
+            title: staticTitles[routeName],
+            metaDesc: 'Enciclopedia online di erbe aromatiche e medicinali'
+          }
+        }
+      }
+
+      const isPost = !['about'].includes(routeName)
+      const slug = isPost 
+        ? (Array.isArray(route.params.uri) ? route.params.uri[0] : route.path.split('/').pop())
+        : route.path
+
+      const { data } = await nuxtApp.$apolloClient.query({
+        query: isPost ? GET_POST_SEO_DATA : GET_PAGE_SEO_DATA,
+        variables: { slug: isPost ? slug : slug || '/' }
+      })
+
+      return isPost ? data.post : data.page
+    } catch (error) {
+      console.error('GraphQL query error:', error)
+      return null
+    }
+  },
+  {
+    watch: [() => route.fullPath],
+    server: true,
+    lazy: false
+  }
+)
+
+// Update head metadata when seoData changes
+watch(seoData, (newData) => {
+  if (!newData) return
+
+  const seo = newData.seo || {}
   const title = isHomepage.value ? (seo.title || 'Wikiherbalist') : (seo.title || 'Pagina')
   const metaDescription = seo.metaDesc || 'Enciclopedia online di erbe aromatiche e medicinali'
  
@@ -125,14 +165,14 @@ const updateHead = (data) => {
       }
       return titleChunk ? `${titleChunk} | Wikiherbalist` : 'Wikiherbalist'
     },
-    title: title,
+    title,
     link: [
       { rel: 'canonical', href: canonicalUrl.value },
     ],
   })
 
   useSeoMeta({
-    title: title,
+    title,
     ogTitle: title,
     description: metaDescription,
     ogDescription: metaDescription,
@@ -140,25 +180,26 @@ const updateHead = (data) => {
     ogImage: '/media/og-image.jpg',
     twitterCard: 'summary_large_image',
   })
-}
+}, { immediate: true })
 
-// Watch for changes in SEO data and update head
-watch(seoData, (newData) => {
-  updateHead(newData)
-})
-
-// Watch for route changes and update SEO data
-watch(() => route.fullPath, () => {
-  updateSeoData()
-})
-
-// Initialize SEO data on component mount
+// Lifecycle hooks
 onMounted(() => {
-  updateSeoData()
+  nextTick(() => {
+    isLoaded.value = true
+  })
 })
 </script>
 
-<style scoped>
+<style>
+.app-loading {
+  opacity: 0;
+  transition: opacity 0.3s ease-in;
+}
+
+.app-loaded {
+  opacity: 1;
+}
+
 .debug-info {
   position: fixed;
   bottom: 10px;
