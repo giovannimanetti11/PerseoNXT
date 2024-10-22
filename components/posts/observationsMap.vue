@@ -5,14 +5,14 @@
       <icon name="eos-icons:three-dots-loading" class="text-5xl text-celeste" />
     </div>
     <div class="flex flex-col md:flex-row justify-between w-full py-2 px-2 md:px-4 bg-white">
-          <p class="text-center md:text-left text-base">Osservazioni di <span class="font-bold italic">{{ nomeScientifico }}</span> nel 2023.</p>
-          <p class="text-center md:text-left text-xs"> Credits: <a href="https://www.gbif.org/" target="_blank" class="text-blu hover:text-celeste">GBIF</a> | <a href="https://www.openstreetmap.org/" target="_blank" class="text-blu hover:text-celeste">OpenStreetMap</a></p>
+      <p class="text-center md:text-left text-base">Osservazioni di <span class="font-bold italic">{{ nomeScientifico }}</span> nel 2023.</p>
+      <p class="text-center md:text-left text-xs"> Credits: <a href="https://www.gbif.org/" target="_blank" rel="noopener noreferrer" class="text-blu hover:text-celeste">GBIF</a> | <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener noreferrer" class="text-blu hover:text-celeste">OpenStreetMap</a></p>
     </div>
   </div>
 </template>
 
-<script setup>
-import { onMounted, ref, watch, reactive, defineProps, defineEmits } from 'vue';
+<script setup lang="ts">
+import { onMounted, ref, watch } from 'vue';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
@@ -24,52 +24,48 @@ import { fromLonLat } from 'ol/proj';
 import Feature from 'ol/Feature';
 import Point from 'ol/geom/Point';
 import { Circle as CircleStyle, Fill, Style, Text } from 'ol/style';
-import { defaults as defaultControls, Rotate } from 'ol/control';
+import { defaults as defaultControls } from 'ol/control';
 
-// Props definition with validation
-const props = defineProps({
-  nomeScientifico: {
-    type: String,
-    required: true
-  }
-});
+interface Props {
+  nomeScientifico: string;
+}
+
+const props = defineProps<Props>();
 
 const emit = defineEmits(['error']);
 
-const mapElement = ref(null);
-const loading = ref(false);
-const data = reactive({ totalCount: 0 });
+const mapElement = ref<HTMLElement | null>(null);
+const loading = ref(true);
 const vectorSource = new VectorSource();
-let map = null;
+let map: Map | null = null;
 
 const MAX_BATCHES = 11;
 const BATCH_SIZE = 300;
 
-// Fetching taxon key with error handling
-const fetchTaxonKey = async (scientificName) => {
+const fetchTaxonKey = async (scientificName: string): Promise<number | null> => {
   try {
     const response = await fetch(`https://api.gbif.org/v1/species/match?name=${encodeURIComponent(scientificName)}`);
     if (!response.ok) throw new Error('Network response was not ok');
     const data = await response.json();
     return data.usageKey;
   } catch (error) {
-    emit('error', error.message);
+    emit('error', (error as Error).message);
     return null;
   }
 };
 
-const fetchOccurrencesWithLimits = async (taxonKey, offset, limit) => {
+const fetchOccurrencesWithLimits = async (taxonKey: number, offset: number, limit: number): Promise<{ results: any[], endOfRecords: boolean }> => {
   try {
     const response = await fetch(`https://api.gbif.org/v1/occurrence/search?taxon_key=${taxonKey}&year=2023&hasCoordinate=true&basisOfRecord=HUMAN_OBSERVATION&offset=${offset}&limit=${limit}`);
     if (!response.ok) throw new Error('Network response was not ok');
     return response.json();
   } catch (error) {
-    emit('error', error.message);
+    emit('error', (error as Error).message);
     return { results: [], endOfRecords: true };
   }
 };
 
-const addFeaturesToMap = (occurrences) => {
+const addFeaturesToMap = (occurrences: any[]) => {
   occurrences.forEach(occurrence => {
     if (occurrence.decimalLongitude && occurrence.decimalLatitude) {
       const feature = new Feature({
@@ -81,6 +77,8 @@ const addFeaturesToMap = (occurrences) => {
 };
 
 const createMap = () => {
+  if (!mapElement.value) return;
+
   map = new Map({
     target: mapElement.value,
     layers: [
@@ -94,7 +92,7 @@ const createMap = () => {
           distance: 30,
           source: vectorSource
         }),
-        style: feature => clusterStyle(feature)
+        style: clusterStyle
       })
     ],
     view: new View({
@@ -103,13 +101,9 @@ const createMap = () => {
     }),
     controls: defaultControls({ attribution: false, rotate: false, zoom: false })
   });
-  const rotateControl = map.getControls().getArray().find(control => control instanceof Rotate);
-  if (rotateControl) {
-    map.removeControl(rotateControl);
-  }
 };
 
-const clusterStyle = (feature) => {
+const clusterStyle = (feature: Feature): Style => {
   const size = feature.get('features').length;
   const color = size > 250 ? '#036297' : size > 100 ? '#0475a8' : size > 50 ? '#0683b9' : size > 35 ? '#2791ca' : size > 20 ? '#48a0db' : size > 10 ? '#69aeeb' : '#5E9EF4';
 
@@ -143,6 +137,8 @@ watch(() => props.nomeScientifico, async (newName) => {
     let offset = 0;
     let batchCount = 0;
     let hasMore = true;
+
+    vectorSource.clear();
 
     while (hasMore && batchCount < MAX_BATCHES) {
       const { results, endOfRecords } = await fetchOccurrencesWithLimits(taxonKey, offset, BATCH_SIZE);
