@@ -120,4 +120,4 @@ Project link: [https://github.com/giovannimanetti11/PerseoNXT](https://github.co
 
 ---
 
-We invite you to be a part of this project and help enhance the theme for wikiherbalist.com, an open-source and not-for-profit project. Your contributions can make a real difference in creating a robust and feature-rich theme for headless WordPress sites.
+You are invited to be a part of this project and help enhance the theme of wikiherbalist.com, an open-source and not-for-profit project. Your contributions can make a real difference in creating a robust and feature-rich theme for headless WordPress sites.
