@@ -2,8 +2,9 @@
   <div class="flex flex-col relative">
     <div class="flex flex-row items-center">
       <h1 class="text-3xl font-bold mb-2">{{ title }}</h1>
-      <button @click="speakTitle" class="flex ml-4 mb-2 shadow text-white bg-blu rounded-full w-10 h-10 md:w-12 md:h-12 justify-center items-center hover:bg-white hover:text-blu print:hidden">
-        <Icon name="f7:speaker-1-fill" class="text-4xl" />
+      <!-- Speak title button -->
+      <button @click="speakTitle" class="flex ml-2 mb-2 shadow text-white bg-blu rounded-full w-6 h-6 justify-center items-center hover:bg-white hover:text-blu print:hidden">
+        <Icon name="f7:speaker-1-fill" class="text-xl" />
       </button>
     </div>
     <!-- Print, Share, Cite buttons -->
@@ -21,12 +22,15 @@
         <span class="ml-1 md:ml-2 text-base">Cita</span>
       </button>
     </div>
+    <!-- Publication and update dates -->
     <p class="mt-4 text-xs text-gray-500">
-      Scheda pubblicata il {{ formattedPublishDate }} e aggiornata il {{ formattedUpdateDate }}
+      Scheda pubblicata il {{ formattedPublishDate }}
     </p>
+    <!-- Author name -->
     <p class="text-xs text-gray-500 mt-2">
       Di: {{ displayAuthorName }}
     </p>
+    <!-- Reading time -->
     <div class="flex items-center mt-2 text-xs text-gray-500">
       <Icon name="ph:clock-fill" class="text-sm text-gray-600 mr-1.5" />
       <span>Tempo di lettura: {{ readingTime }} min</span>
@@ -72,19 +76,27 @@ const props = defineProps({
   }
 });
 
+// Share composable
 const { openShareModal, renderShareModal } = useShare();
+
+// Cite composable
 const { openCiteModal, renderCiteModal, updateTitle, updateAuthorName, updatePublishDate } = useCite(props.title, props.authorName, props.publishDate);
 
+// Format the publication and update dates
 const formattedPublishDate = computed(() => formatDate(props.publishDate));
 const formattedUpdateDate = computed(() => formatDate(props.updateDate));
+
+// Display author name, handling special cases
 const displayAuthorName = computed(() => props.authorName === 'wh_admin' ? 'Editors of Wikiherbalist' : props.authorName);
 
+// Function to format dates to Italian locale
 function formatDate(dateStr) {
   if (!dateStr) return 'Data non disponibile';
   const date = new Date(dateStr);
   return isNaN(date.getTime()) ? 'Data non disponibile' : date.toLocaleDateString('it-IT', { day: '2-digit', month: 'long', year: 'numeric' });
 }
 
+// Function to enable speech synthesis of the title
 const speakTitle = () => {
   if (process.client && 'speechSynthesis' in window) {
     const utterance = new SpeechSynthesisUtterance(props.title);
@@ -95,12 +107,14 @@ const speakTitle = () => {
   }
 };
 
+// Function to print the post
 const printPost = () => {
   if (window.innerWidth >= 640) { 
     window.print();
   }
 };
 
+// Update cite modal data on mount and when props change
 onMounted(() => {
   updateTitle(props.title);
   updateAuthorName(props.authorName);
