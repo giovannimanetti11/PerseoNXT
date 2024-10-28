@@ -2,10 +2,10 @@ import { apiConfig } from '@config';
 
 // Define a Nuxt plugin to handle Google reCAPTCHA loading and execution
 export default defineNuxtPlugin((nuxtApp) => {
-  let recaptchaScript;
+  let recaptchaScript: HTMLScriptElement | null = null;
 
   // Function to load the reCAPTCHA script only once
-  const loadRecaptcha = () => {
+  const loadRecaptcha = (): void => {
     if (!recaptchaScript) {
       recaptchaScript = document.createElement('script');
       recaptchaScript.src = `https://www.google.com/recaptcha/api.js?render=${apiConfig.recaptchaPublicKey}`;
@@ -27,9 +27,9 @@ export default defineNuxtPlugin((nuxtApp) => {
   return {
     provide: {
       recaptcha: {
-        async execute(action) {
+        async execute(action: string): Promise<string> {
           if (!window.grecaptcha) {
-            await new Promise(resolve => {
+            await new Promise<void>((resolve) => {
               const checkRecaptcha = setInterval(() => {
                 if (window.grecaptcha) {
                   clearInterval(checkRecaptcha);
