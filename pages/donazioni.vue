@@ -30,6 +30,13 @@ const customFaqs = [
     answer: 'Al momento supportiamo solo donazioni una tantum, ma stiamo lavorando per implementare donazioni ricorrenti in futuro.',
   }
 ]
+
+useHead({
+  title: 'Donazioni',
+  meta: [
+    { name: 'description', content: 'Sostieni Wikiherbalist con una donazione. Contribuisci allo sviluppo e alla manutenzione di questa enciclopedia online dedicata alle erbe medicinali e aromatiche.' }
+  ]
+})
 </script>
 
 
