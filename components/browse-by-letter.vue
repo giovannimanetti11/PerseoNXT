@@ -5,6 +5,7 @@
         <button class="mr-2" @click="scrollAlphabet('left')" aria-label="Scorri a sinistra">
           <Icon name="iconamoon:arrow-left-2" class="text-5xl text-celeste hover:text-white hover:bg-verde hover:rounded-full hover:border-verde" />
         </button>
+
         <div class="flex overflow-hidden alphabet-container" ref="alphabetContainer">
           <button 
             v-for="letter in alphabet" 
@@ -15,63 +16,61 @@
             {{ letter }}
           </button>
         </div>
+
         <button class="ml-2" @click="scrollAlphabet('right')" aria-label="Scorri a destra">
           <Icon name="iconamoon:arrow-right-2" class="text-5xl text-celeste hover:text-white hover:bg-verde hover:border hover:rounded-full hover:border-verde" />
         </button>
       </div>
+
       <div aria-live="polite" class="text-center mt-4">
-        <p v-if="!pending && currentPosts.length > 0">
+        <p v-if="!isLoading && currentPosts.length > 0">
           {{ currentPosts.length }} {{ currentPosts.length === 1 ? 'erba' : 'erbe' }} che inizia{{ currentPosts.length === 1 ? '' : 'no' }} per {{ selectedLetter }}
         </p>
-        <p v-else-if="!pending && currentPosts.length === 0">
+        <p v-else-if="!isLoading && currentPosts.length === 0">
           Nessun risultato trovato per la lettera {{ selectedLetter }}
         </p>
       </div>
-      <div class="w-full mx-auto flex overflow-x-auto mt-10 gap-4 px-4 pb-6 posts-container" style="scroll-padding-right: 30px;">
-        <div v-if="pending" class="w-full h-64 flex items-center justify-center">
-          <Icon name="eos-icons:three-dots-loading" class="text-5xl text-celeste" />
+
+      <div v-if="isLoading" class="w-full h-64 flex items-center justify-center">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
+      </div>
+
+      <div v-else class="w-full mx-auto flex overflow-x-auto mt-10 gap-4 px-4 pb-6 posts-container" style="scroll-padding-right: 30px;">
+        <div
+          v-for="post in sortedPosts"
+          :key="post.id"
+          class="card flex-none w-56 sm:w-64 h-auto p-3 bg-white rounded-2xl shadow transition-all hover:scale-105 hover:shadow-md hover:cursor-pointer"
+          @click="goToPost(post.uri)"
+        >
+          <NuxtImg 
+            :src="post.featuredImage?.node?.sourceUrl || '/placeholder-image.jpg'" 
+            :alt="post.featuredImage?.node?.altText || post.title" 
+            class="w-full h-28 sm:h-32 object-cover rounded-lg" 
+            width="240"
+            height="128" 
+            format="webp"
+            quality="90"
+          />
+          <h2 class="mt-4 font-bold text-sm sm:text-base">{{ post.title }}</h2>
+          <h3 class="italic text-gray-400 text-xs sm:text-sm">{{ post.nomeScientifico }}</h3>
         </div>
-        <div v-else-if="error" class="w-full text-center text-red-500">
-          Si è verificato un errore: {{ error }}
-        </div>
-        <template v-else>
-          <div
-            v-for="post in currentPosts"
-            :key="post.id"
-            class="card flex-none w-56 sm:w-64 h-auto p-3 bg-white rounded-2xl shadow transition-all hover:scale-105 hover:shadow-md hover:cursor-pointer"
-            @click="goToPost(post.uri)"
-          >
-            <NuxtImg 
-              :src="post.featuredImage?.node?.sourceUrl || '/placeholder-image.jpg'" 
-              :alt="post.featuredImage?.node?.altText || post.title" 
-              class="w-full h-28 sm:h-32 object-cover rounded-lg" 
-              width="240"
-              height="128" 
-              loading="lazy"
-              format="webp"
-              quality="90"
-            />
-            <h2 class="mt-4 font-bold text-sm sm:text-base">{{ post.title }}</h2>
-            <h3 class="italic text-gray-400 text-xs sm:text-sm">{{ post.nomeScientifico }}</h3>
-          </div>
-        </template>
       </div>
     </div>
   </section>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue';
+<script setup>
+import { ref, computed, watch, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAlphabet } from '~/composables/useAlphabet';
 import { useApolloClient } from '@vue/apollo-composable';
+import { useAsyncData } from '#app';
 import gql from 'graphql-tag';
 
 const router = useRouter();
 const { resolveClient } = useApolloClient();
 const apolloClient = resolveClient();
 
-// Initialize state and bind methods for navigating and fetching posts by letter
 const { 
   alphabet, 
   selectedLetter, 
@@ -81,28 +80,14 @@ const {
   letterClass 
 } = useAlphabet();
 
-interface Post {
-  id: string;
-  title: string;
-  nomeScientifico: string;
-  uri: string;
-  featuredImage?: {
-    node: {
-      sourceUrl: string;
-      altText: string;
-    };
-  };
-}
+const currentPosts = ref([]);
+const isLoading = ref(true);
 
-const currentPosts = ref<Post[]>([]);
+const emit = defineEmits(['update:loading']);
 
-// Cache to store fetched posts by letter
-const postsCache = ref<Record<string, Post[]>>({});
-
-// GraphQL query to fetch posts based on the initial letter of their title
 const FETCH_POSTS_BY_LETTER = gql`
   query FetchPostsByLetter($letter: String!) {
-    posts(first: 100, where: { search: $letter }) {
+    posts(first: 1000, where: { search: $letter }) {
       nodes {
         id
         title
@@ -119,46 +104,43 @@ const FETCH_POSTS_BY_LETTER = gql`
   }
 `;
 
-// Function to fetch posts for a given letter, uses Apollo client for GraphQL query execution
-const fetchPostsByLetter = async (letter: string) => {
-  setSelectedLetter(letter);
+// Updated computed property for sorted posts
+const sortedPosts = computed(() => {
+  if (!currentPosts.value) return [];
   
-  // Use cache if available to reduce unnecessary network requests
-  if (postsCache.value[letter]) {
-    currentPosts.value = postsCache.value[letter];
-    return;
-  }
+  return [...currentPosts.value]
+    .filter(post => post.title.charAt(0).toLowerCase() === selectedLetter.value.toLowerCase())
+    .sort((a, b) => a.title.localeCompare(b.title, 'it', { sensitivity: 'base' }));
+});
 
-  const { data, pending, error } = await useAsyncData(
-    `posts-${letter}`,
-    async () => {
-      const { data } = await apolloClient.query({
-        query: FETCH_POSTS_BY_LETTER,
-        variables: { letter }
-      });
-      return data.posts.nodes;
-    }
-  );
+const fetchPostsByLetter = async (letter) => {
+  setSelectedLetter(letter);
+  isLoading.value = true;
+  emit('update:loading', true);
 
-  if (error.value) {
-    console.error(`Error fetching posts for letter: ${letter}`, error.value);
-  } else if (data.value) {
-    const fetchedPosts = data.value.filter((post: Post) => 
-      post.title.charAt(0).toLowerCase() === letter.toLowerCase()
-    );
-    postsCache.value[letter] = fetchedPosts;
-    currentPosts.value = fetchedPosts;
+  try {
+    const { data: { posts } } = await apolloClient.query({
+      query: FETCH_POSTS_BY_LETTER,
+      variables: { letter }
+    });
+
+    currentPosts.value = posts.nodes;
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    currentPosts.value = [];
+  } finally {
+    isLoading.value = false;
+    emit('update:loading', false);
   }
 };
 
-// Navigation function to route to the post detail page
-const goToPost = (uri: string) => {
-  console.log(`Navigating to post with URI: ${uri}`);
+const goToPost = (uri) => {
   router.push(uri);
 };
 
-// Fetch initial data
-fetchPostsByLetter('A');
+onMounted(async () => {
+  await fetchPostsByLetter('A');
+});
 </script>
 
 <style scoped>
