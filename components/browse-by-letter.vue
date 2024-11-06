@@ -23,10 +23,10 @@
       </div>
 
       <div aria-live="polite" class="text-center mt-4">
-        <p v-if="!isLoading && currentPosts.length > 0">
-          {{ currentPosts.length }} {{ currentPosts.length === 1 ? 'erba' : 'erbe' }} che inizia{{ currentPosts.length === 1 ? '' : 'no' }} per {{ selectedLetter }}
+        <p v-if="!isLoading && sortedPosts.length > 0">
+          {{ sortedPosts.length }} {{ sortedPosts.length === 1 ? 'erba' : 'erbe' }} che inizia{{ sortedPosts.length === 1 ? '' : 'no' }} per {{ selectedLetter }}
         </p>
-        <p v-else-if="!isLoading && currentPosts.length === 0">
+        <p v-else-if="!isLoading && sortedPosts.length === 0">
           Nessun risultato trovato per la lettera {{ selectedLetter }}
         </p>
       </div>
@@ -60,11 +60,10 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAlphabet } from '~/composables/useAlphabet';
 import { useApolloClient } from '@vue/apollo-composable';
-import { useAsyncData } from '#app';
 import gql from 'graphql-tag';
 
 const router = useRouter();
@@ -104,7 +103,6 @@ const FETCH_POSTS_BY_LETTER = gql`
   }
 `;
 
-// Updated computed property for sorted posts
 const sortedPosts = computed(() => {
   if (!currentPosts.value) return [];
   
@@ -121,7 +119,8 @@ const fetchPostsByLetter = async (letter) => {
   try {
     const { data: { posts } } = await apolloClient.query({
       query: FETCH_POSTS_BY_LETTER,
-      variables: { letter }
+      variables: { letter },
+      fetchPolicy: 'network-only' // Force network request to ensure fresh data
     });
 
     currentPosts.value = posts.nodes;
