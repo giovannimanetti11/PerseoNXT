@@ -6,10 +6,8 @@
   <div v-else-if="post.data" id="post">
     <SchemaMarkup :post="post.data" :tag="null" />
     <section class="post-info-section flex flex-col md:flex-row py-20 px-2 md:px-10 w-11/12 mx-auto rounded-2xl print:py-2 print:px-0 print:w-full">
-
       <!-- Container for post information -->
       <div class="w-full md:w-3/5 md:mt-28 container mx-auto px-2 print:mt-8 print:px-0 order-2 md:order-1">
-        <!-- Breadcrumbs -->
         <div class="mb-12">
           <Breadcrumbs 
             :currentPageName="post.data.title" 
@@ -26,8 +24,8 @@
         />
       </div>
 
-       <!-- Container for featured image -->
-       <div class="w-full md:w-2/5 md:mt-28 flex flex-col order-1 md:order-2 mb-8 md:mb-0">
+      <!-- Container for featured image -->
+      <div class="w-full md:w-2/5 md:mt-28 flex flex-col order-1 md:order-2 mb-8 md:mb-0">
         <div class="md:sticky md:top-24">
           <NuxtImg
             v-if="featuredImage"
@@ -59,16 +57,35 @@
       </ul>
     </section>
 
-    <!-- Content sections -->
-    <section v-for="(section, index) in post.structuredContent"
-             :class="['post-content-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full', section.className]"
-             :id="'section' + (index + 1)"
-             :key="section.title">
-      <div class="flex items-center" v-if="section.title !== 'Riferimenti'">
-        <div class="circle flex items-center justify-center mt-1 md:mt-0 w-8 h-8 md:w-12 md:h-12 mb-2 md:mb-4 mr-2 bg-blu text-white rounded-full text-base md:text-lg font-bold print:mb-0 print:mr-0.5" aria-hidden="true">{{ index + 1 }}</div>
-        <h3 class="text-xl md:text-2xl mt-1 md:mt-0">{{ section.title }}</h3>
+    <!-- Introduction section -->
+    <section 
+      v-if="post.structuredContent[0] && !post.structuredContent[0].title"
+      class="post-content-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full post-section-introduction"
+    >
+      <div class="mt-4">
+        <InternalLinking 
+          :content="post.structuredContent[0].content" 
+          :current-slug="post.data?.slug || ''"
+          :global-linked-words="globalLinkedWords"
+          @update:globalLinkedWords="updateGlobalLinkedWords"
+        />
       </div>
-      <h3 v-else class="text-xl md:text-2xl mb-4 mt-1 md:mt-0">{{ section.title }}</h3>
+    </section>
+
+    <!-- Regular sections -->
+    <section 
+      v-for="(section, index) in sectionsWithoutIntro"
+      :key="section.title"
+      :class="['post-content-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full', section.className]"
+      :id="'section' + (index + 1)"
+    >
+      <div class="flex items-center space-x-4" v-if="section.title !== 'Riferimenti'">
+        <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">
+          {{ index + 1 }}
+        </div>
+        <h3 class="text-xl md:text-2xl">{{ section.title }}</h3>
+      </div>
+      <h3 v-else class="text-xl md:text-2xl mb-4">{{ section.title }}</h3>
       <InternalLinking 
         :content="section.content" 
         :current-slug="post.data?.slug || ''"
@@ -76,6 +93,7 @@
         @update:globalLinkedWords="updateGlobalLinkedWords"
       />
     </section>
+
     <EditContentProposal :sections="post.headings" />
   </div>
 </template>
@@ -178,43 +196,94 @@ const updateGlobalLinkedWords = (newWords) => {
   newWords.forEach(word => globalLinkedWords.value.add(word));
 };
 
-const processPostContent = async () => {
-  const content = post.data.content;
-  const cheerio = await import('cheerio');
-  const $ = cheerio.load(content);
+const sectionsWithoutIntro = computed(() => {
+  // Skip the introduction section if it exists
+  if (post.structuredContent && post.structuredContent.length > 0 && !post.structuredContent[0].title) {
+    return post.structuredContent.slice(1);
+  }
+  return post.structuredContent;
+});
+
+const processContent = async () => {
+  if (!post.data || !post.data.content) return;
+
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = post.data.content;
+
   const headings = [];
   const sections = [];
-  let currentSection = null;
+  
+  // Get introduction content (everything before first h3)
+  const firstH3 = tempDiv.querySelector('h3');
+  if (firstH3) {
+    const introNodes = [];
+    let currentNode = tempDiv.firstChild;
+    
+    while (currentNode && currentNode !== firstH3) {
+      introNodes.push(currentNode.cloneNode(true));
+      currentNode = currentNode.nextSibling;
+    }
+    
+    if (introNodes.length > 0) {
+      const introDiv = document.createElement('div');
+      introNodes.forEach(node => introDiv.appendChild(node));
+      sections.push({
+        title: null,
+        content: introDiv.innerHTML,
+        className: 'post-section-introduction'
+      });
+    }
+  } else {
+    // If no h3 exists, all content is introduction
+    sections.push({
+      title: null,
+      content: tempDiv.innerHTML,
+      className: 'post-section-introduction'
+    });
+  }
 
-  $('h3, p, ol, ul').each(function(i, elem) {
-    const $elem = $(elem);
-    if ($elem.is('h3')) {
-      if (currentSection) {
-        sections.push(currentSection);
-      }
-      const title = $elem.text().trim();
-      headings.push(title);
-      currentSection = {
-        title: title,
-        content: '',
-        className: `post-section-${title.toLowerCase().replace(/[\s,\'\`]+/g, '-').replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e').replace(/[ìíîï]/g, 'i').replace(/[òóôõö]/g, 'o').replace(/[ùúûü]/g, 'u')}`
-      };
-    } else {
-      if ($elem.is('p') && $elem.text().trim() === "Riferimenti") {
+  // Process regular sections
+  let currentSection = null;
+  const processNodes = (startNode) => {
+    let currentNode = startNode;
+    
+    while (currentNode) {
+      if (currentNode.tagName === 'H3') {
         if (currentSection) {
           sections.push(currentSection);
         }
+        const title = currentNode.textContent.trim();
+        headings.push(title);
         currentSection = {
-          title: "Riferimenti",
+          title,
           content: '',
-          className: 'post-section-riferimenti'
+          className: `post-section-${title.toLowerCase().replace(/[\s,\'\`]+/g, '-')
+            .replace(/[àáâãäå]/g, 'a')
+            .replace(/[èéêë]/g, 'e')
+            .replace(/[ìíîï]/g, 'i')
+            .replace(/[òóôõö]/g, 'o')
+            .replace(/[ùúûü]/g, 'u')}`
         };
       } else if (currentSection) {
-        currentSection.content += $.html($elem);
+        // If it's a "Riferimenti" section starter
+        if (currentNode.tagName === 'P' && currentNode.textContent.trim() === 'Riferimenti') {
+          sections.push(currentSection);
+          currentSection = {
+            title: 'Riferimenti',
+            content: '',
+            className: 'post-section-riferimenti'
+          };
+        } else {
+          currentSection.content += currentNode.outerHTML || '';
+        }
       }
+      currentNode = currentNode.nextSibling;
     }
-  });
+  };
 
+  processNodes(firstH3 || tempDiv.firstChild);
+
+  // Add the last section if exists
   if (currentSection) {
     sections.push(currentSection);
   }
@@ -243,7 +312,7 @@ const yoastData = ref(null);
 watch(() => post.data, async (newPostData) => {
   if (newPostData) {
     await nextTick();
-    await processPostContent();
+    await processContent();
     globalLinkedWords.value.clear();
     
     const fullUrl = `https://wikiherbalist.com${route.fullPath}`;
@@ -253,7 +322,7 @@ watch(() => post.data, async (newPostData) => {
       siteName: config.public.siteName,
       url: fullUrl,
       type: 'article',
-      image: newPostData.seo.opengraphImage?.sourceUrl || newPostData.featuredImage?.node?.sourceUrl || openGraphImage.value,
+      image: newPostData.seo.opengraphImage?.sourceUrl || featuredImage.value?.sourceUrl || openGraphImage.value,
       publishedTime: newPostData.date,
       modifiedTime: newPostData.modified || newPostData.date,
       author: newPostData.authorName,
