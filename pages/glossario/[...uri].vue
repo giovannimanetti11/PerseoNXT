@@ -3,7 +3,6 @@
     <schemaMarkup :glossaryTerm="glossaryTerm" />
     <!-- Main upper term container -->
     <section class="postGlossario-info-section flex flex-col md:flex-row py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl print:py-2 print:px-0 print:w-full">
-
       <!-- Container for main term information -->
       <div class="mt-10 md:mt-20 container mx-auto w-full md:w-3/5 px-2 md:px-4 print:mt-8 print:px-0">
         <!-- Breadcrumbs -->
@@ -19,12 +18,16 @@
           :publishDate="glossaryTerm.date"
           :authorName="glossaryTerm.authorName"
           :readingTime="readingTime"
-          :revisionData="glossaryTerm.revisionData"
         />
       </div>
       <!-- Container for featured image -->
       <div class="flex flex-col w-full md:w-2/5 mt-10 md:mt-20">
-        <NuxtImg v-if="glossaryTerm.featuredImage" class="m-auto h-48 md:h-60 w-auto border rounded-2xl transition-all duration-300 ease-in-out shadow-lg mb-4" :src="glossaryTerm.featuredImage.node.sourceUrl" :alt="glossaryTerm.featuredImage.node.altText" />
+        <NuxtImg 
+          v-if="glossaryTerm.featuredImage" 
+          class="m-auto h-48 md:h-60 w-auto border rounded-2xl transition-all duration-300 ease-in-out shadow-lg mb-4" 
+          :src="glossaryTerm.featuredImage.node.sourceUrl" 
+          :alt="glossaryTerm.featuredImage.node.altText" 
+        />
       </div>
     </section>
     
@@ -43,11 +46,28 @@
       </ul>
     </section>
 
-    <!-- Content sections -->
-    <section v-for="(section, index) in sections"
-            :class="['term-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full', section.className]"
-            :id="'section' + (index + 1)"
-            :key="section.heading">
+    <!-- Introduction section -->
+    <section 
+      v-if="sections[0] && !sections[0].heading"
+      class="term-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full post-section-introduction"
+    >
+      <div class="mt-4">
+        <InternalLinking 
+          :content="sections[0].content" 
+          :current-slug="glossaryTerm.slug"
+          :global-linked-words="globalLinkedWords"
+          @update:globalLinkedWords="updateGlobalLinkedWords"
+        />
+      </div>
+    </section>
+
+    <!-- Regular sections -->
+    <section 
+      v-for="(section, index) in sectionsWithoutIntro"
+      :key="index"
+      :class="['term-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full', section.className]"
+      :id="section.heading !== 'Riferimenti' ? 'section' + index : ''"
+    >
       <div class="flex items-center" v-if="section.heading !== 'Riferimenti'">
         <div class="circle flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 mr-4 bg-blu text-white rounded-full text-base md:text-lg font-bold">
           {{ index + 1 }}
@@ -65,10 +85,8 @@
       </div>
     </section>
   </div>
-  <div v-else class="flex justify-center text-center w-full items-center h-64">
-    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
-  </div>
 </template>
+
 
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
@@ -169,6 +187,13 @@ const updateGlobalLinkedWords = (newWords) => {
   });
 };
 
+const sectionsWithoutIntro = computed(() => {
+  // Skip the introduction section if it exists
+  if (sections.value.length > 0 && !sections.value[0].heading) {
+    return sections.value.slice(1);
+  }
+  return sections.value;
+});
 
 const processContent = async (content) => {
   const { load } = await import('cheerio');
@@ -177,6 +202,39 @@ const processContent = async (content) => {
   const extractedSections = [];
   let wordCount = 0;
 
+  // Get introduction content (everything before first h3)
+  const firstH3 = $('h3').first();
+  if (firstH3.length) {
+    const introContent = firstH3.prevAll().toArray()
+      .reverse()
+      .map(el => $.html(el))
+      .join('');
+    
+    if (introContent.trim()) {
+      extractedSections.push({
+        heading: null,
+        content: introContent,
+        className: 'post-section-introduction'
+      });
+      
+      // Add to word count
+      wordCount += introContent.replace(/<[^>]*>/g, '').split(/\s+/).length;
+    }
+  } else {
+    // If no h3 exists, all content is introduction
+    const introContent = $.html();
+    if (introContent.trim()) {
+      extractedSections.push({
+        heading: null,
+        content: introContent,
+        className: 'post-section-introduction'
+      });
+      
+      wordCount += introContent.replace(/<[^>]*>/g, '').split(/\s+/).length;
+    }
+  }
+
+  // Process h3 sections as before
   $('h3').each(function (index) {
     const headingText = $(this).text().trim();
     const headingId = `section${index + 1}`;
