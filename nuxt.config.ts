@@ -230,61 +230,64 @@ export default defineNuxtConfig({
   },
 
   // Nitro server configuration
-  nitro: {
-    compressPublicAssets: true,
-    // Prerender configuration
-    prerender: {
-      crawlLinks: true,
-      routes: [
-        '/',
-        '/about',
-        '/piante-medicinali',
-        '/glossario',
-        '/blog',
-        '/disclaimer',
-        '/privacy-policy',
-        '/cookie-policy',
-        '/donazioni',
-        '/css/main.css'
-      ]
+nitro: {
+  compressPublicAssets: true,
+  // Prerender configuration
+  prerender: {
+    crawlLinks: true,
+    routes: [
+      '/',
+      '/about',
+      '/piante-medicinali',
+      '/glossario',
+      '/blog',
+      '/disclaimer',
+      '/privacy-policy',
+      '/cookie-policy',
+      '/donazioni',
+      '/css/main.css'
+    ]
+  },
+  // Route rules
+  routeRules: {
+    // CSS handling
+    '/algoliaUpdate': {
+      ssr: false
     },
-    // Route rules
-    routeRules: {
-      // CSS handling
-      '/css/**': {
-        headers: {
-          'Content-Type': 'text/css',
-          'Cache-Control': 'public, max-age=31536000, immutable',
-          'X-Content-Type-Options': 'nosniff'
-        }
-      },
-      // Static pages
-      '/': { static: true },
-      '/about': { static: true },
-      '/piante-medicinali': { static: true },
-      '/glossario': { static: true },
-      '/blog': { static: true },
-      '/disclaimer': { static: true },
-      '/privacy-policy': { static: true },
-      '/cookie-policy': { static: true },
-      '/donazioni': { static: true },
-      // Global security headers and rules
-      '/**': { 
-        headers: {
-          'Content-Security-Policy': `
-            default-src 'self';
-            script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://www.googletagmanager.com https://www.google.com https://www.gstatic.com;
-            style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-            font-src 'self' https://fonts.gstatic.com;
-            img-src 'self' data: https://www.google-analytics.com https://admin.wikiherbalist.com https://tile.openstreetmap.org;
-            connect-src 'self' https://www.google-analytics.com https://admin.wikiherbalist.com https://region1.google-analytics.com https://api.gbif.org https://eutils.ncbi.nlm.nih.gov;
-            frame-src 'self' https://www.google.com;
-            object-src 'none';
-          `.replace(/\s+/g, ' ').trim()
-        }
+    '/css/**': {
+      headers: {
+        'Content-Type': 'text/css',
+        'Cache-Control': 'public, max-age=31536000, immutable',
+        'X-Content-Type-Options': 'nosniff'
+      }
+    },
+    // Static pages
+    '/': { static: true },
+    '/about': { static: true },
+    '/piante-medicinali': { static: true },
+    '/glossario': { static: true },
+    '/blog': { static: true },
+    '/disclaimer': { static: true },
+    '/privacy-policy': { static: true },
+    '/cookie-policy': { static: true },
+    '/donazioni': { static: true },
+    // Global security headers and rules
+    '/**': { 
+      headers: {
+        'Content-Security-Policy': `
+          default-src 'self';
+          script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://www.googletagmanager.com https://www.google.com https://www.gstatic.com https://*.google.com;
+          style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+          font-src 'self' https://fonts.gstatic.com;
+          img-src 'self' data: https://www.google-analytics.com https://admin.wikiherbalist.com https://tile.openstreetmap.org;
+          connect-src 'self' https://www.google-analytics.com https://admin.wikiherbalist.com https://region1.google-analytics.com https://api.gbif.org https://eutils.ncbi.nlm.nih.gov https://*.google.com;
+          frame-src 'self' https://www.google.com https://*.google.com;
+          object-src 'none';
+        `.replace(/\s+/g, ' ').trim()
       }
     }
-  },
+  }
+},
 
   // Hooks configuration
   hooks: {
