@@ -3,12 +3,23 @@ import { provideApolloClient } from '@vue/apollo-composable';
 import { defineNuxtPlugin } from '#app';
 import { apiConfig } from '@config';
 
-// Defines a Nuxt plugin to setup Apollo Client with a configured HTTP link and cache policies.
 export default defineNuxtPlugin((nuxtApp) => {
+  // Helper function for base64 encoding
+  const basicAuth = () => {
+    if (process.server) {
+      // Server-side encoding
+      const credentials = `${apiConfig.username}:${apiConfig.appPassword}`;
+      return `Basic ${Buffer.from(credentials).toString('base64')}`;
+    } else {
+      // Client-side encoding
+      return `Basic ${btoa(`${apiConfig.username}:${apiConfig.appPassword}`)}`;
+    }
+  };
+
   const httpLink = createHttpLink({
     uri: apiConfig.baseUrl,
     headers: {
-      Authorization: `Basic ${btoa(`${apiConfig.username}:${apiConfig.appPassword}`)}`
+      Authorization: basicAuth()
     }
   });
 
@@ -17,12 +28,12 @@ export default defineNuxtPlugin((nuxtApp) => {
       Query: {
         fields: {
           posts: {
-            merge(existing: any, incoming: any): any {
+            merge(existing, incoming) {
               return incoming;
             }
           },
           glossaryTerms: {
-            merge(existing: any, incoming: any): any {
+            merge(existing, incoming) {
               return incoming;
             }
           }
@@ -32,7 +43,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   });
 
   const apolloClient = new ApolloClient({
-    ssrMode: true, // Enable SSR mode
+    ssrMode: process.server,
     link: httpLink,
     cache: cache,
     defaultOptions: {
