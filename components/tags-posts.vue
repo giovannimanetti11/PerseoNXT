@@ -1,13 +1,13 @@
 <template>
   <div class="flex flex-col relative w-11/12 m-auto -my-4">
-    <div v-if="loading" class="flex justify-center text-center w-full items-center h-64">
+    <div v-if="isLoading" class="flex justify-center text-center w-full items-center h-64">
       <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
     </div>
-    
+
     <div v-else-if="error" class="text-red-500 text-center mt-4">
-      Si è verificato un errore nel caricamento dei dati.
+      Si è verificato un errore nel caricamento dei dati: {{ error }}
     </div>
-    
+
     <div v-else>
       <!-- Alphabet navigation -->
       <div class="w-full mx-auto flex justify-center mt-8 items-center">
@@ -80,8 +80,8 @@
               </h3>
               <!-- Associated posts -->
               <p class="text-sm">
-                <template v-for="(post, index) in tag.posts" :key="post.id">
-                  <NuxtLink :to="post.uri" class="text-black hover:text-blu">{{ post.title }}</NuxtLink><span v-if="index < tag.posts.length - 1">, </span>
+                <template v-for="(post, index) in tag.posts.nodes" :key="post.id">
+                  <NuxtLink :to="post.uri" class="text-black hover:text-blu">{{ post.title }}</NuxtLink><span v-if="index < tag.posts.nodes.length - 1">, </span>
                 </template>
               </p>
             </div>
@@ -100,9 +100,10 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { useApolloClient } from '@vue/apollo-composable';
 import { useAlphabet } from '~/composables/useAlphabet';
+import { useAsyncData } from '#app';
 import gql from 'graphql-tag';
 
 const props = defineProps({
@@ -126,12 +127,14 @@ const {
 
 const allTags = ref([]);
 const visibleTags = ref([]);
-const loading = ref(true);
-const error = ref(null);
 const activeTooltip = ref(null);
 const tagsContainer = ref(null);
 const pageSize = 18;
 const currentPage = ref(1);
+const isLoading = ref(true);
+const cachedTags = ref({});
+
+const emit = defineEmits(['dataLoaded']);
 
 const FETCH_TAGS_BY_LETTER = gql`
   query FetchTagsByLetter($letter: String!) {
@@ -152,27 +155,46 @@ const FETCH_TAGS_BY_LETTER = gql`
   }
 `;
 
-const fetchTagsByLetter = async (letter) => {
-  loading.value = true;
-  error.value = null;
-  setSelectedLetter(letter);
-  currentPage.value = 1;
-
-  try {
+const { data: tagsData, error, refresh } = useAsyncData(
+  'tagsByLetter',
+  async () => {
+    isLoading.value = true;
+    if (cachedTags.value[selectedLetter.value]) {
+      isLoading.value = false;
+      return cachedTags.value[selectedLetter.value];
+    }
     const { data } = await apolloClient.query({
       query: FETCH_TAGS_BY_LETTER,
-      variables: { letter }
+      variables: { letter: selectedLetter.value }
     });
+    const filteredTags = data.tags.nodes.filter(tag => tag.name.charAt(0).toLowerCase() === selectedLetter.value.toLowerCase());
+    cachedTags.value[selectedLetter.value] = filteredTags;
+    isLoading.value = false;
+    emit('dataLoaded', filteredTags);
+    return filteredTags;
+  },
+  { watch: [selectedLetter] }
+);
 
-    allTags.value = data.tags.nodes.filter(tag => tag.name.charAt(0).toLowerCase() === letter.toLowerCase());
+const fetchTagsByLetter = async (letter) => {
+  setSelectedLetter(letter);
+  currentPage.value = 1;
+  if (!cachedTags.value[letter]) {
+    isLoading.value = true;
+    await refresh();
+  } else {
+    allTags.value = cachedTags.value[letter];
     updateVisibleTags();
-  } catch (err) {
-    console.error('Error fetching tags:', err);
-    error.value = 'Si è verificato un errore nel caricamento dei dati.';
-  } finally {
-    loading.value = false;
+    isLoading.value = false;
   }
 };
+
+watch(tagsData, (newData) => {
+  if (newData) {
+    allTags.value = newData;
+    updateVisibleTags();
+  }
+});
 
 const updateVisibleTags = () => {
   const startIndex = 0;
@@ -227,23 +249,22 @@ watch(() => props.searchTerm, () => {
 
 onMounted(() => {
   fetchTagsByLetter('A');
-});
-
-onMounted(() => {
   if (process.client) {
-    document.addEventListener('click', (event) => {
-      if (activeTooltip.value !== null && !event.target.closest('.tooltip-custom')) {
-        hideTooltip();
-      }
-    });
+    document.addEventListener('click', handleClickOutside);
   }
 });
 
 onUnmounted(() => {
   if (process.client) {
-    document.removeEventListener('click', hideTooltip);
+    document.removeEventListener('click', handleClickOutside);
   }
 });
+
+const handleClickOutside = (event) => {
+  if (activeTooltip.value !== null && !event.target.closest('.tooltip-custom')) {
+    hideTooltip();
+  }
+};
 </script>
 
 <style scoped>
