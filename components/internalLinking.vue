@@ -6,7 +6,7 @@
     <!-- Tooltip for displaying additional information -->
     <Teleport to="body">
       <div v-if="activeTooltip" 
-           class="keywordsTooltip fixed z-50 bg-white rounded-lg shadow-lg text-sm text-gray-700"
+           class="keywordsTooltip fixed z-50 bg-white rounded-lg shadow-lg"
            :style="tooltipStyle" 
            @mouseenter="keepTooltipVisible" 
            @mouseleave="handleMouseLeave"
@@ -33,19 +33,29 @@
     </Teleport>
 
     <Teleport to="body">
-      <div v-if="activeTooltip && isSmallScreen" class="fixed inset-0 bg-black bg-opacity-50 z-40" @click="hideTooltip" @touchstart="hideTooltip"></div>
+      <div v-if="activeTooltip && isSmallScreen" 
+           class="fixed inset-0 bg-black bg-opacity-50 z-40" 
+           @click="hideTooltip" 
+           @touchstart="hideTooltip">
+      </div>
     </Teleport>
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted, onUnmounted, watch, nextTick, computed } from 'vue';
-import { useQuery } from '@vue/apollo-composable';
+<script setup lang="ts">
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
+import { useAsyncData } from '#app';
+import { useApolloClient } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 import DOMPurify from 'dompurify';
 
+// Blacklist of terms that should not be linked
+const BLACKLISTED_TERMS = ['basilico sacro'];
+
 const router = useRouter();
+const { resolveClient } = useApolloClient();
+const apolloClient = resolveClient();
 
 // Props definition
 const props = defineProps({
@@ -64,12 +74,12 @@ const props = defineProps({
 });
 
 // Refs for managing component state
-const contentContainer = ref(null);
-const activeTooltip = ref(null);
+const contentContainer = ref<HTMLElement | null>(null);
+const activeTooltip = ref<{ title: string; excerpt: string; slug: string; isGlossary: boolean } | null>(null);
 const tooltipPosition = ref({ x: 0, y: 0 });
 const processedContent = ref('');
 const isSmallScreen = ref(false);
-let hideTimeout = null;
+let hideTimeout: number | null = null;
 
 // GraphQL query to fetch all posts and glossary terms
 const FETCH_ALL_POSTS_AND_TERMS = gql`
@@ -92,17 +102,73 @@ const FETCH_ALL_POSTS_AND_TERMS = gql`
   }
 `;
 
-// Execute the GraphQL query
-const { result } = useQuery(FETCH_ALL_POSTS_AND_TERMS);
+// Execute the GraphQL query using useAsyncData
+const { data: queryResult } = await useAsyncData(
+  'allPostsAndTerms',
+  async () => {
+    const { data } = await apolloClient.query({ query: FETCH_ALL_POSTS_AND_TERMS });
+    return data;
+  },
+  { server: false }
+);
 
-// Main function to process the content and add internal links
+// Function to create the HTML string for internal links
+const createLinkString = (item: any, text: string): string => {
+  const href = item.isGlossary ? `/glossario/${item.slug}` : `/${item.slug}`;
+  const tooltip = encodeURIComponent(JSON.stringify({ 
+    title: item.title, 
+    excerpt: item.excerpt, 
+    slug: item.slug, 
+    isGlossary: item.isGlossary 
+  }));
+  return `<a href="${href}" class="text-blu hover:text-celeste internal-link" data-tooltip="${tooltip}">${text}</a>`;
+};
+
+// Function to escape special characters in regular expressions
+function escapeRegExp(string: string): string {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// Helper function to find references section
+const findReferencesSection = (node: Node): Element | null => {
+  const root = node.getRootNode() as Document;
+  const sections = Array.from(root.getElementsByClassName('post-section-riferimenti'));
+  if (sections.length > 0) {
+    return sections[0];
+  }
+  return null;
+};
+
+// Helper function to check if node is in references section
+const isInReferencesSection = (node: Node): boolean => {
+  const referencesSection = findReferencesSection(node);
+  if (!referencesSection) return false;
+
+  let currentNode = node.parentElement;
+  while (currentNode) {
+    if (currentNode === referencesSection) {
+      return true;
+    }
+    currentNode = currentNode.parentElement;
+  }
+  return false;
+};
+
+// Main function to process content and add internal links
 const processContent = () => {
-  if (!result.value) return;
+  console.log('Starting content processing');
+  
+  if (!queryResult.value) {
+    console.log('No query results available');
+    return;
+  }
 
-  // Map posts and glossary terms, adding isGlossary property
-  const posts = result.value.posts?.nodes.map(item => ({ ...item, isGlossary: false })) || [];
-  const glossaryTerms = result.value.glossaryTerms?.nodes.map(item => ({ ...item, isGlossary: true })) || [];
+  // Map posts and glossary terms
+  const posts = queryResult.value.posts?.nodes.map(item => ({ ...item, isGlossary: false })) || [];
+  const glossaryTerms = queryResult.value.glossaryTerms?.nodes.map(item => ({ ...item, isGlossary: true })) || [];
   const allItems = [...posts, ...glossaryTerms];
+
+  console.log('Total items to process:', allItems.length);
 
   let allKeys = allItems
     .filter(item => item.slug !== props.currentSlug)
@@ -120,70 +186,85 @@ const processContent = () => {
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = props.content;
 
-  // Process the DOM tree
-  processNode(tempDiv, allKeys);
+  // Process nodes recursively
+  const processNode = (node: Node) => {
+    if (isInReferencesSection(node)) {
+      console.log('Skipping references section content');
+      return;
+    }
 
-  // Sanitize and set the processed content
+    if (node.nodeType === Node.TEXT_NODE && node.textContent) {
+      const originalContent = node.textContent;
+      let modifiedContent = originalContent;
+      let contentChanged = false;
+
+      allKeys.forEach(item => {
+        if (props.globalLinkedWords.has(item.singular.toLowerCase()) ||
+            (item.plural && props.globalLinkedWords.has(item.plural.toLowerCase()))) {
+          return;
+        }
+
+        const regexSingular = new RegExp(`\\b${escapeRegExp(item.singular)}\\b`, 'gi');
+        const regexPlural = item.plural ? new RegExp(`\\b${escapeRegExp(item.plural)}\\b`, 'gi') : null;
+
+        regexSingular.lastIndex = 0;
+        const matchSingular = regexSingular.exec(modifiedContent);
+
+        let matchPlural = null;
+        if (!matchSingular && regexPlural) {
+          regexPlural.lastIndex = 0;
+          matchPlural = regexPlural.exec(modifiedContent);
+        }
+
+        const match = matchSingular || matchPlural;
+        
+        if (match) {
+          // Check for blacklisted terms
+          const startIndex = Math.max(0, match.index - 20);
+          const endIndex = Math.min(modifiedContent.length, match.index + match[0].length + 20);
+          const context = modifiedContent.substring(startIndex, endIndex).toLowerCase();
+          
+          if (BLACKLISTED_TERMS.some(term => context.includes(term.toLowerCase()))) {
+            console.log(`Skipping blacklisted term context: ${context}`);
+            return;
+          }
+
+          const startPos = match.index;
+          const endPos = startPos + match[0].length;
+          
+          modifiedContent = 
+            modifiedContent.substring(0, startPos) +
+            createLinkString(item, match[0]) +
+            modifiedContent.substring(endPos);
+          
+          contentChanged = true;
+          props.globalLinkedWords.add(item.singular.toLowerCase());
+          if (item.plural) {
+            props.globalLinkedWords.add(item.plural.toLowerCase());
+          }
+        }
+      });
+
+      if (contentChanged) {
+        const span = document.createElement('span');
+        span.innerHTML = modifiedContent;
+        node.parentNode?.replaceChild(span, node);
+      }
+    } else if (node.nodeType === Node.ELEMENT_NODE && !['a', 'script', 'style'].includes((node as Element).tagName.toLowerCase())) {
+      Array.from(node.childNodes).forEach(child => processNode(child));
+    }
+  };
+
+  Array.from(tempDiv.childNodes).forEach(node => processNode(node));
   processedContent.value = DOMPurify.sanitize(tempDiv.innerHTML);
 };
 
-// Function to process individual nodes in the DOM tree
-const processNode = (node, allKeys) => {
-  if (node.nodeType === Node.TEXT_NODE) {
-    const originalContent = node.textContent;
-    let modifiedContent = originalContent;
-
-    allKeys.forEach(item => {
-      const regexSingular = new RegExp(`\\b${escapeRegExp(item.singular)}\\b`, 'gi');
-      const regexPlural = item.plural ? new RegExp(`\\b${escapeRegExp(item.plural)}\\b`, 'gi') : null;
-
-      // Process both singular and plural forms
-      [regexSingular, regexPlural].forEach((regex) => {
-        if (regex) {
-          modifiedContent = modifiedContent.replace(regex, (match) => {
-            // Check if either singular or plural form has been linked
-            if (!props.globalLinkedWords.has(item.singular.toLowerCase()) && !props.globalLinkedWords.has(item.plural?.toLowerCase())) {
-              props.globalLinkedWords.add(item.singular.toLowerCase());
-              if (item.plural) {
-                props.globalLinkedWords.add(item.plural.toLowerCase());
-              }
-              return createLinkString(item, match);
-            }
-            return match;
-          });
-        }
-      });
-    });
-
-    // Replace the node only if the content has been modified
-    if (modifiedContent !== originalContent) {
-      const newNode = document.createElement('span');
-      newNode.innerHTML = modifiedContent;
-      node.parentNode.replaceChild(newNode, node);
-    }
-  } else if (node.nodeType === Node.ELEMENT_NODE && !['a', 'script', 'style'].includes(node.tagName.toLowerCase())) {
-    Array.from(node.childNodes).forEach(child => processNode(child, allKeys));
-  }
-};
-
-// Function to create the HTML string for internal links
-const createLinkString = (item, text) => {
-  const href = item.isGlossary ? `/glossario/${item.slug}` : `/${item.slug}`;
-  const tooltip = encodeURIComponent(JSON.stringify({ title: item.title, excerpt: item.excerpt, slug: item.slug, isGlossary: item.isGlossary }));
-  return `<a href="${href}" class="text-blu hover:text-celeste internal-link" data-tooltip="${tooltip}">${text}</a>`;
-};
-
-// Function to escape special characters in regular expressions
-function escapeRegExp(string) {
-  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
 // Function to show tooltip
-const showTooltip = (event) => {
-  clearTimeout(hideTimeout);
-  const target = event.target.closest('.internal-link');
+const showTooltip = (event: MouseEvent) => {
+  clearTimeout(hideTimeout as number);
+  const target = (event.target as HTMLElement).closest('.internal-link');
   if (target) {
-    const tooltipData = JSON.parse(decodeURIComponent(target.dataset.tooltip));
+    const tooltipData = JSON.parse(decodeURIComponent((target as HTMLElement).dataset.tooltip || '{}'));
     activeTooltip.value = tooltipData;
     
     const rect = target.getBoundingClientRect();
@@ -219,8 +300,8 @@ const startHideTooltipTimer = () => {
 };
 
 // Function to handle outside click
-const handleOutsideClick = (event) => {
-  if (activeTooltip.value && !event.target.closest('.keywordsTooltip') && !event.target.closest('.internal-link')) {
+const handleOutsideClick = (event: MouseEvent) => {
+  if (activeTooltip.value && !event.target?.closest('.keywordsTooltip') && !(event.target as Element).closest('.internal-link')) {
     hideTooltip();
   }
 };
@@ -232,25 +313,23 @@ const hideTooltip = () => {
 
 // Function to keep tooltip visible
 const keepTooltipVisible = () => {
-  clearTimeout(hideTimeout);
+  clearTimeout(hideTimeout as number);
 };
 
 // Computed property for tooltip style
-const tooltipStyle = computed(() => {
-  return {
-    position: 'absolute',
-    top: `${tooltipPosition.value.y}px`,
-    left: isSmallScreen.value ? '50%' : `${tooltipPosition.value.x}px`,
-    transform: isSmallScreen.value ? 'translate(-50%, 0)' : 'translate(-50%, 10px)',
-    width: isSmallScreen.value ? '90vw' : '600px',
-    maxWidth: '90vw',
-    maxHeight: '80vh',
-    overflowY: 'auto',
-    zIndex: 1001
-  };
-});
+const tooltipStyle = computed(() => ({
+  position: 'absolute',
+  top: `${tooltipPosition.value.y}px`,
+  left: isSmallScreen.value ? '50%' : `${tooltipPosition.value.x}px`,
+  transform: isSmallScreen.value ? 'translate(-50%, 0)' : 'translate(-50%, 10px)',
+  width: isSmallScreen.value ? '90vw' : '600px',
+  maxWidth: '90vw',
+  maxHeight: '80vh',
+  overflowY: 'auto',
+  zIndex: 1001
+}));
 
-// Function to check if the screen is small (mobile or reduced desktop)
+// Function to check if the screen is small
 const checkScreenSize = () => {
   isSmallScreen.value = window.innerWidth < 768;
 };
@@ -264,22 +343,32 @@ const goToPost = () => {
   }
 };
 
+// Watch for changes in props and query result
+watch(() => props.content, () => {
+  console.log('Content changed, reprocessing...');
+  processContent();
+});
+
+watch(queryResult, () => {
+  console.log('Query results updated, reprocessing...');
+  processContent();
+});
+
 // Lifecycle hooks
 onMounted(() => {
+  console.log('Component mounted');
   checkScreenSize();
   window.addEventListener('resize', checkScreenSize);
   processContent();
   
-  const handleInteraction = (event) => {
-    const target = event.target.closest('.internal-link');
+  const handleInteraction = (event: Event) => {
+    const target = (event.target as HTMLElement).closest('.internal-link');
     if (target) {
       if (isSmallScreen.value) {
-        // On mobile, prevent default and show tooltip
         event.preventDefault();
-        showTooltip(event);
+        showTooltip(event as MouseEvent);
       } else if (event.type === 'mouseenter') {
-        // On desktop, show tooltip on hover
-        showTooltip(event);
+        showTooltip(event as MouseEvent);
       }
     }
   };
@@ -298,6 +387,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
+  console.log('Component unmounting');
   window.removeEventListener('resize', checkScreenSize);
   if (contentContainer.value) {
     contentContainer.value.removeEventListener('click', handleInteraction);
@@ -308,29 +398,16 @@ onUnmounted(() => {
   document.removeEventListener('touchstart', handleOutsideClick);
 });
 
-// Watch for changes in props and query result
-watch(() => props.content, processContent);
-watch(result, processContent);
-</script>
-
-<style scoped>
-.internal-link {
-  cursor: pointer;
-}
-
-.keywordsTooltip {
-  max-height: 80vh;
-  overflow-y: auto;
-}
-
-.keywordsTooltip h4 {
-  margin-top: 0 !important;
-  color: #036297 !important;
-}
-
-@media (max-width: 768px) {
-  .keywordsTooltip {
-    width: 90vw !important;
+// Helper function for event handling
+const handleInteraction = (event: Event) => {
+  const target = (event.target as HTMLElement).closest('.internal-link');
+  if (target) {
+    if (isSmallScreen.value) {
+      event.preventDefault();
+      showTooltip(event as MouseEvent);
+    } else if (event.type === 'mouseenter') {
+      showTooltip(event as MouseEvent);
+    }
   }
-}
-</style>
+};
+</script>
