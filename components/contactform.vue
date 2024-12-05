@@ -32,8 +32,7 @@
   </div>
 </template>
 
-
-<script setup>
+<script setup lang="ts">
 import { reactive } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import { required, email } from '@vuelidate/validators';
@@ -41,7 +40,25 @@ import { useNuxtApp } from '#app';
 
 const { $recaptcha } = useNuxtApp();
 
-const form = reactive({
+// Definition of interfaces for form and messages
+interface ContactForm {
+  nome: string;
+  cognome: string;
+  email: string;
+  telefono: string;
+  richiesta: string;
+  honeypot: string;
+  recaptchaToken?: string;
+}
+
+interface Message {
+  header: string;
+  content: string;
+  type: string;
+}
+
+// Reactive state for the form and messages
+const form = reactive<ContactForm>({
   nome: '',
   cognome: '',
   email: '',
@@ -51,6 +68,13 @@ const form = reactive({
   recaptchaToken: ''
 });
 
+const message = reactive<Message>({
+  header: '',
+  content: '',
+  type: ''
+});
+
+// Validation rules
 const rules = {
   email: { required, email },
   richiesta: { required }
@@ -58,68 +82,68 @@ const rules = {
 
 const v$ = useVuelidate(rules, form);
 
-const message = reactive({
-  header: '',
-  content: '',
-  type: ''
-});
-
 // Function to handle form submission
 const sendEmail = async () => {
-  if (form.honeypot) return; // Prevent spam
-  v$.value.$validate();
+  if (form.honeypot) return; // Prevents spam
+  await v$.value.$validate();
   if (!v$.value.$error) {
     try {
       form.recaptchaToken = await $recaptcha.execute('submit'); // Recaptcha for additional security
-      console.log('Recaptcha token:', form.recaptchaToken);
 
       const response = await fetch('/api/sendEmail', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Content-Security-Policy': "default-src 'self'; script-src 'self'; object-src 'none';"
         },
         body: JSON.stringify(form)
       });
 
-      if (!response.ok) {
-        const errorDetails = await response.text();
-        throw new Error(`Server response not OK: ${errorDetails}`);
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || 'Error sending the request');
       }
 
-      const data = await response.json();
-      if (data.success) {
-        message.header = 'Inviato!';
-        message.content = data.message;
-        message.type = 'text-green-800 bg-green-50 dark:text-green-400';
-      } else {
-        throw new Error(data.message);
-      }
-    } catch (error) {
-      console.error('Error sending email', error);
-      message.header = 'Errore!';
-      message.content = `Errore nell'invio della richiesta: ${error.message}`;
+      message.header = 'Sent!';
+      message.content = `${data.message} We will respond as soon as possible.`;
+      message.type = 'text-green-800 bg-green-50 dark:text-green-400';
+
+      // Resets the form after submission
+      Object.assign(form, {
+        nome: '',
+        cognome: '',
+        email: '',
+        telefono: '',
+        richiesta: '',
+        honeypot: '',
+        recaptchaToken: ''
+      });
+
+      v$.value.$reset();
+
+    } catch (error: any) {
+      message.header = 'Error!';
+      message.content = `Error sending the request: ${error.message}`;
       message.type = 'text-red-800 bg-red-50 dark:text-red-400';
     }
   } else {
-    updateMessageForValidationErrors(); // Handle validation errors
+    updateMessageForValidationErrors(); // Handles validation errors
   }
 };
 
-// Update message based on validation errors
+// Updates the message based on validation errors
 const updateMessageForValidationErrors = () => {
   if (v$.value.email.$error) {
-    message.header = 'Errore!';
-    message.content = 'Inserisci un indirizzo email valido';
+    message.header = 'Error!';
+    message.content = 'Please enter a valid email address';
     message.type = 'text-red-800 bg-red-50 dark:text-red-400';
   } else if (v$.value.richiesta.$error) {
-    message.header = 'Errore!';
-    message.content = 'Scrivi un messaggio.';
+    message.header = 'Error!';
+    message.content = 'Please write a message.';
     message.type = 'text-red-800 bg-red-50 dark:text-red-400';
   }
 };
 </script>
-
 
 <style scoped>
 .input-error {
