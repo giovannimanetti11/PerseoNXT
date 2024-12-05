@@ -17,7 +17,7 @@
           class="w-full py-2 px-2 sm:px-4 text-sm sm:text-base text-gray-700 leading-tight focus:outline-none"
           v-model="searchTerm"
           @input="handleInput"
-          @focus="setActive(true)"
+          @focus="handleInput"
           @keydown.enter="performSearch"
         />
         <div v-if="searchTerm" @click.stop="resetSearch" class="mr-2 sm:mr-4 hover:cursor-pointer flex-shrink-0">
@@ -39,18 +39,23 @@
           <div v-else-if="searchResults.length" class="max-h-[60vh] overflow-y-auto scrollbar-hide">
             <div v-for="result in paginatedResults" :key="result.objectID" 
                  class="flex items-center py-2 hover:bg-gray-100 hover:cursor-pointer w-full" 
-                 @click.stop="goToPost(result.objectID, result.contentType)">
+                 @click.stop="goToPost(result)">
+              <!-- Featured image -->
               <NuxtImg 
-                :src="result.imageUrl" 
-                :alt="result.imageAlt" 
+                :src="result.imageUrl || '/media/placeholder.jpg'" 
+                :alt="result.imageAlt || result.title" 
                 class="rounded-lg w-16 h-16 sm:w-20 sm:h-20 max-w-[64px] max-h-[64px] sm:max-w-[80px] sm:max-h-[80px] object-cover mr-2 sm:mr-4 flex-shrink-0" 
               />
+              
+              <!-- Content area -->
               <div class="flex-grow min-w-0">
-                <h3 class="text-sm sm:text-lg font-bold truncate" v-html="highlightMatch(result._highlightResult.title.value)"></h3>
-                <p v-if="result.contentType === 'plant'" class="text-xs sm:text-sm italic truncate" v-html="highlightMatch(result._highlightResult.nomeScientifico.value)"></p>
+                <h3 class="text-sm sm:text-lg font-bold truncate" v-html="highlightMatch(result._highlightResult?.title?.value || result.title)"></h3>
+                <p v-if="result.contentType === 'plant'" class="text-xs sm:text-sm italic truncate" v-html="highlightMatch(result._highlightResult?.nomeScientifico?.value || result.nomeScientifico)"></p>
                 <p v-if="result.contentType === 'blog'" class="text-xs sm:text-sm text-gray-600 truncate">Di: {{ result.authorName }}</p>
+                <p v-if="result.excerpt" class="text-xs text-gray-500 mt-1 truncate">{{ result.excerpt }}</p>
               </div>
-              <!-- Content type icon -->
+
+              <!-- Type indicator -->
               <div class="flex-shrink-0 ml-1 sm:ml-2">
                 <div 
                   @mouseenter="showTooltip(result.contentType, result.objectID)" 
@@ -101,7 +106,7 @@
               <Icon name="mdi:chevron-right" class="text-xl sm:text-2xl" />
             </button>
           </div>
-        
+
           <!-- No results message -->
           <div v-if="searchMade && !searchResults.length" class="flex flex-col p-4 sm:p-10 w-auto m-auto">
             <p class="text-red-500 border border-red-500 rounded-lg p-2 text-xs sm:text-sm">
@@ -135,14 +140,14 @@
 import { ref, computed, onMounted, nextTick, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useDebounceFn } from '@vueuse/core';
-import algoliasearch from 'algoliasearch/lite';
-import { apiConfig } from '~/config.js';
+import { useRuntimeConfig } from '#app';
 
+// Initialize router and config
 const router = useRouter();
-const algoliaClient = algoliasearch(apiConfig.algoliaAppId, apiConfig.algoliaSearchAPIKey);
-const searchIndex = algoliaClient.initIndex('wikiherbalist');
+const config = useRuntimeConfig();
 
-// Reactive state
+// State refs
+const searchContainerRef = ref(null);
 const isActive = ref(false);
 const searchTerm = ref('');
 const searchResults = ref([]);
@@ -153,10 +158,46 @@ const tooltipContent = ref('');
 const tooltipPosition = ref({ x: 0, y: 0 });
 const activeTooltipId = ref(null);
 const currentPage = ref(1);
-const searchContainerRef = ref(null);
 
 // Constants
 const RESULTS_PER_PAGE = 5;
+
+// Search implementation
+async function search(query) {
+  try {
+    const response = await fetch(`https://${config.public.algolia.applicationId}-dsn.algolia.net/1/indexes/wikiherbalist/query`, {
+      method: 'POST',
+      headers: {
+        'X-Algolia-API-Key': config.public.algolia.apiKey,
+        'X-Algolia-Application-Id': config.public.algolia.applicationId,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        query,
+        hitsPerPage: 1000,
+        attributesToRetrieve: [
+          'title',
+          'nomeScientifico',
+          'authorName',
+          'imageUrl',
+          'imageAlt',
+          'contentType',
+          'objectID'
+        ],
+        attributesToHighlight: ['title', 'nomeScientifico']
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Search failed:', error);
+    throw error;
+  }
+}
 
 // Computed properties
 const totalPages = computed(() => Math.ceil(searchResults.value.length / RESULTS_PER_PAGE));
@@ -230,49 +271,58 @@ function setActive(value) {
 }
 
 async function performSearch() {
-  isSearching.value = true;
-  setActive(true);
-  searchMade.value = false;
-  currentPage.value = 1;
+  if (!searchTerm.value.trim()) {
+    resetSearch();
+    return;
+  }
+
   try {
-    const { hits } = await searchIndex.search(searchTerm.value, {
-      attributesToRetrieve: ['title', 'nomeScientifico', 'authorName', 'imageUrl', 'imageAlt', 'contentType'],
-      hitsPerPage: 1000,
-      attributesToHighlight: ['title', 'nomeScientifico'],
-      highlightPreTag: '<em>',
-      highlightPostTag: '</em>',
-      ignorePlurals: true,
-      removeStopWords: true,
-      typoTolerance: true,
-    });
+    isSearching.value = true;
+    const { hits } = await search(searchTerm.value);
     searchResults.value = hits;
     searchMade.value = true;
+    setActive(true);
 
-    // Track search query in Google Analytics
     if (window.gtag) {
       window.gtag('event', 'search', {
         search_term: searchTerm.value
       });
     }
   } catch (error) {
-    console.error('Error performing search:', error);
+    console.error('Search error:', error);
     searchResults.value = [];
   } finally {
     isSearching.value = false;
   }
 }
 
+const debouncedSearch = useDebounceFn(performSearch, 300);
+
+// Reset function
+function resetSearch() {
+  searchTerm.value = '';
+  searchResults.value = [];
+  searchMade.value = false;
+  isSearching.value = false;
+  currentPage.value = 1;
+  setActive(false);
+}
+
+// Navigation helper
+function goToPost(result) {
+  const path = result.contentType === 'plant' ? `/${result.objectID}` :
+               result.contentType === 'blog' ? `/blog/${result.objectID}` :
+               `/glossario/${result.objectID}`;
+  router.push(path);
+}
+
 // Tooltip functions
 function getTooltipContent(contentType) {
   switch (contentType) {
-    case 'plant':
-      return 'Erba medicinale';
-    case 'blog':
-      return 'Blog post';
-    case 'glossary':
-      return 'Glossario';
-    default:
-      return '';
+    case 'plant': return 'Erba medicinale';
+    case 'blog': return 'Blog post';
+    case 'glossary': return 'Glossario';
+    default: return '';
   }
 }
 
@@ -304,48 +354,19 @@ const tooltipStyle = computed(() => ({
   transform: 'translate(-50%, -100%)'
 }));
 
-// Utility functions
+// Utility function
 function highlightMatch(text) {
+  if (!text) return '';
   return text.replace(/<em>/g, '<span class="bg-yellow-100 shadow-sm rounded">').replace(/<\/em>/g, '</span>');
 }
 
-const debouncedSearch = useDebounceFn(performSearch, 300);
-
-function resetSearch() {
-  searchTerm.value = '';
-  searchResults.value = [];
-  searchMade.value = false;
-  isSearching.value = false;
-  currentPage.value = 1;
-  setActive(false);
-}
-
-function goToPost(objectID, contentType) {
-  let path;
-  switch (contentType) {
-    case 'plant':
-      path = `/${objectID}`;
-      break;
-    case 'blog':
-      path = `/blog/${objectID}`;
-      break;
-    case 'glossary':
-      path = `/glossario/${objectID}`;
-      break;
-    default:
-      console.error('Unknown content type:', contentType);
-      return;
-  }
-  router.push(path);
-}
-
-// Close search results when clicking outside
+// Click outside handler
 function handleClickOutside(event) {
   const container = searchContainerRef.value;
-  const input = container.querySelector('input[type="text"]');
-  const resultsContainer = container.querySelector('.bg-gray-50');
+  const input = container?.querySelector('input[type="text"]');
+  const resultsContainer = container?.querySelector('.bg-gray-50');
   
-  if (isActive.value && !input.contains(event.target) && (!resultsContainer || !resultsContainer.contains(event.target))) {
+  if (isActive.value && !input?.contains(event.target) && (!resultsContainer || !resultsContainer.contains(event.target))) {
     setActive(false);
   }
 }
