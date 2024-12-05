@@ -1,127 +1,135 @@
 <template>
-  <div v-if="post.loading" class="flex justify-center text-center w-full items-center h-64 mt-12" aria-live="polite" aria-busy="true">
-    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu" aria-label="Caricamento"></div>
-  </div>
-  <div v-else-if="post.error" role="alert" aria-live="assertive">Si è verificato un errore: {{ post.error.message }}</div>
-  <div v-else-if="post.data" id="post">
-    <SchemaMarkup :post="post.data" :tag="null" />
-    <section class="post-info-section flex flex-col md:flex-row py-20 px-2 md:px-10 w-11/12 mx-auto rounded-2xl print:py-2 print:px-0 print:w-full">
-      <!-- Container for post information -->
-      <div class="w-full md:w-3/5 md:mt-28 container mx-auto px-2 print:mt-8 print:px-0 order-2 md:order-1">
-        <div class="mb-12">
-          <Breadcrumbs 
-            :currentPageName="post.data.title" 
-            parentPath="/blog" 
-            parentName="Blog" 
+  <div>
+    <!-- Loading state -->
+    <div v-if="pending" class="flex justify-center text-center w-full items-center h-64 mt-12" aria-live="polite" aria-busy="true">
+      <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu" aria-label="Caricamento"></div>
+    </div>
+
+    <!-- Error state -->
+    <div v-else-if="error" role="alert" aria-live="assertive">Si è verificato un errore: {{ error.message }}</div>
+
+    <!-- Content state -->
+    <div v-else-if="blogPost" id="post">
+      <SchemaMarkup :blogPost="blogPost" />
+      <section class="post-info-section flex flex-col md:flex-row py-20 px-2 md:px-10 w-11/12 mx-auto rounded-2xl print:py-2 print:px-0 print:w-full">
+        <!-- Information container -->
+        <div class="w-full md:w-3/5 md:mt-28 container mx-auto px-2 print:mt-8 print:px-0 order-2 md:order-1">
+          <div class="mb-12">
+            <Breadcrumbs 
+              :currentPageName="blogPost.title" 
+              parentPath="/blog" 
+              parentName="Blog" 
+            />
+          </div>
+          <BlogInfo 
+            :title="blogPost.title"
+            :publishDate="blogPost.date"
+            :content="blogPost.content"
+            :authorName="blogPost.authorName"
           />
         </div>
-        <BlogInfo 
-          :title="post.data.title"
-          :publishDate="post.data.date"
-          :content="post.data.content"
-          :authorName="post.data.authorName"
-          :revisionData="post.data.revisionData"
-        />
-      </div>
 
-      <!-- Container for featured image -->
-      <div class="w-full md:w-2/5 md:mt-28 flex flex-col order-1 md:order-2 mb-8 md:mb-0">
-        <div class="md:sticky md:top-24">
-          <NuxtImg
-            v-if="featuredImage"
-            :src="featuredImage.sourceUrl"
-            :alt="featuredImage.altText"
-            class="w-auto m-auto text-center h-auto rounded-2xl object-cover max-h-48"
-            width="300"
-            height="200"
-            format="webp"
-            loading="lazy"
+        <!-- Featured image container -->
+        <div class="w-full md:w-2/5 md:mt-28 flex flex-col order-1 md:order-2 mb-8 md:mb-0">
+          <div class="md:sticky md:top-24">
+            <NuxtImg
+              v-if="featuredImage"
+              :src="featuredImage.sourceUrl"
+              :alt="featuredImage.altText"
+              class="w-auto m-auto text-center h-auto rounded-2xl object-cover max-h-48"
+              width="300"
+              height="200"
+              format="webp"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Index section (only shown if there are headings) -->
+      <section v-if="headings.length > 0" class="post-index-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full">
+        <div class="font-bold text-xl md:text-2xl flex items-center">
+          <Icon name="ic:twotone-list" class="text-2xl md:text-3xl text-black rounded-full mr-2" aria-hidden="true" /> 
+          <h2 id="table-of-contents">Indice</h2>
+        </div>
+        <ul class="mt-4 md:mt-8 flex flex-wrap justify-start gap-2 md:gap-4 print:gap-0 print:mt-2" aria-labelledby="table-of-contents">
+          <li v-for="(heading, index) in headings" :key="index" class="text-center py-2 md:py-4 px-2 md:px-4 bg-verde text-white rounded-xl text-xs md:text-sm hover:bg-celeste cursor-pointer w-full sm:w-2/5 md:w-1/5 flex-grow-0 flex-shrink-0">
+            <a :href="'#section' + (index + 1)" class="flex items-center group" @click.prevent="smoothScroll('#section' + (index + 1))">
+              <div class="circle flex items-center justify-center w-6 h-6 md:w-8 md:h-8 bg-white text-verde rounded-full mr-1 md:mr-2 text-sm md:text-lg font-bold group-hover:text-celeste">{{ index + 1 }}</div>
+              <span class="text-xs md:text-sm">{{ heading }}</span>
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Introduction section (without numbering) -->
+      <section v-if="introSection" class="post-content-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full">
+        <div class="mt-4">
+          <InternalLinking 
+            :content="introSection.content"
+            :current-slug="blogPost.slug"
+            :global-linked-words="globalLinkedWords"
+            @update:globalLinkedWords="updateGlobalLinkedWords"
           />
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Index section -->
-    <section class="post-index-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full">
-      <div class="font-bold text-xl md:text-2xl flex items-center">
-        <Icon name="ic:twotone-list" class="text-2xl md:text-3xl text-black rounded-full mr-2" aria-hidden="true" /> 
-        <h2 id="table-of-contents">Indice</h2>
-      </div>
-      <ul class="mt-4 md:mt-8 flex flex-wrap justify-start gap-2 md:gap-4 print:gap-0 print:mt-2" aria-labelledby="table-of-contents">
-        <li v-for="(heading, index) in post.headings" :key="index" class="text-center py-2 md:py-4 px-2 md:px-4 bg-verde text-white rounded-xl text-xs md:text-sm hover:bg-celeste cursor-pointer w-full sm:w-2/5 md:w-1/5 flex-grow-0 flex-shrink-0">
-          <a :href="'#section' + (index + 1)" class="flex items-center group" @click.prevent="smoothScroll('#section' + (index + 1))">
-            <div class="circle flex items-center justify-center w-6 h-6 md:w-8 md:h-8 bg-white text-verde rounded-full mr-1 md:mr-2 text-sm md:text-lg font-bold group-hover:text-celeste">{{ index + 1 }}</div>
-            <span class="text-xs md:text-sm">{{ heading }}</span>
-          </a>
-        </li>
-      </ul>
-    </section>
-
-    <!-- Introduction section -->
-    <section 
-      v-if="post.structuredContent[0] && !post.structuredContent[0].title"
-      class="post-content-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full post-section-introduction"
-    >
-      <div class="mt-4">
-        <InternalLinking 
-          :content="post.structuredContent[0].content" 
-          :current-slug="post.data?.slug || ''"
-          :global-linked-words="globalLinkedWords"
-          @update:globalLinkedWords="updateGlobalLinkedWords"
-        />
-      </div>
-    </section>
-
-    <!-- Regular sections -->
-    <section 
-      v-for="(section, index) in sectionsWithoutIntro"
-      :key="section.title"
-      :class="['post-content-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full', section.className]"
-      :id="'section' + (index + 1)"
-    >
-      <div class="flex items-center space-x-4" v-if="section.title !== 'Riferimenti'">
-        <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">
-          {{ index + 1 }}
+      <!-- Numbered content sections -->
+      <section v-for="(section, index) in sections"
+               :class="['post-content-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full', section.className]"
+               :id="'section' + (index + 1)"
+               :key="section.title">
+        <div class="flex items-center space-x-4" v-if="section.title !== 'Riferimenti'">
+          <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">
+            {{ index + 1 }}
+          </div>
+          <h3 class="text-xl md:text-2xl">{{ section.title }}</h3>
         </div>
-        <h3 class="text-xl md:text-2xl">{{ section.title }}</h3>
-      </div>
-      <h3 v-else class="text-xl md:text-2xl mb-4">{{ section.title }}</h3>
-      <InternalLinking 
-        :content="section.content" 
-        :current-slug="post.data?.slug || ''"
-        :global-linked-words="globalLinkedWords"
-        @update:globalLinkedWords="updateGlobalLinkedWords"
-      />
-    </section>
+        <h3 v-else class="text-xl md:text-2xl mb-4">{{ section.title }}</h3>
+        
+        <div class="mt-4">
+          <InternalLinking 
+            :content="section.content"
+            :current-slug="blogPost.slug"
+            :global-linked-words="globalLinkedWords"
+            @update:globalLinkedWords="updateGlobalLinkedWords"
+          />
+        </div>
+      </section>
 
-    <EditContentProposal :sections="post.headings" />
+      <EditContentProposal :sections="headings" />
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, watch, nextTick, computed, defineAsyncComponent } from 'vue';
+import { ref, computed, watch, defineAsyncComponent } from 'vue';
 import { useRoute } from 'vue-router';
-import { useQuery } from '@vue/apollo-composable';
+import { useApolloClient } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 import { useYoastSeo } from '~/composables/useYoastSeo';
 import { useRuntimeConfig } from '#app';
 
-const Breadcrumbs = defineAsyncComponent(() => import('@/components/breadcrumbs.vue'));
-const BlogInfo = defineAsyncComponent(() => import('@/components/blog/bloginfo.vue'));
-const InternalLinking = defineAsyncComponent(() => import('@/components/internalLinking.vue'));
-const EditContentProposal = defineAsyncComponent(() => import('@/components/editContentProposal.vue'));
-const SchemaMarkup = defineAsyncComponent(() => import('@/components/schemaMarkup.vue'));
+// Component imports
+const BlogInfo = defineAsyncComponent(() => import('~/components/blog/bloginfo.vue'));
+const Breadcrumbs = defineAsyncComponent(() => import('~/components/breadcrumbs.vue'));
+const InternalLinking = defineAsyncComponent(() => import('~/components/internalLinking.vue'));
+const EditContentProposal = defineAsyncComponent(() => import('~/components/editContentProposal.vue'));
+const SchemaMarkup = defineAsyncComponent(() => import('~/components/schemaMarkup.vue'));
 
+// Core setup
 const config = useRuntimeConfig();
 const route = useRoute();
-const post = reactive({
-  data: null,
-  loading: true,
-  headings: [],
-  structuredContent: [],
-  error: null
-});
+const apolloClient = useApolloClient().resolveClient();
 
+// State management
+const globalLinkedWords = ref(new Set());
+const headings = ref([]);
+const sections = ref([]);
+const introSection = ref(null);
+const yoastData = ref(null);
+
+// GraphQL query definition
 const FETCH_BLOG_POST_BY_SLUG = gql`
   query FetchBlogPostBySlug($slug: String!) {
     blogPostBy(slug: $slug) {
@@ -152,187 +160,190 @@ const FETCH_BLOG_POST_BY_SLUG = gql`
   }
 `;
 
+// Fetch blog post data with immediate processing
+const { data: blogPost, pending, error } = await useAsyncData(
+  'blogPost',
+  async () => {
+    try {
+      const slug = route.params.uri instanceof Array ? route.params.uri[0] : route.params.uri;
+      console.log('Fetching blog post:', slug);
+      
+      const { data } = await apolloClient.query({
+        query: FETCH_BLOG_POST_BY_SLUG,
+        variables: { slug },
+        fetchPolicy: 'no-cache'
+      });
 
+      if (!data?.blogPostBy) {
+        throw new Error('Post not found');
+      }
+
+      return data.blogPostBy;
+    } catch (err) {
+      console.error('Error fetching blog post:', err);
+      throw err;
+    }
+  },
+  { 
+    server: true,
+    immediate: true
+  }
+);
+
+// Compute featured image data
 const featuredImage = computed(() => {
-  if (post.data?.featuredImage?.node) {
+  if (blogPost.value?.featuredImage?.node) {
     return {
-      sourceUrl: post.data.featuredImage.node.sourceUrl,
-      altText: post.data.featuredImage.node.altText || ''
+      sourceUrl: blogPost.value.featuredImage.node.sourceUrl,
+      altText: blogPost.value.featuredImage.node.altText || ''
     };
   }
   return null;
 });
 
-const openGraphImage = computed(() => {
-  if (featuredImage.value && featuredImage.value.sourceUrl) {
-    return featuredImage.value.sourceUrl;
+// Process content when blog post data changes
+watch(blogPost, async (newPost) => {
+  if (newPost?.content) {
+    await processContent(newPost.content);
   }
-  return 'https://wikiherbalist.com/images/default-og-image.jpg';
-});
+}, { immediate: true });
 
-const fetchPost = async () => {
-  const slug = route.params.uri instanceof Array ? route.params.uri[0] : route.params.uri;
-  const { result, loading, error } = useQuery(FETCH_BLOG_POST_BY_SLUG, { slug });
-
-  watch([result, loading, error], async ([newResult, newLoading, newError]) => {
-    if (newError) {
-      console.error('Error fetching blog post:', newError);
-      post.error = newError;
-    } else if (!newLoading && newResult?.blogPostBy) {
-      post.data = newResult.blogPostBy;
-      post.loading = false;
-      await nextTick();
-      processPostContent();
-    } else if (!newLoading && !newResult?.blogPostBy) {
-      console.error('No blog post data found for slug:', slug);
-      post.error = new Error('Blog post not found');
-    }
-  });
-};
-
-const globalLinkedWords = ref(new Set());
-
-const updateGlobalLinkedWords = (newWords) => {
-  newWords.forEach(word => globalLinkedWords.value.add(word));
-};
-
-const sectionsWithoutIntro = computed(() => {
-  // Skip the introduction section if it exists
-  if (post.structuredContent && post.structuredContent.length > 0 && !post.structuredContent[0].title) {
-    return post.structuredContent.slice(1);
-  }
-  return post.structuredContent;
-});
-
-const processContent = async () => {
-  if (!post.data || !post.data.content) return;
-
-  const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = post.data.content;
-
-  const headings = [];
-  const sections = [];
-  
-  // Get introduction content (everything before first h3)
-  const firstH3 = tempDiv.querySelector('h3');
-  if (firstH3) {
-    const introNodes = [];
-    let currentNode = tempDiv.firstChild;
+// Content processing function
+async function processContent(content) {
+  try {
+    const cheerio = await import('cheerio');
+    const $ = cheerio.load(content);
     
-    while (currentNode && currentNode !== firstH3) {
-      introNodes.push(currentNode.cloneNode(true));
-      currentNode = currentNode.nextSibling;
-    }
+    const extractedHeadings = [];
+    const extractedSections = [];
     
-    if (introNodes.length > 0) {
-      const introDiv = document.createElement('div');
-      introNodes.forEach(node => introDiv.appendChild(node));
-      sections.push({
-        title: null,
-        content: introDiv.innerHTML,
-        className: 'post-section-introduction'
-      });
-    }
-  } else {
-    // If no h3 exists, all content is introduction
-    sections.push({
-      title: null,
-      content: tempDiv.innerHTML,
-      className: 'post-section-introduction'
-    });
-  }
+    // Extract introduction
+    const firstH3 = $('h3').first();
+    if (firstH3.length) {
+      const introContent = firstH3
+        .prevAll()
+        .map((_, el) => $.html(el))
+        .get()
+        .reverse()
+        .join('');
 
-  // Process regular sections
-  let currentSection = null;
-  const processNodes = (startNode) => {
-    let currentNode = startNode;
+      if (introContent.trim()) {
+        introSection.value = {
+          content: introContent,
+          className: 'post-section-introduction'
+        };
+      }
+    }
+
+    // Process main sections
+    let currentSection = null;
     
-    while (currentNode) {
-      if (currentNode.tagName === 'H3') {
+    $('body > *').each(function(index, element) {
+      const $element = $(element);
+      
+      // Check for h3 headings
+      if (element.tagName === 'h3') {
         if (currentSection) {
-          sections.push(currentSection);
+          extractedSections.push(currentSection);
         }
-        const title = currentNode.textContent.trim();
-        headings.push(title);
+        
+        const headingText = $element.text().trim();
+        extractedHeadings.push(headingText);
+        
         currentSection = {
-          title,
+          title: headingText,
           content: '',
-          className: `post-section-${title.toLowerCase().replace(/[\s,\'\`]+/g, '-')
+          className: `post-section-${headingText.toLowerCase()
+            .replace(/[\s,\'\`]+/g, '-')
             .replace(/[àáâãäå]/g, 'a')
             .replace(/[èéêë]/g, 'e')
             .replace(/[ìíîï]/g, 'i')
             .replace(/[òóôõö]/g, 'o')
             .replace(/[ùúûü]/g, 'u')}`
         };
-      } else if (currentSection) {
-        // If it's a "Riferimenti" section starter
-        if (currentNode.tagName === 'P' && currentNode.textContent.trim() === 'Riferimenti') {
-          sections.push(currentSection);
-          currentSection = {
+      } 
+      // Check for "Riferimenti" as a paragraph
+      else if (element.tagName === 'p' && $element.text().trim() === 'Riferimenti') {
+        if (currentSection) {
+          extractedSections.push(currentSection);
+        }
+        
+        currentSection = null;
+        
+        // Find all content after the "Riferimenti" paragraph
+        const referenceContent = $element
+          .nextAll()
+          .map((_, el) => $.html(el))
+          .get()
+          .join('');
+        
+        if (referenceContent.trim()) {
+          extractedSections.push({
             title: 'Riferimenti',
-            content: '',
+            content: referenceContent,
             className: 'post-section-riferimenti'
-          };
-        } else {
-          currentSection.content += currentNode.outerHTML || '';
+          });
         }
       }
-      currentNode = currentNode.nextSibling;
-    }
-  };
-
-  processNodes(firstH3 || tempDiv.firstChild);
-
-  // Add the last section if exists
-  if (currentSection) {
-    sections.push(currentSection);
-  }
-
-  post.headings = headings;
-  post.structuredContent = sections;
-};
-
-const smoothScroll = (target) => {
-  const location = document.querySelector(target);
-  if (location) {
-    window.scrollTo({
-      top: location.offsetTop,
-      behavior: "smooth"
+      // Add content to current section
+      else if (currentSection) {
+        currentSection.content += $.html(element);
+      }
     });
+
+    // Add the last section if exists and it's not references
+    if (currentSection) {
+      extractedSections.push(currentSection);
+    }
+
+    headings.value = extractedHeadings;
+    sections.value = extractedSections;
+    
+  } catch (error) {
+    console.error('Content processing error:', error);
+    throw error;
   }
-};
+}
 
-onMounted(() => {
-  fetchPost();
-});
-
-
-const yoastData = ref(null);
-
-watch(() => post.data, async (newPostData) => {
-  if (newPostData) {
-    await nextTick();
-    await processContent();
-    globalLinkedWords.value.clear();
-    
+// SEO handling
+watch(blogPost, (newPost) => {
+  if (newPost) {
     const fullUrl = `https://wikiherbalist.com${route.fullPath}`;
-    
     yoastData.value = {
-      ...newPostData.seo,
+      ...newPost.seo,
       siteName: config.public.siteName,
       url: fullUrl,
       type: 'article',
-      image: newPostData.seo.opengraphImage?.sourceUrl || featuredImage.value?.sourceUrl || openGraphImage.value,
-      publishedTime: newPostData.date,
-      modifiedTime: newPostData.modified || newPostData.date,
-      author: newPostData.authorName,
+      image: newPost.seo?.opengraphImage?.sourceUrl || 
+             newPost.featuredImage?.node?.sourceUrl || 
+             'https://wikiherbalist.com/images/default-og-image.jpg',
+      publishedTime: newPost.date,
+      modifiedTime: newPost.modified || newPost.date,
+      author: newPost.authorName,
     };
 
     useYoastSeo(yoastData);
   }
-}, { immediate: true });
+});
 
+// Navigation helper
+const smoothScroll = (target) => {
+  if (!process.client) return;
+  const element = document.querySelector(target);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth' });
+  }
+};
 
+// Global linked words management
+const updateGlobalLinkedWords = (newWords) => {
+  newWords.forEach(word => globalLinkedWords.value.add(word));
+};
+
+// Reset linked words on route change
+watch(() => route.params.uri, () => {
+  globalLinkedWords.value.clear();
+});
 </script>
 
 <style scoped>
