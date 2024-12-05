@@ -35,13 +35,15 @@
       </h2>
 
       <!-- Content area -->
-      <div v-if="isLoading" class="w-full h-64 flex items-center justify-center">
-        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
-      </div>
-      <Suspense v-else>
+      <Suspense>
         <template #default>
           <KeepAlive>
-            <component :is="currentComponent" :key="currentView" :searchTerm="searchTerm" />
+            <component 
+              :is="currentComponent" 
+              :key="currentView" 
+              :searchTerm="searchTerm" 
+              @update:loading="updateLoading"
+            />
           </KeepAlive>
         </template>
         <template #fallback>
@@ -55,7 +57,7 @@
 </template>
 
 <script setup>
-import { ref, computed, defineAsyncComponent, nextTick } from 'vue';
+import { ref, computed, defineAsyncComponent, watch } from 'vue';
 
 const BrowseByLetter = defineAsyncComponent(() => import('~/components/browse-by-letter.vue'));
 const TagsPosts = defineAsyncComponent(() => import('~/components/tags-posts.vue'));
@@ -73,20 +75,24 @@ const props = defineProps({
 
 const emit = defineEmits(['viewChange']);
 
-const isLoading = ref(false);
+const isLoading = ref(true);
 
 const currentComponent = computed(() => {
   return props.currentView === 'monographs' ? BrowseByLetter : TagsPosts;
 });
 
-const changeView = async (view) => {
+const changeView = (view) => {
   if (view !== props.currentView) {
     isLoading.value = true;
     emit('viewChange', view);
-    await nextTick();
-    setTimeout(() => {
-      isLoading.value = false;
-    }, 250); // short delay to show a fluid transition
   }
 };
+
+const updateLoading = (loading) => {
+  isLoading.value = loading;
+};
+
+watch(() => props.currentView, () => {
+  isLoading.value = true;
+});
 </script>
