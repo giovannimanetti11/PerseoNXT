@@ -34,7 +34,7 @@
     "graphql-tag": "^2.12.6",
     "h3": "^1.13.0",
     "instantsearch.js": "^4.74.2",
-    "mysql2": "^3.11.3",
+    "mysql2": "^3.11.4",
     "node-fetch": "^3.3.2",
     "nuxt": "^3.13.2",
     "nuxt-schema-org": "^3.4.1",
