@@ -36,14 +36,14 @@
     "instantsearch.js": "^4.74.2",
     "mysql2": "^3.11.3",
     "node-fetch": "^3.3.2",
-    "nuxt": "^3.13.2",
+    "nuxt": "^3.16.0",
     "nuxt-schema-org": "^3.4.1",
     "ol": "^10.2.1",
     "typescript": "~5.6.3",
     "vue": "^3.5.12",
     "vue-easy-lightbox": "^1.19.0",
     "vue-html-to-paper": "^2.0.3",
-    "vue-i18n": "^10.0.4",
+    "vue-i18n": "^10.0.6",
     "vue-router": "^4.4.5"
   },
   "devDependencies": {
