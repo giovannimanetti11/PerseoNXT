@@ -43,7 +43,7 @@
     "vue": "^3.5.12",
     "vue-easy-lightbox": "^1.19.0",
     "vue-html-to-paper": "^2.0.3",
-    "vue-i18n": "^10.0.4",
+    "vue-i18n": "^10.0.8",
     "vue-router": "^4.4.5"
   },
   "devDependencies": {
