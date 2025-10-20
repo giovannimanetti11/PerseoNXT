@@ -106,10 +106,13 @@ const { data: blogData, pending, error } = await useAsyncData('blogPosts', async
   return data.blogPosts.nodes.map((post: any) => ({
     ...post,
     featuredImage: post.featuredImage?.node?.sourceUrl || '',
+    uri: post.uri.replace(/\/$/, ''), // Remove trailing slash
   }));
 });
 
-const posts = computed<BlogPost[]>(() => blogData.value || []);
+const posts = computed<BlogPost[]>(() => {
+  return [...(blogData.value || [])].reverse();
+});
 
 const activePost = ref<string | null>(null);
 const isXLScreen = ref(false);

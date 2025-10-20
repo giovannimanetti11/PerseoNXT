@@ -7,11 +7,12 @@
         </button>
 
         <div class="flex overflow-hidden alphabet-container" ref="alphabetContainer">
-          <button 
-            v-for="letter in alphabet" 
-            :key="letter" 
+          <button
+            v-for="letter in alphabet"
+            :key="letter"
             @click="fetchPostsByLetter(letter)"
             :class="letterClass(letter)"
+            class="w-12 h-12 flex justify-center items-center rounded-full flex-shrink-0"
           >
             {{ letter }}
           </button>
@@ -158,18 +159,14 @@ onMounted(async () => {
 }
 
 .alphabet-container button {
-  width: 36px;
-  height: 36px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 50%;
 }
 
 .alphabet-container button:hover,
 .alphabet-container button.active {
-  width: 36px;
-  height: 36px;
+  /* Styles for hover and active states remain, but dimensions are handled by Tailwind */
 }
 
 .posts-container {

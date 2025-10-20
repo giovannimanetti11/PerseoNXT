@@ -41,11 +41,18 @@
                  class="flex items-center py-2 hover:bg-gray-100 hover:cursor-pointer w-full" 
                  @click.stop="goToPost(result)">
               <!-- Featured image -->
-              <NuxtImg 
-                :src="result.imageUrl || '/media/placeholder.jpg'" 
-                :alt="result.imageAlt || result.title" 
-                class="rounded-lg w-16 h-16 sm:w-20 sm:h-20 max-w-[64px] max-h-[64px] sm:max-w-[80px] sm:max-h-[80px] object-cover mr-2 sm:mr-4 flex-shrink-0" 
-              />
+              <div class="relative flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 mr-2 sm:mr-4">
+                <div v-if="!result.imageLoaded" class="absolute inset-0 flex items-center justify-center bg-gray-100 rounded-lg">
+                  <div class="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blu"></div>
+                </div>
+                <img 
+                  :src="result.imageUrl || '/media/placeholder.jpg'" 
+                  :alt="result.imageAlt || result.title" 
+                  class="rounded-lg w-full h-full object-cover"
+                  @load="result.imageLoaded = true"
+                  :class="{'opacity-0': !result.imageLoaded, 'opacity-100': result.imageLoaded}"
+                />
+              </div>
               
               <!-- Content area -->
               <div class="flex-grow min-w-0">
@@ -192,7 +199,38 @@ async function search(query) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    return await response.json();
+    const data = await response.json();
+    
+    // Preprocess the results to add imageLoaded property and optimize image loading
+    const results = data.hits.map(hit => ({
+      ...hit,
+      imageLoaded: false,
+      // Ensure imageUrl is properly set without timestamp to avoid caching issues
+      imageUrl: hit.imageUrl || '/media/placeholder.jpg',
+      excerpt: hit.excerpt || ''
+    }));
+
+    // Preload the first 5 images
+    if (results.length > 0) {
+      setTimeout(() => {
+        const imagesToPreload = results.slice(0, 5);
+        imagesToPreload.forEach(result => {
+          if (result.imageUrl) {
+            const img = new Image();
+            img.onload = () => {
+              // Find the result in the searchResults array and mark it as loaded
+              const resultInArray = searchResults.value.find(r => r.objectID === result.objectID);
+              if (resultInArray) {
+                resultInArray.imageLoaded = true;
+              }
+            };
+            img.src = result.imageUrl;
+          }
+        });
+      }, 100); // Small timeout to ensure the DOM is ready
+    }
+
+    return results;
   } catch (error) {
     console.error('Search failed:', error);
     throw error;
@@ -203,9 +241,28 @@ async function search(query) {
 const totalPages = computed(() => Math.ceil(searchResults.value.length / RESULTS_PER_PAGE));
 
 const paginatedResults = computed(() => {
-  const start = (currentPage.value - 1) * RESULTS_PER_PAGE;
-  const end = start + RESULTS_PER_PAGE;
-  return searchResults.value.slice(start, end);
+  const startIndex = (currentPage.value - 1) * RESULTS_PER_PAGE;
+  const endIndex = startIndex + RESULTS_PER_PAGE;
+  const results = searchResults.value.slice(startIndex, endIndex);
+  
+  // Preload images for the next page if available
+  if (currentPage.value < totalPages.value) {
+    const nextPageStartIndex = currentPage.value * RESULTS_PER_PAGE;
+    const nextPageEndIndex = nextPageStartIndex + RESULTS_PER_PAGE;
+    const nextPageResults = searchResults.value.slice(nextPageStartIndex, nextPageEndIndex);
+    
+    nextPageResults.forEach(result => {
+      if (result.imageUrl && !result.imageLoaded) {
+        const img = new Image();
+        img.onload = () => {
+          result.imageLoaded = true;
+        };
+        img.src = result.imageUrl;
+      }
+    });
+  }
+  
+  return results;
 });
 
 const visiblePages = computed(() => {
@@ -278,8 +335,8 @@ async function performSearch() {
 
   try {
     isSearching.value = true;
-    const { hits } = await search(searchTerm.value);
-    searchResults.value = hits;
+    const results = await search(searchTerm.value);
+    searchResults.value = results;
     searchMade.value = true;
     setActive(true);
 
