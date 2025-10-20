@@ -20,6 +20,7 @@
             :key="letter" 
             @click="fetchTagsByLetter(letter)"
             :class="letterClass(letter)"
+            class="w-10 h-10 md:w-11 md:h-11 xl:w-12 xl:h-12 flex justify-center items-center rounded-full"
           >
             {{ letter }}
           </button>
@@ -46,7 +47,7 @@
       <div class="mt-8" ref="tagsContainer">
         <div v-if="filteredTags.length > 0" class="mb-6">
           <!-- Letter heading -->
-          <div class="letter-heading flex text-xl font-bold w-16 h-16 rounded-full bg-celeste text-center mb-4">
+          <div class="letter-heading flex items-center justify-center text-xl font-bold w-16 h-16 min-w-16 min-h-16 rounded-full bg-celeste text-white mb-4">
             <span class="m-auto content-center text-white">{{ selectedLetter }}</span>
           </div>
           <!-- Tags grid -->

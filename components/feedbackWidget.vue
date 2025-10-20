@@ -32,15 +32,23 @@
             <p class="text-lg font-semibold mb-3 text-blu">Come miglioreresti Wikiherbalist?</p>
             <textarea 
               v-model="comment" 
+              @input="validateComment"
               class="w-full p-3 border border-celeste rounded-xl focus:outline-none focus:ring-2 focus:ring-blu"
               rows="4"
-              placeholder="La tua opinione (opzionale)"
+              placeholder="La tua opinione (opzionale, max 200 caratteri)"
+              maxlength="200"
             ></textarea>
+            <div class="flex justify-between items-center mt-2">
+              <span class="text-sm" :class="commentLength > 200 ? 'text-red-500' : 'text-gray-500'">
+                {{ commentLength }}/200 caratteri
+              </span>
+              <span v-if="commentError" class="text-sm text-red-500">{{ commentError }}</span>
+            </div>
             <div class="flex justify-end mt-3">
               <button 
                 @click="submitFeedback" 
                 class="bg-verde text-white font-bold py-2 px-4 rounded-xl hover:bg-white hover:text-verde transition-colors duration-300"
-                :disabled="isSubmitting"
+                :disabled="isSubmitting || commentLength > 200 || !!commentError"
               >
                 {{ isSubmitting ? 'Invio in corso...' : 'Invia' }}
               </button>
@@ -64,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
@@ -76,6 +84,9 @@ const selectedFeedback = ref<string | null>(null)
 const comment = ref('')
 const error = ref<string | null>(null)
 const isSubmitting = ref(false)
+const commentError = ref<string | null>(null)
+const csrfToken = ref<string | null>(null)
+
 const question = ref('Trovi utile questa pagina?')
 const options = ref([
   { label: 'SI', value: 'yes', class: 'bg-verde text-white hover:bg-white hover:text-verde' },
@@ -85,14 +96,74 @@ const options = ref([
 const FEEDBACK_DELAY = 5000 // 5 seconds
 const FEEDBACK_COOLDOWN = 60 * 24 * 60 * 60 * 1000 // 60 days in milliseconds
 
+// Computed property per contare i caratteri del commento
+const commentLength = computed(() => comment.value.length)
+
 onMounted(() => {
   checkFeedbackStatus()
+  fetchCSRFToken()
 })
 
 watch(() => route.fullPath, () => {
   resetWidget()
   checkFeedbackStatus()
 })
+
+// Funzione per ottenere il CSRF token dal server
+async function fetchCSRFToken() {
+  try {
+    const response = await fetch('/api/csrf-token')
+    const data = await response.json()
+    if (data.success) {
+      csrfToken.value = data.token
+    }
+  } catch (err) {
+    console.error('Failed to fetch CSRF token:', err)
+  }
+}
+
+// Validazione del commento in tempo reale
+function validateComment() {
+  commentError.value = null
+  
+  if (comment.value.length > 200) {
+    commentError.value = 'Massimo 200 caratteri'
+    return
+  }
+  
+  // Regex per caratteri consentiti: alfanumerici, spazi, punteggiatura di base
+  const allowedCharsRegex = /^[a-zA-Z0-9\sàáâäèéêëìíîïòóôöùúûüñçÀÁÂÄÈÉÊËÌÍÎÏÒÓÔÖÙÚÛÜÑÇ.,!?;:()\-'"]*$/
+  
+  if (comment.value && !allowedCharsRegex.test(comment.value)) {
+    commentError.value = 'Caratteri non consentiti rilevati'
+    return
+  }
+  
+  // Controllo per pattern sospetti
+  const suspiciousPatterns = [
+    /<script/i,
+    /javascript:/i,
+    /on\w+\s*=/i,
+    /eval\s*\(/i,
+    /expression\s*\(/i,
+    /vbscript:/i,
+    /data:text\/html/i,
+    /\.\.\/|\.\.\\|\/etc\/passwd|\/proc\/|\/sys\//i,
+    /response\.write/i,
+    /document\.cookie/i,
+    /window\.location/i,
+    /alert\s*\(/i,
+    /confirm\s*\(/i,
+    /prompt\s*\(/i
+  ]
+  
+  for (const pattern of suspiciousPatterns) {
+    if (pattern.test(comment.value)) {
+      commentError.value = 'Contenuto non consentito'
+      return
+    }
+  }
+}
 
 function checkFeedbackStatus() {
   const currentPath = route.fullPath
@@ -120,22 +191,51 @@ const scheduleWidgetDisplay = () => {
 }
 
 const selectFeedback = (value: string) => {
+  // Validazione rigorosa del valore feedback
+  if (value !== 'yes' && value !== 'no') {
+    error.value = 'Valore feedback non valido'
+    return
+  }
   selectedFeedback.value = value
   showCommentField.value = true
 }
 
 const submitFeedback = async () => {
   console.log('Submitting feedback...')
+  
+  // Validazioni pre-invio
+  if (!selectedFeedback.value || (selectedFeedback.value !== 'yes' && selectedFeedback.value !== 'no')) {
+    error.value = 'Seleziona una risposta valida'
+    return
+  }
+  
+  if (!csrfToken.value) {
+    error.value = 'Token di sicurezza mancante. Ricarica la pagina.'
+    return
+  }
+  
+  if (commentError.value) {
+    error.value = 'Correggi gli errori nel commento prima di inviare'
+    return
+  }
+  
   isSubmitting.value = true
+  
   try {
+    // Sanitizzazione base lato client (la vera sanitizzazione avviene server-side)
+    const sanitizedComment = comment.value
+      .trim()
+      .substring(0, 200) // Taglia a 200 caratteri
+      .replace(/[<>]/g, '') // Rimuove < e >
+    
     const payload = {
       url: window.location.href,
-      feedback: selectedFeedback.value,
-      comment: comment.value,
+      feedback: selectedFeedback.value, 
+      comment: sanitizedComment, 
       device: getDeviceType(),
-      userAgent: navigator.userAgent
+      userAgent: navigator.userAgent,
+      csrfToken: csrfToken.value
     }
-    console.log('Payload:', payload)
 
     const response = await fetch('/api/submitFeedback', {
       method: 'POST',
@@ -145,9 +245,7 @@ const submitFeedback = async () => {
       body: JSON.stringify(payload),
     })
 
-    console.log('Response status:', response.status)
     const result = await response.json()
-    console.log('Response body:', result)
 
     if (response.ok && result.success) {
       console.log('Feedback submitted successfully')
@@ -161,7 +259,9 @@ const submitFeedback = async () => {
     }
   } catch (err) {
     console.error('Error submitting feedback:', err)
-    error.value = `Si è verificato un errore durante l'invio del feedback: ${(err as Error).message}`
+    error.value = `Si è verificato un errore durante l'invio del feedback`
+    // Ricarica il CSRF token in caso di errore
+    fetchCSRFToken()
   } finally {
     isSubmitting.value = false
   }
@@ -174,6 +274,7 @@ const resetWidget = () => {
   selectedFeedback.value = null
   comment.value = ''
   error.value = null
+  commentError.value = null
   isSubmitting.value = false
 }
 

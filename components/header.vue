@@ -3,7 +3,7 @@
     <div :class="['flex justify-between items-center bg-white py-2 px-2 md:py-4 md:px-6 shadow-lg rounded-2xl', {'radius-bottom-none': menuOpen || mailingListMenuOpen}]">
       <!-- Logo -->
       <div class="flex items-center">
-        <a href="https://wikiherbalist.com">
+        <a href="/" v-once>
           <img 
             src="/media/logo_wikiherbalist.svg" 
             alt="Wikiherbalist Logo" 
@@ -18,7 +18,7 @@
       <!-- Desktop menu -->
       <div class="hidden lg:block flex-grow">
         <nav class="flex justify-center space-x-1 xl:space-x-4 text-black text-sm xl:text-base">
-          <a href="https://wikiherbalist.com" class="no-underline py-2 px-1 xl:px-2 hover:text-verde transition-colors duration-300">Home</a>
+          <a href="/" class="no-underline py-2 px-1 xl:px-2 hover:text-verde transition-colors duration-300">Home</a>
           <a href="/about" class="no-underline py-2 px-1 xl:px-2 hover:text-verde transition-colors duration-300">About</a>
           <a href="/piante-medicinali" class="no-underline py-2 px-1 xl:px-2 hover:text-verde transition-colors duration-300">Piante medicinali</a>
           <a href="/glossario" class="no-underline py-2 px-1 xl:px-2 hover:text-verde transition-colors duration-300">Glossario</a>
@@ -46,7 +46,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <!-- Mobile-only menu items -->
               <div class="lg:hidden">
-                <a href="https://wikiherbalist.com" class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde overflow-hidden flex items-center">
+                <a href="/" class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde overflow-hidden flex items-center">
                   <div class="absolute left-2 top-1/2 w-12 h-12 -translate-y-1/2 bg-white p-2 rounded-2xl border border-transparent flex justify-center items-center">
                     <Icon name="mdi:home" class="inner-icon text-celeste text-3xl group-hover:text-verde" />
                   </div>
@@ -130,12 +130,12 @@
               Seguici
             </p>
             <div class="flex space-x-2">
-              <div class="bg-blu p-2 rounded-2xl transition-colors duration-300 hover:bg-verde hover:cursor-pointer">
+              <div class="bg-blu w-12 h-12 p-2 rounded-2xl transition-colors duration-300 hover:bg-verde hover:cursor-pointer">
                 <a href="#" aria-label="Facebook">
                   <Icon name="uil:facebook-f" class="text-white text-3xl" />
                 </a>
               </div>
-              <div class="bg-blu p-2 rounded-2xl transition-colors duration-300 hover:bg-verde hover:cursor-pointer">
+              <div class="bg-blu w-12 h-12 p-2 rounded-2xl transition-colors duration-300 hover:bg-verde hover:cursor-pointer">
                 <a href="#" aria-label="Instagram">
                   <Icon name="uil:instagram" class="text-white text-3xl" />
                 </a>
