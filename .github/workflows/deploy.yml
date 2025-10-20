@@ -29,6 +29,7 @@ jobs:
           strip_components: 1
           rm: false
           overwrite: true
+          debug: true
 
       - name: Build and restart on VPS
         uses: appleboy/ssh-action@v1.0.3
