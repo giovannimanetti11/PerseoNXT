@@ -12,26 +12,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build application
-        run: npm run build
-        env:
-          # Environment variables for build (se necessarie)
-          NODE_ENV: production
-
       - name: Deploy to VPS
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -39,12 +19,13 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
-          source: ".output/*,package.json,package-lock.json"
+          source: ".,!node_modules,!.output,!.nuxt,!.git,!DEPLOY.md"
           target: $DEPLOY_PATH
-          strip_components: 0
+          strip_components: 1
           rm: false
+          overwrite: true
 
-      - name: Install dependencies and restart PM2 on VPS
+      - name: Build and restart on VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -54,8 +35,11 @@ jobs:
           script: |
             cd $DEPLOY_PATH
 
-            # Install production dependencies if package.json changed
-            npm ci --omit=dev
+            # Install dependencies
+            npm ci
+
+            # Build application (uses .env on VPS)
+            npm run build
 
             # Restart PM2 process
             pm2 restart wikiherbalist
