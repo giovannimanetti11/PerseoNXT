@@ -1,4 +1,5 @@
 import { defineNuxtConfig } from 'nuxt/config'
+import { fileURLToPath } from 'url'
 
 export default defineNuxtConfig({
   // Image handling configuration
@@ -23,12 +24,14 @@ export default defineNuxtConfig({
 
   // Site and URL configuration
   site: {
+    name: 'Wikiherbalist',
     url: 'https://wikiherbalist.com',
     baseURL: '/'
   },
 
   // Application head configuration
   app: {
+    name: 'Wikiherbalist',
     baseURL: '/',
     head: {
       titleTemplate: '%s | Wikiherbalist',
@@ -39,23 +42,17 @@ export default defineNuxtConfig({
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         { name: 'format-detection', content: 'telephone=no' },
+        { name: 'robots', content: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' },
         { property: 'og:site_name', content: 'Wikiherbalist' },
+        { property: 'og:locale', content: 'it_IT' },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:image:width', content: '1200' },
+        { property: 'og:image:height', content: '630' },
+        { property: 'og:image:type', content: 'image/jpeg' },
+        { name: 'twitter:card', content: 'summary_large_image' },
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-        // CSS preload configuration
-        { 
-          rel: 'preload',
-          href: '/css/main.css',
-          as: 'style',
-          type: 'text/css'
-        },
-        // Main CSS load
-        {
-          rel: 'stylesheet',
-          href: '/css/main.css',
-          type: 'text/css'
-        }
       ],
       script: [
         {
@@ -71,6 +68,11 @@ export default defineNuxtConfig({
           `,
           type: 'text/javascript'
         },
+        {
+          src: 'https://analytics.ahrefs.com/analytics.js',
+          'data-key': '/ZokPG3lG0QlPl7i+ZSBZg',
+          async: true
+        },
       ]
     },
   },
@@ -78,7 +80,12 @@ export default defineNuxtConfig({
   // Runtime configuration
   runtimeConfig: {
     public: {
-      siteName: 'Wikiherbalist'
+      siteName: 'Wikiherbalist',
+      algolia: {
+        applicationId: process.env.NUXT_PUBLIC_ALGOLIA_APP_ID,
+        apiKey: process.env.NUXT_PUBLIC_ALGOLIA_SEARCH_API_KEY,
+        indexName: 'wikiherbalist'
+      }
     }
   },
 
@@ -90,8 +97,24 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxtjs/seo',
     "nuxt-schema-org",
-    '~/modules/simple-donation'
+    '~/modules/simple-donation',
+    '@nuxtjs/algolia'
   ],
+
+  // Schema.org configuration
+  schemaOrg: {
+    host: 'https://wikiherbalist.com',
+    siteName: 'Wikiherbalist',
+    canonicalHost: 'https://wikiherbalist.com'
+  },
+
+  algolia: {
+    apiKey: process.env.NUXT_PUBLIC_ALGOLIA_SEARCH_API_KEY,
+    applicationId: process.env.NUXT_PUBLIC_ALGOLIA_APP_ID,
+    lite: true,
+    search: true,
+    indexName: 'wikiherbalist'
+  },
 
   // Simple donation module configuration
   simpleDonation: {
@@ -132,8 +155,7 @@ export default defineNuxtConfig({
 
   // Plugins configuration
   plugins: [
-    '~/plugins/wp-api.ts',
-    '~/plugins/algolia.ts',
+    '~/plugins/wp-api.ts'
   ],
 
   // PostCSS configuration
@@ -152,7 +174,9 @@ export default defineNuxtConfig({
   // Build configuration
   build: {
     transpile: ['vue-easy-lightbox'],
-    standalone: true,
+    analyze: false,
+    extractCSS: true,
+    optimizeCSS: true,
     optimization: {
       splitChunks: {
         chunks: 'all',
@@ -166,16 +190,32 @@ export default defineNuxtConfig({
               return `npm.${packageName.replace('@', '')}`;
             },
           },
-        },
-        layouts: true,
-        pages: true,
-        commons: true
-      },
-    },
-    extend(config: any, ctx: any) {
-      if (ctx.isDev) {
-        config.devtool = ctx.isClient ? 'source-map' : 'inline-source-map'
+        }
       }
+    },
+  },
+
+  // Router configuration
+  router: {
+    options: {
+      strict: false
+    },
+    extendRoutes(routes, resolve) {
+      const staticPages = [
+        { name: 'disclaimer', path: '/disclaimer' },
+        { name: 'privacy-policy', path: '/privacy-policy' },
+        { name: 'cookie-policy', path: '/cookie-policy' },
+        { name: 'donazioni', path: '/donazioni' }
+      ]
+
+      // Add static pages to routes with higher priority
+      staticPages.forEach(page => {
+        routes.unshift({
+          name: page.name,
+          path: page.path,
+          component: resolve(__dirname, 'pages/' + page.name + '.vue')
+        })
+      })
     }
   },
 
@@ -188,30 +228,13 @@ export default defineNuxtConfig({
       }
     },
     optimizeDeps: {
-      include: ['vue', 'vue-router', '@vueuse/core'],
-    },
-    build: {
-      cssCodeSplit: true,
-      rollupOptions: {
-        output: {
-          manualChunks(id: string) {
-            if (id.includes('node_modules')) {
-              return 'vendor';
-            }
-            if (id.includes('@nuxtjs/tailwindcss')) {
-              return 'tailwind';
-            }
-          },
-        },
-      },
-    },
-    css: {
-      preprocessorOptions: {
-        css: {
-          additionalData: '@import "@/assets/css/main.css";'
-        }
-      }
+      include: ['vue', 'vue-router', '@vueuse/core']
     }
+  },
+
+  // Disable module-generated static sitemap; use dynamic API endpoint instead
+  sitemap: {
+    enabled: false
   },
 
   // SEO configuration
@@ -220,107 +243,46 @@ export default defineNuxtConfig({
     name: 'Wikiherbalist',
     title: 'Enciclopedia di erbe aromatiche e medicinali',
     description: 'Enciclopedia online di erbe aromatiche e medicinali. Scopri proprietà, usi e benefici delle piante.',
-    sitemap: {
-      hostname: 'https://wikiherbalist.com',
-      routes: async () => {
-        const { data } = await $fetch('/api/sitemap-urls');
-        return data;
-      },
-    },
+  },
+
+  // Link checker configuration
+  linkChecker: {
+    enabled: false, // Disable link checker during build to avoid localhost errors
   },
 
   // Nitro server configuration
-nitro: {
-  compressPublicAssets: true,
-  // Prerender configuration
-  prerender: {
-    crawlLinks: true,
-    routes: [
-      '/',
-      '/about',
-      '/piante-medicinali',
-      '/glossario',
-      '/blog',
-      '/disclaimer',
-      '/privacy-policy',
-      '/cookie-policy',
-      '/donazioni',
-      '/css/main.css'
-    ]
-  },
-  // Route rules
-  routeRules: {
-    // CSS handling
-    '/algoliaUpdate': {
-      ssr: false
-    },
-    '/css/**': {
-      headers: {
-        'Content-Type': 'text/css',
-        'Cache-Control': 'public, max-age=31536000, immutable',
-        'X-Content-Type-Options': 'nosniff'
+  nitro: {
+    compressPublicAssets: true,
+    routeRules: {
+      '/': { static: true },
+      '/sitemap.xml': { 
+        proxy: '/api/sitemap.xml'
       }
     },
-    // Static pages
-    '/': { static: true },
-    '/about': { static: true },
-    '/piante-medicinali': { static: true },
-    '/glossario': { static: true },
-    '/blog': { static: true },
-    '/disclaimer': { static: true },
-    '/privacy-policy': { static: true },
-    '/cookie-policy': { static: true },
-    '/donazioni': { static: true },
-    // Global security headers and rules
-    '/**': { 
-      headers: {
-        'Content-Security-Policy': `
-          default-src 'self';
-          script-src 'self' 'unsafe-inline' https://www.google-analytics.com https://www.googletagmanager.com https://www.google.com https://www.gstatic.com https://*.google.com;
-          style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-          font-src 'self' https://fonts.gstatic.com;
-          img-src 'self' data: https://www.google-analytics.com https://admin.wikiherbalist.com https://tile.openstreetmap.org;
-          connect-src 'self' https://www.google-analytics.com https://admin.wikiherbalist.com https://region1.google-analytics.com https://api.gbif.org https://eutils.ncbi.nlm.nih.gov https://*.google.com;
-          frame-src 'self' https://www.google.com https://*.google.com;
-          object-src 'none';
-        `.replace(/\s+/g, ' ').trim()
-      }
-    }
-  }
-},
-
-  // Hooks configuration
-  hooks: {
-    'nitro:config': (config) => {
-      // Ensure prerender configuration exists
-      config.prerender = config.prerender || {}
-      config.prerender.routes = config.prerender.routes || []
-      
-      // Add additional routes to prerender
-      const additionalRoutes = [
+    prerender: {
+      crawlLinks: false, // Disable crawling to avoid 403 errors from WordPress during build
+      ignore: [
+        '/_ipx/**',
+        '/api/**',
+        '/_ipx/f_webp**',
+        '/sitemap.xml'
+      ],
+      routes: [
+        '/',
         '/about',
-        '/piante-medicinali',
-        '/glossario',
-        '/blog',
         '/disclaimer',
         '/privacy-policy',
         '/cookie-policy',
         '/donazioni'
       ]
-      config.prerender.routes.push(...additionalRoutes)
-    },
-    'build:before': () => {
-      // Additional build configurations can be added here
-    },
-    'render:setupMiddleware'(app) {
-      app.use(compression());
     }
   },
 
   // Experimental features
   experimental: {
     payloadExtraction: true,
-    inlineSSRStyles: false
+    inlineSSRStyles: true,
+    renderJsonPayloads: true
   },
 
   // Compatibility date
