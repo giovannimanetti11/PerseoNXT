@@ -58,41 +58,60 @@ To get started with PerseoNXT, follow these steps:
 
 ## Configuration
 
-Before running the project, you need to set up a `config.js` file in the root directory with your API keys and other configuration details. Create a file named `config.js` with the following structure:
+Before running the project, you need to set up environment variables. Copy the `.env.example` file to `.env` and fill in your configuration details:
 
-```javascript
-export const apiConfig = {
-  baseUrl: 'GRAPHQL_URL',
-  appPassword: 'WORDPRESS_APP_PASSWORD',
-  username: 'YOUR_WORDPRESS_USERNAME',
-  pubMedApiKey: '',
-  amazonPollyAccess: '',
-  amazonPollySecret: '',
-  algoliaAppId: '',
-  algoliaSearchAPIKey: '',
-  algoliaWriteAPIKey: '',
-  algoliaAdminAPIKey: '',
-  algoliaUsageAPIKey: '',
-  algoliaMonitoringAPIKey: '',
-  sendGridApiKey: '',
-  recaptchaPublicKey: '',
-  recaptchaSecretKey: '',
-  MailchimpAPIKey: '',
-  MailchimpListID: '',
-  MailchimpServerPrefix: '',
-  dbHost: 'YOUR_DATABASE_HOST',
-  dbUser: 'YOUR_DATABASE_USER',
-  dbPassword: 'YOUR_DATABASE_PASSWORD',
-  dbName: 'YOUR_DATABASE_NAME',
-  name: 'WEBSITE_NAME',
-  url: 'WEBSITE_URL',
-  description: 'WEBSITE_DESCRIPTION'
-};
+```bash
+cp .env.example .env
 ```
 
-Replace the placeholder values with your actual API keys and configuration details. This file is crucial for the proper functioning of various features in PerseoNXT.
+Then edit the `.env` file with your actual values:
 
-**Note**: Make sure to add `config.js` to your `.gitignore` file to avoid exposing sensitive information in your repository.
+```bash
+# PayPal
+PAYPAL_CLIENT_ID=your_paypal_client_id
+PAYPAL_SECRET=your_paypal_secret
+
+# Algolia
+NUXT_PUBLIC_ALGOLIA_APP_ID=your_algolia_app_id
+NUXT_PUBLIC_ALGOLIA_SEARCH_API_KEY=your_algolia_search_api_key
+ALGOLIA_ADMIN_API_KEY=your_algolia_admin_api_key
+ALGOLIA_USAGE_API_KEY=your_algolia_usage_api_key
+ALGOLIA_WRITE_API_KEY=your_algolia_write_api_key
+ALGOLIA_MONITORING_API_KEY=your_algolia_monitoring_api_key
+ALGOLIA_ACCESS_PASSWORD=your_algolia_access_password
+
+# WordPress GraphQL API
+WP_BASE_URL=https://your-wordpress-site.com/graphql
+WP_APP_PASSWORD=your_wordpress_app_password
+WP_USERNAME=your_wordpress_username
+
+# PubMed API
+PUBMED_API_KEY=your_pubmed_api_key
+
+# Amazon Polly
+AMAZON_POLLY_ACCESS_KEY=your_amazon_polly_access_key
+AMAZON_POLLY_SECRET_KEY=your_amazon_polly_secret_key
+
+# SendGrid
+SENDGRID_API_KEY=your_sendgrid_api_key
+
+# reCAPTCHA v3
+RECAPTCHA_PUBLIC_KEY=your_recaptcha_public_key
+RECAPTCHA_SECRET_KEY=your_recaptcha_secret_key
+
+# Mailchimp
+MAILCHIMP_API_KEY=your_mailchimp_api_key
+MAILCHIMP_LIST_ID=your_mailchimp_list_id
+MAILCHIMP_SERVER_PREFIX=us17
+
+# Database (MySQL)
+DB_HOST=localhost
+DB_USER=your_database_user
+DB_PASSWORD=your_database_password
+DB_NAME=your_database_name
+```
+
+**Note**: The `.env` file is already in `.gitignore` to avoid exposing sensitive information in your repository.
 
 ## Usage
 
