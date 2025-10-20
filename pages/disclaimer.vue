@@ -70,7 +70,7 @@ const sections = [
 useHead({
   title: 'Disclaimer',
   meta: [
-    { name: 'description', content: 'Disclaimer di Wikiherbalist: informazioni importanti sull\'utilizzo del nostro sito, dei contenuti presenti e dei prodotti di terze parti.' }
+    { name: 'description', content: 'Disclaimer di Wikiherbalist: avvertenze e limitazioni di responsabilità. Informazioni importanti sull\'uso dei contenuti del sito.' }
   ]
 })
 </script>
