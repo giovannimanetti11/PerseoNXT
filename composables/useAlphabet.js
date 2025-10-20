@@ -20,7 +20,7 @@ export function useAlphabet() {
 
   // Compute CSS classes for each letter based on selection
   const letterClass = computed(() => (letter) => [
-    'px-4 py-2 rounded-full mx-1 whitespace-nowrap',
+    'rounded-full mx-1 whitespace-nowrap',
     letter === selectedLetter.value ? 'bg-celeste text-white' : 'text-black font-bold hover:bg-celeste hover:text-white',
     'role="button"',
     `aria-selected="${letter === selectedLetter.value}"`
