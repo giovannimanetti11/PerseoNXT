@@ -121,7 +121,7 @@ const fetchPostsByLetter = async (letter) => {
     const { data: { posts } } = await apolloClient.query({
       query: FETCH_POSTS_BY_LETTER,
       variables: { letter },
-      fetchPolicy: 'network-only' // Force network request to ensure fresh data
+      fetchPolicy: 'cache-first' // Use cache when available
     });
 
     currentPosts.value = posts.nodes;

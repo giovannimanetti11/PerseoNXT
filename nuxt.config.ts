@@ -93,11 +93,11 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     '@nuxtjs/google-fonts',
-    'nuxt-icon',
+    '@nuxt/icon',
     '@nuxt/image',
     '@nuxtjs/seo',
     "nuxt-schema-org",
-    '~/modules/simple-donation',
+    'simple-donation',
     '@nuxtjs/algolia'
   ],
 
@@ -168,7 +168,7 @@ export default defineNuxtConfig({
 
   // Aliases configuration
   alias: {
-    '@config': '/var/www/wikiherbalist.com/nuxt-app/config.js',
+    '@config': fileURLToPath(new URL('./config.js', import.meta.url)),
   },
 
   // Build configuration
