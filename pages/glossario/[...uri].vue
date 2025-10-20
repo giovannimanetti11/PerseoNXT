@@ -40,13 +40,14 @@
 
       <!-- Index section -->
       <section v-if="headings.length > 0" class="postGlossario-index-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto mt-4 rounded-2xl">
-        <div class="font-bold text-xl md:text-2xl">
-          <Icon name="ic:twotone-list" class="text-2xl md:text-3xl text-black rounded-full mr-2" /> Indice
+        <div class="font-bold text-xl md:text-2xl flex items-center">
+          <Icon name="ic:twotone-list" class="text-2xl md:text-3xl text-black rounded-full mr-2" />
+          <div id="table-of-contents" class="font-bold text-xl md:text-2xl">Indice</div>
         </div>
         <ul class="mt-4 md:mt-8 flex flex-wrap justify-start gap-2 md:gap-4 print:gap-0 print:mt-2">
           <li v-for="(heading, index) in headings" :key="index" class="flex text-center py-2 md:py-4 px-2 md:px-4 bg-verde text-white rounded-xl m-1 text-xs md:text-sm hover:bg-celeste cursor-pointer w-full sm:w-[calc(50%-0.5rem)] md:w-[calc(33.333%-0.5rem)] lg:w-[calc(20%-0.5rem)]">
             <a :href="'#section' + (index + 1)" class="flex items-center group w-full" @click.prevent="smoothScroll('#section' + (index + 1))">
-              <div class="circle flex-shrink-0 flex items-center justify-center w-6 h-6 md:w-8 md:h-8 bg-white text-verde rounded-full mr-2 text-sm md:text-lg font-bold group-hover:text-celeste">{{ index + 1 }}</div>
+              <div class="circle flex-shrink-0 flex items-center justify-center w-6 h-6 md:w-8 md:h-8 min-w-6 min-h-6 md:min-w-8 md:min-h-8 bg-white text-verde rounded-full mr-2 text-sm md:text-lg font-bold group-hover:text-celeste">{{ index + 1 }}</div>
               <span class="flex-grow text-left">{{ heading }}</span>
             </a>
           </li>
@@ -56,11 +57,11 @@
       <!-- Introduction section -->
       <section v-if="introSection" class="term-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full post-section-introduction">
         <div class="mt-4">
-          <InternalLinking 
+          <InternalLinking
             :content="introSection.content"
-            :current-slug="glossaryTerm.slug"
-            :global-linked-words="globalLinkedWords"
-            @update:globalLinkedWords="updateGlobalLinkedWords"
+            :currentSlug="glossaryTerm.slug"
+            :globalLinkedWords="globalLinkedWords"
+            @update:linked-words="updateGlobalLinkedWords"
           />
         </div>
       </section>
@@ -71,18 +72,18 @@
               :id="'section' + (index + 1)"
               :key="section.heading">
         <div class="flex items-center" v-if="section.heading !== 'Riferimenti'">
-          <div class="circle flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 mr-4 bg-blu text-white rounded-full text-base md:text-lg font-bold">
+          <div class="circle flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 mr-4 bg-blu text-white rounded-full text-base md:text-lg font-bold">
             {{ index + 1 }}
           </div>
           <h3 class="text-xl md:text-2xl">{{ section.heading }}</h3>
         </div>
         <h3 v-else class="text-xl md:text-2xl mb-4">{{ section.heading }}</h3>
         <div class="mt-4">
-          <InternalLinking 
+          <InternalLinking
             :content="section.content"
-            :current-slug="glossaryTerm.slug"
-            :global-linked-words="globalLinkedWords"
-            @update:globalLinkedWords="updateGlobalLinkedWords"
+            :currentSlug="glossaryTerm.slug"
+            :globalLinkedWords="globalLinkedWords"
+            @update:linked-words="updateGlobalLinkedWords"
           />
         </div>
       </section>
@@ -98,16 +99,16 @@ import gql from 'graphql-tag';
 import { useYoastSeo } from '~/composables/useYoastSeo';
 import { useRuntimeConfig } from '#app';
 
-const GlossarioInfo = defineAsyncComponent(() => 
+const GlossarioInfo = defineAsyncComponent(() =>
   import('~/components/glossario/glossarioinfo.vue')
 );
-const Breadcrumbs = defineAsyncComponent(() => 
+const Breadcrumbs = defineAsyncComponent(() =>
   import('~/components/breadcrumbs.vue')
 );
-const InternalLinking = defineAsyncComponent(() => 
+const InternalLinking = defineAsyncComponent(() =>
   import('~/components/internalLinking.vue')
 );
-const SchemaMarkup = defineAsyncComponent(() => 
+const SchemaMarkup = defineAsyncComponent(() =>
   import('~/components/schemaMarkup.vue')
 );
 
@@ -155,7 +156,7 @@ const FETCH_GLOSSARY_TERM_BY_SLUG = gql`
   }
 `;
 
-const { data: glossaryTerm, pending, error } = await useAsyncData(
+const { data: glossaryTerm, pending, error } = useAsyncData(
   'glossaryTerm',
   async () => {
     const slug = route.params.uri instanceof Array ? route.params.uri[0] : route.params.uri;
@@ -164,7 +165,7 @@ const { data: glossaryTerm, pending, error } = await useAsyncData(
       const { data } = await apolloClient.query({
         query: FETCH_GLOSSARY_TERM_BY_SLUG,
         variables: { slug },
-        fetchPolicy: 'no-cache'
+        fetchPolicy: 'cache-first'
       });
 
       return data.glossaryTermBy;
@@ -175,11 +176,20 @@ const { data: glossaryTerm, pending, error } = await useAsyncData(
   },
   { 
     server: true,
-    immediate: true
+    immediate: true,
+    watch: [route.params.uri]
   }
 );
 
 watch(glossaryTerm, async (newTerm) => {
+  if (!glossaryTerm.value && !pending.value) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: 'Pagina non trovata',
+      fatal: true
+    })
+  }
+
   if (newTerm?.content) {
     const wordCount = newTerm.content
       .replace(/<[^>]*>/g, '')
@@ -190,10 +200,36 @@ watch(glossaryTerm, async (newTerm) => {
     readingTime.value = Math.ceil(wordCount / 200);
     await processContent(newTerm.content);
   }
+
+  if (newTerm) {
+    const fullUrl = `https://wikiherbalist.com${route.fullPath}`;
+    yoastData.value = {
+      ...newTerm.seo,
+      siteName: config.public.siteName,
+      url: fullUrl,
+      type: 'article',
+      image: newTerm.seo?.opengraphImage?.sourceUrl || 
+             newTerm.featuredImage?.node?.sourceUrl || 
+             'https://wikiherbalist.com/images/default-og-image.jpg',
+      publishedTime: newTerm.date,
+      modifiedTime: newTerm.modified || newTerm.date,
+      author: newTerm.authorName,
+    };
+
+    useYoastSeo(yoastData);
+  }
 }, { immediate: true });
 
 async function processContent(content) {
   try {
+    // Ensure content is not empty or undefined
+    if (!content) {
+      console.warn('Empty content received in processContent');
+      headings.value = [];
+      sections.value = [];
+      return;
+    }
+
     const cheerio = await import('cheerio');
     const $ = cheerio.load(content);
     
@@ -221,62 +257,95 @@ async function processContent(content) {
     // Process main sections
     let currentSection = null;
     
-    $('body > *').each(function(index, element) {
-      const $element = $(element);
+    try {
+      // First try with 'body > *' selector
+      const bodyElements = $('body > *');
       
-      // Check for h3 headings
-      if (element.tagName === 'h3') {
-        if (currentSection) {
-          extractedSections.push(currentSection);
+      // If no body elements found, try with direct children of the root
+      const elements = bodyElements.length ? bodyElements : $('> *');
+      
+      elements.each(function(index, element) {
+        try {
+          const $element = $(element);
+          
+          // Check for h3 headings
+          if (element.tagName && element.tagName.toLowerCase() === 'h3') {
+            if (currentSection) {
+              extractedSections.push(currentSection);
+            }
+            
+            const headingText = $element.text().trim();
+            extractedHeadings.push(headingText);
+            
+            currentSection = {
+              heading: headingText,
+              content: '',
+              className: `term-section-${headingText.toLowerCase()
+                .replace(/[\s,\'\`]+/g, '-')
+                .replace(/[àáâãäå]/g, 'a')
+                .replace(/[èéêë]/g, 'e')
+                .replace(/[ìíîï]/g, 'i')
+                .replace(/[òóôõö]/g, 'o')
+                .replace(/[ùúûü]/g, 'u')}`
+            };
+          } 
+          // Check for "Riferimenti" as a paragraph
+          else if (element.tagName && element.tagName.toLowerCase() === 'p' && $element.text().trim() === 'Riferimenti') {
+            if (currentSection) {
+              extractedSections.push(currentSection);
+            }
+            
+            currentSection = null;
+            
+            // Find all content after the "Riferimenti" paragraph
+            const referenceContent = $element
+              .nextAll()
+              .map((_, el) => $.html(el))
+              .get()
+              .join('');
+            
+            if (referenceContent.trim()) {
+              extractedSections.push({
+                heading: 'Riferimenti',
+                content: referenceContent,
+                className: 'term-section-riferimenti'
+              });
+            }
+          }
+          // Add content to current section
+          else if (currentSection) {
+            currentSection.content += $.html(element);
+          }
+        } catch (elementError) {
+          console.warn('Error processing element:', elementError);
+          // Continue with next element
         }
-        
-        const headingText = $element.text().trim();
-        extractedHeadings.push(headingText);
-        
-        currentSection = {
-          heading: headingText,
-          content: '',
-          className: `term-section-${headingText.toLowerCase()
-            .replace(/[\s,\'\`]+/g, '-')
-            .replace(/[àáâãäå]/g, 'a')
-            .replace(/[èéêë]/g, 'e')
-            .replace(/[ìíîï]/g, 'i')
-            .replace(/[òóôõö]/g, 'o')
-            .replace(/[ùúûü]/g, 'u')}`
-        };
-      } 
-      // Check for "Riferimenti" as a paragraph
-      else if (element.tagName === 'p' && $element.text().trim() === 'Riferimenti') {
-        if (currentSection) {
-          extractedSections.push(currentSection);
-        }
-        
-        currentSection = null;
-        
-        // Find all content after the "Riferimenti" paragraph
-        const referenceContent = $element
-          .nextAll()
-          .map((_, el) => $.html(el))
-          .get()
-          .join('');
-        
-        if (referenceContent.trim()) {
-          extractedSections.push({
-            heading: 'Riferimenti',
-            content: referenceContent,
-            className: 'term-section-riferimenti'
-          });
-        }
+      });
+    } catch (selectorError) {
+      console.error('Error with selector:', selectorError);
+      // Try a fallback approach - get all content
+      const allContent = $.html();
+      if (allContent) {
+        extractedSections.push({
+          heading: glossaryTerm.value?.title || 'Contenuto',
+          content: allContent,
+          className: 'term-section-contenuto'
+        });
       }
-      // Add content to current section
-      else if (currentSection) {
-        currentSection.content += $.html(element);
-      }
-    });
+    }
 
     // Add the last section if exists and it's not references
     if (currentSection) {
       extractedSections.push(currentSection);
+    }
+
+    // Ensure we have at least one section
+    if (extractedSections.length === 0 && content.trim()) {
+      extractedSections.push({
+        heading: 'Contenuto',
+        content: content,
+        className: 'term-section-contenuto'
+      });
     }
 
     headings.value = extractedHeadings;
@@ -284,30 +353,11 @@ async function processContent(content) {
     
   } catch (error) {
     console.error('Content processing error:', error);
-    throw error;
+    // Don't throw the error, instead set empty arrays to prevent page crash
+    headings.value = [];
+    sections.value = [];
   }
 }
-
-// Watch for term changes and update SEO
-watch(glossaryTerm, (newTerm) => {
-  if (newTerm) {
-    const fullUrl = `https://wikiherbalist.com${route.fullPath}`;
-    yoastData.value = {
-      ...newTerm.seo,
-      siteName: config.public.siteName,
-      url: fullUrl,
-      type: 'article',
-      image: newTerm.seo?.opengraphImage?.sourceUrl || 
-             newTerm.featuredImage?.node?.sourceUrl || 
-             'https://wikiherbalist.com/images/default-og-image.jpg',
-      publishedTime: newTerm.date,
-      modifiedTime: newTerm.modified || newTerm.date,
-      author: newTerm.authorName,
-    };
-
-    useYoastSeo(yoastData);
-  }
-});
 
 const smoothScroll = (targetId) => {
   if (!process.client) return;

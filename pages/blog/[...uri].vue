@@ -50,12 +50,12 @@
       <section v-if="headings.length > 0" class="post-index-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full">
         <div class="font-bold text-xl md:text-2xl flex items-center">
           <Icon name="ic:twotone-list" class="text-2xl md:text-3xl text-black rounded-full mr-2" aria-hidden="true" /> 
-          <h2 id="table-of-contents">Indice</h2>
+          <div id="table-of-contents" class="font-bold text-xl md:text-2xl">Indice</div>
         </div>
         <ul class="mt-4 md:mt-8 flex flex-wrap justify-start gap-2 md:gap-4 print:gap-0 print:mt-2" aria-labelledby="table-of-contents">
           <li v-for="(heading, index) in headings" :key="index" class="text-center py-2 md:py-4 px-2 md:px-4 bg-verde text-white rounded-xl text-xs md:text-sm hover:bg-celeste cursor-pointer w-full sm:w-2/5 md:w-1/5 flex-grow-0 flex-shrink-0">
             <a :href="'#section' + (index + 1)" class="flex items-center group" @click.prevent="smoothScroll('#section' + (index + 1))">
-              <div class="circle flex items-center justify-center w-6 h-6 md:w-8 md:h-8 bg-white text-verde rounded-full mr-1 md:mr-2 text-sm md:text-lg font-bold group-hover:text-celeste">{{ index + 1 }}</div>
+              <div class="circle flex items-center justify-center w-6 h-6 md:w-8 md:h-8 min-w-6 min-h-6 md:min-w-8 md:min-h-8 bg-white text-verde rounded-full mr-1 md:mr-2 text-sm md:text-lg font-bold group-hover:text-celeste">{{ index + 1 }}</div>
               <span class="text-xs md:text-sm">{{ heading }}</span>
             </a>
           </li>
@@ -65,11 +65,11 @@
       <!-- Introduction section (without numbering) -->
       <section v-if="introSection" class="post-content-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full">
         <div class="mt-4">
-          <InternalLinking 
+          <InternalLinking
             :content="introSection.content"
-            :current-slug="blogPost.slug"
-            :global-linked-words="globalLinkedWords"
-            @update:globalLinkedWords="updateGlobalLinkedWords"
+            :currentSlug="blogPost.slug"
+            :globalLinkedWords="globalLinkedWords"
+            @update:linked-words="updateGlobalLinkedWords"
           />
         </div>
       </section>
@@ -80,7 +80,7 @@
                :id="'section' + (index + 1)"
                :key="section.title">
         <div class="flex items-center space-x-4" v-if="section.title !== 'Riferimenti'">
-          <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">
+          <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">
             {{ index + 1 }}
           </div>
           <h3 class="text-xl md:text-2xl">{{ section.title }}</h3>
@@ -88,11 +88,11 @@
         <h3 v-else class="text-xl md:text-2xl mb-4">{{ section.title }}</h3>
         
         <div class="mt-4">
-          <InternalLinking 
+          <InternalLinking
             :content="section.content"
-            :current-slug="blogPost.slug"
-            :global-linked-words="globalLinkedWords"
-            @update:globalLinkedWords="updateGlobalLinkedWords"
+            :currentSlug="blogPost.slug"
+            :globalLinkedWords="globalLinkedWords"
+            @update:linked-words="updateGlobalLinkedWords"
           />
         </div>
       </section>
@@ -307,8 +307,23 @@ async function processContent(content) {
 
 // SEO handling
 watch(blogPost, (newPost) => {
+  if (!blogPost.value && !pending.value) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: 'Pagina non trovata',
+      fatal: true
+    })
+  }
+
   if (newPost) {
     const fullUrl = `https://wikiherbalist.com${route.fullPath}`;
+    const truncate = (s, n) => {
+      if (!s) return ''
+      const clean = s.replace(/<[^>]*>/g, '').trim()
+      return clean.length > n ? clean.slice(0, n - 1).trimEnd() + '…' : clean
+    }
+    const title = truncate(newPost.seo?.title || newPost.title, 60)
+    const desc = truncate(newPost.seo?.metaDesc || newPost.excerpt || '', 155)
     yoastData.value = {
       ...newPost.seo,
       siteName: config.public.siteName,
@@ -320,11 +335,24 @@ watch(blogPost, (newPost) => {
       publishedTime: newPost.date,
       modifiedTime: newPost.modified || newPost.date,
       author: newPost.authorName,
+      title,
+      metaDesc: desc,
+      opengraphTitle: newPost.seo?.opengraphTitle || title,
+      opengraphDescription: newPost.seo?.opengraphDescription || desc,
     };
 
     useYoastSeo(yoastData);
+
+    if (newPost?.featuredImage?.node?.sourceUrl) {
+      useHead({
+        link: [
+          { rel: 'preload', as: 'image', href: newPost.featuredImage.node.sourceUrl, fetchpriority: 'high' }
+        ]
+      })
+    }
   }
-});
+}, { immediate: true });
+
 
 // Navigation helper
 const smoothScroll = (target) => {

@@ -36,6 +36,25 @@ const handleSearch = (term) => {
 }
 
 useHead({
-  title: 'Home'
+  title: 'Wikiherbalist - Enciclopedia di erbe aromatiche e medicinali',
+  titleTemplate: title => title || 'Home | Wikiherbalist',
+  meta: [
+    { 
+      name: 'description', 
+      content: 'Scopri proprietà, usi e benefici delle piante medicinali attraverso monografie dettagliate, glossario e articoli informativi.' 
+    },
+    {
+      property: 'og:title',
+      content: 'Wikiherbalist - Enciclopedia di erbe aromatiche e medicinali'
+    },
+    {
+      property: 'og:description',
+      content: 'Scopri proprietà, usi e benefici delle piante medicinali attraverso monografie dettagliate, glossario e articoli informativi.'
+    },
+    {
+      name: 'twitter:title',
+      content: 'Wikiherbalist - Enciclopedia di erbe aromatiche e medicinali'
+    }
+  ]
 })
 </script>
