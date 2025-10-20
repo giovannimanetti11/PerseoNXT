@@ -1,5 +1,4 @@
-import { ref, h } from 'vue';
-import { Icon } from '#components';
+import { ref, h, resolveComponent } from 'vue';
 
 // Composable function to manage social sharing and link copying
 export function useShare() {
@@ -62,6 +61,8 @@ export function useShare() {
   // Rendering logic for the share modal
   const renderShareModal = () => {
     if (!isShareModalOpen.value) return null;
+
+    const Icon = resolveComponent('Icon');
 
     return h('div', {
       class: 'fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center',
