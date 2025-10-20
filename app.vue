@@ -8,8 +8,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, computed, nextTick } from 'vue'
-import { useRoute, useHead, useSeoMeta, useNuxtApp, useAsyncData } from '#app'
+import { ref, computed, watch, onMounted, nextTick } from 'vue'
+import { useRoute, useHead, useSeoMeta, useNuxtApp, useRuntimeConfig } from '#app'
 import gql from 'graphql-tag'
 
 // Types
@@ -17,6 +17,11 @@ interface SeoData {
   seo?: {
     title?: string
     metaDesc?: string
+    opengraphTitle?: string
+    opengraphDescription?: string
+    opengraphImage?: {
+      sourceUrl?: string
+    }
   }
   title?: string
 }
@@ -51,6 +56,11 @@ const GET_POST_SEO_DATA = gql`
       seo {
         title
         metaDesc
+        opengraphTitle
+        opengraphDescription
+        opengraphImage {
+          sourceUrl
+        }
       }
       content
       date
@@ -73,6 +83,11 @@ const GET_PAGE_SEO_DATA = gql`
       seo {
         title
         metaDesc
+        opengraphTitle
+        opengraphDescription
+        opengraphImage {
+          sourceUrl
+        }
       }
     }
   }
@@ -81,7 +96,9 @@ const GET_PAGE_SEO_DATA = gql`
 // State and setup
 const route = useRoute()
 const nuxtApp = useNuxtApp()
+const config = useRuntimeConfig()
 const isLoaded = ref(false)
+const baseUrl = 'https://wikiherbalist.com'
 
 // Static titles mapping
 const staticTitles: Record<string, string> = {
@@ -90,13 +107,12 @@ const staticTitles: Record<string, string> = {
   'cookie-policy': 'Cookie Policy'
 }
 
-// Computed properties
-const canonicalUrl = computed(() => {
-  const baseUrl = 'https://wikiherbalist.com'
-  return route.path === '/' ? baseUrl : `${baseUrl}${route.path}`
-})
-
 const isHomepage = computed(() => route.path === '/')
+
+const isPost = computed(() => {
+  const routeName = route.name as string
+  return !['about', 'index'].includes(routeName) && route.path !== '/'
+})
 
 // Async data fetching with useAsyncData
 const { data: seoData } = useAsyncData(
@@ -110,12 +126,29 @@ const { data: seoData } = useAsyncData(
     }
 
     try {
-      if (routeName === 'index') {
-        const { data } = await nuxtApp.$apolloClient.query({
-          query: GET_PAGE_SEO_DATA,
-          variables: { uri: '/' }
-        })
-        return data.page
+      if (routeName === 'index' || route.path === '/') {
+        try {
+          const { data } = await nuxtApp.$apolloClient.query({
+            query: GET_PAGE_SEO_DATA,
+            variables: { uri: '/' }
+          })
+          return data.page || {
+            title: 'Wikiherbalist - Enciclopedia di erbe aromatiche e medicinali',
+            seo: {
+              title: 'Wikiherbalist - Enciclopedia di erbe aromatiche e medicinali',
+              metaDesc: 'Scopri proprietà, usi e benefici delle piante medicinali attraverso monografie dettagliate, glossario e articoli informativi.'
+            }
+          }
+        } catch (error) {
+          console.error('Error fetching homepage data:', error)
+          return {
+            title: 'Wikiherbalist - Enciclopedia di erbe aromatiche e medicinali',
+            seo: {
+              title: 'Wikiherbalist - Enciclopedia di erbe aromatiche e medicinali',
+              metaDesc: 'Scopri proprietà, usi e benefici delle piante medicinali attraverso monografie dettagliate, glossario e articoli informativi.'
+            }
+          }
+        }
       } 
       
       if (staticTitles[routeName]) {
@@ -127,17 +160,16 @@ const { data: seoData } = useAsyncData(
         }
       }
 
-      const isPost = !['about'].includes(routeName)
-      const slug = isPost 
+      const slug = isPost.value 
         ? (Array.isArray(route.params.uri) ? route.params.uri[0] : route.path.split('/').pop())
         : route.path
 
       const { data } = await nuxtApp.$apolloClient.query({
-        query: isPost ? GET_POST_SEO_DATA : GET_PAGE_SEO_DATA,
-        variables: { slug: isPost ? slug : slug || '/' }
+        query: isPost.value ? GET_POST_SEO_DATA : GET_PAGE_SEO_DATA,
+        variables: { slug: isPost.value ? slug : slug || '/' }
       })
 
-      return isPost ? data.post : data.page
+      return isPost.value ? data.post : data.page
     } catch (error) {
       console.error('GraphQL query error:', error)
       return null
@@ -150,14 +182,19 @@ const { data: seoData } = useAsyncData(
   }
 )
 
-// Update head metadata when seoData changes
+// Watch for SEO data changes and update meta tags
 watch(seoData, (newData) => {
   if (!newData) return
 
   const seo = newData.seo || {}
   const title = isHomepage.value ? (seo.title || 'Wikiherbalist') : (seo.title || 'Pagina')
   const metaDescription = seo.metaDesc || 'Enciclopedia online di erbe aromatiche e medicinali'
- 
+  const canonicalUrl = new URL(route.path, baseUrl).toString()
+
+  // Remove trailing slash except for homepage
+  const normalizedCanonical = canonicalUrl === baseUrl ? canonicalUrl : canonicalUrl.replace(/\/$/, '')
+
+  // Update head meta tags
   useHead({
     titleTemplate: (titleChunk) => {
       if (isHomepage.value) {
@@ -167,18 +204,26 @@ watch(seoData, (newData) => {
     },
     title,
     link: [
-      { rel: 'canonical', href: canonicalUrl.value },
+      { rel: 'canonical', href: normalizedCanonical },
     ],
   })
 
+  // Update SEO meta tags
   useSeoMeta({
     title,
-    ogTitle: title,
+    ogTitle: seo.opengraphTitle || title,
     description: metaDescription,
-    ogDescription: metaDescription,
-    ogUrl: canonicalUrl.value,
-    ogImage: '/media/og-image.jpg',
+    ogDescription: seo.opengraphDescription || metaDescription,
+    ogUrl: normalizedCanonical,
+    ogImage: seo.opengraphImage?.sourceUrl || `${baseUrl}/media/og-image.jpg`,
+    ogType: isPost.value ? 'article' : 'website',
+    ogLocale: 'it_IT',
     twitterCard: 'summary_large_image',
+    articleModifiedTime: newData.modified,
+    articlePublishedTime: newData.date,
+    twitterTitle: seo.opengraphTitle || title,
+    twitterDescription: seo.opengraphDescription || metaDescription,
+    twitterImage: seo.opengraphImage?.sourceUrl || `${baseUrl}/media/og-image.jpg`
   })
 }, { immediate: true })
 

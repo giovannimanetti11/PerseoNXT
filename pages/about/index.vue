@@ -1,17 +1,17 @@
 <template>
   <div class="bg-gray-50 min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
-      <div v-if="loading" class="flex justify-center items-center h-64">
+      <div v-if="pending" class="flex justify-center items-center h-64">
         <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
       </div>
       <div v-else-if="error" class="text-center text-red-600 font-semibold">
-        {{ error }}
+        {{ error.message }}
       </div>
       <div v-else>
         <!-- About Content -->
         <div class="mt-16 mb-20">
           <h1 class="text-4xl sm:text-5xl font-bold text-gray-800 mb-8 text-center">Il progetto Wikiherbalist</h1>
-          <div v-html="formattedAboutContent" class="w-full mx-auto bg-white shadow-lg rounded-lg p-6 sm:p-8 text-base sm:text-lg text-gray-700 leading-relaxed"></div>
+          <div v-html="formattedAboutContent" class="about-content w-full mx-auto bg-white shadow-lg rounded-lg p-6 sm:p-8 text-base sm:text-lg text-gray-700 leading-relaxed"></div>
         </div>
 
         <!-- Members Section -->
@@ -43,16 +43,38 @@
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted, watch, computed } from 'vue';
-import { useQuery } from '@vue/apollo-composable';
-import gql from 'graphql-tag';
-import DOMPurify from 'dompurify';
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { useAsyncData } from '#app'
+import { useApolloClient } from '@vue/apollo-composable'
+import gql from 'graphql-tag'
 
-const aboutContent = ref('');
-const members = ref([]);
-const loading = ref(true);
-const error = ref(null);
+interface Member {
+  id: string
+  databaseId: number
+  title: string
+  content: string
+  affiliation: string
+  featuredImage?: {
+    node: {
+      sourceUrl: string
+    }
+  }
+  memberCategories?: {
+    nodes: {
+      name: string
+    }[]
+  }
+}
+
+interface AboutData {
+  pageBy: {
+    content: string
+  }
+  members: {
+    nodes: Member[]
+  }
+}
 
 const FETCH_ABOUT_DATA = gql`
   query FetchAboutData {
@@ -79,83 +101,80 @@ const FETCH_ABOUT_DATA = gql`
       }
     }
   }
-`;
+`
 
-const formatContent = (content) => {
-  if (!content) return '';
+const { resolveClient } = useApolloClient()
+const apolloClient = resolveClient()
+
+const { data: aboutData, pending, error } = await useAsyncData<AboutData>('aboutData', async () => {
+  const { data } = await apolloClient.query({
+    query: FETCH_ABOUT_DATA
+  })
+  return data
+})
+
+const aboutContent = computed(() => aboutData.value?.pageBy?.content || '')
+const members = computed(() => aboutData.value?.members?.nodes || [])
+
+const formattedAboutContent = computed(() => formatContent(aboutContent.value))
+
+const reversedMembers = computed(() => [...members.value].reverse())
+
+const formatContent = (content: string): string => {
+  if (!content) return ''
   
-  const cleanContent = DOMPurify.sanitize(content);
-  const div = document.createElement('div');
-  div.innerHTML = cleanContent;
-
-  div.querySelectorAll('h1, h2, h3, h4, h5, h6, ul, ol, li, a').forEach(el => {
-    switch (el.tagName.toLowerCase()) {
+  // Use a regular expression to add classes instead of manipulating the DOM
+  content = content.replace(/<(h[1-6]|ul|ol|li|a)([^>]*)>/g, (match, tag, attributes) => {
+    let classes = ''
+    switch (tag) {
       case 'h1':
-        el.classList.add('text-3xl', 'font-bold', 'mt-6', 'mb-4');
-        break;
+        classes = 'text-3xl font-bold mt-6 mb-4'
+        break
       case 'h2':
-        el.classList.add('text-2xl', 'font-bold', 'mt-6', 'mb-4');
-        break;
+        classes = 'text-2xl font-bold mt-6 mb-4'
+        break
       case 'h3':
-        el.classList.add('text-xl', 'font-bold', 'mt-6', 'mb-4');
-        break;
+        classes = 'text-xl font-bold mt-6 mb-4'
+        break
       case 'h4':
-        el.classList.add('text-lg', 'font-bold', 'mt-6', 'mb-4');
-        break;
+        classes = 'text-lg font-bold mt-6 mb-4'
+        break
       case 'ul':
-        el.classList.add('list-disc', 'list-inside', 'my-4', 'pl-4');
-        break;
+        classes = 'list-disc list-inside my-4 pl-4'
+        break
       case 'ol':
-        el.classList.add('list-decimal', 'list-inside', 'my-4', 'pl-4');
-        break;
+        classes = 'list-decimal list-inside my-4 pl-4'
+        break
       case 'li':
-        el.classList.add('mb-2');
-        break;
+        classes = 'mb-2'
+        break
       case 'a':
-        el.classList.add('text-blu', 'hover:text-celeste', 'underline');
-        break;
+        classes = 'text-blu hover:text-celeste underline'
+        break
     }
-  });
+    return `<${tag}${attributes} class="${classes}">`
+  })
 
-  return div.innerHTML;
-};
+  return content
+}
 
-const formattedAboutContent = computed(() => formatContent(aboutContent.value));
-
-const getInitials = (name) => {
+const getInitials = (name: string): string => {
   return name
     .split(' ')
     .map(word => word[0])
     .join('')
     .toUpperCase()
-    .slice(0, 2);
-};
-
-const reversedMembers = computed(() => {
-  return [...members.value].reverse();
-});
-
-onMounted(async () => {
-  const { result, loading: queryLoading, error: queryError } = useQuery(FETCH_ABOUT_DATA);
- 
-  watch([result, queryLoading, queryError], ([newResult, newLoading, newError]) => {
-    loading.value = newLoading;
-   
-    if (newError) {
-      console.error('Error fetching data:', newError);
-      error.value = 'Si è verificato un errore nel caricamento dei dati. Si prega di riprovare più tardi.';
-    } else if (newResult) {
-      aboutContent.value = newResult.pageBy?.content || '';
-      members.value = newResult.members?.nodes.map(member => ({
-        ...member,
-        content: member.content || '',
-        affiliation: member.affiliation || 'Affiliazione non specificata',
-      })) || [];
-    }
-  });
-});
+    .slice(0, 2)
+}
 
 useHead({
   title: 'About'
 })
 </script>
+
+<style>
+  .about-content h4 {
+    color: #5E9EF4;
+    margin: 10px 0;
+  }
+</style>

@@ -10,9 +10,9 @@
       Si è verificato un errore nel caricamento dei dati. Riprova più tardi.
     </div>
     <div v-else-if="posts.length" class="flex justify-center mt-14">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-4xl">
+      <div class="grid grid-cols-1 px-2 md:grid-cols-2 gap-4 w-full max-w-4xl">
         <div v-for="(posts, letter) in groupedPosts" :key="letter" class="mb-6 flex flex-row ml-4 md:ml-0">
-          <div class="letter-heading flex text-xl font-bold w-16 h-16 rounded-full bg-celeste text-center"><span class="m-auto content-center text-white">{{ letter }}</span></div>
+          <div class="letter-heading flex items-center justify-center text-xl font-bold w-16 h-16 min-w-16 min-h-16 rounded-full bg-celeste text-white">{{ letter }}</div>
           <ul class="ml-4 flex flex-col flex-wrap gap-4">
             <li v-for="post in posts" :key="post.id" class="flex flex-row">
               <NuxtLink :to="`/${post.slug}`" class="text-black hover:text-blu">
