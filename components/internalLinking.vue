@@ -182,16 +182,24 @@ const processContentSSR = (content: string, allItems: any[]): string => {
   
   // Function to check if a position is inside an HTML tag
   const isInsideHtmlTag = (html: string, position: number): boolean => {
-    // Check if the position is inside an <a> tag
+    // Check if the position is inside any HTML tag, especially <a> tags
     const beforePosition = html.substring(0, position);
-    const afterPosition = html.substring(position);
-    
+
     // Count opening <a> and closing </a> tags before the position
     const openTagsBeforeCount = (beforePosition.match(/<a[^>]*>/gi) || []).length;
     const closeTagsBeforeCount = (beforePosition.match(/<\/a>/gi) || []).length;
-    
+
     // If there are more opening tags than closing tags, we're inside an <a> tag
-    return openTagsBeforeCount > closeTagsBeforeCount;
+    if (openTagsBeforeCount > closeTagsBeforeCount) {
+      return true;
+    }
+
+    // Also check if we're inside any other HTML tag (between < and >)
+    const lastOpenBracket = beforePosition.lastIndexOf('<');
+    const lastCloseBracket = beforePosition.lastIndexOf('>');
+
+    // If the last < comes after the last >, we're inside a tag
+    return lastOpenBracket > lastCloseBracket;
   };
   
   // Function to check if a position is inside an attribute value
@@ -222,25 +230,40 @@ const processContentSSR = (content: string, allItems: any[]): string => {
     
     // Function to replace matches safely
     const replaceMatches = (regex, originalText) => {
-      return originalText.replace(regex, (match) => {
-        // Skip if inside HTML tag or attribute
-        const tempIndex = originalText.indexOf(match);
-        if (isInsideHtmlTag(originalText, tempIndex) || isInsideAttribute(originalText, tempIndex)) {
+      let lastIndex = 0;
+      let result = '';
+
+      // Process each match individually with its actual position
+      originalText.replace(regex, (match, offset) => {
+        // Check if this specific match position is inside HTML tag or attribute
+        if (isInsideHtmlTag(originalText, offset) || isInsideAttribute(originalText, offset)) {
           return match;
         }
-        
+
         // Skip if contains blacklisted term
-        const startIndex = Math.max(0, tempIndex - 20);
-        const endIndex = Math.min(originalText.length, tempIndex + match.length + 20);
+        const startIndex = Math.max(0, offset - 20);
+        const endIndex = Math.min(originalText.length, offset + match.length + 20);
         const matchContext = originalText.substring(startIndex, endIndex);
-        
+
         if (containsBlacklistedTerm(matchContext)) {
           return match;
         }
-        
+
+        // Add the text before this match
+        result += originalText.substring(lastIndex, offset);
+        // Add the linked version
+        result += createLinkString(item, match);
+        lastIndex = offset + match.length;
         matched = true;
-        return createLinkString(item, match);
+
+        return match;
       });
+
+      // Add remaining text after last match
+      result += originalText.substring(lastIndex);
+
+      // Return result only if we made replacements, otherwise return original
+      return matched ? result : originalText;
     };
     
     // Process singular form
