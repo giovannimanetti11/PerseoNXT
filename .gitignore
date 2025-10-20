@@ -1,6 +1,9 @@
 # Config/AUTH
 .env
 
+# Deployment documentation (contains sensitive info)
+DEPLOY.md
+
 #pm2
 
 ecosystem.config.cjs
