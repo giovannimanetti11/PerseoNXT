@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /_nuxt/
+Disallow: /api/
+Disallow: /search/
+Disallow: /tag/
+Disallow: /\d+-\d+$
+
+Sitemap: https://wikiherbalist.com/sitemap.xml

@@ -14,13 +14,11 @@ body {
 /* Post styles */
 
 #post h3 {
-  font-size: 1.875rem;
-  margin-bottom: 1rem;
-  font-weight: bold;
+  font-size: 1.5rem;
+  font-weight: medium;
 }
 
-#post h4 {
-  font-weight: bold;
+#post h4, .about-content h4 {
   color: #5E9EF4;
   margin-top: 20px;
 }
@@ -29,8 +27,13 @@ body {
   list-style-type: decimal;
 }
 
+#post section p {
+  margin-top: 10px;
+}
+
 .post-section-riferimenti ol {
   padding-left: 15px;
+  list-style-type: decimal;
 }
 
 #post table {
@@ -100,9 +103,15 @@ body {
   font-size: 14px;
 }
 
+.blogpost-content-section ul, .term-section ul, .post-content-section ul {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-left: 10px;
+}
+
 .blogpost-content-section ul li, .term-section ul li, .post-content-section ul li {
   margin-top: 5px;
-  margin-left: 10px;
+  margin-left: 25px;
   list-style-type: disc;
 }
 
@@ -145,6 +154,69 @@ body {
   }
 }
 
+/* Post table */
+
+.post-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.post-table th,
+.post-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+  word-break: break-word;
+}
+
+.post-table th {
+  background-color: #f4f4f4;
+}
+
+@media screen and (max-width: 768px) {
+  .post-table thead {
+    display: none;
+  }
+
+  .post-table,
+  .post-table tbody,
+  .post-table tr,
+  .post-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .post-table tr {
+    margin-bottom: 16px;
+    border-bottom: 2px solid #ccc;
+    padding: 6px 0;
+  }
+
+  .post-table td {
+    display: block;
+    position: relative;
+    padding: 6px 8px 6px 50%;
+    margin-bottom: 6px;
+    border: none;
+    text-align: right !important;
+    min-height: 28px;
+  }
+
+  .post-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    top: 6px;
+    left: 8px;
+    width: 45%;
+    padding-right: 10px;
+    font-weight: bold;
+    color: #333;
+    text-align: left;
+    white-space: normal;
+    line-height: 1.2;
+  }
+}
 
 /* Print css */
 @media print {
