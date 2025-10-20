@@ -10,9 +10,9 @@
 <script setup>
 import { defineAsyncComponent } from 'vue'
 
-// Import the SimpleDonation component asynchronously
-const SimpleDonation = defineAsyncComponent(() => 
-  import('~/modules/simple-donation/runtime/components/simpleDonation.vue')
+// Import the SimpleDonation component asynchronously from npm package
+const SimpleDonation = defineAsyncComponent(() =>
+  import('simple-donation/runtime/components/simpleDonation.vue')
 )
 
 // Custom FAQs
