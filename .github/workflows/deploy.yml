@@ -39,15 +39,13 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
           script: |
-            cd /var/www/wikiherbalist.com/nuxt-app
-
-            # Load NVM and use correct Node version
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            nvm use 22 || nvm use default
 
-            # Clean node_modules and package-lock to fix oxc-parser binding issues
-            rm -rf node_modules package-lock.json
+            cd /var/www/wikiherbalist.com/nuxt-app
+
+            # Clean build artifacts and dependencies
+            rm -rf node_modules package-lock.json .nuxt .output
 
             # Install dependencies
             npm install || { echo "npm install failed"; exit 1; }
