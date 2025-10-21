@@ -39,13 +39,15 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
           script: |
+            # Load NVM and use Node 22
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm use 22
 
             cd $DEPLOY_PATH
 
-            # Clean build artifacts and dependencies
-            rm -rf node_modules package-lock.json .nuxt .output
+            # Clean all build artifacts and dependencies with sudo (permission issues)
+            sudo rm -rf .nuxt .output node_modules package-lock.json
 
             # Install dependencies
             npm install || { echo "npm install failed"; exit 1; }
