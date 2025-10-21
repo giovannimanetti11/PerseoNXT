@@ -41,8 +41,16 @@ jobs:
           script: |
             cd /var/www/wikiherbalist.com/nuxt-app
 
+            # Load NVM and use correct Node version
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm use 22 || nvm use default
+
+            # Clean node_modules and package-lock to fix oxc-parser binding issues
+            rm -rf node_modules package-lock.json
+
             # Install dependencies
-            npm ci || { echo "npm ci failed"; exit 1; }
+            npm install || { echo "npm install failed"; exit 1; }
 
             # Build application - exit on failure
             npm run build || { echo "Build failed!"; exit 1; }
