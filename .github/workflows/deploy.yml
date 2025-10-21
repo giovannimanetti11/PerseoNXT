@@ -50,8 +50,10 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
           script: |
-            source ~/.nvm/nvm.sh
-            nvm use 22
+            # Install n (Node version manager) and Node 22
+            sudo npm cache clean -f
+            sudo npm install -g n
+            sudo n 22
 
             cd $DEPLOY_PATH
 
