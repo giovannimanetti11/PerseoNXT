@@ -28,12 +28,27 @@ export default defineNuxtPlugin((nuxtApp) => {
       Query: {
         fields: {
           posts: {
-            merge(existing, incoming) {
+            keyArgs: ['first', 'where'],
+            merge(existing, incoming, { args }) {
+              // Don't cache search queries (they change frequently)
+              if (args?.where?.search) {
+                return incoming;
+              }
               return incoming;
             }
           },
           glossaryTerms: {
+            keyArgs: ['first', 'where'],
             merge(existing, incoming) {
+              return incoming;
+            }
+          },
+          blogPosts: {
+            merge(existing, incoming) {
+              // Merge array-based results
+              if (Array.isArray(existing) && Array.isArray(incoming)) {
+                return [...incoming];
+              }
               return incoming;
             }
           }
@@ -48,7 +63,12 @@ export default defineNuxtPlugin((nuxtApp) => {
     cache: cache,
     defaultOptions: {
       watchQuery: {
-        fetchPolicy: 'cache-and-network',
+        fetchPolicy: 'cache-first',
+        errorPolicy: 'all',
+      },
+      query: {
+        fetchPolicy: 'cache-first',
+        errorPolicy: 'all',
       },
     },
   });
