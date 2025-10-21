@@ -255,8 +255,12 @@ export default defineNuxtConfig({
     compressPublicAssets: true,
     routeRules: {
       '/': { static: true },
-      '/sitemap.xml': { 
-        proxy: '/api/sitemap.xml'
+      '/sitemap.xml': {
+        proxy: '/api/sitemap.xml',
+        cache: false
+      },
+      '/api/sitemap.xml': {
+        cache: false
       }
     },
     prerender: {
