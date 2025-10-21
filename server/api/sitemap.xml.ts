@@ -1,8 +1,9 @@
 import { defineEventHandler, setResponseHeaders, getRequestURL } from 'h3'
+import { apiConfig } from '@config'
 
 export default defineEventHandler(async (event) => {
   console.log('=== SITEMAP.XML ENDPOINT CALLED ===');
-  
+
   try {
     // Set the response headers for XML content with proper caching
     const isDev = process.env.NODE_ENV !== 'production'
@@ -14,59 +15,198 @@ export default defineEventHandler(async (event) => {
       'cache-control': cacheControl,
       'x-content-type-options': 'nosniff'
     })
-    
+
     // Compute base URL from current request
     const { origin } = getRequestURL(event)
     const baseUrl = origin || 'https://wikiherbalist.com'
-    
-    // Fetch all URLs from the sitemap-urls endpoint with a timeout
-    let urls;
+
+    // Static URLs that are always included in the sitemap
+    const staticUrls = [
+      { url: '/', lastmod: new Date().toISOString(), changefreq: 'daily', priority: 1 },
+      { url: '/disclaimer', lastmod: new Date().toISOString(), changefreq: 'monthly', priority: 0.5 },
+      { url: '/cookie-policy', lastmod: new Date().toISOString(), changefreq: 'monthly', priority: 0.5 },
+      { url: '/privacy-policy', lastmod: new Date().toISOString(), changefreq: 'monthly', priority: 0.5 },
+      { url: '/about', lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.8 },
+      { url: '/piante-medicinali', lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.8 },
+      { url: '/glossario', lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.8 },
+      { url: '/blog', lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.8 },
+      { url: '/donazioni', lastmod: new Date().toISOString(), changefreq: 'monthly', priority: 0.5 },
+    ];
+
+    // Fetch all URLs from GraphQL directly
+    let urls = [...staticUrls];
     try {
-      console.log('Attempting to fetch from /api/sitemap-urls...');
+      console.log('Loading WordPress configuration from @config...');
 
-      // Set a timeout for the fetch operation
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      const graphqlEndpoint = apiConfig.baseUrl;
+      const username = apiConfig.username;
+      const appPassword = apiConfig.appPassword;
 
-      const { origin } = getRequestURL(event);
-      const res = await fetch(`${origin}/api/sitemap-urls`, {
-        signal: controller.signal,
-        headers: {
-          'Cache-Control': 'no-cache'
+      if (!graphqlEndpoint || !username || !appPassword) {
+        console.error('WordPress credentials missing in @config');
+        throw new Error('WordPress credentials not configured');
+      }
+
+      const authorization = `Basic ${Buffer.from(`${username}:${appPassword}`).toString('base64')}`;
+
+      const fetchWithRetry = async (input: RequestInfo | URL, init: RequestInit & { timeoutMs?: number }, retries = 2): Promise<any> => {
+        const { timeoutMs = 30000, ...rest } = init;
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), timeoutMs);
+        try {
+          const res = await fetch(input, { ...rest, signal: controller.signal });
+          clearTimeout(timer);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+          return await res.json();
+        } catch (err) {
+          clearTimeout(timer);
+          if (retries > 0) {
+            console.log(`Retrying... (${retries} attempts left)`);
+            return await fetchWithRetry(input, init, retries - 1);
+          }
+          throw err;
         }
-      });
+      };
 
-      clearTimeout(timeoutId);
+      const fetchGraphQL = async (query: string, variables?: Record<string, any>) => {
+        return await fetchWithRetry(graphqlEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': authorization
+          },
+          body: JSON.stringify({ query, variables }),
+          timeoutMs: 30000
+        }, 2);
+      };
 
-      if (!res.ok) {
-        throw new Error(`HTTP ${res.status}`);
+      // BlogPosts: paging until all results are fetched
+      const blogQuery = `
+        query FETCH_BLOG_POSTS($first: Int!, $after: String) {
+          blogPosts(first: $first, after: $after, where: { orderby: { field: DATE, order: DESC } }) {
+            nodes {
+              slug
+              date
+              modified
+            }
+            pageInfo {
+              hasNextPage
+              endCursor
+            }
+          }
+        }
+      `;
+
+      let blogNodes: Array<{ slug: string; date?: string; modified?: string; }> = [];
+      let blogHasNext = true;
+      let blogAfter: string | null = null;
+      while (blogHasNext) {
+        const res: any = await fetchGraphQL(blogQuery, { first: 100, after: blogAfter });
+        const conn = res?.data?.blogPosts;
+        const nodes = conn?.nodes || [];
+        blogNodes.push(...nodes);
+        blogHasNext = Boolean(conn?.pageInfo?.hasNextPage);
+        blogAfter = conn?.pageInfo?.endCursor || null;
       }
 
-      const response = await res.json();
-      console.log('Response from sitemap-urls count:', Array.isArray(response) ? response.length : 'invalid');
+      const blogUrls = blogNodes.map(post => ({
+        url: `/blog/${post.slug}`,
+        lastmod: post.modified || post.date || new Date().toISOString(),
+        changefreq: 'weekly',
+        priority: 0.7
+      }));
 
-      if (Array.isArray(response) && response.length > 0) {
-        urls = response;
-        console.log('Using URLs from sitemap-urls endpoint, count:', urls.length);
-      } else {
-        throw new Error('Invalid response format from sitemap-urls');
+      console.log('Blog URLs generated:', blogUrls.length);
+
+      // Posts (monographs): paging
+      const postsQuery = `
+        query FETCH_POSTS($first: Int!, $after: String) {
+          posts(first: $first, after: $after, where: { status: PUBLISH, orderby: { field: DATE, order: DESC } }) {
+            nodes {
+              slug
+              date
+              modified
+            }
+            pageInfo {
+              hasNextPage
+              endCursor
+            }
+          }
+        }
+      `;
+
+      let postNodes: Array<{ slug: string; date?: string; modified?: string; }> = [];
+      let postHasNext = true;
+      let postAfter: string | null = null;
+      while (postHasNext) {
+        const res: any = await fetchGraphQL(postsQuery, { first: 100, after: postAfter });
+        const conn = res?.data?.posts;
+        const nodes = conn?.nodes || [];
+        postNodes.push(...nodes);
+        postHasNext = Boolean(conn?.pageInfo?.hasNextPage);
+        postAfter = conn?.pageInfo?.endCursor || null;
       }
+
+      const postUrls = postNodes.map(post => ({
+        url: `/piante-medicinali/${post.slug}`,
+        lastmod: post.modified || post.date || new Date().toISOString(),
+        changefreq: 'weekly',
+        priority: 0.7
+      }));
+
+      console.log('Post URLs generated:', postUrls.length);
+
+      // Glossary: paging (aligned with pages/glossario/index.vue -> glossaryTerms)
+      const glossaryQuery = `
+        query FETCH_GLOSSARY_TERMS($first: Int!, $after: String) {
+          glossaryTerms(first: $first, after: $after) {
+            nodes {
+              slug
+              date
+              modified
+            }
+            pageInfo {
+              hasNextPage
+              endCursor
+            }
+          }
+        }
+      `;
+
+      let termNodes: Array<{ slug: string; date?: string; modified?: string; }> = [];
+      let termHasNext = true;
+      let termAfter: string | null = null;
+      while (termHasNext) {
+        const res: any = await fetchGraphQL(glossaryQuery, { first: 100, after: termAfter });
+        if (res?.errors) {
+          console.error('GraphQL errors (glossaryTerms):', JSON.stringify(res.errors));
+        }
+        const conn = res?.data?.glossaryTerms;
+        const nodes = conn?.nodes || [];
+        termNodes.push(...nodes);
+        termHasNext = Boolean(conn?.pageInfo?.hasNextPage);
+        termAfter = conn?.pageInfo?.endCursor || null;
+      }
+
+      const glossaryUrls = termNodes.map(term => ({
+        url: `/glossario/${term.slug}`,
+        lastmod: term.modified || term.date || new Date().toISOString(),
+        changefreq: 'monthly',
+        priority: 0.6
+      }));
+
+      console.log('Glossary URLs generated:', glossaryUrls.length);
+
+      // Final merge + anti-Algolia filter
+      urls = [...staticUrls, ...blogUrls, ...postUrls, ...glossaryUrls]
+        .filter(item => !/algolia/i.test(item.url));
+
+      console.log('Total URLs in sitemap:', urls.length);
+
     } catch (error) {
-      console.error('Error fetching sitemap URLs:', error);
-      console.log('Using fallback URLs');
-      
-      // Provide fallback URLs for critical pages
-      urls = [
-        { url: '/', lastmod: new Date().toISOString(), changefreq: 'daily', priority: 1 },
-        { url: '/about', lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.8 },
-        { url: '/blog', lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.8 },
-        { url: '/glossario', lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.8 },
-        { url: '/piante-medicinali', lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.8 },
-        { url: '/disclaimer', lastmod: new Date().toISOString(), changefreq: 'monthly', priority: 0.5 },
-        { url: '/cookie-policy', lastmod: new Date().toISOString(), changefreq: 'monthly', priority: 0.5 },
-        { url: '/privacy-policy', lastmod: new Date().toISOString(), changefreq: 'monthly', priority: 0.5 },
-        { url: '/donazioni', lastmod: new Date().toISOString(), changefreq: 'monthly', priority: 0.5 }
-      ];
+      console.error('Error fetching sitemap URLs from GraphQL:', error);
+      console.log('Using static URLs only');
+      // urls already contains staticUrls
     }
     
     // Generate the XML sitemap with proper formatting for lastmod dates
