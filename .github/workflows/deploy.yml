@@ -39,25 +39,19 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
           script: |
-            # Load NVM and set Node path
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            source ~/.nvm/nvm.sh
             nvm use 22
-
-            # Get Node and npm paths from NVM
-            NODE_PATH=$(which node)
-            NPM_PATH=$(which npm)
 
             cd $DEPLOY_PATH
 
             # Clean all build artifacts and dependencies with sudo (permission issues)
             sudo rm -rf .nuxt .output node_modules package-lock.json
 
-            # Install dependencies (use full path to npm)
-            sudo $NPM_PATH install || { echo "npm install failed"; exit 1; }
+            # Install dependencies
+            sudo npm install || { echo "npm install failed"; exit 1; }
 
-            # Build application - exit on failure (use full path to npm)
-            sudo $NPM_PATH run build || { echo "Build failed!"; exit 1; }
+            # Build application - exit on failure
+            sudo npm run build || { echo "Build failed!"; exit 1; }
 
             # Restart PM2 process (runs as root)
             sudo pm2 restart wikiherbalist || { echo "PM2 restart failed!"; exit 1; }
