@@ -42,15 +42,12 @@ jobs:
             cd /var/www/wikiherbalist.com/nuxt-app
 
             # Install dependencies
-            npm ci
+            npm ci || { echo "npm ci failed"; exit 1; }
 
-            # Build application (uses .env on VPS)
-            npm run build
+            # Build application - exit on failure
+            npm run build || { echo "Build failed!"; exit 1; }
 
             # Restart PM2 process
-            pm2 restart wikiherbalist
-
-            # Save PM2 process list
-            pm2 save
+            pm2 restart wikiherbalist || { echo "PM2 restart failed!"; exit 1; }
 
             echo "Deployment completed successfully!"

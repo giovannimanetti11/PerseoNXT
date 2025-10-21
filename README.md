@@ -113,6 +113,36 @@ DB_NAME=your_database_name
 
 **Note**: The `.env` file is already in `.gitignore` to avoid exposing sensitive information in your repository.
 
+### Production Deployment with PM2
+
+When deploying to production using PM2, environment variables must be configured in the `ecosystem.config.cjs` file. PM2 does not automatically load `.env` files, so all environment variables must be explicitly defined in the ecosystem configuration:
+
+```javascript
+module.exports = {
+  apps: [{
+    name: 'your-app-name',
+    script: './.output/server/index.mjs',
+    instances: 1,
+    exec_mode: 'cluster',
+    env: {
+      NODE_ENV: 'production',
+      PORT: 3001,
+      WP_BASE_URL: 'your_wordpress_url',
+      WP_APP_PASSWORD: 'your_password',
+      WP_USERNAME: 'your_username',
+      // ... add all other environment variables here
+    }
+  }]
+}
+```
+
+⚠️ **Important**: After updating environment variables in `ecosystem.config.cjs`, you must rebuild the application for changes to take effect:
+
+```bash
+npm run build
+pm2 restart your-app-name
+```
+
 ## Usage
 
 After installation and configuration, you can start developing your own headless WordPress site using PerseoNXT as a base. Customize the theme to fit your specific needs and design preferences.
