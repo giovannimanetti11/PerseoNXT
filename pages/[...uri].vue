@@ -300,11 +300,12 @@ const globalLinkedWords = ref(new Set<string>());
 // Active tooltip state
 const activeTooltip = ref<string | null>(null);
 
-// Fetch post data using useAsyncData
 const { data: postData, pending, error } = useAsyncData(
-  'postData',
+  () => `postData-${Array.isArray(route.params.uri) ? route.params.uri[0] : route.params.uri}`,
   async () => {
     const slug = Array.isArray(route.params.uri) ? route.params.uri[0] : route.params.uri;
+    globalLinkedWords.value = new Set<string>();
+
     try {
       const { data } = await apolloClient.query({
         query: FETCH_POST_BY_SLUG,
@@ -334,11 +335,10 @@ const { data: postData, pending, error } = useAsyncData(
 // Watch for changes in postData and update post reactive object
 watch(postData, async (newPostData) => {
   post.data = newPostData;
-  
+
   if (newPostData) {
     await nextTick();
     processPostContent();
-    globalLinkedWords.value.clear();
   }
 }, { immediate: true });
 
