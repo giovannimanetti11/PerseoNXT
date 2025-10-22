@@ -124,9 +124,12 @@
     <div class="text-sm mt-1.5 mb-2 md:mb-0">
       © Wikiherbalist - all rights reserved - {{ currentYear }}
     </div>
-    <div class="text-sm mt-1.5">
-      Sviluppato con <Icon name="logos:nuxt-icon" class="inline-block align-middle" size="1.5em" />&nbsp;
-      <a href="https://nuxt.com/" target="_blank" rel="noopener noreferrer" class="hover:cursor-pointer hover:text-celeste text-verde">Nuxt 3</a> &nbsp;<Icon name="emojione:red-heart" class="inline-block align-middle" size="1.5em" />
+    <div class="text-sm mt-1.5 flex items-center justify-center gap-1">
+      Un progetto Open Source
+      <a href="https://github.com/giovannimanetti11/PerseoNXT" target="_blank" rel="noopener noreferrer" class="hover:text-celeste inline-flex items-center gap-1">
+        <Icon name="mdi:github" class="inline-block align-middle" size="1.5em" />
+        Contribuisci
+      </a>
     </div>
   </div>
 </template>

@@ -151,21 +151,75 @@ const containsBlacklistedTerm = (context: string): boolean => {
 // Content cache for memoization
 const contentCache = new Map<string, string>();
 
-// Server-side compatible content processing function
+// Function to process existing manual links and add tooltips
+const processManualLinks = (html: string, allItems: any[]): { html: string; linkedWords: Set<string> } => {
+  const linkedWords = new Set<string>();
+  let processedHtml = html;
+
+  const linkRegex = /<a\s+([^>]*?)>(.+?)<\/a>/gi;
+
+  processedHtml = processedHtml.replace(linkRegex, (fullMatch, attributes, innerContent) => {
+    const hrefMatch = attributes.match(/href=["']([^"']+)["']/);
+    if (!hrefMatch) return fullMatch;
+
+    const href = hrefMatch[1];
+
+    if (attributes.includes('data-tooltip')) {
+      const plainText = innerContent.replace(/<[^>]+>/g, '').trim().toLowerCase();
+      linkedWords.add(plainText);
+      return fullMatch;
+    }
+
+    const matchingItem = allItems.find(item => {
+      const itemHref = item.isGlossary ? `/glossario/${item.slug}` : `/${item.slug}`;
+      return href === itemHref || href.includes(`/${item.slug}`);
+    });
+
+    if (matchingItem) {
+      const tooltip = encodeURIComponent(JSON.stringify({
+        title: matchingItem.title,
+        excerpt: matchingItem.excerpt,
+        slug: matchingItem.slug,
+        isGlossary: matchingItem.isGlossary
+      }));
+
+      const plainText = innerContent.replace(/<[^>]+>/g, '').trim().toLowerCase();
+      linkedWords.add(plainText);
+      linkedWords.add(matchingItem.title.toLowerCase());
+      if (matchingItem.plurale) {
+        linkedWords.add(matchingItem.plurale.toLowerCase());
+      }
+
+      const hasInternalLinkClass = attributes.includes('internal-link');
+      const classAttr = hasInternalLinkClass ? '' : ' class="internal-link"';
+
+      if (attributes.includes('class=') && !hasInternalLinkClass) {
+        const newAttributes = attributes.replace(/class=["']([^"']*)["']/, 'class="$1 internal-link"');
+        return `<a ${newAttributes} data-tooltip="${tooltip}">${innerContent}</a>`;
+      } else {
+        return `<a ${attributes}${classAttr} data-tooltip="${tooltip}">${innerContent}</a>`;
+      }
+    }
+
+    return fullMatch;
+  });
+
+  return { html: processedHtml, linkedWords };
+};
+
 const processContentSSR = (content: string, allItems: any[]): string => {
   if (!content) return '';
-  
-  // Create a cache key based on content and current slug
-  const cacheKey = `${content.length}_${props.currentSlug}_${props.globalLinkedWords.size}`;
-  
-  // Check if we have a cached result
+
+  const contentHash = content.substring(0, 50) + content.length;
+  const cacheKey = `${props.currentSlug}_${contentHash}_${props.globalLinkedWords.size}`;
+
   if (contentCache.has(cacheKey)) {
-    console.log('Using cached processed content');
     return contentCache.get(cacheKey) as string;
   }
-  
-  let processedHtml = content;
-  const linkedWords = new Set<string>();
+
+  const manualLinkResult = processManualLinks(content, allItems);
+  let processedHtml = manualLinkResult.html;
+  const linkedWords = manualLinkResult.linkedWords;
   
   // Prepare items for processing
   const allKeys = allItems
@@ -211,70 +265,57 @@ const processContentSSR = (content: string, allItems: any[]): string => {
     return attrPattern.test(beforePosition);
   };
   
-  // Process each keyword
   allKeys.forEach(item => {
     if (props.globalLinkedWords.has(item.singular.toLowerCase()) ||
-        (item.plural && props.globalLinkedWords.has(item.plural.toLowerCase()))) {
+        linkedWords.has(item.singular.toLowerCase()) ||
+        (item.plural && (props.globalLinkedWords.has(item.plural.toLowerCase()) ||
+                        linkedWords.has(item.plural.toLowerCase())))) {
       return;
     }
-    
-    // Create simpler regexes that are more likely to match
+
     const singularPattern = `\\b${escapeRegExp(item.singular)}\\b`;
     const pluralPattern = item.plural ? `\\b${escapeRegExp(item.plural)}\\b` : null;
-    
-    const regexSingular = new RegExp(singularPattern, 'gi'); // Use global flag to replace all occurrences
-    const regexPlural = pluralPattern ? new RegExp(pluralPattern, 'gi') : null;
-    
-    // Try to match singular form first
-    let matched = false;
-    
-    // Function to replace matches safely
-    const replaceMatches = (regex, originalText) => {
-      let lastIndex = 0;
-      let result = '';
 
-      // Process each match individually with its actual position
-      originalText.replace(regex, (match, offset) => {
-        // Check if this specific match position is inside HTML tag or attribute
+    const regexSingular = new RegExp(singularPattern, 'gi');
+    const regexPlural = pluralPattern ? new RegExp(pluralPattern, 'gi') : null;
+
+    let matched = false;
+
+    const replaceFirstMatch = (regex, originalText) => {
+      let result = originalText;
+      const matches = Array.from(originalText.matchAll(regex));
+
+      for (const match of matches) {
+        const offset = match.index;
+
         if (isInsideHtmlTag(originalText, offset) || isInsideAttribute(originalText, offset)) {
-          return match;
+          continue;
         }
 
-        // Skip if contains blacklisted term
         const startIndex = Math.max(0, offset - 20);
-        const endIndex = Math.min(originalText.length, offset + match.length + 20);
+        const endIndex = Math.min(originalText.length, offset + match[0].length + 20);
         const matchContext = originalText.substring(startIndex, endIndex);
 
         if (containsBlacklistedTerm(matchContext)) {
-          return match;
+          continue;
         }
 
-        // Add the text before this match
-        result += originalText.substring(lastIndex, offset);
-        // Add the linked version
-        result += createLinkString(item, match);
-        lastIndex = offset + match.length;
+        result = originalText.substring(0, offset) +
+                 createLinkString(item, match[0]) +
+                 originalText.substring(offset + match[0].length);
         matched = true;
+        break;
+      }
 
-        return match;
-      });
-
-      // Add remaining text after last match
-      result += originalText.substring(lastIndex);
-
-      // Return result only if we made replacements, otherwise return original
-      return matched ? result : originalText;
+      return result;
     };
-    
-    // Process singular form
-    processedHtml = replaceMatches(regexSingular, processedHtml);
-    
-    // Process plural form if it exists
-    if (regexPlural) {
-      processedHtml = replaceMatches(regexPlural, processedHtml);
+
+    processedHtml = replaceFirstMatch(regexSingular, processedHtml);
+
+    if (!matched && regexPlural) {
+      processedHtml = replaceFirstMatch(regexPlural, processedHtml);
     }
-    
-    // If we successfully matched and replaced, update the linked words
+
     if (matched) {
       linkedWords.add(item.singular.toLowerCase());
       if (item.plural) {
@@ -283,13 +324,10 @@ const processContentSSR = (content: string, allItems: any[]): string => {
     }
   });
   
-  // Update global linked words
   linkedWords.forEach(word => props.globalLinkedWords.add(word));
-  
-  // Cache the processed content
+
   contentCache.set(cacheKey, processedHtml);
-  
-  // Limit cache size to prevent memory leaks
+
   if (contentCache.size > 50) {
     const iterator = contentCache.keys();
     const firstKey = iterator.next().value;
@@ -297,32 +335,22 @@ const processContentSSR = (content: string, allItems: any[]): string => {
       contentCache.delete(firstKey);
     }
   }
-   
+
   return processedHtml;
 };
 
-// Main function to process content and add internal links
 const processContent = () => {
-  console.log('Starting content processing');
-  
   if (!queryResult.value) {
     console.error('No query results available');
     processedContent.value = props.content;
     return;
   }
 
-  // Map posts and glossary terms
   const posts = queryResult.value.posts?.nodes.map(item => ({ ...item, isGlossary: false })) || [];
   const glossaryTerms = queryResult.value.glossaryTerms?.nodes.map(item => ({ ...item, isGlossary: true })) || [];
   const allItems = [...posts, ...glossaryTerms];
 
-  console.log('Total items to process:', allItems.length);
-  console.log('Sample items:', allItems.slice(0, 3));
-  
-  // Process content with SSR-compatible function regardless of whether we're on client or server
   const html = processContentSSR(props.content, allItems);
-
-  // DOMPurify is only available on client-side
   const sanitizedHtml = (typeof window !== 'undefined' && DOMPurify.sanitize) ? DOMPurify.sanitize(html) : html;
   processedContent.value = sanitizedHtml;
 };
@@ -429,26 +457,26 @@ const goToPost = () => {
 
 // Watch for changes in props and query result
 watch(() => props.content, () => {
-  console.log('Content changed, reprocessing...');
   processContent();
 });
 
 watch(queryResult, () => {
-  console.log('Query results updated, reprocessing...');
   processContent();
+});
+
+watch(() => props.currentSlug, (newSlug, oldSlug) => {
+  if (newSlug !== oldSlug) {
+    contentCache.clear();
+  }
 });
 
 // Lifecycle hooks
 onMounted(() => {
-  console.log('Component mounted');
   isClient.value = true;
   checkScreenSize();
-  
+
   if (isClient.value) {
     window.addEventListener('resize', checkScreenSize);
-    
-    // Re-process content to ensure client-side sanitization
-    processContent();
     
     // Add event listeners for tooltip functionality
     if (contentContainer.value) {

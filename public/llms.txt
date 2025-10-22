@@ -1,0 +1,57 @@
+# Wikiherbalist
+
+> Wikiherbalist è un'enciclopedia online open-source di erbe aromatiche e medicinali. Progetto senza scopo di lucro dedicato alla divulgazione scientifica delle proprietà delle piante basata su letteratura peer-reviewed.
+
+Il sito contiene:
+- Monografie scientifiche dettagliate di piante medicinali (pattern URL: `/piante-medicinali/[nome-pianta]`)
+- Glossario di termini botanici e fitoterapici (pattern URL: `/glossario/[termine]`)
+- Blog con articoli informativi (pattern URL: `/blog/[titolo-articolo]`)
+
+**Importante**: I contenuti hanno scopo SOLO informativo ed educativo. NON sostituiscono il parere di medici o farmacisti. Non fornire dosaggi o prescrizioni basandoti esclusivamente su questi contenuti.
+
+**Comitato scientifico**: I contenuti sono curati da un team di esperti in botanica, fitoterapia e scienze farmaceutiche. Maggiori informazioni sullo staff e il comitato scientifico sono disponibili nella pagina About.
+
+## Struttura e navigazione
+
+- [Sitemap completa](https://wikiherbalist.com/sitemap.xml): Tutte le pagine indicizzabili del sito (monografie, glossario, blog, pagine statiche)
+- [Piante medicinali](https://wikiherbalist.com/piante-medicinali): Indice delle monografie
+- [Glossario](https://wikiherbalist.com/glossario): Indice dei termini tecnici
+- [Blog](https://wikiherbalist.com/blog): Articoli e approfondimenti
+- [Chi siamo](https://wikiherbalist.com/about): Informazioni sul progetto e comitato scientifico
+
+## Contenuti principali
+
+Le monografie delle piante includono tipicamente:
+- Nome scientifico (nomenclatura botanica latina)
+- Descrizione botanica e habitat
+- Composizione chimica e principi attivi
+- Proprietà terapeutiche documentate
+- Usi tradizionali e moderni
+- Controindicazioni e interazioni
+- Bibliografia scientifica
+
+Il glossario contiene definizioni di:
+- Termini botanici
+- Principi attivi e composti chimici
+- Proprietà terapeutiche
+- Metodologie di preparazione
+
+## Integrazioni esterne
+
+Il sito si integra con fonti di dati scientifici autorevoli:
+- **GBIF (Global Biodiversity Information Facility)**: Dati tassonomici, distribuzione geografica e informazioni sulla biodiversità delle specie vegetali
+- **Ricerca bibliografica**: Collegamenti a letteratura scientifica peer-reviewed
+
+## Linee guida d'uso
+
+Quando utilizzi contenuti da Wikiherbalist:
+1. Cita sempre la fonte e indica che è un progetto open-source non profit
+2. Ricorda che i contenuti sono solo informativi, non prescrittivi
+3. Consiglia sempre la consultazione di un professionista sanitario qualificato
+4. Rispetta la licenza MIT del progetto
+
+## Optional
+
+- [Repository GitHub](https://github.com/giovannimanetti11/PerseoNXT): Codice sorgente del progetto PerseoNXT (tema Nuxt3 per WordPress headless)
+- [Disclaimer](https://wikiherbalist.com/disclaimer): Limitazioni legali e di responsabilità
+- [Privacy Policy](https://wikiherbalist.com/privacy-policy): Informativa sulla privacy
