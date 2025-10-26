@@ -55,20 +55,13 @@
       </section>
 
       <!-- Introduction section -->
-      <section v-if="introSection" class="term-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full post-section-introduction">
-        <div class="mt-4">
-          <InternalLinking
-            :content="introSection.content"
-            :currentSlug="glossaryTerm.slug"
-            :globalLinkedWords="globalLinkedWords"
-            @update:linked-words="updateGlobalLinkedWords"
-          />
-        </div>
+      <section v-if="introSection" class="term-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4">
+        <div v-html="sanitizeHtml(introSection.content)"></div>
       </section>
 
       <!-- Content sections -->
       <section v-for="(section, index) in sections"
-              :class="['term-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full', section.className]"
+              :class="['term-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4', section.className]"
               :id="'section' + (index + 1)"
               :key="section.heading">
         <div class="flex items-center" v-if="section.heading !== 'Riferimenti'">
@@ -78,14 +71,7 @@
           <h3 class="text-xl md:text-2xl">{{ section.heading }}</h3>
         </div>
         <h3 v-else class="text-xl md:text-2xl mb-4">{{ section.heading }}</h3>
-        <div class="mt-4">
-          <InternalLinking
-            :content="section.content"
-            :currentSlug="glossaryTerm.slug"
-            :globalLinkedWords="globalLinkedWords"
-            @update:linked-words="updateGlobalLinkedWords"
-          />
-        </div>
+        <div class="mt-4" v-html="sanitizeHtml(section.content)"></div>
       </section>
     </div>
   </div>
@@ -96,11 +82,10 @@ import { ref, computed, watch, defineAsyncComponent } from 'vue';
 import { useRoute } from 'vue-router';
 import { useApolloClient } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
-import { useYoastSeo } from '~/composables/useYoastSeo';
-import { useRuntimeConfig } from '#app';
+import { useRuntimeConfig, useHead } from '#app';
+import DOMPurify from 'dompurify';
 
-// Import critical components directly to improve SEO
-import InternalLinking from '~/components/internalLinking.vue';
+// Import critical components directly for better SSR
 import GlossarioInfo from '~/components/glossario/glossarioinfo.vue';
 import Breadcrumbs from '~/components/breadcrumbs.vue';
 
@@ -113,8 +98,17 @@ const config = useRuntimeConfig();
 const route = useRoute();
 const apolloClient = useApolloClient().resolveClient();
 
+// Sanitize HTML to prevent XSS attacks
+const sanitizeHtml = (html) => {
+  if (!html) return '';
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'a', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'code', 'pre', 'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'span', 'div'],
+    ALLOWED_ATTR: ['href', 'title', 'target', 'rel', 'src', 'alt', 'class', 'id', 'style'],
+    ALLOW_DATA_ATTR: false
+  });
+};
+
 // State management
-const globalLinkedWords = ref(new Set());
 const headings = ref([]);
 const sections = ref([]);
 const introSection = ref(null);
@@ -174,24 +168,6 @@ const { data: glossaryTerm, pending, error } = useAsyncData(
       }
 
       const termData = data.glossaryTermBy;
-      
-      // Set SEO meta tags immediately for SSR
-      const fullUrl = `https://wikiherbalist.com/glossario/${slug}`;
-      const yoastDataImmediate = {
-        ...termData.seo,
-        siteName: config.public.siteName,
-        url: fullUrl,
-        type: 'article',
-        image: termData.seo?.opengraphImage?.sourceUrl || 
-               termData.featuredImage?.node?.sourceUrl || 
-               'https://wikiherbalist.com/images/default-og-image.jpg',
-        publishedTime: termData.date,
-        modifiedTime: termData.modified || termData.date,
-        author: termData.authorName,
-      };
-      
-      useYoastSeo(ref(yoastDataImmediate));
-
       return termData;
     } catch (error) {
       console.error('Fetch error:', error);
@@ -227,22 +203,33 @@ watch(glossaryTerm, async (newTerm) => {
 
   if (newTerm) {
     const fullUrl = `https://wikiherbalist.com${route.fullPath}`;
-    yoastData.value = {
-      ...newTerm.seo,
-      siteName: config.public.siteName,
-      url: fullUrl,
-      type: 'article',
-      image: newTerm.seo?.opengraphImage?.sourceUrl || 
-             newTerm.featuredImage?.node?.sourceUrl || 
-             'https://wikiherbalist.com/images/default-og-image.jpg',
-      publishedTime: newTerm.date,
-      modifiedTime: newTerm.modified || newTerm.date,
-      author: newTerm.authorName,
-    };
-
-    useYoastSeo(yoastData);
   }
 }, { immediate: true });
+
+// Computed for SEO data
+const seoTitle = computed(() => term.value?.seo?.title || term.value?.title || '');
+const seoDescription = computed(() => term.value?.seo?.metaDesc || '');
+const seoImage = computed(() => 
+  term.value?.seo?.opengraphImage?.sourceUrl || 
+  term.value?.featuredImage?.node?.sourceUrl || 
+  'https://wikiherbalist.com/images/default-og-image.jpg'
+);
+
+// Set meta tags with useHead at top level
+useHead({
+  title: seoTitle,
+  meta: [
+    { name: 'description', content: seoDescription },
+    { property: 'og:title', content: seoTitle },
+    { property: 'og:description', content: seoDescription },
+    { property: 'og:image', content: seoImage },
+    { property: 'og:type', content: 'article' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: seoTitle },
+    { name: 'twitter:description', content: seoDescription },
+    { name: 'twitter:image', content: seoImage }
+  ]
+});
 
 async function processContent(content) {
   try {
