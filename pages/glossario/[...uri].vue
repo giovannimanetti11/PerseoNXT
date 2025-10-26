@@ -99,15 +99,12 @@ import gql from 'graphql-tag';
 import { useYoastSeo } from '~/composables/useYoastSeo';
 import { useRuntimeConfig } from '#app';
 
-const GlossarioInfo = defineAsyncComponent(() =>
-  import('~/components/glossario/glossarioinfo.vue')
-);
-const Breadcrumbs = defineAsyncComponent(() =>
-  import('~/components/breadcrumbs.vue')
-);
-const InternalLinking = defineAsyncComponent(() =>
-  import('~/components/internalLinking.vue')
-);
+// Import critical components directly to improve SEO
+import InternalLinking from '~/components/internalLinking.vue';
+import GlossarioInfo from '~/components/glossario/glossarioinfo.vue';
+import Breadcrumbs from '~/components/breadcrumbs.vue';
+
+// Lazy load non-critical components
 const SchemaMarkup = defineAsyncComponent(() =>
   import('~/components/schemaMarkup.vue')
 );

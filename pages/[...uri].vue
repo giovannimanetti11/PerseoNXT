@@ -221,14 +221,16 @@ import { useRuntimeConfig, useAsyncData } from '#app';
 import { useYoastSeo } from '~/composables/useYoastSeo';
 import { useReferences } from '~/composables/useReferences'
 
-// Lazy load components
-const Breadcrumbs = defineAsyncComponent(() => import('@/components/breadcrumbs.vue'));
+// Import critical components directly to improve SEO
+import InternalLinking from '@/components/internalLinking.vue';
+import Breadcrumbs from '@/components/breadcrumbs.vue';
+import PostInfo from '@/components/posts/postinfo.vue';
+
+// Lazy load non-critical components
 const Slideshow = defineAsyncComponent(() => import('@/components/posts/slideshow.vue'));
-const PostInfo = defineAsyncComponent(() => import('@/components/posts/postinfo.vue'));
 const ObservationsMap = defineAsyncComponent(() => import('@/components/posts/observationsMap.vue'));
 const EditContentProposal = defineAsyncComponent(() => import('@/components/editContentProposal.vue'));
 const SchemaMarkup = defineAsyncComponent(() => import('@/components/schemaMarkup.vue'));
-const InternalLinking = defineAsyncComponent(() => import('@/components/internalLinking.vue'));
 
 const config = useRuntimeConfig();
 const route = useRoute();
