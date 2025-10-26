@@ -5,7 +5,7 @@
       <icon name="eos-icons:three-dots-loading" class="text-5xl text-celeste" />
     </div>
     <div class="flex flex-col md:flex-row justify-between w-full py-2 px-2 md:px-4 bg-white">
-      <p class="text-center md:text-left text-base">Osservazioni di <span class="font-bold italic">{{ nomeScientifico }}</span> nel 2023.</p>
+      <p class="text-center md:text-left text-base">Osservazioni di <span class="font-bold italic">{{ nomeScientifico }}</span> nel 2024.</p>
       <p class="text-center md:text-left text-xs"> Credits: <a href="https://www.gbif.org/" target="_blank" rel="noopener noreferrer" class="text-blu hover:text-celeste">GBIF</a> | <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener noreferrer" class="text-blu hover:text-celeste">OpenStreetMap</a></p>
     </div>
   </div>
@@ -56,7 +56,7 @@ const fetchTaxonKey = async (scientificName: string): Promise<number | null> => 
 
 const fetchOccurrencesWithLimits = async (taxonKey: number, offset: number, limit: number): Promise<{ results: any[], endOfRecords: boolean }> => {
   try {
-    const response = await fetch(`https://api.gbif.org/v1/occurrence/search?taxon_key=${taxonKey}&year=2023&hasCoordinate=true&basisOfRecord=HUMAN_OBSERVATION&offset=${offset}&limit=${limit}`);
+    const response = await fetch(`https://api.gbif.org/v1/occurrence/search?taxon_key=${taxonKey}&year=2024&hasCoordinate=true&basisOfRecord=HUMAN_OBSERVATION&offset=${offset}&limit=${limit}`);
     if (!response.ok) throw new Error('Network response was not ok');
     return response.json();
   } catch (error) {
