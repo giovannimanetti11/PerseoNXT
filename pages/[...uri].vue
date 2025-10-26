@@ -103,10 +103,11 @@
           <li v-for="tag in post.data.tags.nodes" :key="tag.id" 
               class="relative hover:bg-blu hover:text-white text-center py-2 md:py-4 px-2 md:px-4 bg-white text-blu rounded-xl text-xs md:text-sm cursor-pointer w-full sm:w-2/5 md:w-1/5 flex-grow-0 flex-shrink-0"
               @click="toggleTooltip(tag.id)"
-              @mouseenter="showTooltip(tag.id)">
+              @mouseenter="handleMouseEnterTag(tag.id)"
+              @mouseleave="handleMouseLeaveTag">
             {{ tag.name }}
             <div v-if="activeTooltip === tag.id" 
-                class="tooltip-custom fixed z-50 bg-white rounded-lg shadow-lg text-sm text-gray-700"
+                class="tooltip-custom fixed z-50 bg-white border border-blu rounded-lg shadow-xl text-sm text-gray-700"
                 :style="tooltipStyle"
                 @click.stop>
               <div class="p-6">
@@ -297,8 +298,10 @@ const post = reactive({
   structuredContent: [] as any[]
 });
 
-// Active tooltip state
 const activeTooltip = ref<string | null>(null);
+const isScrolling = ref(false);
+let mouseEnterTimeout: number | null = null;
+let scrollTimeout: number | null = null;
 
 const { data: postData, pending, error } = useAsyncData(
   () => `postData-${Array.isArray(route.params.uri) ? route.params.uri[0] : route.params.uri}`,
@@ -490,10 +493,18 @@ const parseStringToArray = (str?: string): string[] => str?.split(/[\s]*[;,][\s]
 const partiUsateArray = computed(() => parseStringToArray(post.data?.partiUsate));
 const nomeComuneArray = computed(() => parseStringToArray(post.data?.nomeComune));
 
-// Tooltip interaction functions
-const showTooltip = (tagId: string) => activeTooltip.value = tagId;
-const hideTooltip = () => activeTooltip.value = null;
+const showTooltip = (tagId: string) => {
+  if (isScrolling.value) return;
+  activeTooltip.value = tagId;
+};
+
+const hideTooltip = () => {
+  if (mouseEnterTimeout) clearTimeout(mouseEnterTimeout);
+  activeTooltip.value = null;
+};
+
 const toggleTooltip = (tagId: string) => {
+  if (isScrolling.value) return;
   if (activeTooltip.value === tagId) {
     hideTooltip();
   } else {
@@ -501,7 +512,24 @@ const toggleTooltip = (tagId: string) => {
   }
 };
 
-// Computed styles for tooltip
+const handleMouseEnterTag = (tagId: string) => {
+  if (isScrolling.value) return;
+  showTooltip(tagId);
+};
+
+const handleMouseLeaveTag = () => {
+  if (mouseEnterTimeout) clearTimeout(mouseEnterTimeout);
+};
+
+const handleScrollPage = () => {
+  hideTooltip();
+  isScrolling.value = true;
+  if (scrollTimeout) clearTimeout(scrollTimeout);
+  scrollTimeout = window.setTimeout(() => {
+    isScrolling.value = false;
+  }, 200);
+};
+
 const tooltipStyle = computed(() => ({
   position: 'fixed',
   top: '50%',
@@ -509,11 +537,10 @@ const tooltipStyle = computed(() => ({
   transform: 'translate(-50%, -50%)',
   width: '600px',
   maxWidth: '90vw',
-  maxHeight: '90vh',
+  maxHeight: '80vh',
   overflowY: 'auto'
 }));
 
-// Event handler for clicks outside the tooltip
 const handleClickOutside = (event: MouseEvent) => {
   if (process.client && activeTooltip.value !== null) {
     const tooltipElement = document.querySelector('.tooltip-custom');
@@ -525,31 +552,23 @@ const handleClickOutside = (event: MouseEvent) => {
   }
 };
 
-// Smooth scroll function
-const smoothScroll = (targetId: string) => {
-  if (process.client) {
-    const targetElement = document.querySelector(targetId);
-    if (targetElement) {
-      targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }
-};
-
-// Lifecycle hooks
 onMounted(() => {
   if (process.client) {
     window.addEventListener('click', handleClickOutside);
-    processPostContent(); // Ensure content is processed after mount
+    window.addEventListener('scroll', handleScrollPage, { passive: true });
+    processPostContent();
   }
 });
 
 onUnmounted(() => {
   if (process.client) {
     window.removeEventListener('click', handleClickOutside);
+    window.removeEventListener('scroll', handleScrollPage);
   }
+  if (mouseEnterTimeout) clearTimeout(mouseEnterTimeout);
+  if (scrollTimeout) clearTimeout(scrollTimeout);
 });
 
-// Add computed property for references
 const references = computed(() => {
   const referencesSection = post.data.structuredContent?.find(section => section.title === 'Riferimenti')
   if (referencesSection?.content) {
@@ -558,7 +577,6 @@ const references = computed(() => {
   return []
 })
 
-// Add computed property to check if "Fitochimica" section already exists in the content
 const hasFitochimicaSection = computed(() => post.structuredContent?.some(section => section.title === 'Fitochimica') || false)
 </script>
 
