@@ -114,7 +114,7 @@
                 <button @click.stop="hideTooltip" class="absolute top-2 right-2 text-blu hover:text-celeste" aria-label="Chiudi tooltip">
                   <Icon name="mdi:close" class="text-xl" aria-hidden="true" />
                 </button>
-                <p v-html="tag.description" class="font-normal text-left"></p>
+                <p v-html="sanitizeHtml(tag.description)" class="font-normal text-left"></p>
               </div>
             </div>
           </li>
@@ -163,7 +163,12 @@
           <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">5</div>
           <h3 class="text-xl md:text-2xl">Fitochimica</h3>
         </div>
-        <div class="mt-4" v-if="post.data.costituenti" v-html="sanitizeHtml(post.data.costituenti)"></div>
+        <div class="mt-4">
+          <ContentTooltip
+            v-if="post.data.costituenti"
+            :content="post.data.costituenti"
+          />
+        </div>
       </section>
 
       <!-- Dynamic content sections -->
@@ -177,11 +182,19 @@
         </div>
         <h3 v-else class="text-xl md:text-2xl mb-4">{{ section.title }}</h3>
 
-        <div class="mt-4" v-if="section.content" v-html="sanitizeHtml(section.content)"></div>
+        <div class="mt-4">
+          <ContentTooltip
+            v-if="section.content"
+            :content="section.content"
+          />
+        </div>
 
         <div v-for="(subSection, subIndex) in section.subSections" :key="subIndex" class="mt-6">
           <h4 class="text-lg md:text-xl font-semibold mb-2">{{ subSection.title }}</h4>
-          <div v-if="subSection.content" v-html="sanitizeHtml(subSection.content)"></div>
+          <ContentTooltip
+            v-if="subSection.content"
+            :content="subSection.content"
+          />
         </div>
       </section>
 
@@ -200,6 +213,7 @@ import { useReferences } from '~/composables/useReferences'
 import DOMPurify from 'dompurify'
 
 // Import critical components directly to improve SEO
+import ContentTooltip from '@/components/contentTooltip.vue';
 import Breadcrumbs from '@/components/breadcrumbs.vue';
 import PostInfo from '@/components/posts/postinfo.vue';
 
