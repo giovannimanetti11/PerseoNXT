@@ -1,14 +1,17 @@
 import { useHead } from '#app'
-import { computed } from 'vue'
+import { computed, isRef } from 'vue'
 
 export function useYoastSeo(yoastData) {
-  const metaTitle = computed(() => yoastData.value?.title || '')
-  const metaDescription = computed(() => yoastData.value?.metaDesc || '')
-  const ogTitle = computed(() => yoastData.value?.opengraphTitle || metaTitle.value)
-  const ogDescription = computed(() => yoastData.value?.opengraphDescription || metaDescription.value)
-  const ogImage = computed(() => yoastData.value?.opengraphImage?.sourceUrl || '/media/og-image.jpg')
-  const publishedTime = computed(() => yoastData.value?.publishedTime || '')
-  const modifiedTime = computed(() => yoastData.value?.modifiedTime || '')
+  // Support both ref and plain objects
+  const getData = () => isRef(yoastData) ? yoastData.value : yoastData
+  
+  const metaTitle = computed(() => getData()?.title || '')
+  const metaDescription = computed(() => getData()?.metaDesc || '')
+  const ogTitle = computed(() => getData()?.opengraphTitle || metaTitle.value)
+  const ogDescription = computed(() => getData()?.opengraphDescription || metaDescription.value)
+  const ogImage = computed(() => getData()?.opengraphImage?.sourceUrl || '/media/og-image.jpg')
+  const publishedTime = computed(() => getData()?.publishedTime || '')
+  const modifiedTime = computed(() => getData()?.modifiedTime || '')
 
   useHead({
     title: metaTitle,

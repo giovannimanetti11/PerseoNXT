@@ -254,7 +254,45 @@ export default defineNuxtConfig({
   nitro: {
     compressPublicAssets: true,
     routeRules: {
+      // Homepage static
       '/': { static: true },
+      
+      // ISR: Cache SSR pages with Stale-While-Revalidate
+      '/**': { 
+        swr: 3600  // 1 hour: serve cached, update in background
+      },
+      
+      // Content pages: longer cache
+      '/piante-medicinali/**': { 
+        swr: 7200,  // 2 hours
+        headers: {
+          'X-Robots-Tag': 'index, follow',
+          'Cache-Control': 'public, max-age=3600, s-maxage=7200'
+        }
+      },
+      '/blog/**': { 
+        swr: 7200,
+        headers: {
+          'X-Robots-Tag': 'index, follow',
+          'Cache-Control': 'public, max-age=3600, s-maxage=7200'
+        }
+      },
+      '/glossario/**': { 
+        swr: 7200,
+        headers: {
+          'X-Robots-Tag': 'index, follow',
+          'Cache-Control': 'public, max-age=3600, s-maxage=7200'
+        }
+      },
+      
+      // Static pages: 24h cache
+      '/disclaimer': { swr: 86400 },
+      '/privacy-policy': { swr: 86400 },
+      '/cookie-policy': { swr: 86400 },
+      '/donazioni': { swr: 86400 },
+      '/about': { swr: 86400 },
+      
+      // API routes: no cache
       '/sitemap.xml': {
         proxy: '/api/sitemap.xml',
         cache: false
@@ -262,25 +300,6 @@ export default defineNuxtConfig({
       '/api/sitemap.xml': {
         cache: false
       },
-      // Ensure proper headers for crawlers on dynamic pages
-      '/piante-medicinali/**': { 
-        headers: {
-          'X-Robots-Tag': 'index, follow',
-          'Cache-Control': 'public, max-age=3600, s-maxage=7200'
-        }
-      },
-      '/blog/**': { 
-        headers: {
-          'X-Robots-Tag': 'index, follow',
-          'Cache-Control': 'public, max-age=3600, s-maxage=7200'
-        }
-      },
-      '/glossario/**': { 
-        headers: {
-          'X-Robots-Tag': 'index, follow',
-          'Cache-Control': 'public, max-age=3600, s-maxage=7200'
-        }
-      }
     },
     prerender: {
       crawlLinks: false, // Disable crawling to avoid 403 errors from WordPress during build
