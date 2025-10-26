@@ -4,7 +4,7 @@
   <Teleport to="body" v-if="isClient">
     <div 
       v-if="activeTooltip && !isSmallScreen"
-      class="keywordsTooltip fixed bg-white border-2 border-blu rounded-lg shadow-xl z-50"
+      class="keywordsTooltip fixed bg-white border border-blu rounded-lg shadow-xl z-50"
       :style="tooltipStyle"
       @mouseenter="keepTooltipVisible"
       @mouseleave="startHideTooltipTimer"
@@ -17,7 +17,7 @@
 
     <div 
       v-if="activeTooltip && isSmallScreen"
-      class="keywordsTooltip fixed bg-white border-2 border-blu rounded-lg shadow-xl z-50"
+      class="keywordsTooltip fixed bg-white border border-blu rounded-lg shadow-xl z-50"
       :style="tooltipStyle"
       @touchstart.stop="keepTooltipVisible"
     >
@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 import { useApolloClient } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
@@ -74,8 +74,8 @@ const isClient = ref(false);
 const isScrolling = ref(false);
 let hideTimeout: number | null = null;
 let scrollTimeout: number | null = null;
+let mouseEnterTimeout: number | null = null;
 
-// Sanitize content
 const sanitizedContent = computed(() => {
   if (!props.content) return '';
   return DOMPurify.sanitize(props.content, {
@@ -85,7 +85,6 @@ const sanitizedContent = computed(() => {
   });
 });
 
-// GraphQL query to fetch post/glossary data
 const FETCH_TOOLTIP_DATA = gql`
   query FetchTooltipData($slug: String!) {
     postBy(slug: $slug) {
@@ -101,19 +100,30 @@ const FETCH_TOOLTIP_DATA = gql`
   }
 `;
 
-const showTooltip = async (event: MouseEvent) => {
-  if (!isClient.value || isScrolling.value) return;
+const showTooltip = async (event: MouseEvent | Event) => {
+  if (!isClient.value || isScrolling.value) {
+    event.preventDefault();
+    return;
+  }
   
   clearTimeout(hideTimeout as number);
   const target = (event.target as HTMLElement).closest('a');
   
   if (target && target.getAttribute('href')) {
     const href = target.getAttribute('href') || '';
-    const slug = href.replace(/^\//, '').replace(/^glossario\//, '');
-    const isGlossary = href.includes('/glossario/');
     
     // Skip external links
-    if (href.startsWith('http') || href.startsWith('//')) return;
+    if (href.startsWith('http') && !href.includes('wikiherbalist.com')) return;
+    if (href.startsWith('//') && !href.includes('wikiherbalist.com')) return;
+    
+    // Extract slug from absolute or relative link
+    let slug = href;
+    if (href.includes('wikiherbalist.com')) {
+      const url = new URL(href);
+      slug = url.pathname;
+    }
+    slug = slug.replace(/^\//, '').replace(/^glossario\//, '');
+    const isGlossary = href.includes('/glossario/');
     
     try {
       const { data } = await apolloClient.query({
@@ -125,8 +135,11 @@ const showTooltip = async (event: MouseEvent) => {
       const tooltipData = isGlossary ? data.glossaryTermBy : data.postBy;
       
       if (tooltipData) {
+        const linkText = target.textContent?.trim() || tooltipData.title;
+        const sentenceCaseTitle = linkText.charAt(0).toUpperCase() + linkText.slice(1).toLowerCase();
+        
         activeTooltip.value = {
-          title: tooltipData.title,
+          title: sentenceCaseTitle,
           excerpt: tooltipData.excerpt,
           slug: tooltipData.slug,
           isGlossary
@@ -151,12 +164,14 @@ const showTooltip = async (event: MouseEvent) => {
         };
       }
     } catch (error) {
-      // Link non trovato, ignora
+      // Link not found, ignore
     }
   }
 };
 
 const handleMouseLeave = () => {
+  if (mouseEnterTimeout) clearTimeout(mouseEnterTimeout);
+  
   if (!isClient.value || isSmallScreen.value) return;
   startHideTooltipTimer();
 };
@@ -200,11 +215,45 @@ const checkScreenSize = () => {
 };
 
 const handleScroll = () => {
+  hideTooltip();
   isScrolling.value = true;
   if (scrollTimeout) clearTimeout(scrollTimeout);
   scrollTimeout = window.setTimeout(() => {
     isScrolling.value = false;
-  }, 150);
+  }, 200);
+};
+
+const handleClick = (event: Event) => {
+  if (!isSmallScreen.value) return;
+  
+  const target = (event.target as HTMLElement).closest('a');
+  if (target && !isScrolling.value) {
+    event.preventDefault();
+    showTooltip(event);
+  }
+};
+
+const handleMouseEnter = (event: Event) => {
+  if (isSmallScreen.value) return;
+  
+  const target = (event.target as HTMLElement).closest('a');
+  if (target && !isScrolling.value) {
+    showTooltip(event);
+  }
+};
+
+const attachEventListeners = () => {
+  if (!isClient.value || !contentContainer.value) return;
+  
+  contentContainer.value.removeEventListener('click', handleClick, true);
+  contentContainer.value.removeEventListener('mouseenter', handleMouseEnter, true);
+  contentContainer.value.removeEventListener('mouseleave', handleMouseLeave, true);
+  if (isSmallScreen.value) {
+    contentContainer.value.addEventListener('click', handleClick, true);
+  } else {
+    contentContainer.value.addEventListener('mouseenter', handleMouseEnter, true);
+  }
+  contentContainer.value.addEventListener('mouseleave', handleMouseLeave, true);
 };
 
 onMounted(() => {
@@ -212,25 +261,21 @@ onMounted(() => {
   checkScreenSize();
   
   if (isClient.value) {
-    window.addEventListener('resize', checkScreenSize);
+    window.addEventListener('resize', () => {
+      checkScreenSize();
+      attachEventListeners();
+    });
     window.addEventListener('scroll', handleScroll, { passive: true });
-    
-    if (contentContainer.value) {
-      const handleInteraction = (event: Event) => {
-        const target = (event.target as HTMLElement).closest('a');
-        if (target) {
-          if (isSmallScreen.value) {
-            event.preventDefault();
-            showTooltip(event as MouseEvent);
-          } else if (event.type === 'mouseenter') {
-            showTooltip(event as MouseEvent);
-          }
-        }
-      };
-      
-      contentContainer.value.addEventListener(isSmallScreen.value ? 'click' : 'mouseenter', handleInteraction, true);
-      contentContainer.value.addEventListener('mouseleave', handleMouseLeave, true);
-    }
+    nextTick(() => {
+      attachEventListeners();
+    });
+  }
+});
+
+watch(() => props.content, async () => {
+  if (isClient.value) {
+    await nextTick();
+    attachEventListeners();
   }
 });
 
@@ -238,9 +283,15 @@ onUnmounted(() => {
   if (isClient.value) {
     window.removeEventListener('resize', checkScreenSize);
     window.removeEventListener('scroll', handleScroll);
+    if (contentContainer.value) {
+      contentContainer.value.removeEventListener('click', handleClick, true);
+      contentContainer.value.removeEventListener('mouseenter', handleMouseEnter, true);
+      contentContainer.value.removeEventListener('mouseleave', handleMouseLeave, true);
+    }
   }
   if (scrollTimeout) clearTimeout(scrollTimeout);
   if (hideTimeout) clearTimeout(hideTimeout);
+  if (mouseEnterTimeout) clearTimeout(mouseEnterTimeout);
 });
 </script>
 
