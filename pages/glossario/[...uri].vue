@@ -165,7 +165,34 @@ const { data: glossaryTerm, pending, error } = useAsyncData(
         fetchPolicy: 'cache-first'
       });
 
-      return data.glossaryTermBy;
+      if (!data?.glossaryTermBy) {
+        throw createError({
+          statusCode: 404,
+          statusMessage: 'Pagina non trovata',
+          fatal: true
+        });
+      }
+
+      const termData = data.glossaryTermBy;
+      
+      // Set SEO meta tags immediately for SSR
+      const fullUrl = `https://wikiherbalist.com/glossario/${slug}`;
+      const yoastDataImmediate = {
+        ...termData.seo,
+        siteName: config.public.siteName,
+        url: fullUrl,
+        type: 'article',
+        image: termData.seo?.opengraphImage?.sourceUrl || 
+               termData.featuredImage?.node?.sourceUrl || 
+               'https://wikiherbalist.com/images/default-og-image.jpg',
+        publishedTime: termData.date,
+        modifiedTime: termData.modified || termData.date,
+        author: termData.authorName,
+      };
+      
+      useYoastSeo(ref(yoastDataImmediate));
+
+      return termData;
     } catch (error) {
       console.error('Fetch error:', error);
       throw error;

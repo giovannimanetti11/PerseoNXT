@@ -180,7 +180,38 @@ const { data: blogPost, pending, error } = await useAsyncData(
         throw new Error('Post not found');
       }
 
-      return data.blogPostBy;
+      const postData = data.blogPostBy;
+      
+      // Set SEO meta tags immediately for SSR
+      const fullUrl = `https://wikiherbalist.com/blog/${slug}`;
+      const truncate = (s, n) => {
+        if (!s) return ''
+        const clean = s.replace(/<[^>]*>/g, '').trim()
+        return clean.length > n ? clean.slice(0, n - 1).trimEnd() + '…' : clean
+      };
+      const title = truncate(postData.seo?.title || postData.title, 60);
+      const desc = truncate(postData.seo?.metaDesc || postData.excerpt || '', 155);
+      
+      const yoastDataImmediate = {
+        ...postData.seo,
+        siteName: config.public.siteName,
+        url: fullUrl,
+        type: 'article',
+        image: postData.seo?.opengraphImage?.sourceUrl || 
+               postData.featuredImage?.node?.sourceUrl || 
+               'https://wikiherbalist.com/images/default-og-image.jpg',
+        publishedTime: postData.date,
+        modifiedTime: postData.modified || postData.date,
+        author: postData.authorName,
+        title,
+        metaDesc: desc,
+        opengraphTitle: postData.seo?.opengraphTitle || title,
+        opengraphDescription: postData.seo?.opengraphDescription || desc,
+      };
+      
+      useYoastSeo(ref(yoastDataImmediate));
+
+      return postData;
     } catch (err) {
       console.error('Error fetching blog post:', err);
       throw err;
