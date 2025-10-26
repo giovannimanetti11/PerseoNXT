@@ -24,7 +24,7 @@
   </template>
   
   <script setup>
-  import DOMPurify from 'dompurify'
+  import DOMPurify from 'isomorphic-dompurify'
 
   const sanitizeHtml = (html) => {
     if (!html) return ''

@@ -94,7 +94,7 @@ import { useRoute } from 'vue-router';
 import { useApolloClient } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 import { useRuntimeConfig, useHead } from '#app';
-import DOMPurify from 'dompurify';
+import DOMPurify from 'isomorphic-dompurify';
 
 // Import critical components directly for better SSR
 import ContentTooltip from '~/components/contentTooltip.vue';
