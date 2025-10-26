@@ -15,16 +15,14 @@ PerseoNXT is a custom Nuxt3-based theme designed specifically for headless WordP
 
 - **Vue3**: built with Vue3, Composition API, reactivity system;
 - **Nuxt3**: latest Nuxt3 framework to improve performance and SEO;
-- **Vite 7**: upgraded to Vite 7 for ~30% faster builds and improved HMR;
 - **GraphQL and Apollo**: GraphQL with Apollo for efficient data fetching, real-time updates and flexible querying capabilities;
 - **Nuxt Algolia**: integrated Algolia module for powerful search capabilities;
 - **Tailwind CSS**: integrates Tailwind CSS for utility-first, responsive, and highly customizable styling;
 - **TypeScript**: full TypeScript support with type definitions for enhanced development experience;
 - **ESLint**: ensures code quality and consistency with ESLint configurations;
-- **Content tooltips**: interactive tooltips on internal links with scroll detection and lazy loading;
 - **Advanced SEO**: automated sitemap generation, canonical URLs, schema markup, and proper SSR meta tags;
 - **GDPR Compliance**: cookie banner with consent management, privacy policy, and cookie policy pages;
-- **XSS Protection**: all HTML content sanitized with DOMPurify to prevent injection attacks;
+- **XSS Protection**: all HTML content sanitized to prevent injection attacks;
 - **Responsive design**: fully responsive layout that works seamlessly across desktop, tablet, and mobile devices;
 - **Async data handling**: optimized data fetching with loading states and error handling;
 - **Performance focused**: optimized for fast loading times and efficient resource usage.
