@@ -74,7 +74,7 @@
                       <button @click.stop="hideTooltip" class="absolute top-2 right-2 text-blu hover:text-celeste">
                         <Icon name="mdi:close" class="text-xl" />
                       </button>
-                      <p v-html="tag.description" class="font-normal"></p>
+                      <p v-html="sanitizeHtml(tag.description)" class="font-normal"></p>
                     </div>
                   </div>
                 </div>
@@ -102,10 +102,13 @@
 
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
+import { useSanitize } from '~/composables/useSanitize';
 import { useApolloClient } from '@vue/apollo-composable';
 import { useAlphabet } from '~/composables/useAlphabet';
 import { useAsyncData } from '#app';
 import gql from 'graphql-tag';
+
+const { sanitizeHtml } = useSanitize();
 
 const props = defineProps({
   searchTerm: {

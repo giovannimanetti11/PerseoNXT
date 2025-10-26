@@ -23,7 +23,7 @@
           <div class="flex flex-col w-full md:w-1/2 ml-4">
             <h2 class="text-3xl font-semibold text-left mb-2">{{ featuredPost.title }}</h2>
             <p class="text-gray-600 mb-4">di {{ featuredPost.authorName }} - {{ formatDate(featuredPost.date) }}</p>
-            <div v-html="featuredPost.excerpt" class="text-gray-700 mb-4 pb-12"></div>
+            <div v-html="sanitizeHtml(featuredPost.excerpt)" class="text-gray-700 mb-4 pb-12"></div>
           </div>
         </div>
         <NuxtLink :to="'/blog/' + featuredPost.slug" class="m-auto align-center bg-verde border text-white text-center w-full md:w-1/4 rounded-xl py-2 px-8 m-auto hover:border-verde hover:border hover:text-verde hover:bg-white">
@@ -53,11 +53,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted } from 'vue';
+import { ref, computed } from 'vue';
+import { useSanitize } from '~/composables/useSanitize';
 import { useApolloClient } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 import Searchfield from '~/components/searchfield.vue';
 import Contacts from "~/components/contacts.vue";
+
+const { sanitizeHtml } = useSanitize();
 
 interface BlogPost {
   title: string;
