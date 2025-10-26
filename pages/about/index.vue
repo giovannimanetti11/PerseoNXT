@@ -48,6 +48,7 @@ import { ref, computed } from 'vue'
 import { useAsyncData } from '#app'
 import { useApolloClient } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
+import DOMPurify from 'dompurify'
 
 interface Member {
   id: string
@@ -123,8 +124,14 @@ const reversedMembers = computed(() => [...members.value].reverse())
 const formatContent = (content: string): string => {
   if (!content) return ''
   
-  // Use a regular expression to add classes instead of manipulating the DOM
-  content = content.replace(/<(h[1-6]|ul|ol|li|a)([^>]*)>/g, (match, tag, attributes) => {
+  // Sanitize first
+  const sanitized = DOMPurify.sanitize(content, {
+    ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'a', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+    ALLOWED_ATTR: ['href', 'title', 'target', 'rel', 'class']
+  })
+  
+  // Use a regular expression to add classes
+  const formatted = sanitized.replace(/<(h[1-6]|ul|ol|li|a)([^>]*)>/g, (match, tag, attributes) => {
     let classes = ''
     switch (tag) {
       case 'h1':
@@ -155,7 +162,7 @@ const formatContent = (content: string): string => {
     return `<${tag}${attributes} class="${classes}">`
   })
 
-  return content
+  return formatted
 }
 
 const getInitials = (name: string): string => {
