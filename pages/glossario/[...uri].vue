@@ -56,7 +56,7 @@
 
       <!-- Introduction section -->
       <section v-if="introSection" class="term-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4">
-        <div v-html="sanitizeHtml(introSection.content)"></div>
+        <ContentTooltip :content="introSection.content" />
       </section>
 
       <!-- Content sections -->
@@ -71,7 +71,7 @@
           <h3 class="text-xl md:text-2xl">{{ section.heading }}</h3>
         </div>
         <h3 v-else class="text-xl md:text-2xl mb-4">{{ section.heading }}</h3>
-        <div class="mt-4" v-html="sanitizeHtml(section.content)"></div>
+        <ContentTooltip v-if="section.content" :content="section.content" class="mt-4" />
       </section>
     </div>
   </div>
@@ -86,6 +86,7 @@ import { useRuntimeConfig, useHead } from '#app';
 import DOMPurify from 'dompurify';
 
 // Import critical components directly for better SSR
+import ContentTooltip from '~/components/contentTooltip.vue';
 import GlossarioInfo from '~/components/glossario/glossarioinfo.vue';
 import Breadcrumbs from '~/components/breadcrumbs.vue';
 
