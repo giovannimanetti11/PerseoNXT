@@ -261,6 +261,25 @@ export default defineNuxtConfig({
       },
       '/api/sitemap.xml': {
         cache: false
+      },
+      // Ensure proper headers for crawlers on dynamic pages
+      '/piante-medicinali/**': { 
+        headers: {
+          'X-Robots-Tag': 'index, follow',
+          'Cache-Control': 'public, max-age=3600, s-maxage=7200'
+        }
+      },
+      '/blog/**': { 
+        headers: {
+          'X-Robots-Tag': 'index, follow',
+          'Cache-Control': 'public, max-age=3600, s-maxage=7200'
+        }
+      },
+      '/glossario/**': { 
+        headers: {
+          'X-Robots-Tag': 'index, follow',
+          'Cache-Control': 'public, max-age=3600, s-maxage=7200'
+        }
       }
     },
     prerender: {
