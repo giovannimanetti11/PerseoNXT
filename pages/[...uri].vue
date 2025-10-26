@@ -320,7 +320,23 @@ const { data: postData, pending, error } = useAsyncData(
           fatal: true
         });
       }
-      return data.postBy;
+      
+      const postData = data.postBy;
+      
+      // Set SEO meta tags immediately for SSR
+      const fullUrl = `https://wikiherbalist.com/${slug}`;
+      const yoastDataImmediate = {
+        ...postData.seo,
+        siteName: config.public.siteName,
+        url: fullUrl,
+        type: 'article',
+        image: postData.seo?.opengraphImage?.sourceUrl || postData.featuredImage?.node?.sourceUrl || 'https://wikiherbalist.com/media/og-image.jpg',
+        keywords: `${postData.nomeScientifico}, ${postData.nomeComune}, ${postData.partiUsate}`.trim()
+      };
+      
+      useYoastSeo(ref(yoastDataImmediate));
+      
+      return postData;
     } catch (err) {
       throw createError({
         statusCode: 404,
