@@ -8,7 +8,7 @@
         <div class="space-y-8">
           <section v-for="(section, index) in sections" :key="index">
             <h2 class="text-2xl font-semibold mb-4 text-verde">{{ index + 1 }}. {{ section.title }}</h2>
-            <div class="prose max-w-none" v-html="section.content"></div>
+            <div class="prose max-w-none" v-html="sanitizeHtml(section.content)"></div>
           </section>
         </div>
 
@@ -24,6 +24,16 @@
 </template>
 
 <script setup>
+import DOMPurify from 'dompurify'
+
+const sanitizeHtml = (html) => {
+  if (!html) return ''
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'a', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+    ALLOWED_ATTR: ['href', 'title', 'target', 'rel', 'class']
+  })
+}
+
 const sections = [
   {
     title: "Scopo informativo",
