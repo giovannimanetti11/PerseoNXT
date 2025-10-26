@@ -63,15 +63,8 @@
       </section>
 
       <!-- Introduction section (without numbering) -->
-      <section v-if="introSection" class="post-content-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full">
-        <div class="mt-4">
-          <InternalLinking
-            :content="introSection.content"
-            :currentSlug="blogPost.slug"
-            :globalLinkedWords="globalLinkedWords"
-            @update:linked-words="updateGlobalLinkedWords"
-          />
-        </div>
+      <section v-if="introSection" class="post-section-introduction flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4">
+        <div v-html="sanitizeHtml(introSection.content)"></div>
       </section>
 
       <!-- Numbered content sections -->
@@ -87,14 +80,7 @@
         </div>
         <h3 v-else class="text-xl md:text-2xl mb-4">{{ section.title }}</h3>
         
-        <div class="mt-4">
-          <InternalLinking
-            :content="section.content"
-            :currentSlug="blogPost.slug"
-            :globalLinkedWords="globalLinkedWords"
-            @update:linked-words="updateGlobalLinkedWords"
-          />
-        </div>
+        <div class="mt-4" v-html="sanitizeHtml(section.content)"></div>
       </section>
 
       <EditContentProposal :sections="headings" />
@@ -107,11 +93,10 @@ import { ref, computed, watch, defineAsyncComponent } from 'vue';
 import { useRoute } from 'vue-router';
 import { useApolloClient } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
-import { useYoastSeo } from '~/composables/useYoastSeo';
-import { useRuntimeConfig } from '#app';
+import { useRuntimeConfig, useHead } from '#app';
+import DOMPurify from 'dompurify';
 
-// Import critical components directly to improve SEO
-import InternalLinking from '~/components/internalLinking.vue';
+// Import critical components directly for better SSR
 import BlogInfo from '~/components/blog/bloginfo.vue';
 import Breadcrumbs from '~/components/breadcrumbs.vue';
 
@@ -124,12 +109,51 @@ const config = useRuntimeConfig();
 const route = useRoute();
 const apolloClient = useApolloClient().resolveClient();
 
+// Sanitize HTML to prevent XSS attacks
+const sanitizeHtml = (html) => {
+  if (!html) return '';
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'a', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'code', 'pre', 'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'span', 'div'],
+    ALLOWED_ATTR: ['href', 'title', 'target', 'rel', 'src', 'alt', 'class', 'id', 'style'],
+    ALLOW_DATA_ATTR: false
+  });
+};
+
 // State management
-const globalLinkedWords = ref(new Set());
 const headings = ref([]);
 const sections = ref([]);
 const introSection = ref(null);
-const yoastData = ref(null);
+// Computed for SEO data
+const seoTitle = computed(() => {
+  const title = post.value?.seo?.title || post.value?.title || '';
+  return title.length > 60 ? title.slice(0, 59) + '…' : title;
+});
+const seoDescription = computed(() => {
+  const desc = post.value?.seo?.metaDesc || post.value?.excerpt || '';
+  const clean = desc.replace(/<[^>]*>/g, '').trim();
+  return clean.length > 155 ? clean.slice(0, 154) + '…' : clean;
+});
+const seoImage = computed(() => 
+  post.value?.seo?.opengraphImage?.sourceUrl || 
+  post.value?.featuredImage?.node?.sourceUrl || 
+  'https://wikiherbalist.com/images/default-og-image.jpg'
+);
+
+// Set meta tags with useHead at top level
+useHead({
+  title: seoTitle,
+  meta: [
+    { name: 'description', content: seoDescription },
+    { property: 'og:title', content: seoTitle },
+    { property: 'og:description', content: seoDescription },
+    { property: 'og:image', content: seoImage },
+    { property: 'og:type', content: 'article' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: seoTitle },
+    { name: 'twitter:description', content: seoDescription },
+    { name: 'twitter:image', content: seoImage }
+  ]
+});
 
 // GraphQL query definition
 const FETCH_BLOG_POST_BY_SLUG = gql`
@@ -181,36 +205,6 @@ const { data: blogPost, pending, error } = await useAsyncData(
       }
 
       const postData = data.blogPostBy;
-      
-      // Set SEO meta tags immediately for SSR
-      const fullUrl = `https://wikiherbalist.com/blog/${slug}`;
-      const truncate = (s, n) => {
-        if (!s) return ''
-        const clean = s.replace(/<[^>]*>/g, '').trim()
-        return clean.length > n ? clean.slice(0, n - 1).trimEnd() + '…' : clean
-      };
-      const title = truncate(postData.seo?.title || postData.title, 60);
-      const desc = truncate(postData.seo?.metaDesc || postData.excerpt || '', 155);
-      
-      const yoastDataImmediate = {
-        ...postData.seo,
-        siteName: config.public.siteName,
-        url: fullUrl,
-        type: 'article',
-        image: postData.seo?.opengraphImage?.sourceUrl || 
-               postData.featuredImage?.node?.sourceUrl || 
-               'https://wikiherbalist.com/images/default-og-image.jpg',
-        publishedTime: postData.date,
-        modifiedTime: postData.modified || postData.date,
-        author: postData.authorName,
-        title,
-        metaDesc: desc,
-        opengraphTitle: postData.seo?.opengraphTitle || title,
-        opengraphDescription: postData.seo?.opengraphDescription || desc,
-      };
-      
-      useYoastSeo(ref(yoastDataImmediate));
-
       return postData;
     } catch (err) {
       console.error('Error fetching blog post:', err);
@@ -349,33 +343,6 @@ watch(blogPost, (newPost) => {
   }
 
   if (newPost) {
-    const fullUrl = `https://wikiherbalist.com${route.fullPath}`;
-    const truncate = (s, n) => {
-      if (!s) return ''
-      const clean = s.replace(/<[^>]*>/g, '').trim()
-      return clean.length > n ? clean.slice(0, n - 1).trimEnd() + '…' : clean
-    }
-    const title = truncate(newPost.seo?.title || newPost.title, 60)
-    const desc = truncate(newPost.seo?.metaDesc || newPost.excerpt || '', 155)
-    yoastData.value = {
-      ...newPost.seo,
-      siteName: config.public.siteName,
-      url: fullUrl,
-      type: 'article',
-      image: newPost.seo?.opengraphImage?.sourceUrl || 
-             newPost.featuredImage?.node?.sourceUrl || 
-             'https://wikiherbalist.com/images/default-og-image.jpg',
-      publishedTime: newPost.date,
-      modifiedTime: newPost.modified || newPost.date,
-      author: newPost.authorName,
-      title,
-      metaDesc: desc,
-      opengraphTitle: newPost.seo?.opengraphTitle || title,
-      opengraphDescription: newPost.seo?.opengraphDescription || desc,
-    };
-
-    useYoastSeo(yoastData);
-
     if (newPost?.featuredImage?.node?.sourceUrl) {
       useHead({
         link: [
@@ -385,7 +352,6 @@ watch(blogPost, (newPost) => {
     }
   }
 }, { immediate: true });
-
 
 // Navigation helper
 const smoothScroll = (target) => {

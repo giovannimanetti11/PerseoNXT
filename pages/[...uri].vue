@@ -163,15 +163,7 @@
           <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">5</div>
           <h3 class="text-xl md:text-2xl">Fitochimica</h3>
         </div>
-        <div class="mt-4">
-          <InternalLinking
-            v-if="post.data.costituenti"
-            :content="post.data.costituenti"
-            :currentSlug="post.data.slug"
-            :globalLinkedWords="globalLinkedWords"
-            @update:linked-words="updateGlobalLinkedWords"
-          />
-        </div>
+        <div class="mt-4" v-if="post.data.costituenti" v-html="sanitizeHtml(post.data.costituenti)"></div>
       </section>
 
       <!-- Dynamic content sections -->
@@ -185,25 +177,11 @@
         </div>
         <h3 v-else class="text-xl md:text-2xl mb-4">{{ section.title }}</h3>
 
-        <div class="mt-4">
-          <InternalLinking
-            v-if="section.content"
-            :content="section.content"
-            :currentSlug="post.data.slug"
-            :globalLinkedWords="globalLinkedWords"
-            @update:linked-words="updateGlobalLinkedWords"
-          />
-        </div>
+        <div class="mt-4" v-if="section.content" v-html="sanitizeHtml(section.content)"></div>
 
         <div v-for="(subSection, subIndex) in section.subSections" :key="subIndex" class="mt-6">
           <h4 class="text-lg md:text-xl font-semibold mb-2">{{ subSection.title }}</h4>
-          <InternalLinking
-            v-if="subSection.content"
-            :content="subSection.content"
-            :currentSlug="post.data.slug"
-            :globalLinkedWords="globalLinkedWords"
-            @update:linked-words="updateGlobalLinkedWords"
-          />
+          <div v-if="subSection.content" v-html="sanitizeHtml(subSection.content)"></div>
         </div>
       </section>
 
@@ -217,12 +195,11 @@ import { ref, reactive, watch, nextTick, computed, defineAsyncComponent, onMount
 import { useRoute } from 'vue-router';
 import { useApolloClient } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
-import { useRuntimeConfig, useAsyncData } from '#app';
-import { useYoastSeo } from '~/composables/useYoastSeo';
+import { useRuntimeConfig, useAsyncData, useHead } from '#app';
 import { useReferences } from '~/composables/useReferences'
+import DOMPurify from 'dompurify'
 
 // Import critical components directly to improve SEO
-import InternalLinking from '@/components/internalLinking.vue';
 import Breadcrumbs from '@/components/breadcrumbs.vue';
 import PostInfo from '@/components/posts/postinfo.vue';
 
@@ -236,6 +213,16 @@ const config = useRuntimeConfig();
 const route = useRoute();
 const { resolveClient } = useApolloClient();
 const apolloClient = resolveClient();
+
+// Sanitize HTML to prevent XSS attacks
+const sanitizeHtml = (html: string): string => {
+  if (!html) return '';
+  return DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'a', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'code', 'pre', 'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'span', 'div'],
+    ALLOWED_ATTR: ['href', 'title', 'target', 'rel', 'src', 'alt', 'class', 'id', 'style'],
+    ALLOW_DATA_ATTR: false
+  });
+};
 
 // Add to setup
 const { parseReferences } = useReferences()
@@ -296,9 +283,6 @@ const post = reactive({
   structuredContent: [] as any[]
 });
 
-// Global linked words set
-const globalLinkedWords = ref(new Set<string>());
-
 // Active tooltip state
 const activeTooltip = ref<string | null>(null);
 
@@ -306,7 +290,6 @@ const { data: postData, pending, error } = useAsyncData(
   () => `postData-${Array.isArray(route.params.uri) ? route.params.uri[0] : route.params.uri}`,
   async () => {
     const slug = Array.isArray(route.params.uri) ? route.params.uri[0] : route.params.uri;
-    globalLinkedWords.value = new Set<string>();
 
     try {
       const { data } = await apolloClient.query({
@@ -322,20 +305,6 @@ const { data: postData, pending, error } = useAsyncData(
       }
       
       const postData = data.postBy;
-      
-      // Set SEO meta tags immediately for SSR
-      const fullUrl = `https://wikiherbalist.com/${slug}`;
-      const yoastDataImmediate = {
-        ...postData.seo,
-        siteName: config.public.siteName,
-        url: fullUrl,
-        type: 'article',
-        image: postData.seo?.opengraphImage?.sourceUrl || postData.featuredImage?.node?.sourceUrl || 'https://wikiherbalist.com/media/og-image.jpg',
-        keywords: `${postData.nomeScientifico}, ${postData.nomeComune}, ${postData.partiUsate}`.trim()
-      };
-      
-      useYoastSeo(ref(yoastDataImmediate));
-      
       return postData;
     } catch (err) {
       throw createError({
@@ -359,6 +328,31 @@ watch(postData, async (newPostData) => {
     processPostContent();
   }
 }, { immediate: true });
+
+// Computed for SEO data
+const seoTitle = computed(() => postData.value?.seo?.title || postData.value?.title || '');
+const seoDescription = computed(() => postData.value?.seo?.metaDesc || '');
+const seoImage = computed(() => 
+  postData.value?.seo?.opengraphImage?.sourceUrl || 
+  postData.value?.featuredImage?.node?.sourceUrl || 
+  'https://wikiherbalist.com/media/og-image.jpg'
+);
+
+// Set meta tags with useHead at top level
+useHead({
+  title: seoTitle,
+  meta: [
+    { name: 'description', content: seoDescription },
+    { property: 'og:title', content: seoTitle },
+    { property: 'og:description', content: seoDescription },
+    { property: 'og:image', content: seoImage },
+    { property: 'og:type', content: 'article' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: seoTitle },
+    { name: 'twitter:description', content: seoDescription },
+    { name: 'twitter:image', content: seoImage }
+  ]
+});
 
 // Computed properties for images
 const featuredImage = computed(() => {
@@ -463,11 +457,6 @@ const processPostContent = () => {
   post.structuredContent = sections;
 };
 
-// Update global linked words
-const updateGlobalLinkedWords = (newWords: string[]) => {
-  newWords.forEach(word => globalLinkedWords.value.add(word));
-};
-
 // Compute all headings
 const allHeadings = computed(() => {
   const staticHeadings = ["Proprietà terapeutiche", "Nome scientifico", "Parti usate", "Nome comune"];
@@ -546,8 +535,6 @@ onUnmounted(() => {
   }
 });
 
-const yoastData = ref(null);
-
 // Add computed property for references
 const references = computed(() => {
   const referencesSection = post.data.structuredContent?.find(section => section.title === 'Riferimenti')
@@ -556,37 +543,6 @@ const references = computed(() => {
   }
   return []
 })
-
-// Add references to post data
-watch(() => post.data, async (newPostData) => {
-  if (!newPostData && !pending.value) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'Pagina non trovata',
-      fatal: true
-    })
-  }
-
-  if (newPostData) {
-    await nextTick()
-    processPostContent()
-    globalLinkedWords.value.clear()
-    
-    const fullUrl = `https://wikiherbalist.com${route.fullPath}`
-    
-    yoastData.value = {
-      ...newPostData.seo,
-      siteName: config.public.siteName,
-      url: fullUrl,
-      type: 'article',
-      image: newPostData.seo.opengraphImage?.sourceUrl || featuredImage.value?.sourceUrl || openGraphImage.value,
-      keywords: `${newPostData.nomeScientifico}, ${newPostData.nomeComune}, ${newPostData.partiUsate}`.trim(),
-      references: references.value
-    }
-
-    useYoastSeo(yoastData)
-  }
-}, { immediate: true })
 
 // Add computed property to check if "Fitochimica" section already exists in the content
 const hasFitochimicaSection = computed(() => post.structuredContent?.some(section => section.title === 'Fitochimica') || false)
