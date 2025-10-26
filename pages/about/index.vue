@@ -48,7 +48,7 @@ import { ref, computed } from 'vue'
 import { useAsyncData } from '#app'
 import { useApolloClient } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
-import DOMPurify from 'dompurify'
+import DOMPurify from 'isomorphic-dompurify'
 
 interface Member {
   id: string

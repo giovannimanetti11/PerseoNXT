@@ -210,7 +210,7 @@ import { useApolloClient } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 import { useRuntimeConfig, useAsyncData, useHead } from '#app';
 import { useReferences } from '~/composables/useReferences'
-import DOMPurify from 'dompurify'
+import DOMPurify from 'isomorphic-dompurify'
 
 // Import critical components directly to improve SEO
 import ContentTooltip from '@/components/contentTooltip.vue';

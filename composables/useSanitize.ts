@@ -1,4 +1,4 @@
-import DOMPurify from 'dompurify'
+import DOMPurify from 'isomorphic-dompurify'
 
 export function useSanitize() {
   const sanitizeHtml = (html: string | null | undefined): string => {
