@@ -125,7 +125,6 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useNuxtApp, useRuntimeConfig } from '#app'
 import gql from 'graphql-tag'
 // Removed @config import - using server API endpoints instead
 
@@ -144,11 +143,6 @@ const accessError = ref('')
 const isAuthenticated = ref(false)
 
 // Get Nuxt app instance
-const nuxtApp = useNuxtApp()
-const config = useRuntimeConfig()
-
-// Ensure index name is defined
-const ALGOLIA_INDEX_NAME = 'wikiherbalist'
 
 // Computed
 const isReady = computed(() => {
