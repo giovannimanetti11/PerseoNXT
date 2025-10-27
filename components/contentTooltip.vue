@@ -163,7 +163,7 @@ const showTooltip = async (event: MouseEvent | Event) => {
           y: rect.bottom + window.pageYOffset + 10
         };
       }
-    } catch (error) {
+    } catch {
       // Link not found, ignore
     }
   }

@@ -1,10 +1,10 @@
 <template>
-  <div class="mt-4 md:mt-24 flex flex-col md:float-right print:mt-8 content-center" v-if="hasSlideshowContent">
+  <div class="mt-4 md:mt-24 flex flex-col md:float-right print:mt-8" v-if="hasSlideshowContent">
     <!-- Image section that triggers lightbox on click -->
     <div v-show="currentImage" class="relative h-auto w-full md:w-96 md:float-right hover:cursor-pointer hover:opacity-85">
       <NuxtImg
         :src="currentImage"
-        class="m-auto h-60 w-auto border rounded-2xl transition-all duration-300 ease-in-out"
+        class="m-auto md:ml-auto md:mr-0 h-60 w-auto border rounded-2xl transition-all duration-300 ease-in-out"
         :alt="currentAltText"
         @click="openLightbox"
         width="384"
@@ -14,7 +14,7 @@
       />
     </div>
     <!-- Thumbnails of additional images, including featured image -->
-    <div v-show="hasThumbnails" class="additional-images w-full mt-1.5 flex flex-wrap justify-center">
+    <div v-show="hasThumbnails" class="additional-images w-full mt-1.5 flex flex-wrap justify-center md:justify-end">
       <!-- Featured image thumbnail -->
       <div v-if="featuredImageSrc" class="h-16">
         <NuxtImg
