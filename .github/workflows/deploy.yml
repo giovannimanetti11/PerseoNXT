@@ -59,6 +59,7 @@ jobs:
           script: |
             cd $DEPLOY_PATH
             sudo rm -rf .nuxt .output node_modules package-lock.json
+            sudo chown -R $USER:$USER .
 
       - name: Deploy to VPS
         uses: appleboy/scp-action@v0.1.7
