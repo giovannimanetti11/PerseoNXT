@@ -79,8 +79,32 @@ export default defineNuxtConfig({
 
   // Runtime configuration
   runtimeConfig: {
+    // Private keys - only available server-side
+    wpBaseUrl: process.env.WP_BASE_URL || 'https://admin.wikiherbalist.com/graphql',
+    wpUsername: process.env.WP_USERNAME,
+    wpAppPassword: process.env.WP_APP_PASSWORD,
+    pubMedApiKey: process.env.PUBMED_API_KEY,
+    amazonPollyAccess: process.env.AMAZON_POLLY_ACCESS_KEY,
+    amazonPollySecret: process.env.AMAZON_POLLY_SECRET_KEY,
+    algoliaAccessPassword: process.env.ALGOLIA_ACCESS_PASSWORD,
+    algoliaWriteApiKey: process.env.ALGOLIA_WRITE_API_KEY,
+    algoliaAdminApiKey: process.env.ALGOLIA_ADMIN_API_KEY,
+    algoliaUsageApiKey: process.env.ALGOLIA_USAGE_API_KEY,
+    algoliaMonitoringApiKey: process.env.ALGOLIA_MONITORING_API_KEY,
+    sendGridApiKey: process.env.SENDGRID_API_KEY,
+    recaptchaSecretKey: process.env.RECAPTCHA_SECRET_KEY,
+    mailchimpApiKey: process.env.MAILCHIMP_API_KEY,
+    mailchimpListId: process.env.MAILCHIMP_LIST_ID,
+    mailchimpServerPrefix: process.env.MAILCHIMP_SERVER_PREFIX || 'us17',
+    dbHost: process.env.DB_HOST || 'localhost',
+    dbUser: process.env.DB_USER,
+    dbPassword: process.env.DB_PASSWORD,
+    dbName: process.env.DB_NAME,
+
+    // Public keys - available on both client and server
     public: {
       siteName: 'Wikiherbalist',
+      recaptchaPublicKey: process.env.RECAPTCHA_PUBLIC_KEY,
       algolia: {
         applicationId: process.env.NUXT_PUBLIC_ALGOLIA_APP_ID,
         apiKey: process.env.NUXT_PUBLIC_ALGOLIA_SEARCH_API_KEY,
@@ -163,6 +187,18 @@ export default defineNuxtConfig({
     plugins: {
       tailwindcss: {},
       autoprefixer: {},
+      ...(process.env.NODE_ENV === 'production' ? {
+        cssnano: {
+          preset: ['default', {
+            discardComments: {
+              removeAll: true,
+            },
+            normalizeWhitespace: true,
+            minifyFontValues: true,
+            minifyGradients: true,
+          }]
+        }
+      } : {})
     },
   },
 
