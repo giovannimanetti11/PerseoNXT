@@ -93,8 +93,7 @@ import { ref, computed, watch, defineAsyncComponent } from 'vue';
 import { useRoute } from 'vue-router';
 import { useApolloClient } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
-import { useRuntimeConfig, useHead } from '#app';
-import DOMPurify from 'isomorphic-dompurify';
+import { useHead } from '#app';
 
 // Import critical components directly for better SSR
 import ContentTooltip from '~/components/contentTooltip.vue';
@@ -106,19 +105,8 @@ const EditContentProposal = defineAsyncComponent(() => import('~/components/edit
 const SchemaMarkup = defineAsyncComponent(() => import('~/components/schemaMarkup.vue'));
 
 // Core setup
-const config = useRuntimeConfig();
 const route = useRoute();
 const apolloClient = useApolloClient().resolveClient();
-
-// Sanitize HTML to prevent XSS attacks
-const sanitizeHtml = (html) => {
-  if (!html) return '';
-  return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'a', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'code', 'pre', 'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'span', 'div'],
-    ALLOWED_ATTR: ['href', 'title', 'target', 'rel', 'src', 'alt', 'class', 'id', 'style'],
-    ALLOW_DATA_ATTR: false
-  });
-};
 
 // State management
 const headings = ref([]);
@@ -361,11 +349,6 @@ const smoothScroll = (target) => {
   if (element) {
     element.scrollIntoView({ behavior: 'smooth' });
   }
-};
-
-// Global linked words management
-const updateGlobalLinkedWords = (newWords) => {
-  newWords.forEach(word => globalLinkedWords.value.add(word));
 };
 
 // Reset linked words on route change

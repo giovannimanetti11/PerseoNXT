@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { useAsyncData } from '#app'
 import { useApolloClient } from '@vue/apollo-composable'
 import gql from 'graphql-tag'
