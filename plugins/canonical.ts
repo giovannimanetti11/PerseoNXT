@@ -1,4 +1,4 @@
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin(() => {
     const route = useRoute()
     const baseUrl = 'https://wikiherbalist.com'
   

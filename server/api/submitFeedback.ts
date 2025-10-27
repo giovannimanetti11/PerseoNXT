@@ -115,7 +115,7 @@ async function logSuspiciousActivity(
     // Crea la directory logs se non esiste
     try {
       await fs.mkdir(logDir, { recursive: true });
-    } catch (err) {
+    } catch {
       // Directory già esistente, ignora l'errore
     }
     
