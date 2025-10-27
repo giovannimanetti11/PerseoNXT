@@ -164,33 +164,6 @@
         'itemListElement': breadcrumbItems
       }"
     />
-
-    <!-- Schema for tag pages -->
-    <SchemaOrgCollectionPage
-      v-else-if="isTag && tag"
-      :name="tag.name"
-      :description="tag.description"
-      :url="fullUrl"
-      :identifier="fullUrl"
-      :id="fullUrl"
-      :isPartOf="{
-        '@type': 'WebSite',
-        '@id': baseUrl,
-        'name': siteName,
-        'url': baseUrl
-      }"
-      :breadcrumb="{
-        '@type': 'BreadcrumbList',
-        'itemListElement': breadcrumbItems
-      }"
-    >
-      <template #mainEntity>
-        <SchemaOrgMedicalEntity 
-          :name="tag.name"
-          :description="tag.description"
-        />
-      </template>
-    </SchemaOrgCollectionPage>
   </div>
 </template>
 
@@ -214,10 +187,6 @@ const props = defineProps({
   blogPost: {
     type: Object,
     default: () => null
-  },
-  tag: {
-    type: Object,
-    default: () => null
   }
 });
 
@@ -227,10 +196,9 @@ const siteName = computed(() => config.public.siteName || 'Wikiherbalist');
 const fullUrl = computed(() => `${baseUrl.value}${route.fullPath}`);
 
 // Route type checks
-const isPost = computed(() => route.name === 'post' || route.name === '[...uri]');
-const isGlossaryTerm = computed(() => route.name === 'glossary-term');
-const isBlogPost = computed(() => route.name === 'blog-post');
-const isTag = computed(() => route.name === 'tag');
+const isPost = computed(() => route.name === 'uri' || route.path.startsWith('/piante-medicinali/') || (!route.path.startsWith('/blog/') && !route.path.startsWith('/glossario/') && route.params.uri));
+const isGlossaryTerm = computed(() => route.name === 'glossario-uri' || route.path.startsWith('/glossario/'));
+const isBlogPost = computed(() => route.name === 'blog-uri' || route.path.startsWith('/blog/'));
 
 // Breadcrumb generation
 const breadcrumbItems = computed(() => {
@@ -270,10 +238,9 @@ const breadcrumbItems = computed(() => {
   }
 
   // Add current page
-  const currentPageName = props.post?.title || 
-                         props.glossaryTerm?.title || 
-                         props.blogPost?.title || 
-                         props.tag?.name;
+  const currentPageName = props.post?.title ||
+                         props.glossaryTerm?.title ||
+                         props.blogPost?.title;
 
   if (currentPageName) {
     items.push({
