@@ -1,5 +1,3 @@
-import { ref } from 'vue'
-
 interface Reference {
   authors: string
   year: string
