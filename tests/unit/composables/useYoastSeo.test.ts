@@ -2,8 +2,9 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { ref } from 'vue'
 
 // Mock nuxt's useHead
+const useHeadMock = vi.fn()
 vi.mock('#app', () => ({
-  useHead: vi.fn()
+  useHead: useHeadMock
 }))
 
 describe('useYoastSeo Composable', () => {
@@ -13,17 +14,15 @@ describe('useYoastSeo Composable', () => {
 
   it('should handle null data gracefully', async () => {
     const { useYoastSeo } = await import('../../../composables/useYoastSeo')
-    const { useHead } = await import('#app')
 
     const yoastData = ref(null)
     useYoastSeo(yoastData)
 
-    expect(useHead).toHaveBeenCalled()
+    expect(useHeadMock).toHaveBeenCalled()
   })
 
   it('should use title and metaDesc from yoast data', async () => {
     const { useYoastSeo } = await import('../../../composables/useYoastSeo')
-    const { useHead } = await import('#app')
 
     const yoastData = ref({
       title: 'Test Title',
@@ -34,7 +33,7 @@ describe('useYoastSeo Composable', () => {
 
     useYoastSeo(yoastData)
 
-    expect(useHead).toHaveBeenCalledWith(
+    expect(useHeadMock).toHaveBeenCalledWith(
       expect.objectContaining({
         title: expect.any(Object)
       })
@@ -43,7 +42,6 @@ describe('useYoastSeo Composable', () => {
 
   it('should fallback to metaTitle when opengraphTitle is missing', async () => {
     const { useYoastSeo } = await import('../../../composables/useYoastSeo')
-    const { useHead } = await import('#app')
 
     const yoastData = ref({
       title: 'Test Title',
@@ -52,6 +50,6 @@ describe('useYoastSeo Composable', () => {
 
     useYoastSeo(yoastData)
 
-    expect(useHead).toHaveBeenCalled()
+    expect(useHeadMock).toHaveBeenCalled()
   })
 })
