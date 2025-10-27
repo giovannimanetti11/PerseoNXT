@@ -39,7 +39,7 @@ module.exports = {
       // Disable unused Tailwind features
       preflight: true, // Keep for base styles
       container: false, // Not used
-      float: false, // Not used
+      float: true, // Used in slideshow component
     },
     // Safelist only dynamic classes that can't be detected by PurgeCSS
     safelist: [
@@ -55,7 +55,14 @@ module.exports = {
       {
         pattern: /term-section-.+/,
         variants: [],
-      }
+      },
+      // Slideshow responsive margin classes
+      'm-auto',
+      'md:ml-auto',
+      'md:mr-0',
+      'md:float-right',
+      'justify-center',
+      'md:justify-end'
     ],
     plugins: [],
   };
