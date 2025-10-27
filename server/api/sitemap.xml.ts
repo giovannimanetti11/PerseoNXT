@@ -1,5 +1,5 @@
 import { defineEventHandler, setResponseHeaders, getRequestURL } from 'h3'
-import { apiConfig } from '@config'
+import { useApiConfig } from '../config'
 
 export default defineEventHandler(async (event) => {
   console.log('=== SITEMAP.XML ENDPOINT CALLED ===');
@@ -36,14 +36,19 @@ export default defineEventHandler(async (event) => {
     // Fetch all URLs from GraphQL directly
     let urls = [...staticUrls];
     try {
-      console.log('Loading WordPress configuration from @config...');
+      console.log('Loading WordPress configuration from runtimeConfig...');
 
+      const apiConfig = useApiConfig(event);
       const graphqlEndpoint = apiConfig.baseUrl;
       const username = apiConfig.username;
       const appPassword = apiConfig.appPassword;
 
       if (!graphqlEndpoint || !username || !appPassword) {
-        console.error('WordPress credentials missing in @config');
+        console.error('WordPress credentials missing in runtimeConfig', {
+          hasEndpoint: !!graphqlEndpoint,
+          hasUsername: !!username,
+          hasPassword: !!appPassword
+        });
         throw new Error('WordPress credentials not configured');
       }
 
