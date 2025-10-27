@@ -1,4 +1,4 @@
-import { ref, computed, type Ref } from 'vue'
+import { ref, computed } from 'vue'
 
 // Composable function to manage alphabet selection and scrolling
 export function useAlphabet() {
