@@ -1,7 +1,6 @@
 import { defineEventHandler, createError } from 'h3'
-import { apiConfig } from '@config'
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async () => {
   try {
     const config = useRuntimeConfig()
     const applicationId = config.public.algolia.applicationId

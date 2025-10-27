@@ -229,7 +229,7 @@ export default defineEventHandler(async (event) => {
         if (!isNaN(date.getTime())) {
           lastmod = date.toISOString().split('T')[0];
         }
-      } catch (e) {
+      } catch {
         // If there's an error, use current date
         lastmod = new Date().toISOString().split('T')[0];
       }

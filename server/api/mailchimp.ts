@@ -62,7 +62,7 @@ export default defineEventHandler(async (event: H3Event): Promise<SuccessRespons
     if (error.response) {
       try {
         errorDetails = JSON.stringify(error.response.body);
-      } catch (e: any) {
+      } catch {
         errorDetails = error.response.text || error.response.statusText;
       }
     }

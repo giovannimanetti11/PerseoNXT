@@ -17,9 +17,8 @@
 </template>
 
 <script setup>
-import { useRouter, useError, clearError } from '#app'
+import { useRouter, clearError } from '#app'
 
-const error = useError()
 const router = useRouter()
 
 const goHome = () => {

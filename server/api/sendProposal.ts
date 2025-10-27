@@ -116,7 +116,7 @@ export default defineEventHandler(async (event: H3Event) => {
     // Send email via SendGrid
     await sgMail.send(msg);
     return { success: true, message: 'Proposta inviata con successo' };
-  } catch (error: any) {
+  } catch {
     // Handle errors gracefully
     return {
       success: false,

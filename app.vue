@@ -9,42 +9,9 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, nextTick } from 'vue'
-import { useRoute, useHead, useSeoMeta, useNuxtApp, useRuntimeConfig } from '#app'
+import { useRoute, useHead, useSeoMeta, useNuxtApp } from '#app'
 import gql from 'graphql-tag'
 
-// Types
-interface SeoData {
-  seo?: {
-    title?: string
-    metaDesc?: string
-    opengraphTitle?: string
-    opengraphDescription?: string
-    opengraphImage?: {
-      sourceUrl?: string
-    }
-  }
-  title?: string
-}
-
-interface Author {
-  node: {
-    name: string
-  }
-}
-
-interface PostData extends SeoData {
-  id: string
-  slug: string
-  content: string
-  date: string
-  modified: string
-  author: Author
-}
-
-interface PageData extends SeoData {
-  id: string
-  slug: string
-}
 
 // GraphQL queries
 const GET_POST_SEO_DATA = gql`
@@ -96,7 +63,6 @@ const GET_PAGE_SEO_DATA = gql`
 // State and setup
 const route = useRoute()
 const nuxtApp = useNuxtApp()
-const config = useRuntimeConfig()
 const isLoaded = ref(false)
 const baseUrl = 'https://wikiherbalist.com'
 
