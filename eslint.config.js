@@ -6,8 +6,10 @@ import vueParser from 'vue-eslint-parser';
 
 export default [
   {
-    files: ['**/*.{js,vue,ts}'],
     ignores: ['node_modules/**', '.output/**', '.nuxt/**', 'dist/**'],
+  },
+  {
+    files: ['**/*.{js,vue,ts}'],
     plugins: {
       vue: pluginVue,
       unicorn: pluginUnicorn,
