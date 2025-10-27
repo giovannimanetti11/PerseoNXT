@@ -37,7 +37,7 @@ const emit = defineEmits(['error']);
 const mapElement = ref<HTMLElement | null>(null);
 const loading = ref(true);
 const vectorSource = new VectorSource();
-let map: Map | null = null;
+let _map: Map | null = null;
 
 const MAX_BATCHES = 11;
 const BATCH_SIZE = 300;
@@ -79,7 +79,7 @@ const addFeaturesToMap = (occurrences: any[]) => {
 const createMap = () => {
   if (!mapElement.value) return;
 
-  map = new Map({
+  _map = new Map({
     target: mapElement.value,
     layers: [
       new TileLayer({

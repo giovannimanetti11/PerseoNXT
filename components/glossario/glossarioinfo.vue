@@ -82,9 +82,8 @@ const { openShareModal, renderShareModal } = useShare();
 // Cite composable
 const { openCiteModal, renderCiteModal, updateTitle, updateAuthorName, updatePublishDate } = useCite(props.title, props.authorName, props.publishDate);
 
-// Format the publication and update dates
+// Format the publication date
 const formattedPublishDate = computed(() => formatDate(props.publishDate));
-const formattedUpdateDate = computed(() => formatDate(props.updateDate));
 
 // Display author name, handling special cases
 const displayAuthorName = computed(() => props.authorName === 'wh_admin' ? 'Editors of Wikiherbalist' : props.authorName);

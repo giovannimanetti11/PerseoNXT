@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import { useDebounceFn } from '@vueuse/core';
 
 const searchTerm = ref('');

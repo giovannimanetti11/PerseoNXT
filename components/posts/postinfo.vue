@@ -170,7 +170,7 @@ const formattedModifiedDate = computed(() => getFormattedDate(props.modifiedDate
 
 const formattedRevisionDate = computed(() => {
   if (props.revisionData && props.revisionData.length > 0) {
-    const latestRevision = props.revisionData[props.revisionData.length - 1];
+    const latestRevision = props.revisionData.at(-1);
     return getFormattedDate(latestRevision.date);
   }
   return 'data non disponibile';
@@ -317,15 +317,16 @@ const { data: classificationData } = useAsyncData(
         species: 'Specie',
       };
 
-      return Object.entries(taxonomyMap).reduce((acc, [key, italianName]) => {
+      const result: Record<string, { name: string; link: string }> = {};
+      for (const [key, italianName] of Object.entries(taxonomyMap)) {
         if (response[key]) {
-          acc[italianName] = {
+          result[italianName] = {
             name: response[key],
             link: `https://it.wikipedia.org/wiki/${encodeURIComponent(response[key])}`
           };
         }
-        return acc;
-      }, {} as Record<string, { name: string; link: string }>);
+      }
+      return result;
     } catch (error) {
       console.error('Error fetching classification data:', error);
       return null;
