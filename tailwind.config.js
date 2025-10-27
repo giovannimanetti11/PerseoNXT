@@ -8,6 +8,7 @@ module.exports = {
       './plugins/**/*.{js,ts}',
       './nuxt.config.{js,ts}',
       './app.vue',
+      './error.vue',
     ],
     theme: {
       extend: {
@@ -33,6 +34,28 @@ module.exports = {
         '4': '4px'
       }
     },
-    plugins: [
+    // Optimize production build
+    corePlugins: {
+      // Disable unused Tailwind features
+      preflight: true, // Keep for base styles
+      container: false, // Not used
+      float: false, // Not used
+    },
+    // Safelist only dynamic classes that can't be detected by PurgeCSS
+    safelist: [
+      // Section-specific classes generated dynamically
+      {
+        pattern: /post-section-.+/,
+        variants: [],
+      },
+      {
+        pattern: /blogpost-section-.+/,
+        variants: [],
+      },
+      {
+        pattern: /term-section-.+/,
+        variants: [],
+      }
     ],
+    plugins: [],
   };
