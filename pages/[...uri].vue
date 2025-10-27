@@ -209,8 +209,7 @@ import { ref, reactive, watch, nextTick, computed, defineAsyncComponent, onMount
 import { useRoute } from 'vue-router';
 import { useApolloClient } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
-import { useRuntimeConfig, useAsyncData, useHead } from '#app';
-import { useReferences } from '~/composables/useReferences'
+import { useAsyncData, useHead } from '#app';
 import DOMPurify from 'isomorphic-dompurify'
 
 // Import critical components directly to improve SEO
@@ -224,7 +223,6 @@ const ObservationsMap = defineAsyncComponent(() => import('@/components/posts/ob
 const EditContentProposal = defineAsyncComponent(() => import('@/components/editContentProposal.vue'));
 const SchemaMarkup = defineAsyncComponent(() => import('@/components/schemaMarkup.vue'));
 
-const config = useRuntimeConfig();
 const route = useRoute();
 const { resolveClient } = useApolloClient();
 const apolloClient = resolveClient();
@@ -238,9 +236,6 @@ const sanitizeHtml = (html: string): string => {
     ALLOW_DATA_ATTR: false
   });
 };
-
-// Add to setup
-const { parseReferences } = useReferences()
 
 // GraphQL query to fetch post data
 const FETCH_POST_BY_SLUG = gql`
@@ -303,7 +298,7 @@ const isScrolling = ref(false);
 let mouseEnterTimeout: number | null = null;
 let scrollTimeout: number | null = null;
 
-const { data: postData, pending, error } = useAsyncData(
+const { data: postData } = useAsyncData(
   () => `postData-${Array.isArray(route.params.uri) ? route.params.uri[0] : route.params.uri}`,
   async () => {
     const slug = Array.isArray(route.params.uri) ? route.params.uri[0] : route.params.uri;
@@ -323,7 +318,7 @@ const { data: postData, pending, error } = useAsyncData(
       
       const postData = data.postBy;
       return postData;
-    } catch (err) {
+    } catch {
       throw createError({
         statusCode: 404,
         statusMessage: 'Pagina non trovata',
@@ -380,13 +375,6 @@ const featuredImage = computed(() => {
     };
   }
   return null;
-});
-
-const openGraphImage = computed(() => {
-  if (featuredImage.value && featuredImage.value.sourceUrl) {
-    return featuredImage.value.sourceUrl;
-  }
-  return 'https://wikiherbalist.com/images/default-plant-og-image.jpg';
 });
 
 const additionalImages = computed(() => {
@@ -568,14 +556,6 @@ onUnmounted(() => {
   if (mouseEnterTimeout) clearTimeout(mouseEnterTimeout);
   if (scrollTimeout) clearTimeout(scrollTimeout);
 });
-
-const references = computed(() => {
-  const referencesSection = post.data.structuredContent?.find(section => section.title === 'Riferimenti')
-  if (referencesSection?.content) {
-    return parseReferences(referencesSection.content)
-  }
-  return []
-})
 
 const hasFitochimicaSection = computed(() => post.structuredContent?.some(section => section.title === 'Fitochimica') || false)
 </script>

@@ -126,7 +126,6 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import { useNuxtApp, useRuntimeConfig } from '#app'
 import gql from 'graphql-tag'
 
 // Constants
@@ -151,11 +150,6 @@ const statusMessage = ref('')
 const lastUpdateTime = ref(null)
 
 // Get Nuxt app instance
-const nuxtApp = useNuxtApp()
-const config = useRuntimeConfig()
-
-// Ensure index name is defined
-const ALGOLIA_INDEX_NAME = 'wikiherbalist'
 
 // GraphQL query for glossary terms
 const GLOSSARY_TERMS_QUERY = gql`
