@@ -51,3 +51,6 @@ Desktop.ini
 # Temporary files
 tmp
 temp
+
+# Local development modules
+modules/
