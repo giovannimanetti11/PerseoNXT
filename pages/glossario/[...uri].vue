@@ -192,11 +192,11 @@ watch(glossaryTerm, async (newTerm) => {
 }, { immediate: true });
 
 // Computed for SEO data
-const seoTitle = computed(() => term.value?.seo?.title || term.value?.title || '');
-const seoDescription = computed(() => term.value?.seo?.metaDesc || '');
+const seoTitle = computed(() => glossaryTerm.value?.seo?.title || glossaryTerm.value?.title || '');
+const seoDescription = computed(() => glossaryTerm.value?.seo?.metaDesc || '');
 const seoImage = computed(() => 
-  term.value?.seo?.opengraphImage?.sourceUrl || 
-  term.value?.featuredImage?.node?.sourceUrl || 
+  glossaryTerm.value?.seo?.opengraphImage?.sourceUrl || 
+  glossaryTerm.value?.featuredImage?.node?.sourceUrl || 
   'https://wikiherbalist.com/images/default-og-image.jpg'
 );
 
@@ -362,11 +362,6 @@ const smoothScroll = (targetId) => {
     element.scrollIntoView({ behavior: 'smooth' });
   }
 };
-
-// Watch for route changes and reset linked words
-watch(() => route.params.uri, () => {
-  globalLinkedWords.value.clear();
-});
 
 </script>
 

@@ -114,17 +114,17 @@ const sections = ref([]);
 const introSection = ref(null);
 // Computed for SEO data
 const seoTitle = computed(() => {
-  const title = post.value?.seo?.title || post.value?.title || '';
+  const title = blogPost.value?.seo?.title || blogPost.value?.title || '';
   return title.length > 60 ? title.slice(0, 59) + '…' : title;
 });
 const seoDescription = computed(() => {
-  const desc = post.value?.seo?.metaDesc || post.value?.excerpt || '';
+  const desc = blogPost.value?.seo?.metaDesc || blogPost.value?.excerpt || '';
   const clean = desc.replace(/<[^>]*>/g, '').trim();
   return clean.length > 155 ? clean.slice(0, 154) + '…' : clean;
 });
 const seoImage = computed(() => 
-  post.value?.seo?.opengraphImage?.sourceUrl || 
-  post.value?.featuredImage?.node?.sourceUrl || 
+  blogPost.value?.seo?.opengraphImage?.sourceUrl || 
+  blogPost.value?.featuredImage?.node?.sourceUrl || 
   'https://wikiherbalist.com/images/default-og-image.jpg'
 );
 
@@ -350,11 +350,6 @@ const smoothScroll = (target) => {
     element.scrollIntoView({ behavior: 'smooth' });
   }
 };
-
-// Reset linked words on route change
-watch(() => route.params.uri, () => {
-  globalLinkedWords.value.clear();
-});
 </script>
 
 <style scoped>
