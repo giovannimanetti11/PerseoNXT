@@ -1,23 +1,24 @@
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client/core';
 import { provideApolloClient } from '@vue/apollo-composable';
-import { defineNuxtPlugin } from '#app';
-import { apiConfig } from '@config';
+import { defineNuxtPlugin, useRuntimeConfig } from '#app';
 
 export default defineNuxtPlugin((nuxtApp) => {
+  const config = useRuntimeConfig();
+  
   // Helper function for base64 encoding
   const basicAuth = () => {
     if (process.server) {
       // Server-side encoding
-      const credentials = `${apiConfig.username}:${apiConfig.appPassword}`;
+      const credentials = `${config.wpUsername}:${config.wpAppPassword}`;
       return `Basic ${Buffer.from(credentials).toString('base64')}`;
     } else {
-      // Client-side encoding
-      return `Basic ${btoa(`${apiConfig.username}:${apiConfig.appPassword}`)}`;
+      // Client-side encoding - these should not be exposed to client
+      return '';
     }
   };
 
   const httpLink = createHttpLink({
-    uri: apiConfig.baseUrl,
+    uri: config.wpBaseUrl || 'https://admin.wikiherbalist.com/graphql',
     headers: {
       Authorization: basicAuth()
     }
