@@ -14,7 +14,8 @@ export default defineNuxtConfig({
         format: ['webp', 'jpg', 'png'],
         quality: 90,
         fit: 'cover',
-      }
+      },
+      maxAge: 60 * 60 * 24 * 365
     }
   },
 

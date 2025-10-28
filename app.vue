@@ -135,6 +135,12 @@ const { data: seoData } = useAsyncData(
         variables: { slug: isPost.value ? slug : slug || '/' }
       })
 
+      // Check if data exists before accessing nested properties
+      if (!data) {
+        console.warn('GraphQL returned no data for route:', route.path)
+        return null
+      }
+
       return isPost.value ? data.post : data.page
     } catch (error) {
       console.error('GraphQL query error:', error)
