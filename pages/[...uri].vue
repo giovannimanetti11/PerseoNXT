@@ -1,16 +1,16 @@
 <template>
   <div>
     <!-- Loading state -->
-    <div v-if="post.loading" class="flex justify-center text-center w-full items-center h-64 mt-12" aria-live="polite" aria-busy="true">
+    <div v-if="pending" class="flex justify-center text-center w-full items-center h-64 mt-12" aria-live="polite" aria-busy="true">
       <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu" aria-label="Caricamento"></div>
     </div>
 
     <!-- Error state -->
-    <div v-else-if="post.error" role="alert" aria-live="assertive">Si è verificato un errore: {{ post.error.message }}</div>
+    <div v-else-if="error" role="alert" aria-live="assertive">Si è verificato un errore: {{ error.message }}</div>
 
     <!-- Content state -->
-    <div v-else-if="post.data" id="post">
-      <SchemaMarkup :post="post.data" :tag="null" />
+    <div v-else-if="postData" id="post">
+      <SchemaMarkup :post="postData" :tag="null" />
 
       <!-- Post info section -->
       <section class="post-info-section flex flex-col md:flex-row py-20 px-2 md:px-10 w-11/12 mx-auto rounded-2xl print:py-2 print:px-0 print:w-full">
@@ -33,20 +33,20 @@
         <!-- Post information container -->
         <div class="w-full md:w-2/5 md:mt-28 container mx-auto px-2 print:mt-8 print:px-0 order-2 md:order-1">
           <div class="mb-12">
-            <Breadcrumbs 
-              :currentPageName="post.data.title" 
-              parentPath="/piante-medicinali" 
-              parentName="Piante medicinali" 
+            <Breadcrumbs
+              :currentPageName="postData.title"
+              parentPath="/piante-medicinali"
+              parentName="Piante medicinali"
             />
           </div>
-          <PostInfo 
-            :title="post.data.title"
-            :nomeScientifico="post.data.nomeScientifico"
-            :publishDate="post.data.date"
-            :modifiedDate="post.data.modified"
-            :content="post.data.content"
-            :authorName="post.data.authorName"
-            :revisionData="post.data.revisionData"
+          <PostInfo
+            :title="postData.title"
+            :nomeScientifico="postData.nomeScientifico"
+            :publishDate="postData.date"
+            :modifiedDate="postData.modified"
+            :content="postData.content"
+            :authorName="postData.authorName"
+            :revisionData="postData.revisionData"
           />
         </div>
 
@@ -68,7 +68,7 @@
           </div>
           <ClientOnly>
             <Suspense>
-              <ObservationsMap :nomeScientifico="post.data.nomeScientifico" class="mt-8 md:mt-0 pb-4 w-full m-auto" />
+              <ObservationsMap :nomeScientifico="postData.nomeScientifico" class="mt-8 md:mt-0 pb-4 w-full m-auto" />
               <template #fallback>
                 <div class="animate-pulse bg-gray-200 h-64 w-full rounded-2xl" aria-hidden="true"></div>
               </template>
@@ -77,10 +77,10 @@
         </div>
       </section>
 
-      <!-- Index section -->
-      <section class="post-index-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full">
+      <!-- Index section - CLIENT SIDE ONLY -->
+      <section v-if="isContentProcessed" class="post-index-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full">
         <div class="font-bold text-xl md:text-2xl flex items-center">
-          <Icon name="ic:twotone-list" class="text-2xl md:text-3xl text-black rounded-full mr-2" aria-hidden="true" /> 
+          <Icon name="ic:twotone-list" class="text-2xl md:text-3xl text-black rounded-full mr-2" aria-hidden="true" />
           <div id="table-of-contents" class="font-bold text-xl md:text-2xl">Indice</div>
         </div>
         <ul class="mt-4 md:mt-8 flex flex-wrap justify-start gap-2 md:gap-4 print:gap-0 print:mt-2" aria-labelledby="table-of-contents">
@@ -94,13 +94,13 @@
       </section>
 
       <!-- Properties section -->
-      <section v-if="post.data.tags && post.data.tags.nodes.length > 0" class="post-section-proprieta flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full" id="section1">
+      <section v-if="postData.tags && postData.tags.nodes.length > 0" class="post-section-proprieta flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full" id="section1">
         <div class="flex items-center space-x-4">
           <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">1</div>
           <h3 class="text-xl md:text-2xl">Proprietà terapeutiche</h3>
         </div>
         <ul class="mt-4 md:mt-8 flex flex-wrap justify-start gap-2 md:gap-4">
-          <li v-for="tag in post.data.tags.nodes" :key="tag.id" 
+          <li v-for="tag in postData.tags.nodes" :key="tag.id" 
               class="relative hover:bg-blu hover:text-white text-center py-2 md:py-4 px-2 md:px-4 bg-white text-blu rounded-xl text-xs md:text-sm cursor-pointer w-full sm:w-2/5 md:w-1/5 flex-grow-0 flex-shrink-0"
               @click="toggleTooltip(tag.id)"
               @mouseenter="handleMouseEnterTag(tag.id)"
@@ -126,16 +126,16 @@
       <div class="flex flex-col md:flex-row w-11/12 mx-auto print:w-full gap-4 md:gap-8">
         <div class="flex flex-col w-full md:w-1/2 mx-auto print:w-full">
           <!-- Scientific name section -->
-          <section v-if="post.data.nomeScientifico" class="post-section-nome-scientifico flex flex-col w-full py-10 md:py-20 px-4 md:px-10 mx-auto rounded-2xl mt-4 print:py-2 print:px-0" id="section2">
+          <section v-if="postData.nomeScientifico" class="post-section-nome-scientifico flex flex-col w-full py-10 md:py-20 px-4 md:px-10 mx-auto rounded-2xl mt-4 print:py-2 print:px-0" id="section2">
             <div class="flex items-center space-x-4">
               <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">2</div>
               <h3 class="text-xl md:text-2xl">Nome scientifico</h3>
             </div>
-            <p class="text-center italic mt-4 py-2 md:py-4 px-2 md:px-4 bg-white text-blu rounded-xl text-xs md:text-sm cursor-pointer w-full md:w-2/5">{{ post.data.nomeScientifico }}</p>
+            <p class="text-center italic mt-4 py-2 md:py-4 px-2 md:px-4 bg-white text-blu rounded-xl text-xs md:text-sm cursor-pointer w-full md:w-2/5">{{ postData.nomeScientifico }}</p>
           </section>
-          
+
           <!-- Used parts section -->
-          <section v-if="post.data.partiUsate" class="post-section-parti-usate flex flex-col w-full py-10 md:py-20 px-4 md:px-10 mx-auto rounded-2xl mt-4 print:py-2 print:px-0" id="section3">
+          <section v-if="postData.partiUsate" class="post-section-parti-usate flex flex-col w-full py-10 md:py-20 px-4 md:px-10 mx-auto rounded-2xl mt-4 print:py-2 print:px-0" id="section3">
             <div class="flex items-center space-x-4">
               <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">3</div>
               <h3 class="text-xl md:text-2xl">Parti usate</h3>
@@ -147,7 +147,7 @@
         </div>
 
         <!-- Common name section -->
-        <div v-if="post.data.nomeComune" class="post-section-nome-comune flex flex-col w-full md:w-1/2 py-10 md:py-20 px-4 md:px-10 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full" id="section4">
+        <div v-if="postData.nomeComune" class="post-section-nome-comune flex flex-col w-full md:w-1/2 py-10 md:py-20 px-4 md:px-10 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full" id="section4">
           <div class="flex items-center space-x-4">
             <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">4</div>
             <h3 class="text-xl md:text-2xl">Nome comune</h3>
@@ -159,26 +159,31 @@
       </div>
 
       <!-- Phytochemistry section - only show if no "Fitochimica" H3 exists in content -->
-      <section v-if="post.data.costituenti && !hasFitochimicaSection" class="post-section-fitochimica flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full" id="section5">
+      <section v-if="postData.costituenti && !hasFitochimicaSection" class="post-section-fitochimica flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full" id="section5">
         <div class="flex items-center space-x-4">
           <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">5</div>
           <h3 class="text-xl md:text-2xl">Fitochimica</h3>
         </div>
         <div class="mt-4">
           <ContentTooltip
-            v-if="post.data.costituenti"
-            :content="post.data.costituenti"
+            v-if="postData.costituenti"
+            :content="postData.costituenti"
           />
         </div>
       </section>
 
-      <!-- Dynamic content sections -->
-      <section v-for="(section, index) in post.structuredContent"
+      <!-- RAW CONTENT for SSR - Googlebot sees this immediately -->
+      <section v-if="!isContentProcessed && postData?.content" class="post-content-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full">
+        <ContentTooltip :content="postData.content" />
+      </section>
+
+      <!-- PROCESSED Dynamic content sections - CLIENT SIDE ONLY -->
+      <section v-if="isContentProcessed" v-for="(section, index) in structuredContent"
                :class="['post-content-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full', section.className]"
-               :id="'section' + (post.data.costituenti && !hasFitochimicaSection ? 5 + index + 1 : 5 + index)"
+               :id="'section' + (postData.costituenti && !hasFitochimicaSection ? 5 + index + 1 : 5 + index)"
                :key="section.title">
         <div class="flex items-center space-x-4" v-if="section.title !== 'Riferimenti'">
-          <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">{{ post.data.costituenti && !hasFitochimicaSection ? 5 + index + 1 : 5 + index }}</div>
+          <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">{{ postData.costituenti && !hasFitochimicaSection ? 5 + index + 1 : 5 + index }}</div>
           <h3 class="text-xl md:text-2xl">{{ section.title }}</h3>
         </div>
         <h3 v-else class="text-xl md:text-2xl mb-4">{{ section.title }}</h3>
@@ -207,10 +212,9 @@
 <script setup lang="ts">
 import { ref, reactive, watch, nextTick, computed, defineAsyncComponent, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { useApolloClient } from '@vue/apollo-composable';
-import gql from 'graphql-tag';
 import { useAsyncData, useHead } from '#app';
 import DOMPurify from 'isomorphic-dompurify'
+import { useGraphQL } from '~/composables/useGraphQL';
 
 // Import critical components directly to improve SEO
 import ContentTooltip from '@/components/contentTooltip.vue';
@@ -224,8 +228,7 @@ const EditContentProposal = defineAsyncComponent(() => import('@/components/edit
 const SchemaMarkup = defineAsyncComponent(() => import('@/components/schemaMarkup.vue'));
 
 const route = useRoute();
-const { resolveClient } = useApolloClient();
-const apolloClient = resolveClient();
+const { query } = useGraphQL();
 
 // Sanitize HTML to prevent XSS attacks
 const sanitizeHtml = (html: string): string => {
@@ -238,7 +241,7 @@ const sanitizeHtml = (html: string): string => {
 };
 
 // GraphQL query to fetch post data
-const FETCH_POST_BY_SLUG = gql`
+const FETCH_POST_BY_SLUG = `
   query FetchPostBySlug($slug: String!) {
     postBy(slug: $slug) {
       id
@@ -286,28 +289,24 @@ const FETCH_POST_BY_SLUG = gql`
   }
 `;
 
-// Reactive state for post data
-const post = reactive({
-  data: null as any,
-  headings: [] as string[],
-  structuredContent: [] as any[]
-});
+// State management - simplified to use postData directly
+const headings = ref<string[]>([]);
+const structuredContent = ref<any[]>([]);
+const isContentProcessed = ref(false); // Flag to track if content has been processed client-side
 
 const activeTooltip = ref<string | null>(null);
 const isScrolling = ref(false);
 let mouseEnterTimeout: number | null = null;
 let scrollTimeout: number | null = null;
 
-const { data: postData } = useAsyncData(
+// Fetch post data with SSR
+const { data: postData, pending, error } = await useAsyncData(
   () => `postData-${Array.isArray(route.params.uri) ? route.params.uri[0] : route.params.uri}`,
   async () => {
     const slug = Array.isArray(route.params.uri) ? route.params.uri[0] : route.params.uri;
 
     try {
-      const { data } = await apolloClient.query({
-        query: FETCH_POST_BY_SLUG,
-        variables: { slug }
-      });
+      const data = await query(FETCH_POST_BY_SLUG, { slug });
       if (!data.postBy) {
         throw createError({
           statusCode: 404,
@@ -315,9 +314,8 @@ const { data: postData } = useAsyncData(
           fatal: true
         });
       }
-      
-      const postData = data.postBy;
-      return postData;
+
+      return data.postBy;
     } catch {
       throw createError({
         statusCode: 404,
@@ -327,19 +325,20 @@ const { data: postData } = useAsyncData(
     }
   },
   {
-    watch: [() => route.params.uri]
+    watch: [() => route.params.uri],
+    server: true,  // Force SSR only - prevents client-side refetch on hard refresh
+    lazy: false
   }
 );
 
-// Watch for changes in postData and update post reactive object
-watch(postData, async (newPostData) => {
-  post.data = newPostData;
-
-  if (newPostData) {
-    await nextTick();
-    processPostContent();
-  }
-}, { immediate: true });
+// Handle error/404 - check after fetch completes
+if (error.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Pagina non trovata',
+    fatal: true
+  });
+}
 
 // Computed for SEO data
 const seoTitle = computed(() => postData.value?.seo?.title || postData.value?.title || '');
@@ -368,18 +367,18 @@ useHead({
 
 // Computed properties for images
 const featuredImage = computed(() => {
-  if (post.data?.featuredImage?.node) {
+  if (postData.value?.featuredImage?.node) {
     return {
-      sourceUrl: post.data.featuredImage.node.sourceUrl,
-      altText: post.data.featuredImage.node.altText || ''
+      sourceUrl: postData.value.featuredImage.node.sourceUrl,
+      altText: postData.value.featuredImage.node.altText || ''
     };
   }
   return null;
 });
 
 const additionalImages = computed(() => {
-  if (post.data?.additionalImages) {
-    return post.data.additionalImages.map(img => ({
+  if (postData.value?.additionalImages) {
+    return postData.value.additionalImages.map(img => ({
       url: img.sourceUrl,
       altText: img.altText || ''
     }));
@@ -393,13 +392,23 @@ const hasImages = computed(() => {
 });
 
 // Function to process post content and extract headings and sections
+// CLIENT-SIDE ONLY - uses document API
 const processPostContent = () => {
-  if (!post.data || !post.data.content) return;
+  // Don't process in SSR - just return without setting isContentProcessed
+  if (!process.client) {
+    return;
+  }
 
-  const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = post.data.content;
+  if (!postData.value || !postData.value.content) {
+    isContentProcessed.value = true;
+    return;
+  }
 
-  const headings: string[] = [];
+  try {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = postData.value.content;
+
+  const extractedHeadings: string[] = [];
   const sections: any[] = [];
   let currentSection: any = null;
   let currentSubSection: any = null;
@@ -414,7 +423,7 @@ const processPostContent = () => {
         sections.push(currentSection);
       }
       const title = elem.textContent?.trim() || '';
-      headings.push(title);
+      extractedHeadings.push(title);
       currentSection = {
         title: title,
         content: '',
@@ -458,28 +467,55 @@ const processPostContent = () => {
     sections.push(currentSection);
   }
 
-  post.headings = headings;
-  post.structuredContent = sections;
+    headings.value = extractedHeadings;
+    structuredContent.value = sections;
+
+    // Mark content as processed
+    isContentProcessed.value = true;
+  } catch (error) {
+    console.error('Error processing post content:', error);
+    // Show raw content on error
+    isContentProcessed.value = true;
+  }
 };
+
+// Client-side content processing after mount
+onMounted(() => {
+  if (process.client && postData.value?.content) {
+    processPostContent();
+  }
+});
+
+// Watch for route changes during SPA navigation
+watch(() => route.params.uri, async () => {
+  if (process.client) {
+    // Reset flag and wait for data update
+    isContentProcessed.value = false;
+    await nextTick();
+    if (postData.value?.content) {
+      processPostContent();
+    }
+  }
+});
 
 // Compute all headings
 const allHeadings = computed(() => {
   const staticHeadings = ["Proprietà terapeutiche", "Nome scientifico", "Parti usate", "Nome comune"];
-  
-  // Only add "Fitochimica" to static headings if it doesn't exist in post.headings
-  if (!post.headings.includes("Fitochimica") && post.data?.costituenti) {
+
+  // Only add "Fitochimica" to static headings if it doesn't exist in headings
+  if (!headings.value.includes("Fitochimica") && postData.value?.costituenti) {
     staticHeadings.push("Fitochimica");
   }
-  
-  return [...staticHeadings, ...post.headings];
+
+  return [...staticHeadings, ...headings.value];
 });
 
 // Parse comma-separated string into array
 const parseStringToArray = (str?: string): string[] => str?.split(/[\s]*[;,][\s]*/).filter(Boolean) || [];
 
 // Computed properties for parsed arrays
-const partiUsateArray = computed(() => parseStringToArray(post.data?.partiUsate));
-const nomeComuneArray = computed(() => parseStringToArray(post.data?.nomeComune));
+const partiUsateArray = computed(() => parseStringToArray(postData.value?.partiUsate));
+const nomeComuneArray = computed(() => parseStringToArray(postData.value?.nomeComune));
 
 const showTooltip = (tagId: string) => {
   if (isScrolling.value) return;
@@ -557,7 +593,7 @@ onUnmounted(() => {
   if (scrollTimeout) clearTimeout(scrollTimeout);
 });
 
-const hasFitochimicaSection = computed(() => post.structuredContent?.some(section => section.title === 'Fitochimica') || false)
+const hasFitochimicaSection = computed(() => structuredContent.value?.some(section => section.title === 'Fitochimica') || false)
 </script>
 
 <style scoped>

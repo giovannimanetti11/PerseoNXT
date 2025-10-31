@@ -21,7 +21,7 @@
         <Icon name="f7:speaker-1-fill" class="text-xl" aria-hidden="true" />
       </button>
     </div>
-    <p class="text-xl italic text-gray-700">{{ nomeScientifico }}</p>
+    <h2 class="text-xl italic text-gray-700 font-normal">{{ nomeScientifico }}</h2>
 
     <!-- Basionym and synonyms -->
     <ClientOnly>

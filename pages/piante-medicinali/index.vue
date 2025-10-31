@@ -34,8 +34,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useAsyncData } from '#app';
-import { useApolloClient } from '@vue/apollo-composable';
-import gql from 'graphql-tag';
+import { useGraphQL } from '~/composables/useGraphQL';
 import Searchfield from '~/components/searchfield.vue';
 import Contacts from "~/components/contacts.vue";
 
@@ -50,7 +49,7 @@ interface GroupedPosts {
   [key: string]: Post[];
 }
 
-const FETCH_ALL_POSTS = gql`
+const FETCH_ALL_POSTS = `
   query FetchAllPosts {
     posts(first: 1000) {
       nodes {
@@ -63,16 +62,13 @@ const FETCH_ALL_POSTS = gql`
   }
 `;
 
-const { resolveClient } = useApolloClient();
-const apolloClient = resolveClient();
+const { query } = useGraphQL();
 
 const { data: posts, pending, error } = await useAsyncData<Post[]>(
   'allPosts',
   async () => {
     try {
-      const { data } = await apolloClient.query({
-        query: FETCH_ALL_POSTS
-      });
+      const data = await query(FETCH_ALL_POSTS);
       return data.posts.nodes;
     } catch (err) {
       console.error('Error fetching posts:', err);
@@ -80,6 +76,8 @@ const { data: posts, pending, error } = await useAsyncData<Post[]>(
     }
   },
   {
+    server: true,  // Force SSR only - prevents client-side refetch
+    lazy: false,
     transform: (result) => {
       return result?.map((post: any) => ({
         id: post.id,

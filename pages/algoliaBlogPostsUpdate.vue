@@ -125,8 +125,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import gql from 'graphql-tag'
-// Removed @config import - using server API endpoints instead
+import { useGraphQL } from '~/composables/useGraphQL'
 
 // State
 const algoliaStatus = ref('Not Connected')
@@ -143,6 +142,8 @@ const accessError = ref('')
 const isAuthenticated = ref(false)
 
 // Get Nuxt app instance
+const nuxtApp = useNuxtApp()
+const { query } = useGraphQL()
 
 // Computed
 const isReady = computed(() => {
@@ -186,7 +187,7 @@ async function fetchAlgoliaCount() {
 }
 
 // GraphQL query
-const BLOG_POSTS_QUERY = gql`
+const BLOG_POSTS_QUERY = `
   query FetchBlogPosts {
     blogPosts(first: 1000) {
       nodes {
@@ -208,15 +209,8 @@ const BLOG_POSTS_QUERY = gql`
 
 // Fetch posts from WordPress
 async function fetchWordPressPosts() {
-  if (!nuxtApp.$apolloClient) {
-    console.error('Apollo client not available')
-    return
-  }
-
   try {
-    const { data } = await nuxtApp.$apolloClient.query({
-      query: BLOG_POSTS_QUERY
-    })
+    const data = await query(BLOG_POSTS_QUERY)
 
     if (data?.blogPosts?.nodes) {
       posts.value = data.blogPosts.nodes.map(post => ({

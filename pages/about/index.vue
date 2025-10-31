@@ -46,8 +46,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useAsyncData } from '#app'
-import { useApolloClient } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
+import { useGraphQL } from '~/composables/useGraphQL'
 import DOMPurify from 'isomorphic-dompurify'
 
 interface Member {
@@ -77,7 +76,7 @@ interface AboutData {
   }
 }
 
-const FETCH_ABOUT_DATA = gql`
+const FETCH_ABOUT_DATA = `
   query FetchAboutData {
     pageBy(uri: "about") {
       content
@@ -104,14 +103,14 @@ const FETCH_ABOUT_DATA = gql`
   }
 `
 
-const { resolveClient } = useApolloClient()
-const apolloClient = resolveClient()
+const { query } = useGraphQL()
 
 const { data: aboutData, pending, error } = await useAsyncData<AboutData>('aboutData', async () => {
-  const { data } = await apolloClient.query({
-    query: FETCH_ABOUT_DATA
-  })
+  const data = await query(FETCH_ABOUT_DATA)
   return data
+}, {
+  server: true,  // Force SSR only - prevents client-side refetch
+  lazy: false
 })
 
 const aboutContent = computed(() => aboutData.value?.pageBy?.content || '')

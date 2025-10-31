@@ -53,14 +53,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import { useSanitize } from '~/composables/useSanitize';
-import { useApolloClient } from '@vue/apollo-composable';
-import gql from 'graphql-tag';
+import { useGraphQL } from '~/composables/useGraphQL';
+import { useAsyncData } from '#app';
 import Searchfield from '~/components/searchfield.vue';
 import Contacts from "~/components/contacts.vue";
 
 const { sanitizeHtml } = useSanitize();
+const { query } = useGraphQL();
 
 interface BlogPost {
   title: string;
@@ -77,7 +78,7 @@ interface BlogPost {
   databaseId: number;
 }
 
-const FETCH_BLOG_POSTS = gql`
+const FETCH_BLOG_POSTS = `
   query FETCH_BLOG_POSTS {
     blogPosts(first: 50, where: {orderby: {field: DATE, order: DESC}}) {
       nodes {
@@ -98,43 +99,33 @@ const FETCH_BLOG_POSTS = gql`
   }
 `;
 
-// State management
-const blogPosts = ref<BlogPost[]>([]);
-const pending = ref(true);
-const error = ref<Error | null>(null);
+// Fetch blog posts with useAsyncData for SSR
+const { data: blogPosts, pending, error } = await useAsyncData<BlogPost[]>(
+  'blogPosts',
+  async () => {
+    try {
+      const data = await query(FETCH_BLOG_POSTS);
 
-// Apollo client setup
-const { resolveClient } = useApolloClient();
-const apolloClient = resolveClient();
-
-// Fetch function that can be called both on mount and when needed
-const fetchBlogPosts = async () => {
-  pending.value = true;
-  error.value = null;
-  
-  try {
-    const { data } = await apolloClient.query({
-      query: FETCH_BLOG_POSTS,
-      fetchPolicy: 'network-only' // Force network request
-    });
-    
-    // Transform the data
-    blogPosts.value = data.blogPosts.nodes.map((post: any) => ({
-      ...post,
-      featuredImage: {
-        node: {
-          sourceUrl: post.featuredImage?.node?.sourceUrl || '/placeholder-image.jpg',
-          altText: post.featuredImage?.node?.altText || post.title
+      // Transform the data
+      return data.blogPosts.nodes.map((post: any) => ({
+        ...post,
+        featuredImage: {
+          node: {
+            sourceUrl: post.featuredImage?.node?.sourceUrl || '/placeholder-image.jpg',
+            altText: post.featuredImage?.node?.altText || post.title
+          }
         }
-      }
-    }));
-  } catch (err) {
-    console.error('Error fetching blog posts:', err);
-    error.value = err instanceof Error ? err : new Error('Failed to fetch blog posts');
-  } finally {
-    pending.value = false;
+      }));
+    } catch (err) {
+      console.error('Error fetching blog posts:', err);
+      throw new Error('Failed to fetch blog posts');
+    }
+  },
+  {
+    server: true,  // Force SSR only - prevents client-side refetch
+    lazy: false
   }
-};
+);
 
 // Computed properties for UI
 const featuredPost = computed<BlogPost | null>(() => blogPosts.value?.[0] || null);
@@ -145,11 +136,6 @@ const formatDate = (dateStr: string): string => {
   const date = new Date(dateStr);
   return date.toLocaleDateString('it-IT', { year: 'numeric', month: 'long', day: 'numeric' });
 };
-
-// Fetch data on component mount
-onMounted(() => {
-  fetchBlogPosts();
-});
 
 // Set page metadata
 useHead({

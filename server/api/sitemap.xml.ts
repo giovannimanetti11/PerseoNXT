@@ -153,7 +153,7 @@ export default defineEventHandler(async (event) => {
       }
 
       const postUrls = postNodes.map(post => ({
-        url: `/piante-medicinali/${post.slug}`,
+        url: `/${post.slug}`,
         lastmod: post.modified || post.date || new Date().toISOString(),
         changefreq: 'weekly',
         priority: 0.7

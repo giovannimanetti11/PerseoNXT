@@ -5,7 +5,7 @@
 ![language](https://img.shields.io/github/languages/top/giovannimanetti11/PerseoNXT)
 ![release](https://img.shields.io/github/v/release/giovannimanetti11/PerseoNXT?include_prereleases)
 
-PerseoNXT is a custom Nuxt3-based theme designed specifically for headless WordPress websites, tailored for the project [wikiherbalist.com](https://wikiherbalist.com). This theme is now live and can be seen in action at [wikiherbalist.com](https://wikiherbalist.com).
+PerseoNXT is a custom Nuxt 4-based theme designed specifically for headless WordPress websites, tailored for the project [wikiherbalist.com](https://wikiherbalist.com). This theme is now live and can be seen in action at [wikiherbalist.com](https://wikiherbalist.com).
 
 <p align="center">
 <img src="https://github.com/user-attachments/assets/1b48f4bd-8628-4e8f-bea2-8e28bf12b7d6" alt="homepage" width="300">
@@ -13,9 +13,9 @@ PerseoNXT is a custom Nuxt3-based theme designed specifically for headless WordP
 
 ## Features
 
-- **Vue3**: built with Vue3, Composition API, reactivity system;
-- **Nuxt3**: latest Nuxt3 framework to improve performance and SEO;
-- **GraphQL and Apollo**: GraphQL with Apollo for efficient data fetching, real-time updates and flexible querying capabilities;
+- **Vue 3**: built with Vue 3, Composition API, reactivity system;
+- **Nuxt 4**: latest Nuxt 4 framework with improved performance and SEO;
+- **GraphQL**: native GraphQL integration using Nuxt's $fetch (no Apollo dependency);
 - **Nuxt Algolia**: integrated Algolia module for powerful search capabilities;
 - **Tailwind CSS**: integrates Tailwind CSS for utility-first, responsive, and highly customizable styling;
 - **TypeScript**: full TypeScript support with type definitions for enhanced development experience;

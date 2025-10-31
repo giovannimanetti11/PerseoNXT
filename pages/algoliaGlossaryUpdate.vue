@@ -126,7 +126,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import gql from 'graphql-tag'
+import { useGraphQL } from '~/composables/useGraphQL'
 
 // Constants
 const UPDATE_COOLDOWN = 5 * 60 * 1000 // 5 minutes
@@ -150,9 +150,11 @@ const statusMessage = ref('')
 const lastUpdateTime = ref(null)
 
 // Get Nuxt app instance
+const nuxtApp = useNuxtApp()
+const { query } = useGraphQL()
 
 // GraphQL query for glossary terms
-const GLOSSARY_TERMS_QUERY = gql`
+const GLOSSARY_TERMS_QUERY = `
   query FetchGlossaryTerms {
     glossaryTerms(first: 1000) {
       nodes {
@@ -199,16 +201,8 @@ async function fetchAlgoliaCount() {
 }
 
 async function fetchWordPressTerms() {
-  const nuxtApp = useNuxtApp()
-  if (!nuxtApp.$apolloClient) {
-    console.error('WordPress connection not available')
-    return
-  }
-
   try {
-    const { data } = await nuxtApp.$apolloClient.query({
-      query: GLOSSARY_TERMS_QUERY
-    })
+    const data = await query(GLOSSARY_TERMS_QUERY)
 
     if (data?.glossaryTerms?.nodes) {
       terms.value = data.glossaryTerms.nodes.map(term => ({

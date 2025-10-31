@@ -103,12 +103,12 @@
 <script setup>
 import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { useSanitize } from '~/composables/useSanitize';
-import { useApolloClient } from '@vue/apollo-composable';
+import { useGraphQL } from '~/composables/useGraphQL';
 import { useAlphabet } from '~/composables/useAlphabet';
 import { useAsyncData } from '#app';
-import gql from 'graphql-tag';
 
 const { sanitizeHtml } = useSanitize();
+const { query } = useGraphQL();
 
 const props = defineProps({
   searchTerm: {
@@ -116,9 +116,6 @@ const props = defineProps({
     default: ''
   }
 });
-
-const { resolveClient } = useApolloClient();
-const apolloClient = resolveClient();
 
 const { 
   alphabet, 
@@ -140,7 +137,7 @@ const cachedTags = ref({});
 
 const emit = defineEmits(['dataLoaded']);
 
-const FETCH_TAGS_BY_LETTER = gql`
+const FETCH_TAGS_BY_LETTER = `
   query FetchTagsByLetter($letter: String!) {
     tags(first: 1000, where: { search: $letter }) {
       nodes {
@@ -167,17 +164,18 @@ const { data: tagsData, error, refresh } = useAsyncData(
       isLoading.value = false;
       return cachedTags.value[selectedLetter.value];
     }
-    const { data } = await apolloClient.query({
-      query: FETCH_TAGS_BY_LETTER,
-      variables: { letter: selectedLetter.value }
-    });
+    const data = await query(FETCH_TAGS_BY_LETTER, { letter: selectedLetter.value });
     const filteredTags = data.tags.nodes.filter(tag => tag.name.charAt(0).toLowerCase() === selectedLetter.value.toLowerCase());
     cachedTags.value[selectedLetter.value] = filteredTags;
     isLoading.value = false;
     emit('dataLoaded', filteredTags);
     return filteredTags;
   },
-  { watch: [selectedLetter] }
+  {
+    watch: [selectedLetter],
+    server: true,  // Force SSR only
+    lazy: false
+  }
 );
 
 const fetchTagsByLetter = async (letter) => {
