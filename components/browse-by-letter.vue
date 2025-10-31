@@ -61,7 +61,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAlphabet } from '~/composables/useAlphabet';
 import { useGraphQL } from '~/composables/useGraphQL';

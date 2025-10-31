@@ -141,8 +141,7 @@ const accessPassword = ref('')
 const accessError = ref('')
 const isAuthenticated = ref(false)
 
-// Get Nuxt app instance
-const nuxtApp = useNuxtApp()
+// Get GraphQL composable
 const { query } = useGraphQL()
 
 // Computed

@@ -210,7 +210,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch, nextTick, computed, defineAsyncComponent, onMounted, onUnmounted } from 'vue';
+import { ref, watch, nextTick, computed, defineAsyncComponent, onMounted, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useAsyncData, useHead } from '#app';
 import DOMPurify from 'isomorphic-dompurify'
