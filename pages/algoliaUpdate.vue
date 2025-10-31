@@ -126,13 +126,11 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
-import { useNuxtApp, useRuntimeConfig } from '#app';
 import { useGraphQL } from '~/composables/useGraphQL';
 
 
 // Constants
 const UPDATE_COOLDOWN = 5 * 60 * 1000; // 5 minutes
-const config = useRuntimeConfig();
 
 // Ensure index name is defined
 const ALGOLIA_INDEX_NAME = 'wikiherbalist';

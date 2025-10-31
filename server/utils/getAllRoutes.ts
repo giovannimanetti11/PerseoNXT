@@ -3,11 +3,6 @@
  * This is used during build time to generate static pages
  */
 
-interface Route {
-  url: string
-  lastmod?: string
-}
-
 export async function getAllRoutesForPrerender(): Promise<string[]> {
   try {
     const config = useRuntimeConfig()

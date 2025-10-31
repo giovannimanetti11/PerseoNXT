@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, nextTick } from 'vue'
-import { useRoute, useHead, useSeoMeta, useNuxtApp } from '#app'
+import { useRoute, useHead, useSeoMeta } from '#app'
 import { useGraphQL } from '~/composables/useGraphQL'
 
 
@@ -62,7 +62,6 @@ const GET_PAGE_SEO_DATA = `
 
 // State and setup
 const route = useRoute()
-const nuxtApp = useNuxtApp()
 const isLoaded = ref(false)
 const baseUrl = 'https://wikiherbalist.com'
 const { query } = useGraphQL()

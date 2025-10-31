@@ -149,8 +149,7 @@ const updateSuccess = ref(false)
 const statusMessage = ref('')
 const lastUpdateTime = ref(null)
 
-// Get Nuxt app instance
-const nuxtApp = useNuxtApp()
+// Get GraphQL composable
 const { query } = useGraphQL()
 
 // GraphQL query for glossary terms
