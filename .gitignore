@@ -1,8 +1,9 @@
 # Config/AUTH
 .env
 
-# Deployment documentation (contains sensitive info)
-DEPLOY.md
+# Documentation files (except README.md)
+*.md
+!README.md
 
 #pm2
 

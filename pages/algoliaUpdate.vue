@@ -127,7 +127,8 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useNuxtApp, useRuntimeConfig } from '#app';
-import gql from 'graphql-tag';
+import { useGraphQL } from '~/composables/useGraphQL';
+
 
 // Constants
 const UPDATE_COOLDOWN = 5 * 60 * 1000; // 5 minutes
@@ -136,10 +137,6 @@ const config = useRuntimeConfig();
 // Ensure index name is defined
 const ALGOLIA_INDEX_NAME = 'wikiherbalist';
 
-console.log('Config:', {
-  indexName: ALGOLIA_INDEX_NAME,
-  applicationId: config.public.algolia?.applicationId
-});
 
 // Auth state
 const isAuthenticated = ref(false);
@@ -159,12 +156,13 @@ const updateSuccess = ref(false);
 const statusMessage = ref('');
 const lastUpdateTime = ref(null);
 
-// Get Nuxt Algolia instance
+// Get Nuxt app and composables
 const nuxtApp = useNuxtApp();
 const { $algolia } = nuxtApp;
+const { query } = useGraphQL();
 
 // GraphQL query
-const POSTS_QUERY = gql`
+const POSTS_QUERY = `
   query FetchPosts {
     posts(first: 1000) {
       nodes {
@@ -201,8 +199,8 @@ const isReady = computed(() => {
   };
   console.log('Ready state:', readyState);
 
-  return algoliaStatus.value === 'Ready' && 
-         wordpressStatus.value === 'Ready' && 
+  return algoliaStatus.value === 'Ready' &&
+         wordpressStatus.value === 'Ready' &&
          posts.value.length > 0;
 });
 
@@ -284,14 +282,8 @@ async function initialize() {
 }
 
 async function fetchWordPressPosts() {
-  if (!nuxtApp.$apolloClient) {
-    throw new Error('WordPress connection not available');
-  }
-
   try {
-    const { data } = await nuxtApp.$apolloClient.query({
-      query: POSTS_QUERY
-    });
+    const data = await query(POSTS_QUERY);
 
     if (!data?.posts?.nodes) {
       throw new Error('No posts data received');

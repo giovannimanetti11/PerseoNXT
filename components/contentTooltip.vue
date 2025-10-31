@@ -54,8 +54,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
-import { useApolloClient } from '@vue/apollo-composable';
-import gql from 'graphql-tag';
+import { useGraphQL } from '~/composables/useGraphQL';
 import DOMPurify from 'isomorphic-dompurify';
 
 const props = defineProps<{
@@ -63,8 +62,7 @@ const props = defineProps<{
 }>();
 
 const router = useRouter();
-const { resolveClient } = useApolloClient();
-const apolloClient = resolveClient();
+const { query } = useGraphQL();
 
 const contentContainer = ref<HTMLElement | null>(null);
 const activeTooltip = ref<{ title: string; excerpt: string; slug: string; isGlossary: boolean } | null>(null);
@@ -85,7 +83,7 @@ const sanitizedContent = computed(() => {
   });
 });
 
-const FETCH_TOOLTIP_DATA = gql`
+const FETCH_TOOLTIP_DATA = `
   query FetchTooltipData($slug: String!) {
     postBy(slug: $slug) {
       title
@@ -105,17 +103,17 @@ const showTooltip = async (event: MouseEvent | Event) => {
     event.preventDefault();
     return;
   }
-  
+
   clearTimeout(hideTimeout as number);
   const target = (event.target as HTMLElement).closest('a');
-  
+
   if (target && target.getAttribute('href')) {
     const href = target.getAttribute('href') || '';
-    
+
     // Skip external links
     if (href.startsWith('http') && !href.includes('wikiherbalist.com')) return;
     if (href.startsWith('//') && !href.includes('wikiherbalist.com')) return;
-    
+
     // Extract slug from absolute or relative link
     let slug = href;
     if (href.includes('wikiherbalist.com')) {
@@ -124,14 +122,10 @@ const showTooltip = async (event: MouseEvent | Event) => {
     }
     slug = slug.replace(/^\//, '').replace(/^glossario\//, '');
     const isGlossary = href.includes('/glossario/');
-    
+
     try {
-      const { data } = await apolloClient.query({
-        query: FETCH_TOOLTIP_DATA,
-        variables: { slug },
-        fetchPolicy: 'cache-first'
-      });
-      
+      const data = await query(FETCH_TOOLTIP_DATA, { slug });
+
       const tooltipData = isGlossary ? data.glossaryTermBy : data.postBy;
       
       if (tooltipData) {

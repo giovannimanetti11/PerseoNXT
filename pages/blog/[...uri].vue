@@ -15,13 +15,13 @@
         <!-- Information container -->
         <div class="w-full md:w-3/5 md:mt-28 container mx-auto px-2 print:mt-8 print:px-0 order-2 md:order-1">
           <div class="mb-12">
-            <Breadcrumbs 
-              :currentPageName="blogPost.title" 
-              parentPath="/blog" 
-              parentName="Blog" 
+            <Breadcrumbs
+              :currentPageName="blogPost.title"
+              parentPath="/blog"
+              parentName="Blog"
             />
           </div>
-          <BlogInfo 
+          <BlogInfo
             :title="blogPost.title"
             :publishDate="blogPost.date"
             :content="blogPost.content"
@@ -46,10 +46,10 @@
         </div>
       </section>
 
-      <!-- Index section (only shown if there are headings) -->
-      <section v-if="headings.length > 0" class="post-index-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full">
+      <!-- Index section (only shown if there are headings) - CLIENT SIDE ONLY -->
+      <section v-if="isContentProcessed && headings.length > 0" class="post-index-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full">
         <div class="font-bold text-xl md:text-2xl flex items-center">
-          <Icon name="ic:twotone-list" class="text-2xl md:text-3xl text-black rounded-full mr-2" aria-hidden="true" /> 
+          <Icon name="ic:twotone-list" class="text-2xl md:text-3xl text-black rounded-full mr-2" aria-hidden="true" />
           <div id="table-of-contents" class="font-bold text-xl md:text-2xl">Indice</div>
         </div>
         <ul class="mt-4 md:mt-8 flex flex-wrap justify-start gap-2 md:gap-4 print:gap-0 print:mt-2" aria-labelledby="table-of-contents">
@@ -62,37 +62,44 @@
         </ul>
       </section>
 
-      <!-- Introduction section (without numbering) -->
-      <section v-if="introSection" class="post-section-introduction flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4">
-        <ContentTooltip :content="introSection.content" />
+      <!-- RAW CONTENT for SSR - Googlebot sees this immediately -->
+      <section v-if="!isContentProcessed && blogPost.content" class="post-content-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full">
+        <ContentTooltip :content="blogPost.content" />
       </section>
 
-      <!-- Numbered content sections -->
-      <section v-for="(section, index) in sections"
-               :class="['post-content-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full', section.className]"
-               :id="'section' + (index + 1)"
-               :key="section.title">
-        <div class="flex items-center space-x-4" v-if="section.title !== 'Riferimenti'">
-          <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">
-            {{ index + 1 }}
+      <!-- PROCESSED CONTENT - Client-side only, with sections and styling -->
+      <template v-if="isContentProcessed">
+        <!-- Introduction section (without numbering) -->
+        <section v-if="introSection" class="post-section-introduction flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4">
+          <ContentTooltip :content="introSection.content" />
+        </section>
+
+        <!-- Numbered content sections -->
+        <section v-for="(section, index) in sections"
+                 :class="['post-content-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full', section.className]"
+                 :id="'section' + (index + 1)"
+                 :key="section.title">
+          <div class="flex items-center space-x-4" v-if="section.title !== 'Riferimenti'">
+            <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">
+              {{ index + 1 }}
+            </div>
+            <h3 class="text-xl md:text-2xl">{{ section.title }}</h3>
           </div>
-          <h3 class="text-xl md:text-2xl">{{ section.title }}</h3>
-        </div>
-        <h3 v-else class="text-xl md:text-2xl mb-4">{{ section.title }}</h3>
-        
-        <ContentTooltip v-if="section.content" :content="section.content" class="mt-4" />
-      </section>
+          <h3 v-else class="text-xl md:text-2xl mb-4">{{ section.title }}</h3>
 
-      <EditContentProposal :sections="headings" />
+          <ContentTooltip v-if="section.content" :content="section.content" class="mt-4" />
+        </section>
+      </template>
+
+      <EditContentProposal v-if="isContentProcessed" :sections="headings" />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, watch, defineAsyncComponent } from 'vue';
+import { ref, computed, onMounted, watch, nextTick, defineAsyncComponent } from 'vue';
 import { useRoute } from 'vue-router';
-import { useApolloClient } from '@vue/apollo-composable';
-import gql from 'graphql-tag';
+import { useGraphQL } from '~/composables/useGraphQL';
 import { useHead } from '#app';
 
 // Import critical components directly for better SSR
@@ -106,12 +113,13 @@ const SchemaMarkup = defineAsyncComponent(() => import('~/components/schemaMarku
 
 // Core setup
 const route = useRoute();
-const apolloClient = useApolloClient().resolveClient();
+const { query } = useGraphQL();
 
 // State management
 const headings = ref([]);
 const sections = ref([]);
 const introSection = ref(null);
+const isContentProcessed = ref(false); // Flag to track if content has been processed client-side
 // Computed for SEO data
 const seoTitle = computed(() => {
   const title = blogPost.value?.seo?.title || blogPost.value?.title || '';
@@ -145,7 +153,7 @@ useHead({
 });
 
 // GraphQL query definition
-const FETCH_BLOG_POST_BY_SLUG = gql`
+const FETCH_BLOG_POST_BY_SLUG = `
   query FetchBlogPostBySlug($slug: String!) {
     blogPostBy(slug: $slug) {
       id
@@ -182,15 +190,15 @@ const { data: blogPost, pending, error } = await useAsyncData(
     try {
       const slug = route.params.uri instanceof Array ? route.params.uri[0] : route.params.uri;
       console.log('Fetching blog post:', slug);
-      
-      const { data } = await apolloClient.query({
-        query: FETCH_BLOG_POST_BY_SLUG,
-        variables: { slug },
-        fetchPolicy: 'no-cache'
-      });
+
+      const data = await query(FETCH_BLOG_POST_BY_SLUG, { slug });
 
       if (!data?.blogPostBy) {
-        throw new Error('Post not found');
+        throw createError({
+          statusCode: 404,
+          statusMessage: 'Pagina non trovata',
+          fatal: true
+        });
       }
 
       const postData = data.blogPostBy;
@@ -200,11 +208,21 @@ const { data: blogPost, pending, error } = await useAsyncData(
       throw err;
     }
   },
-  { 
-    server: true,
-    immediate: true
+  {
+    server: true,  // Force SSR only - prevents client-side refetch
+    lazy: false,
+    watch: [() => route.params.uri]  // Watch route changes for SPA navigation
   }
 );
+
+// Handle error/404 - check after fetch completes
+if (error.value) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Pagina non trovata',
+    fatal: true
+  });
+}
 
 // Compute featured image data
 const featuredImage = computed(() => {
@@ -217,15 +235,17 @@ const featuredImage = computed(() => {
   return null;
 });
 
-// Process content when blog post data changes
-watch(blogPost, async (newPost) => {
-  if (newPost?.content) {
-    await processContent(newPost.content);
-  }
-}, { immediate: true });
-
-// Content processing function
+// Content processing function - CLIENT-SIDE ONLY
+// This runs after mount to create the fancy UI with sections, index, etc.
+// SSR shows raw content so Googlebot sees everything immediately
 async function processContent(content) {
+  // Safety check
+  if (!content || typeof content !== 'string') {
+    console.warn('processContent: invalid content');
+    isContentProcessed.value = true; // Mark as processed to avoid showing duplicate content
+    return;
+  }
+
   try {
     const cheerio = await import('cheerio');
     const $ = cheerio.load(content);
@@ -314,33 +334,47 @@ async function processContent(content) {
 
     headings.value = extractedHeadings;
     sections.value = extractedSections;
-    
+
+    // Mark content as processed - this will trigger UI update to show sections
+    isContentProcessed.value = true;
+
   } catch (error) {
     console.error('Content processing error:', error);
-    throw error;
+    // Don't throw - show raw content instead
+    isContentProcessed.value = true;
   }
 }
 
-// SEO handling
-watch(blogPost, (newPost) => {
-  if (!blogPost.value && !pending.value) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: 'Pagina non trovata',
-      fatal: true
-    })
+// Client-side content processing after mount
+onMounted(() => {
+  if (process.client && blogPost.value?.content) {
+    processContent(blogPost.value.content);
   }
+});
 
-  if (newPost) {
-    if (newPost?.featuredImage?.node?.sourceUrl) {
-      useHead({
-        link: [
-          { rel: 'preload', as: 'image', href: newPost.featuredImage.node.sourceUrl, fetchpriority: 'high' }
-        ]
-      })
+// Watch for route changes during SPA navigation (client-side only)
+// Watch the route params, not the content itself to avoid race conditions
+watch(() => route.params.uri, async () => {
+  if (process.client) {
+    // Wait for next tick to ensure data is updated
+    await nextTick();
+    if (blogPost.value?.content) {
+      // Reset flag to show raw content during processing
+      isContentProcessed.value = false;
+      // Process content
+      processContent(blogPost.value.content);
     }
   }
-}, { immediate: true });
+});
+
+// SEO handling - preload featured image
+if (blogPost.value?.featuredImage?.node?.sourceUrl) {
+  useHead({
+    link: [
+      { rel: 'preload', as: 'image', href: blogPost.value.featuredImage.node.sourceUrl, fetchpriority: 'high' }
+    ]
+  });
+}
 
 // Navigation helper
 const smoothScroll = (target) => {

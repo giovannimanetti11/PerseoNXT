@@ -10,11 +10,11 @@
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, nextTick } from 'vue'
 import { useRoute, useHead, useSeoMeta, useNuxtApp } from '#app'
-import gql from 'graphql-tag'
+import { useGraphQL } from '~/composables/useGraphQL'
 
 
 // GraphQL queries
-const GET_POST_SEO_DATA = gql`
+const GET_POST_SEO_DATA = `
   query GetPostWithSEO($slug: ID!) {
     post(id: $slug, idType: SLUG) {
       id
@@ -41,7 +41,7 @@ const GET_POST_SEO_DATA = gql`
   }
 `
 
-const GET_PAGE_SEO_DATA = gql`
+const GET_PAGE_SEO_DATA = `
   query GetPageWithSEO($uri: ID!) {
     page(id: $uri, idType: URI) {
       id
@@ -65,6 +65,7 @@ const route = useRoute()
 const nuxtApp = useNuxtApp()
 const isLoaded = ref(false)
 const baseUrl = 'https://wikiherbalist.com'
+const { query } = useGraphQL()
 
 // Static titles mapping
 const staticTitles: Record<string, string> = {
@@ -75,9 +76,11 @@ const staticTitles: Record<string, string> = {
 
 const isHomepage = computed(() => route.path === '/')
 
+const isBlogPost = computed(() => route.path.startsWith('/blog/') && route.path !== '/blog' && route.path !== '/blog/')
+
 const isPost = computed(() => {
   const routeName = route.name as string
-  return !['about', 'index'].includes(routeName) && route.path !== '/'
+  return !['about', 'index'].includes(routeName) && route.path !== '/' && !isBlogPost.value
 })
 
 // Async data fetching with useAsyncData
@@ -85,19 +88,16 @@ const { data: seoData } = useAsyncData(
   'seoData',
   async () => {
     const routeName = route.name as string
-    
-    if (!nuxtApp.$apolloClient) {
-      console.error('Apollo client not available')
-      return null
-    }
 
     try {
+      // Skip SEO management for blog posts - handled in blog page component
+      if (isBlogPost.value) {
+        return null
+      }
+
       if (routeName === 'index' || route.path === '/') {
         try {
-          const { data } = await nuxtApp.$apolloClient.query({
-            query: GET_PAGE_SEO_DATA,
-            variables: { uri: '/' }
-          })
+          const data = await query(GET_PAGE_SEO_DATA, { uri: '/' })
           return data.page || {
             title: 'Wikiherbalist - Enciclopedia di erbe aromatiche e medicinali',
             seo: {
@@ -115,8 +115,8 @@ const { data: seoData } = useAsyncData(
             }
           }
         }
-      } 
-      
+      }
+
       if (staticTitles[routeName]) {
         return {
           seo: {
@@ -126,14 +126,14 @@ const { data: seoData } = useAsyncData(
         }
       }
 
-      const slug = isPost.value 
+      const slug = isPost.value
         ? (Array.isArray(route.params.uri) ? route.params.uri[0] : route.path.split('/').pop())
         : route.path
 
-      const { data } = await nuxtApp.$apolloClient.query({
-        query: isPost.value ? GET_POST_SEO_DATA : GET_PAGE_SEO_DATA,
-        variables: { slug: isPost.value ? slug : slug || '/' }
-      })
+      const data = await query(
+        isPost.value ? GET_POST_SEO_DATA : GET_PAGE_SEO_DATA,
+        { slug: isPost.value ? slug : slug || '/' }
+      )
 
       // Check if data exists before accessing nested properties
       if (!data) {
