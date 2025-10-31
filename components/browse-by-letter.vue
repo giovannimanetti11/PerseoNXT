@@ -64,12 +64,10 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAlphabet } from '~/composables/useAlphabet';
-import { useApolloClient } from '@vue/apollo-composable';
-import gql from 'graphql-tag';
+import { useGraphQL } from '~/composables/useGraphQL';
 
 const router = useRouter();
-const { resolveClient } = useApolloClient();
-const apolloClient = resolveClient();
+const { query } = useGraphQL();
 
 const { 
   alphabet, 
@@ -80,12 +78,9 @@ const {
   letterClass 
 } = useAlphabet();
 
-const currentPosts = ref([]);
-const isLoading = ref(true);
-
 const emit = defineEmits(['update:loading']);
 
-const FETCH_POSTS_BY_LETTER = gql`
+const FETCH_POSTS_BY_LETTER = `
   query FetchPostsByLetter($letter: String!) {
     posts(first: 1000, where: { search: $letter }) {
       nodes {
@@ -104,9 +99,30 @@ const FETCH_POSTS_BY_LETTER = gql`
   }
 `;
 
+// Fetch initial data with SSR - Googlebot sees plants starting with 'A'
+const { data: initialPosts, pending: isLoading } = await useAsyncData(
+  'plants-by-letter-A',
+  async () => {
+    try {
+      const data = await query(FETCH_POSTS_BY_LETTER, { letter: 'A' });
+      setSelectedLetter('A');
+      return data.posts.nodes;
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+      return [];
+    }
+  },
+  {
+    server: true,  // Force SSR - Googlebot sees content
+    lazy: false
+  }
+);
+
+const currentPosts = ref(initialPosts.value || []);
+
 const sortedPosts = computed(() => {
   if (!currentPosts.value) return [];
-  
+
   return [...currentPosts.value]
     .filter(post => post.title.charAt(0).toLowerCase() === selectedLetter.value.toLowerCase())
     .sort((a, b) => a.title.localeCompare(b.title, 'it', { sensitivity: 'base' }));
@@ -114,22 +130,15 @@ const sortedPosts = computed(() => {
 
 const fetchPostsByLetter = async (letter) => {
   setSelectedLetter(letter);
-  isLoading.value = true;
   emit('update:loading', true);
 
   try {
-    const { data: { posts } } = await apolloClient.query({
-      query: FETCH_POSTS_BY_LETTER,
-      variables: { letter },
-      fetchPolicy: 'cache-first' // Use cache when available
-    });
-
-    currentPosts.value = posts.nodes;
+    const data = await query(FETCH_POSTS_BY_LETTER, { letter });
+    currentPosts.value = data.posts.nodes;
   } catch (error) {
     console.error('Error fetching posts:', error);
     currentPosts.value = [];
   } finally {
-    isLoading.value = false;
     emit('update:loading', false);
   }
 };
@@ -137,10 +146,6 @@ const fetchPostsByLetter = async (letter) => {
 const goToPost = (uri) => {
   router.push(uri);
 };
-
-onMounted(async () => {
-  await fetchPostsByLetter('A');
-});
 </script>
 
 <style scoped>

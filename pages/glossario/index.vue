@@ -33,8 +33,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useAsyncData } from '#app';
-import { useApolloClient } from '@vue/apollo-composable';
-import gql from 'graphql-tag';
+import { useGraphQL } from '~/composables/useGraphQL';
 import Searchfield from '~/components/searchfield.vue';
 import Contacts from "~/components/contacts.vue";
 
@@ -47,7 +46,7 @@ interface GroupedTerms {
   [key: string]: GlossaryTerm[];
 }
 
-const FETCH_ALL_GLOSSARY_TERMS = gql`
+const FETCH_ALL_GLOSSARY_TERMS = `
   query FetchAllGlossaryTerms {
     glossaryTerms(first: 1000) {
       nodes {
@@ -58,16 +57,13 @@ const FETCH_ALL_GLOSSARY_TERMS = gql`
   }
 `;
 
-const { resolveClient } = useApolloClient();
-const apolloClient = resolveClient();
+const { query } = useGraphQL();
 
 const { data: glossaryTerms, pending, error } = await useAsyncData<GlossaryTerm[]>(
   'allGlossaryTerms',
   async () => {
     try {
-      const { data } = await apolloClient.query({
-        query: FETCH_ALL_GLOSSARY_TERMS
-      });
+      const data = await query(FETCH_ALL_GLOSSARY_TERMS);
       return data.glossaryTerms.nodes;
     } catch (err) {
       console.error('Error fetching glossary terms:', err);
@@ -75,6 +71,8 @@ const { data: glossaryTerms, pending, error } = await useAsyncData<GlossaryTerm[
     }
   },
   {
+    server: true,  // Force SSR only - prevents client-side refetch
+    lazy: false,
     transform: (result) => {
       return result?.map((term: any) => ({
         title: term.title,

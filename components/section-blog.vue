@@ -68,8 +68,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { useApolloClient } from '@vue/apollo-composable';
-import gql from 'graphql-tag';
+import { useGraphQL } from '~/composables/useGraphQL';
 
 interface BlogPost {
   authorName: string;
@@ -79,7 +78,7 @@ interface BlogPost {
   date: string;
 }
 
-const BLOG_POSTS_QUERY = gql`
+const BLOG_POSTS_QUERY = `
   query BlogPosts {
     blogPosts(first: 3, where: {orderby: {field: DATE, order: DESC}}) {
       nodes {
@@ -98,16 +97,18 @@ const BLOG_POSTS_QUERY = gql`
   }
 `;
 
-const { resolveClient } = useApolloClient();
-const apolloClient = resolveClient();
+const { query } = useGraphQL();
 
 const { data: blogData, pending, error } = await useAsyncData('blogPosts', async () => {
-  const { data } = await apolloClient.query({ query: BLOG_POSTS_QUERY });
+  const data = await query(BLOG_POSTS_QUERY);
   return data.blogPosts.nodes.map((post: any) => ({
     ...post,
     featuredImage: post.featuredImage?.node?.sourceUrl || '',
     uri: post.uri.replace(/\/$/, ''), // Remove trailing slash
   }));
+}, {
+  server: true,  // Force SSR only - prevents client-side refetch
+  lazy: false
 });
 
 const posts = computed<BlogPost[]>(() => {
