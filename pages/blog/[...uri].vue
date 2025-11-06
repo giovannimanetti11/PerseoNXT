@@ -11,9 +11,10 @@
     <!-- Content state -->
     <div v-else-if="blogPost" id="post">
       <SchemaMarkup :blogPost="blogPost" />
-      <section class="post-info-section flex flex-col md:flex-row py-20 px-2 md:px-10 w-11/12 mx-auto rounded-2xl print:py-2 print:px-0 print:w-full">
-        <!-- Information container -->
-        <div class="w-full md:w-3/5 md:mt-28 container mx-auto px-2 print:mt-8 print:px-0 order-2 md:order-1">
+
+      <!-- Header section -->
+      <section class="post-info-section flex flex-col md:flex-row py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl print:py-2 print:px-0 print:w-full">
+        <div class="mt-10 md:mt-20 container mx-auto w-full md:w-3/5 px-2 md:px-4 print:mt-8 print:px-0">
           <div class="mb-12">
             <Breadcrumbs
               :currentPageName="blogPost.title"
@@ -28,70 +29,62 @@
             :authorName="blogPost.authorName"
           />
         </div>
-
-        <!-- Featured image container -->
-        <div class="w-full md:w-2/5 md:mt-28 flex flex-col order-1 md:order-2 mb-8 md:mb-0">
-          <div class="md:sticky md:top-24">
-            <NuxtImg
-              v-if="featuredImage"
-              :src="featuredImage.sourceUrl"
-              :alt="featuredImage.altText"
-              class="w-auto m-auto text-center h-auto rounded-2xl object-cover max-h-48"
-              width="300"
-              height="200"
-              format="webp"
-              loading="lazy"
-            />
-          </div>
+        <div class="flex flex-col w-full md:w-2/5 mt-10 md:mt-20">
+          <NuxtImg v-if="blogPost?.featuredImage?.node?.sourceUrl"
+            class="m-auto h-48 md:h-60 w-auto border rounded-2xl transition-all duration-300 ease-in-out shadow-lg mb-4"
+            :src="blogPost.featuredImage.node.sourceUrl"
+            :alt="blogPost.featuredImage.node.altText || blogPost.title"
+            width="240"
+            height="240"
+            format="webp"
+            loading="eager"
+          />
         </div>
       </section>
 
-      <!-- Index section (only shown if there are headings) - CLIENT SIDE ONLY -->
-      <section v-if="isContentProcessed && headings.length > 0" class="post-index-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full">
+      <!-- Index section - CLIENT SIDE ONLY -->
+      <section :class="['post-index-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto mt-4 rounded-2xl', { 'hidden': !isContentProcessed || headings.length === 0 }]">
         <div class="font-bold text-xl md:text-2xl flex items-center">
-          <Icon name="ic:twotone-list" class="text-2xl md:text-3xl text-black rounded-full mr-2" aria-hidden="true" />
+          <Icon name="ic:twotone-list" class="text-2xl md:text-3xl text-black rounded-full mr-2" />
           <div id="table-of-contents" class="font-bold text-xl md:text-2xl">Indice</div>
         </div>
-        <ul class="mt-4 md:mt-8 flex flex-wrap justify-start gap-2 md:gap-4 print:gap-0 print:mt-2" aria-labelledby="table-of-contents">
-          <li v-for="(heading, index) in headings" :key="index" class="text-center py-2 md:py-4 px-2 md:px-4 bg-verde text-white rounded-xl text-xs md:text-sm hover:bg-celeste cursor-pointer w-full sm:w-2/5 md:w-1/5 flex-grow-0 flex-shrink-0">
-            <a :href="'#section' + (index + 1)" class="flex items-center group" @click.prevent="smoothScroll('#section' + (index + 1))">
-              <div class="circle flex items-center justify-center w-6 h-6 md:w-8 md:h-8 min-w-6 min-h-6 md:min-w-8 md:min-h-8 bg-white text-verde rounded-full mr-1 md:mr-2 text-sm md:text-lg font-bold group-hover:text-celeste">{{ index + 1 }}</div>
-              <span class="text-xs md:text-sm">{{ heading }}</span>
+        <ul class="mt-4 md:mt-8 flex flex-wrap justify-start gap-2 md:gap-4 print:gap-0 print:mt-2">
+          <li v-for="(heading, index) in headings" :key="index" class="flex text-center py-2 md:py-4 px-2 md:px-4 bg-verde text-white rounded-xl m-1 text-xs md:text-sm hover:bg-celeste cursor-pointer w-full sm:w-[calc(50%-0.5rem)] md:w-[calc(33.333%-0.5rem)] lg:w-[calc(20%-0.5rem)]">
+            <a :href="'#section' + (index + 1)" class="flex items-center group w-full" @click.prevent="smoothScroll('#section' + (index + 1))">
+              <div class="circle flex-shrink-0 flex items-center justify-center w-6 h-6 md:w-8 md:h-8 min-w-6 min-h-6 md:min-w-8 md:min-h-8 bg-white text-verde rounded-full mr-2 text-sm md:text-lg font-bold group-hover:text-celeste">{{ index + 1 }}</div>
+              <span class="flex-grow text-left">{{ heading }}</span>
             </a>
           </li>
         </ul>
       </section>
 
       <!-- RAW CONTENT for SSR - Googlebot sees this immediately -->
-      <section v-if="!isContentProcessed && blogPost.content" class="post-content-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full">
-        <ContentTooltip :content="blogPost.content" />
+      <section :class="['post-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4', { 'hidden': isContentProcessed }]">
+        <ContentTooltip v-if="blogPost?.content" :content="blogPost.content" />
       </section>
 
       <!-- PROCESSED CONTENT - Client-side only, with sections and styling -->
-      <template v-if="isContentProcessed">
-        <!-- Introduction section (without numbering) -->
-        <section v-if="introSection" class="post-section-introduction flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4">
-          <ContentTooltip :content="introSection.content" />
-        </section>
+      <!-- Introduction section -->
+      <section :class="['post-section-introduction flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4', { 'hidden': !isContentProcessed || !introSection }]">
+        <ContentTooltip v-if="introSection" :content="introSection.content" />
+      </section>
 
-        <!-- Numbered content sections -->
-        <section v-for="(section, index) in sections"
-                 :class="['post-content-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full', section.className]"
-                 :id="'section' + (index + 1)"
-                 :key="section.title">
-          <div class="flex items-center space-x-4" v-if="section.title !== 'Riferimenti'">
-            <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">
+      <!-- Content sections -->
+      <section v-for="(section, index) in sections"
+              :class="['post-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4', section.className, { 'hidden': !isContentProcessed }]"
+              :id="'section' + (index + 1)"
+              :key="section.heading">
+          <div class="flex items-center" v-if="section.heading !== 'Riferimenti'">
+            <div class="circle flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 mr-4 bg-blu text-white rounded-full text-base md:text-lg font-bold">
               {{ index + 1 }}
             </div>
-            <h3 class="text-xl md:text-2xl">{{ section.title }}</h3>
+            <h3 class="text-xl md:text-2xl">{{ section.heading }}</h3>
           </div>
-          <h3 v-else class="text-xl md:text-2xl mb-4">{{ section.title }}</h3>
-
+          <h3 v-else class="text-xl md:text-2xl mb-4">{{ section.heading }}</h3>
           <ContentTooltip v-if="section.content" :content="section.content" class="mt-4" />
         </section>
-      </template>
 
-      <EditContentProposal v-if="isContentProcessed" :sections="headings" />
+      <EditContentProposal :sections="headings" />
     </div>
   </div>
 </template>
@@ -119,38 +112,7 @@ const { query } = useGraphQL();
 const headings = ref([]);
 const sections = ref([]);
 const introSection = ref(null);
-const isContentProcessed = ref(false); // Flag to track if content has been processed client-side
-// Computed for SEO data
-const seoTitle = computed(() => {
-  const title = blogPost.value?.seo?.title || blogPost.value?.title || '';
-  return title.length > 60 ? title.slice(0, 59) + '…' : title;
-});
-const seoDescription = computed(() => {
-  const desc = blogPost.value?.seo?.metaDesc || blogPost.value?.excerpt || '';
-  const clean = desc.replace(/<[^>]*>/g, '').trim();
-  return clean.length > 155 ? clean.slice(0, 154) + '…' : clean;
-});
-const seoImage = computed(() => 
-  blogPost.value?.seo?.opengraphImage?.sourceUrl || 
-  blogPost.value?.featuredImage?.node?.sourceUrl || 
-  'https://wikiherbalist.com/images/default-og-image.jpg'
-);
-
-// Set meta tags with useHead at top level
-useHead({
-  title: seoTitle,
-  meta: [
-    { name: 'description', content: seoDescription },
-    { property: 'og:title', content: seoTitle },
-    { property: 'og:description', content: seoDescription },
-    { property: 'og:image', content: seoImage },
-    { property: 'og:type', content: 'article' },
-    { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: seoTitle },
-    { name: 'twitter:description', content: seoDescription },
-    { name: 'twitter:image', content: seoImage }
-  ]
-});
+const isContentProcessed = ref(false);
 
 // GraphQL query definition
 const FETCH_BLOG_POST_BY_SLUG = `
@@ -183,14 +145,13 @@ const FETCH_BLOG_POST_BY_SLUG = `
   }
 `;
 
-// Fetch blog post data with immediate processing
+// Fetch blog post data
 const { data: blogPost, pending, error } = await useAsyncData(
   'blogPost',
   async () => {
-    try {
-      const slug = route.params.uri instanceof Array ? route.params.uri[0] : route.params.uri;
-      console.log('Fetching blog post:', slug);
+    const slug = route.params.uri instanceof Array ? route.params.uri[0] : route.params.uri;
 
+    try {
       const data = await query(FETCH_BLOG_POST_BY_SLUG, { slug });
 
       if (!data?.blogPostBy) {
@@ -203,15 +164,14 @@ const { data: blogPost, pending, error } = await useAsyncData(
 
       const postData = data.blogPostBy;
       return postData;
-    } catch (err) {
-      console.error('Error fetching blog post:', err);
-      throw err;
+    } catch (error) {
+      console.error('Error fetching blog post:', error);
+      throw error;
     }
   },
   {
-    server: true,  // Force SSR only - prevents client-side refetch
-    lazy: false,
-    watch: [() => route.params.uri]  // Watch route changes for SPA navigation
+    server: true,
+    lazy: false
   }
 );
 
@@ -224,15 +184,29 @@ if (error.value) {
   });
 }
 
-// Compute featured image data
-const featuredImage = computed(() => {
-  if (blogPost.value?.featuredImage?.node) {
-    return {
-      sourceUrl: blogPost.value.featuredImage.node.sourceUrl,
-      altText: blogPost.value.featuredImage.node.altText || ''
-    };
-  }
-  return null;
+// Computed for SEO data
+const seoTitle = computed(() => blogPost.value?.seo?.title || blogPost.value?.title || '');
+const seoDescription = computed(() => blogPost.value?.seo?.metaDesc || '');
+const seoImage = computed(() =>
+  blogPost.value?.seo?.opengraphImage?.sourceUrl ||
+  blogPost.value?.featuredImage?.node?.sourceUrl ||
+  'https://wikiherbalist.com/images/default-og-image.jpg'
+);
+
+// Set meta tags with useHead at top level
+useHead({
+  title: seoTitle,
+  meta: [
+    { name: 'description', content: seoDescription },
+    { property: 'og:title', content: seoTitle },
+    { property: 'og:description', content: seoDescription },
+    { property: 'og:image', content: seoImage },
+    { property: 'og:type', content: 'article' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: seoTitle },
+    { name: 'twitter:description', content: seoDescription },
+    { name: 'twitter:image', content: seoImage }
+  ]
 });
 
 // Content processing function - CLIENT-SIDE ONLY
@@ -249,10 +223,10 @@ async function processContent(content) {
   try {
     const cheerio = await import('cheerio');
     const $ = cheerio.load(content);
-    
+
     const extractedHeadings = [];
     const extractedSections = [];
-    
+
     // Extract introduction
     const firstH3 = $('h3').first();
     if (firstH3.length) {
@@ -273,63 +247,96 @@ async function processContent(content) {
 
     // Process main sections
     let currentSection = null;
-    
-    $('body > *').each(function(index, element) {
-      const $element = $(element);
-      
-      // Check for h3 headings
-      if (element.tagName === 'h3') {
-        if (currentSection) {
-          extractedSections.push(currentSection);
+
+    try {
+      // First try with 'body > *' selector
+      const bodyElements = $('body > *');
+
+      // If no body elements found, try with direct children of the root
+      const elements = bodyElements.length ? bodyElements : $('> *');
+
+      elements.each(function(index, element) {
+        try {
+          const $element = $(element);
+
+          // Check for h3 headings
+          if (element.tagName && element.tagName.toLowerCase() === 'h3') {
+            if (currentSection) {
+              extractedSections.push(currentSection);
+            }
+
+            const headingText = $element.text().trim();
+            extractedHeadings.push(headingText);
+
+            currentSection = {
+              heading: headingText,
+              content: '',
+              className: `post-section-${headingText.toLowerCase()
+                .replace(/[\s,\'\`]+/g, '-')
+                .replace(/[àáâãäå]/g, 'a')
+                .replace(/[èéêë]/g, 'e')
+                .replace(/[ìíîï]/g, 'i')
+                .replace(/[òóôõö]/g, 'o')
+                .replace(/[ùúûü]/g, 'u')}`
+            };
+          }
+          // Check for "Riferimenti" as a paragraph
+          else if (element.tagName && element.tagName.toLowerCase() === 'p' && $element.text().trim() === 'Riferimenti') {
+            if (currentSection) {
+              extractedSections.push(currentSection);
+            }
+
+            currentSection = null;
+
+            // Find all content after the "Riferimenti" paragraph
+            const referenceContent = $element
+              .nextAll()
+              .map((_, el) => $.html(el))
+              .get()
+              .join('');
+
+            if (referenceContent.trim()) {
+              extractedSections.push({
+                heading: 'Riferimenti',
+                content: referenceContent,
+                className: 'post-section-riferimenti'
+              });
+            }
+          }
+          // Add content to current section
+          else if (currentSection) {
+            currentSection.content += $.html(element);
+          }
+        } catch (elementError) {
+          console.warn('Error processing element:', elementError);
+          // Continue with next element
         }
-        
-        const headingText = $element.text().trim();
-        extractedHeadings.push(headingText);
-        
-        currentSection = {
-          title: headingText,
-          content: '',
-          className: `post-section-${headingText.toLowerCase()
-            .replace(/[\s,\'\`]+/g, '-')
-            .replace(/[àáâãäå]/g, 'a')
-            .replace(/[èéêë]/g, 'e')
-            .replace(/[ìíîï]/g, 'i')
-            .replace(/[òóôõö]/g, 'o')
-            .replace(/[ùúûü]/g, 'u')}`
-        };
-      } 
-      // Check for "Riferimenti" as a paragraph
-      else if (element.tagName === 'p' && $element.text().trim() === 'Riferimenti') {
-        if (currentSection) {
-          extractedSections.push(currentSection);
-        }
-        
-        currentSection = null;
-        
-        // Find all content after the "Riferimenti" paragraph
-        const referenceContent = $element
-          .nextAll()
-          .map((_, el) => $.html(el))
-          .get()
-          .join('');
-        
-        if (referenceContent.trim()) {
-          extractedSections.push({
-            title: 'Riferimenti',
-            content: referenceContent,
-            className: 'post-section-riferimenti'
-          });
-        }
+      });
+    } catch (selectorError) {
+      console.error('Error with selector:', selectorError);
+      // Try a fallback approach - get all content
+      const allContent = $.html();
+      if (allContent) {
+        extractedSections.push({
+          heading: blogPost.value?.title || 'Contenuto',
+          content: allContent,
+          className: 'post-section-contenuto'
+        });
       }
-      // Add content to current section
-      else if (currentSection) {
-        currentSection.content += $.html(element);
-      }
-    });
+    }
 
     // Add the last section if exists and it's not references
     if (currentSection) {
       extractedSections.push(currentSection);
+    }
+
+    // Ensure we have at least one section
+    if (extractedSections.length === 0 && content.trim()) {
+      extractedSections.push({
+        heading: 'Contenuto',
+        content: content,
+        className: 'post-section-contenuto'
+      });
     }
 
     headings.value = extractedHeadings;
@@ -367,15 +374,6 @@ watch(() => route.params.uri, async () => {
   }
 });
 
-// SEO handling - preload featured image
-if (blogPost.value?.featuredImage?.node?.sourceUrl) {
-  useHead({
-    link: [
-      { rel: 'preload', as: 'image', href: blogPost.value.featuredImage.node.sourceUrl, fetchpriority: 'high' }
-    ]
-  });
-}
-
 // Navigation helper
 const smoothScroll = (target) => {
   if (!process.client) return;
@@ -392,8 +390,24 @@ const smoothScroll = (target) => {
   background: linear-gradient(180deg, rgba(224,237,253,1) 0%, rgba(245,245,245,1) 100%);
 }
 
-.post-content-section {
+.post-section {
   background: rgb(224,237,253) !important;
   background: linear-gradient(180deg, rgba(245,245,245,1) 0%, rgba(224,237,253,1) 100%) !important;
+}
+
+.circle {
+  min-width: 2rem;
+  min-height: 2rem;
+}
+
+.hidden {
+  display: none !important;
+}
+
+@media (min-width: 768px) {
+  .circle {
+    min-width: 3rem;
+    min-height: 3rem;
+  }
 }
 </style>

@@ -1,3 +1,4 @@
+<!-- URI POST -->
 <template>
   <div>
     <!-- Loading state -->
@@ -15,11 +16,10 @@
       <!-- Post info section -->
       <section class="post-info-section flex flex-col md:flex-row py-20 px-2 md:px-10 w-11/12 mx-auto rounded-2xl print:py-2 print:px-0 print:w-full">
         <!-- Mobile slideshow -->
-        <div class="md:hidden w-full mb-8">
+        <div v-if="featuredImage || (additionalImages && additionalImages.length > 0)" class="md:hidden w-full mb-8">
           <ClientOnly>
             <Suspense>
-              <Slideshow 
-                v-if="hasImages"
+              <Slideshow
                 :featured-image="featuredImage"
                 :additional-images="additionalImages"
               />
@@ -52,11 +52,10 @@
 
         <!-- Desktop slideshow and map -->
         <div class="w-full md:w-3/5 flex flex-col order-3 md:order-2">
-          <div class="hidden md:block mr-16 mb-8">
+          <div v-if="featuredImage || (additionalImages && additionalImages.length > 0)" class="md:block mr-16 mb-8">
             <ClientOnly>
               <Suspense>
-                <Slideshow 
-                  v-if="hasImages"
+                <Slideshow
                   :featured-image="featuredImage"
                   :additional-images="additionalImages"
                 />
@@ -78,7 +77,7 @@
       </section>
 
       <!-- Index section - CLIENT SIDE ONLY -->
-      <section v-if="isContentProcessed" class="post-index-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full">
+      <section :class="['post-index-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full', { 'hidden': !isContentProcessed }]">
         <div class="font-bold text-xl md:text-2xl flex items-center">
           <Icon name="ic:twotone-list" class="text-2xl md:text-3xl text-black rounded-full mr-2" aria-hidden="true" />
           <div id="table-of-contents" class="font-bold text-xl md:text-2xl">Indice</div>
@@ -93,116 +92,119 @@
         </ul>
       </section>
 
-      <!-- Properties section -->
-      <section v-if="postData.tags && postData.tags.nodes.length > 0" class="post-section-proprieta flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full" id="section1">
-        <div class="flex items-center space-x-4">
-          <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">1</div>
-          <h3 class="text-xl md:text-2xl">Proprietà terapeutiche</h3>
-        </div>
-        <ul class="mt-4 md:mt-8 flex flex-wrap justify-start gap-2 md:gap-4">
-          <li v-for="tag in postData.tags.nodes" :key="tag.id" 
-              class="relative hover:bg-blu hover:text-white text-center py-2 md:py-4 px-2 md:px-4 bg-white text-blu rounded-xl text-xs md:text-sm cursor-pointer w-full sm:w-2/5 md:w-1/5 flex-grow-0 flex-shrink-0"
-              @click="toggleTooltip(tag.id)"
-              @mouseenter="handleMouseEnterTag(tag.id)"
-              @mouseleave="handleMouseLeaveTag">
-            {{ tag.name }}
-            <div v-if="activeTooltip === tag.id" 
-                class="tooltip-custom fixed z-50 bg-white border border-blu rounded-lg shadow-xl text-sm text-gray-700"
-                :style="tooltipStyle"
-                @click.stop>
-              <div class="p-6">
-                <h4 class="text-2xl font-bold text-blu text-left mb-4">{{ tag.name }}</h4>
-                <button @click.stop="hideTooltip" class="absolute top-2 right-2 text-blu hover:text-celeste" aria-label="Chiudi tooltip">
-                  <Icon name="mdi:close" class="text-xl" aria-hidden="true" />
-                </button>
-                <p v-html="sanitizeHtml(tag.description)" class="font-normal text-left"></p>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </section>
-
-      <!-- Split sections container -->
-      <div class="flex flex-col md:flex-row w-11/12 mx-auto print:w-full gap-4 md:gap-8">
-        <div class="flex flex-col w-full md:w-1/2 mx-auto print:w-full">
-          <!-- Scientific name section -->
-          <section v-if="postData.nomeScientifico" class="post-section-nome-scientifico flex flex-col w-full py-10 md:py-20 px-4 md:px-10 mx-auto rounded-2xl mt-4 print:py-2 print:px-0" id="section2">
-            <div class="flex items-center space-x-4">
-              <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">2</div>
-              <h3 class="text-xl md:text-2xl">Nome scientifico</h3>
-            </div>
-            <p class="text-center italic mt-4 py-2 md:py-4 px-2 md:px-4 bg-white text-blu rounded-xl text-xs md:text-sm cursor-pointer w-full md:w-2/5">{{ postData.nomeScientifico }}</p>
-          </section>
-
-          <!-- Used parts section -->
-          <section v-if="postData.partiUsate" class="post-section-parti-usate flex flex-col w-full py-10 md:py-20 px-4 md:px-10 mx-auto rounded-2xl mt-4 print:py-2 print:px-0" id="section3">
-            <div class="flex items-center space-x-4">
-              <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">3</div>
-              <h3 class="text-xl md:text-2xl">Parti usate</h3>
-            </div>
-            <div class="flex flex-wrap gap-2 md:gap-4">
-              <p v-for="parte in partiUsateArray" :key="parte" class="text-center mt-2 md:mt-4 py-2 md:py-4 px-2 md:px-4 bg-white text-blu rounded-xl text-xs md:text-sm cursor-pointer w-full sm:w-2/5">{{ parte }}</p>
-            </div>
-          </section>
-        </div>
-
-        <!-- Common name section -->
-        <div v-if="postData.nomeComune" class="post-section-nome-comune flex flex-col w-full md:w-1/2 py-10 md:py-20 px-4 md:px-10 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full" id="section4">
-          <div class="flex items-center space-x-4">
-            <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">4</div>
-            <h3 class="text-xl md:text-2xl">Nome comune</h3>
-          </div>
-          <div class="flex flex-wrap gap-2 md:gap-4">
-            <p v-for="nome in nomeComuneArray" :key="nome" class="text-center mt-2 md:mt-4 py-2 md:py-4 px-2 md:px-4 bg-white text-blu rounded-xl text-xs md:text-sm cursor-pointer w-full sm:w-2/5">{{ nome }}</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Phytochemistry section - only show if no "Fitochimica" H3 exists in content -->
-      <section v-if="postData.costituenti && !hasFitochimicaSection" class="post-section-fitochimica flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full" id="section5">
-        <div class="flex items-center space-x-4">
-          <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">5</div>
-          <h3 class="text-xl md:text-2xl">Fitochimica</h3>
-        </div>
-        <div class="mt-4">
-          <ContentTooltip
-            v-if="postData.costituenti"
-            :content="postData.costituenti"
-          />
-        </div>
-      </section>
-
       <!-- RAW CONTENT for SSR - Googlebot sees this immediately -->
-      <section v-if="!isContentProcessed && postData?.content" class="post-content-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full">
-        <ContentTooltip :content="postData.content" />
+      <section :class="['post-content-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4', { 'hidden': isContentProcessed }]">
+        <ContentTooltip v-if="postData?.content" :content="postData.content" />
       </section>
 
       <!-- PROCESSED Dynamic content sections - CLIENT SIDE ONLY -->
-      <section v-if="isContentProcessed" v-for="(section, index) in structuredContent"
-               :class="['post-content-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full', section.className]"
-               :id="'section' + (postData.costituenti && !hasFitochimicaSection ? 5 + index + 1 : 5 + index)"
-               :key="section.title">
-        <div class="flex items-center space-x-4" v-if="section.title !== 'Riferimenti'">
-          <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">{{ postData.costituenti && !hasFitochimicaSection ? 5 + index + 1 : 5 + index }}</div>
-          <h3 class="text-xl md:text-2xl">{{ section.title }}</h3>
-        </div>
-        <h3 v-else class="text-xl md:text-2xl mb-4">{{ section.title }}</h3>
+      <div :class="{ 'hidden': !isContentProcessed }">
+        <!-- Properties section -->
+        <section v-if="postData.tags && postData.tags.nodes.length > 0" class="post-section-proprieta flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full" id="section1">
+          <div class="flex items-center space-x-4">
+            <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">1</div>
+            <h3 class="text-xl md:text-2xl">Proprietà terapeutiche</h3>
+          </div>
+          <ul class="mt-4 md:mt-8 flex flex-wrap justify-start gap-2 md:gap-4">
+            <li v-for="tag in postData.tags.nodes" :key="tag.id" 
+                class="relative hover:bg-blu hover:text-white text-center py-2 md:py-4 px-2 md:px-4 bg-white text-blu rounded-xl text-xs md:text-sm cursor-pointer w-full sm:w-2/5 md:w-1/5 flex-grow-0 flex-shrink-0"
+                @click="toggleTooltip(tag.id)"
+                @mouseenter="handleMouseEnterTag(tag.id)"
+                @mouseleave="handleMouseLeaveTag">
+              {{ tag.name }}
+              <div v-if="activeTooltip === tag.id" 
+                  class="tooltip-custom fixed z-50 bg-white border border-blu rounded-lg shadow-xl text-sm text-gray-700"
+                  :style="tooltipStyle"
+                  @click.stop>
+                <div class="p-6">
+                  <h4 class="text-2xl font-bold text-blu text-left mb-4">{{ tag.name }}</h4>
+                  <button @click.stop="hideTooltip" class="absolute top-2 right-2 text-blu hover:text-celeste" aria-label="Chiudi tooltip">
+                    <Icon name="mdi:close" class="text-xl" aria-hidden="true" />
+                  </button>
+                  <p v-html="sanitizeHtml(tag.description)" class="font-normal text-left"></p>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </section>
 
-        <div class="mt-4">
-          <ContentTooltip
-            v-if="section.content"
-            :content="section.content"
-          />
+        <!-- Split sections container -->
+        <div class="flex flex-col md:flex-row w-11/12 mx-auto print:w-full gap-4 md:gap-8">
+          <div class="flex flex-col w-full md:w-1/2 mx-auto print:w-full">
+            <!-- Scientific name section -->
+            <section v-if="postData.nomeScientifico" class="post-section-nome-scientifico flex flex-col w-full py-10 md:py-20 px-4 md:px-10 mx-auto rounded-2xl mt-4 print:py-2 print:px-0" id="section2">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">2</div>
+                <h3 class="text-xl md:text-2xl">Nome scientifico</h3>
+              </div>
+              <p class="text-center italic mt-4 py-2 md:py-4 px-2 md:px-4 bg-white text-blu rounded-xl text-xs md:text-sm cursor-pointer w-full md:w-2/5">{{ postData.nomeScientifico }}</p>
+            </section>
+
+            <!-- Used parts section -->
+            <section v-if="postData.partiUsate" class="post-section-parti-usate flex flex-col w-full py-10 md:py-20 px-4 md:px-10 mx-auto rounded-2xl mt-4 print:py-2 print:px-0" id="section3">
+              <div class="flex items-center space-x-4">
+                <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">3</div>
+                <h3 class="text-xl md:text-2xl">Parti usate</h3>
+              </div>
+              <div class="flex flex-wrap gap-2 md:gap-4">
+                <p v-for="parte in partiUsateArray" :key="parte" class="text-center mt-2 md:mt-4 py-2 md:py-4 px-2 md:px-4 bg-white text-blu rounded-xl text-xs md:text-sm cursor-pointer w-full sm:w-2/5">{{ parte }}</p>
+              </div>
+            </section>
+          </div>
+
+          <!-- Common name section -->
+          <div v-if="postData.nomeComune" class="post-section-nome-comune flex flex-col w-full md:w-1/2 py-10 md:py-20 px-4 md:px-10 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full" id="section4">
+            <div class="flex items-center space-x-4">
+              <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">4</div>
+              <h3 class="text-xl md:text-2xl">Nome comune</h3>
+            </div>
+            <div class="flex flex-wrap gap-2 md:gap-4">
+              <p v-for="nome in nomeComuneArray" :key="nome" class="text-center mt-2 md:mt-4 py-2 md:py-4 px-2 md:px-4 bg-white text-blu rounded-xl text-xs md:text-sm cursor-pointer w-full sm:w-2/5">{{ nome }}</p>
+            </div>
+          </div>
         </div>
 
-        <div v-for="(subSection, subIndex) in section.subSections" :key="subIndex" class="mt-6">
-          <h4 class="text-lg md:text-xl font-semibold mb-2">{{ subSection.title }}</h4>
-          <ContentTooltip
-            v-if="subSection.content"
-            :content="subSection.content"
-          />
-        </div>
-      </section>
+        <!-- Phytochemistry section - only show if no "Fitochimica" H3 exists in content -->
+        <section v-if="postData.costituenti && !hasFitochimicaSection" class="post-section-fitochimica flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full" id="section5">
+          <div class="flex items-center space-x-4">
+            <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">5</div>
+            <h3 class="text-xl md:text-2xl">Fitochimica</h3>
+          </div>
+          <div class="mt-4">
+            <ContentTooltip
+              v-if="postData.costituenti"
+              :content="postData.costituenti"
+            />
+          </div>
+        </section>
+
+        <!-- Dynamic content sections -->
+        <section v-for="(section, index) in structuredContent"
+                 :class="['post-content-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4', section.className]"
+                 :id="'section' + (postData.costituenti && !hasFitochimicaSection ? 5 + index + 1 : 5 + index)"
+                 :key="section.heading">
+          <div class="flex items-center space-x-4" v-if="section.heading !== 'Riferimenti'">
+            <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">{{ postData.costituenti && !hasFitochimicaSection ? 5 + index + 1 : 5 + index }}</div>
+            <h3 class="text-xl md:text-2xl">{{ section.heading }}</h3>
+          </div>
+          <h3 v-else class="text-xl md:text-2xl mb-4">{{ section.heading }}</h3>
+
+          <div class="mt-4">
+            <ContentTooltip
+              v-if="section.content"
+              :content="section.content"
+            />
+          </div>
+
+          <div v-for="(subSection, subIndex) in section.subSections" :key="subIndex" class="mt-6">
+            <h4 class="text-lg md:text-xl font-semibold mb-2">{{ subSection.heading }}</h4>
+            <ContentTooltip
+              v-if="subSection.content"
+              :content="subSection.content"
+            />
+          </div>
+        </section>
+      </div>
 
       <EditContentProposal :sections="allHeadings" />
     </div>
@@ -301,13 +303,15 @@ let scrollTimeout: number | null = null;
 
 // Fetch post data with SSR
 const { data: postData, pending, error } = await useAsyncData(
-  () => `postData-${Array.isArray(route.params.uri) ? route.params.uri[0] : route.params.uri}`,
+  'postData',
   async () => {
     const slug = Array.isArray(route.params.uri) ? route.params.uri[0] : route.params.uri;
 
     try {
       const data = await query(FETCH_POST_BY_SLUG, { slug });
-      if (!data.postBy) {
+      
+      // Verifica critica mancante che causa l'errore in hard refresh
+      if (!data?.postBy) {
         throw createError({
           statusCode: 404,
           statusMessage: 'Pagina non trovata',
@@ -316,18 +320,19 @@ const { data: postData, pending, error } = await useAsyncData(
       }
 
       return data.postBy;
-    } catch {
+    } catch (error) {
+      console.error('Error fetching post:', error);
+      // Gestione errore mancante/inconsistente
       throw createError({
         statusCode: 404,
         statusMessage: 'Pagina non trovata',
         fatal: true
-      });
+      }); 
     }
   },
   {
-    watch: [() => route.params.uri],
-    server: true,  // Force SSR only - prevents client-side refetch on hard refresh
-    lazy: false
+    server: true,  // Importante per SSR
+    lazy: false    // Importante per evitare race conditions
   }
 );
 
@@ -391,109 +396,179 @@ const hasImages = computed(() => {
   return !!featuredImage.value || additionalImages.value.length > 0;
 });
 
-// Function to process post content and extract headings and sections
-// CLIENT-SIDE ONLY - uses document API
-const processPostContent = () => {
-  // Don't process in SSR - just return without setting isContentProcessed
-  if (!process.client) {
-    return;
-  }
-
-  if (!postData.value || !postData.value.content) {
-    isContentProcessed.value = true;
+// Content processing function - CLIENT-SIDE ONLY
+// This runs after mount to create the fancy UI with sections, index, etc.
+// SSR shows raw content so Googlebot sees everything immediately
+async function processContent(content: string) {
+  // Safety check
+  if (!content || typeof content !== 'string') {
+    console.warn('processContent: invalid content');
+    isContentProcessed.value = true; // Mark as processed to avoid showing duplicate content
     return;
   }
 
   try {
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = postData.value.content;
+    const cheerio = await import('cheerio');
+    const $ = cheerio.load(content);
 
-  const extractedHeadings: string[] = [];
-  const sections: any[] = [];
-  let currentSection: any = null;
-  let currentSubSection: any = null;
+    const extractedHeadings: string[] = [];
+    const extractedSections: any[] = [];
 
-  Array.from(tempDiv.children).forEach((elem) => {
-    if (elem.tagName === 'H3') {
-      if (currentSection) {
-        if (currentSubSection) {
-          currentSection.subSections.push(currentSubSection);
-          currentSubSection = null;
+    // Process main sections
+    let currentSection: any = null;
+    let currentSubSection: any = null;
+
+    try {
+      // First try with 'body > *' selector
+      const bodyElements = $('body > *');
+
+      // If no body elements found, try with direct children of the root
+      const elements = bodyElements.length ? bodyElements : $('> *');
+
+      elements.each(function(index, element) {
+        try {
+          const $element = $(element);
+
+          // h3 -> new section
+          if (element.tagName && element.tagName.toLowerCase() === 'h3') {
+            // Save current section/subsection
+            if (currentSection) {
+              if (currentSubSection) {
+                currentSection.subSections.push(currentSubSection);
+                currentSubSection = null;
+              }
+              extractedSections.push(currentSection);
+            }
+
+            const headingText = $element.text().trim();
+            extractedHeadings.push(headingText);
+
+            currentSection = {
+              heading: headingText,
+              content: '',
+              subSections: [],
+              className: `post-section-${headingText.toLowerCase()
+                .replace(/[\s,\'\`]+/g, '-')
+                .replace(/[àáâãäå]/g, 'a')
+                .replace(/[èéêë]/g, 'e')
+                .replace(/[ìíîï]/g, 'i')
+                .replace(/[òóôõö]/g, 'o')
+                .replace(/[ùúûü]/g, 'u')}`
+            };
+          }
+          // h4 -> subsection
+          else if (element.tagName && element.tagName.toLowerCase() === 'h4') {
+            if (currentSubSection) {
+              // push previous sub
+              if (currentSection) currentSection.subSections.push(currentSubSection);
+            }
+            currentSubSection = {
+              heading: $element.text().trim(),
+              content: ''
+            };
+          }
+          // "Riferimenti" paragraph special case
+          else if (element.tagName && element.tagName.toLowerCase() === 'p' && $element.text().trim() === 'Riferimenti') {
+            if (currentSection) {
+              if (currentSubSection) {
+                currentSection.subSections.push(currentSubSection);
+                currentSubSection = null;
+              }
+              extractedSections.push(currentSection);
+            }
+
+            currentSection = null;
+
+            // Gather everything after the "Riferimenti" paragraph
+            const referenceContent = $element
+              .nextAll()
+              .map((_, el) => $.html(el))
+              .get()
+              .join('');
+
+            if (referenceContent.trim()) {
+              extractedSections.push({
+                heading: 'Riferimenti',
+                content: referenceContent,
+                subSections: [],
+                className: 'post-section-riferimenti'
+              });
+            }
+          }
+          // Append content to current subsection or section
+          else if (currentSubSection) {
+            currentSubSection.content += $.html(element);
+          } else if (currentSection) {
+            currentSection.content += $.html(element);
+          }
+        } catch (elementError) {
+          console.warn('Error processing element:', elementError);
+          // Continue with next element
         }
-        sections.push(currentSection);
+      });
+    } catch (selectorError) {
+      console.error('Error with selector:', selectorError);
+      // Fallback: use full html as single section
+      const allContent = $.html();
+      if (allContent) {
+        extractedSections.push({
+          heading: postData.value?.title || 'Contenuto',
+          content: allContent,
+          subSections: [],
+          className: 'post-section-contenuto'
+        });
       }
-      const title = elem.textContent?.trim() || '';
-      extractedHeadings.push(title);
-      currentSection = {
-        title: title,
-        content: '',
-        subSections: [],
-        className: `post-section-${title.toLowerCase().replace(/[\s,\'\`]+/g, '-').replace(/[àáâãäå]/g, 'a').replace(/[èéêë]/g, 'e').replace(/[ìíîï]/g, 'i').replace(/[òóôõö]/g, 'o').replace(/[ùúûü]/g, 'u')}`
-      };
-    } else if (elem.tagName === 'H4') {
+    }
+
+    // Add the last section if exists
+    if (currentSection) {
       if (currentSubSection) {
         currentSection.subSections.push(currentSubSection);
       }
-      currentSubSection = {
-        title: elem.textContent?.trim() || '',
-        content: ''
-      };
-    } else {
-      if (elem.tagName === 'P' && elem.textContent?.trim() === "Riferimenti") {
-        if (currentSection) {
-          if (currentSubSection) {
-            currentSection.subSections.push(currentSubSection);
-            currentSubSection = null;
-          }
-          sections.push(currentSection);
-        }
-        currentSection = {
-          title: "Riferimenti",
-          content: '',
-          className: 'post-section-riferimenti'
-        };
-      } else if (currentSubSection) {
-        currentSubSection.content += elem.outerHTML;
-      } else if (currentSection) {
-        currentSection.content += elem.outerHTML;
-      }
+      extractedSections.push(currentSection);
     }
-  });
 
-  if (currentSection) {
-    if (currentSubSection) {
-      currentSection.subSections.push(currentSubSection);
+    // Ensure at least one section exists
+    if (extractedSections.length === 0 && content.trim()) {
+      extractedSections.push({
+        heading: 'Contenuto',
+        content: content,
+        subSections: [],
+        className: 'post-section-contenuto'
+      });
     }
-    sections.push(currentSection);
-  }
 
     headings.value = extractedHeadings;
-    structuredContent.value = sections;
+    structuredContent.value = extractedSections;
 
-    // Mark content as processed
+    // Mark content as processed - triggers UI update
     isContentProcessed.value = true;
+
   } catch (error) {
-    console.error('Error processing post content:', error);
-    // Show raw content on error
+    console.error('Content processing error:', error);
+    // Don't throw - show raw content instead
     isContentProcessed.value = true;
   }
-};
+}
 
 // Client-side content processing after mount
 onMounted(() => {
   if (process.client && postData.value?.content) {
-    processPostContent();
+    processContent(postData.value.content);
   }
 });
 
-// Watch for route changes during SPA navigation
+// Watch for route changes during SPA navigation (client-side only)
+// Watch the route params, not the content itself to avoid race conditions
 watch(() => route.params.uri, async () => {
   if (process.client) {
-    // Reset flag and wait for data update
-    isContentProcessed.value = false;
+    // Wait for next tick to ensure data is updated
     await nextTick();
     if (postData.value?.content) {
-      processPostContent();
+      // Reset flag to show raw content during processing
+      isContentProcessed.value = false;
+      // Process content
+      processContent(postData.value.content);
     }
   }
 });
@@ -580,7 +655,12 @@ onMounted(() => {
   if (process.client) {
     window.addEventListener('click', handleClickOutside);
     window.addEventListener('scroll', handleScrollPage, { passive: true });
-    processPostContent();
+
+    // Ensure we process content client-side as in URI BLOG POST
+    if (postData.value?.content) {
+      isContentProcessed.value = false;
+      processContent(postData.value.content);
+    }
   }
 });
 
@@ -593,7 +673,7 @@ onUnmounted(() => {
   if (scrollTimeout) clearTimeout(scrollTimeout);
 });
 
-const hasFitochimicaSection = computed(() => structuredContent.value?.some(section => section.title === 'Fitochimica') || false)
+const hasFitochimicaSection = computed(() => structuredContent.value?.some(section => section.heading === 'Fitochimica') || false)
 </script>
 
 <style scoped>
@@ -621,6 +701,10 @@ div[class*="post-section-"] {
 
 .tooltip-custom h4 {
   color: #036297 !important;
+}
+
+.hidden {
+  display: none !important;
 }
 
 @media (max-width: 768px) {

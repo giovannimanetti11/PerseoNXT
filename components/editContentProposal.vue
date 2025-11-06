@@ -12,7 +12,7 @@
       <Transition name="fade">
         <div
           v-if="showModal"
-          class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+          class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]"
           @click="closeModal"
         >
           <div
