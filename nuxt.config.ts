@@ -187,18 +187,6 @@ export default defineNuxtConfig({
     plugins: {
       tailwindcss: {},
       autoprefixer: {},
-      ...(process.env.NODE_ENV === 'production' ? {
-        cssnano: {
-          preset: ['default', {
-            discardComments: {
-              removeAll: true,
-            },
-            normalizeWhitespace: true,
-            minifyFontValues: true,
-            minifyGradients: true,
-          }]
-        }
-      } : {})
     },
   },
 
@@ -209,10 +197,10 @@ export default defineNuxtConfig({
 
   // Build configuration
   build: {
-    transpile: ['vue-easy-lightbox'],
+    transpile: ['vue-easy-lightbox', 'cheerio'],
     analyze: false,
-    extractCSS: true,
-    optimizeCSS: true,
+    extractCSS: false,
+    optimizeCSS: false,
     optimization: {
       splitChunks: {
         chunks: 'all',
@@ -247,7 +235,19 @@ export default defineNuxtConfig({
       }
     },
     optimizeDeps: {
-      include: ['vue', 'vue-router', '@vueuse/core']
+      include: ['vue', 'vue-router', '@vueuse/core'],
+      force: true  // Force re-optimization to fix TDZ errors
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          // Manual chunk splitting to avoid circular dependencies
+          manualChunks: {
+            'vue-core': ['vue', 'vue-router'],
+            'composables': ['@vueuse/core']
+          }
+        }
+      }
     }
   },
 
@@ -273,45 +273,7 @@ export default defineNuxtConfig({
   nitro: {
     compressPublicAssets: true,
     routeRules: {
-      // Homepage static
-      '/': { static: true },
-
-      // ISR: Cache SSR pages with Stale-While-Revalidate
-      '/**': {
-        swr: 3600  // 1 hour: serve cached, update in background
-      },
-
-      // Content pages: longer cache + SEO headers
-      '/piante-medicinali/**': {
-        swr: 7200,  // 2 hours
-        headers: {
-          'X-Robots-Tag': 'index, follow',
-          'Cache-Control': 'public, max-age=3600, s-maxage=7200'
-        }
-      },
-      '/blog/**': {
-        swr: 7200,
-        headers: {
-          'X-Robots-Tag': 'index, follow',
-          'Cache-Control': 'public, max-age=3600, s-maxage=7200'
-        }
-      },
-      '/glossario/**': {
-        swr: 7200,
-        headers: {
-          'X-Robots-Tag': 'index, follow',
-          'Cache-Control': 'public, max-age=3600, s-maxage=7200'
-        }
-      },
-
-      // Static pages: 24h cache
-      '/disclaimer': { swr: 86400 },
-      '/privacy-policy': { swr: 86400 },
-      '/cookie-policy': { swr: 86400 },
-      // '/donazioni': { swr: 86400 },  // Disabled temporarily
-      '/about': { swr: 86400 },
-
-      // API routes: no cache + CORS headers for admin.wikiherbalist.com
+      // API routes: no cache + CORS headers
       '/api/**': {
         cache: false,
         headers: {
@@ -321,10 +283,21 @@ export default defineNuxtConfig({
           'Access-Control-Allow-Credentials': 'true'
         }
       },
+
+      // Sitemap proxy
       '/sitemap.xml': {
         proxy: '/api/sitemap.xml',
         cache: false
       },
+
+      // Default: ISR with Stale-While-Revalidate for all other routes
+      // TEMPORARILY DISABLED - Causing client-side routing errors in Nuxt 4.2.0
+      // '/**': {
+      //   swr: 3600,  // 1 hour cache with background revalidation
+      //   headers: {
+      //     'X-Robots-Tag': 'index, follow'
+      //   }
+      // }
     },
     prerender: {
       crawlLinks: false, // Disable crawling to avoid 403 errors from WordPress during build
@@ -351,5 +324,6 @@ export default defineNuxtConfig({
   },
 
   // Compatibility date
-  compatibilityDate: '2024-11-01'
+  compatibilityDate: '2024-11-01',
+
 });
