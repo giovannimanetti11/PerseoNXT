@@ -391,11 +391,6 @@ const additionalImages = computed(() => {
   return [];
 });
 
-// Check if post has images
-const hasImages = computed(() => {
-  return !!featuredImage.value || additionalImages.value.length > 0;
-});
-
 // Content processing function - CLIENT-SIDE ONLY
 // This runs after mount to create the fancy UI with sections, index, etc.
 // SSR shows raw content so Googlebot sees everything immediately
