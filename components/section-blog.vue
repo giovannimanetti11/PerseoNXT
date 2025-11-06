@@ -41,14 +41,13 @@
               <p :class="['blog-details', { 'text-gray-500 md:group-hover:text-white': !isXLScreen || post.uri !== activePost }]">{{ formatDate(post.date) }}</p>
             </div>
             <div class="flex-col w-full xl:w-2/4 m-auto text-center">
-              <NuxtImg 
-                :src="post.featuredImage" 
-                :alt="post.title" 
+              <img
+                :src="post.featuredImage"
+                :alt="post.title"
                 class="rounded-2xl w-11/12 mt-4 m-auto h-auto max-h-32 object-cover"
                 width="300"
                 height="200"
                 loading="lazy"
-                format="webp"
               />
               <NuxtLink :to="post.uri" class="block w-11/12 mt-4 mb-4 mx-auto">
                 <button :class="[
