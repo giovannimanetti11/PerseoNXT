@@ -43,14 +43,13 @@
           class="card flex-none w-56 sm:w-64 h-auto p-3 bg-white rounded-2xl shadow transition-all hover:scale-105 hover:shadow-md hover:cursor-pointer"
           @click="goToPost(post.uri)"
         >
-          <NuxtImg 
-            :src="post.featuredImage?.node?.sourceUrl || '/placeholder-image.jpg'" 
-            :alt="post.featuredImage?.node?.altText || post.title" 
-            class="w-full h-28 sm:h-32 object-cover rounded-lg" 
+          <img
+            :src="post.featuredImage?.node?.sourceUrl || '/placeholder-image.jpg'"
+            :alt="post.featuredImage?.node?.altText || post.title"
+            class="w-full h-28 sm:h-32 object-cover rounded-lg"
             width="240"
-            height="128" 
-            format="webp"
-            quality="90"
+            height="128"
+            loading="lazy"
           />
           <h2 class="mt-4 font-bold text-sm sm:text-base">{{ post.title }}</h2>
           <h3 class="italic text-gray-400 text-xs sm:text-sm">{{ post.nomeScientifico }}</h3>
@@ -61,7 +60,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAlphabet } from '~/composables/useAlphabet';
 import { useGraphQL } from '~/composables/useGraphQL';
@@ -120,11 +119,18 @@ const { data: initialPosts, pending: isLoading } = await useAsyncData(
 
 const currentPosts = ref(initialPosts.value || []);
 
+// Sync initialPosts to currentPosts when data loads (fixes hydration mismatch)
+watch(initialPosts, (newPosts) => {
+  if (newPosts && newPosts.length > 0 && currentPosts.value.length === 0) {
+    currentPosts.value = newPosts;
+  }
+}, { immediate: true });
+
 const sortedPosts = computed(() => {
-  if (!currentPosts.value) return [];
+  if (!currentPosts.value || currentPosts.value.length === 0) return [];
 
   return [...currentPosts.value]
-    .filter(post => post.title.charAt(0).toLowerCase() === selectedLetter.value.toLowerCase())
+    .filter(post => post.title && post.title.charAt(0).toLowerCase() === selectedLetter.value.toLowerCase())
     .sort((a, b) => a.title.localeCompare(b.title, 'it', { sensitivity: 'base' }));
 });
 
@@ -144,7 +150,24 @@ const fetchPostsByLetter = async (letter) => {
 };
 
 const goToPost = (uri) => {
-  router.push(uri);
+  // Validate URI before navigation
+  if (!uri) {
+    console.error('Invalid URI: URI is null or undefined');
+    return;
+  }
+
+  // Ensure URI is a string
+  const uriString = typeof uri === 'string' ? uri : String(uri);
+
+  // Ensure URI starts with /
+  const cleanUri = uriString.startsWith('/') ? uriString : `/${uriString}`;
+
+  console.log('Navigating to:', cleanUri);
+
+  // Navigate
+  router.push(cleanUri).catch(err => {
+    console.error('Navigation failed:', err);
+  });
 };
 </script>
 

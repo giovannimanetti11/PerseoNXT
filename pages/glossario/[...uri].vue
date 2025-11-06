@@ -1,4 +1,5 @@
-<template>
+<!-- URI TERM -->
+ <template>
   <div>
     <!-- Loading state -->
     <div v-if="pending" class="flex justify-center text-center w-full items-center h-64 mt-12" aria-live="polite" aria-busy="true">
@@ -43,7 +44,7 @@
       </section>
 
       <!-- Index section - CLIENT SIDE ONLY -->
-      <section v-if="isContentProcessed && headings.length > 0" class="postGlossario-index-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto mt-4 rounded-2xl">
+      <section :class="['postGlossario-index-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto mt-4 rounded-2xl', { 'hidden': !isContentProcessed || headings.length === 0 }]">
         <div class="font-bold text-xl md:text-2xl flex items-center">
           <Icon name="ic:twotone-list" class="text-2xl md:text-3xl text-black rounded-full mr-2" />
           <div id="table-of-contents" class="font-bold text-xl md:text-2xl">Indice</div>
@@ -59,22 +60,21 @@
       </section>
 
       <!-- RAW CONTENT for SSR - Googlebot sees this immediately -->
-      <section v-if="!isContentProcessed && glossaryTerm.content" class="term-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4">
-        <ContentTooltip :content="glossaryTerm.content" />
+      <section :class="['term-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4', { 'hidden': isContentProcessed }]">
+        <ContentTooltip v-if="glossaryTerm?.content" :content="glossaryTerm.content" />
       </section>
 
       <!-- PROCESSED CONTENT - Client-side only, with sections and styling -->
-      <template v-if="isContentProcessed">
-        <!-- Introduction section -->
-        <section v-if="introSection" class="term-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4">
-          <ContentTooltip :content="introSection.content" />
-        </section>
+      <!-- Introduction section -->
+      <section :class="['term-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4', { 'hidden': !isContentProcessed || !introSection }]">
+        <ContentTooltip v-if="introSection" :content="introSection.content" />
+      </section>
 
-        <!-- Content sections -->
-        <section v-for="(section, index) in sections"
-                :class="['term-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4', section.className]"
-                :id="'section' + (index + 1)"
-                :key="section.heading">
+      <!-- Content sections -->
+      <section v-for="(section, index) in sections"
+              :class="['term-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4', section.className, { 'hidden': !isContentProcessed }]"
+              :id="'section' + (index + 1)"
+              :key="section.heading">
           <div class="flex items-center" v-if="section.heading !== 'Riferimenti'">
             <div class="circle flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 mr-4 bg-blu text-white rounded-full text-base md:text-lg font-bold">
               {{ index + 1 }}
@@ -84,7 +84,6 @@
           <h3 v-else class="text-xl md:text-2xl mb-4">{{ section.heading }}</h3>
           <ContentTooltip v-if="section.content" :content="section.content" class="mt-4" />
         </section>
-      </template>
     </div>
   </div>
 </template>
@@ -166,14 +165,13 @@ const { data: glossaryTerm, pending, error } = await useAsyncData(
       const termData = data.glossaryTermBy;
       return termData;
     } catch (error) {
-      console.error('Fetch error:', error);
+      console.error('Error fetching glossary term:', error);
       throw error;
     }
   },
   {
-    server: true,  // Force SSR only - prevents client-side refetch
-    lazy: false,
-    watch: [() => route.params.uri]  // Watch route changes for SPA navigation
+    server: true,
+    lazy: false
   }
 );
 
@@ -411,6 +409,10 @@ const smoothScroll = (targetId) => {
 .circle {
   min-width: 2rem;
   min-height: 2rem;
+}
+
+.hidden {
+  display: none !important;
 }
 
 @media (min-width: 768px) {
