@@ -96,8 +96,22 @@ const groupedTerms = computed<GroupedTerms>(() => {
   );
 });
 
+const baseUrl = 'https://wikiherbalist.com'
+
 useHead({
-  title: 'Glossario'
+  title: 'Glossario',
+  meta: [
+    { name: 'description', content: 'Glossario completo dei termini botanici, farmacologici e fitoterapici. Definizioni e spiegazioni delle piante medicinali.' },
+    { property: 'og:title', content: 'Glossario - Wikiherbalist' },
+    { property: 'og:description', content: 'Glossario dei termini di fitoterapia, botanica e farmacologia delle piante medicinali.' },
+    { property: 'og:url', content: `${baseUrl}/glossario` },
+    { property: 'og:type', content: 'website' },
+    { name: 'twitter:title', content: 'Glossario - Wikiherbalist' },
+    { name: 'twitter:description', content: 'Glossario dei termini botanici e fitoterapici.' }
+  ],
+  link: [
+    { rel: 'canonical', href: `${baseUrl}/glossario` }
+  ]
 })
 </script>
 

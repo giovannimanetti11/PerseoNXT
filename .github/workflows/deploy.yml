@@ -1,14 +1,44 @@
 name: Test, Build and Deploy
 
+# Workflow triggers:
+# 1. Push automatico:
+#    - main/master: esegue test + deploy automatico
+#    - claude/**:   esegue solo test (no deploy)
+# 2. Pull Request: esegue solo test
+# 3. Manuale (workflow_dispatch):
+#    - Vai su Actions → "Test, Build and Deploy" → "Run workflow"
+#    - Scegli branch, commit specifico (opzionale) e se fare deploy
+#    - Esempio: branch="claude/xyz", commit="abc123", deploy="true"
+
 on:
   push:
     branches:
       - main
       - master
+      - 'claude/**'  # Test anche i branch claude/* (no deploy)
   pull_request:
     branches:
       - main
       - master
+  workflow_dispatch:  # Trigger manuale
+    inputs:
+      branch:
+        description: 'Branch da deployare'
+        required: true
+        default: 'main'
+        type: string
+      commit:
+        description: 'Commit specifico (opzionale, lascia vuoto per ultimo)'
+        required: false
+        type: string
+      deploy:
+        description: 'Fare anche il deploy?'
+        required: true
+        default: 'false'
+        type: choice
+        options:
+          - 'true'
+          - 'false'
 
 jobs:
   test:
@@ -18,6 +48,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || github.ref }}
+
+      - name: Checkout specific commit (if provided)
+        if: github.event.inputs.commit != ''
+        run: git checkout ${{ github.event.inputs.commit }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -41,13 +77,25 @@ jobs:
     name: Deploy to Production VPS
     runs-on: ubuntu-latest
     needs: test
-    if: github.event_name == 'push'
+    # Deploy se: push a main/master OPPURE workflow_dispatch con deploy=true
+    if: |
+      (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')) ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'true')
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.inputs.branch || github.ref }}
           submodules: recursive
+
+      - name: Checkout specific commit (if provided)
+        if: github.event.inputs.commit != ''
+        run: git checkout ${{ github.event.inputs.commit }}
+
+      - name: Get commit SHA
+        id: commit
+        run: echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
       - name: Clean old files on VPS
         uses: appleboy/ssh-action@v1.0.3
@@ -66,16 +114,20 @@ jobs:
 
       - name: Deploy to VPS via rsync
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          COMMIT_SHA: ${{ steps.commit.outputs.sha }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
+          envs: COMMIT_SHA
           script: |
             cd /var/www/wikiherbalist.com/nuxt-app
             echo "=== Pulling latest code ==="
             git fetch origin
-            git reset --hard origin/main
+            echo "=== Deploying commit: $COMMIT_SHA ==="
+            git reset --hard $COMMIT_SHA
             echo "=== Current commit ==="
             git log --oneline -1
             echo "=== Files in pages/ ==="
@@ -109,3 +161,4 @@ jobs:
             sudo pm2 list
 
             echo "=== Deployment completed successfully! ==="
+            echo "Deployed commit: $(git log --oneline -1)"
