@@ -1,10 +1,15 @@
-import { defineEventHandler, createError } from 'h3'
+import { defineEventHandler, createError, getQuery } from 'h3'
 
 export default defineEventHandler(async (event) => {
   try {
-    // Get the path parameters
-    const path = event.node.req.url?.replace(/^\/api\/gbif/, '') || ''
-    
+    // Get the catch-all path segments
+    const params = event.context.params?._ || ''
+    const query = getQuery(event)
+
+    // Build the full path with query string
+    const queryString = new URLSearchParams(query as Record<string, string>).toString()
+    const path = `/${params}${queryString ? `?${queryString}` : ''}`
+
     // Set up request headers
     const headers = {
       'Accept': 'application/json',
