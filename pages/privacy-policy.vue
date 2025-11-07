@@ -3,7 +3,7 @@
       <div class="container mx-auto px-4 py-12">
         <h1 class="text-4xl font-bold mb-8 text-center text-blu">Privacy Policy</h1>
         <div class="bg-white rounded-lg shadow-lg p-8">
-          <p class="text-sm text-gray-600 mb-6">Ultimo aggiornamento: Novembre 2024</p>
+          <p class="text-sm text-gray-600 mb-6">Ultimo aggiornamento: {{ lastUpdate }}</p>
           
           <div class="space-y-8">
             <section v-for="(section, index) in sections" :key="index">
@@ -25,6 +25,13 @@
   
   <script setup>
   import DOMPurify from 'isomorphic-dompurify'
+  import { computed } from 'vue'
+
+  // Dynamic last update date (month + year in Italian)
+  const lastUpdate = computed(() => {
+    const now = new Date()
+    return new Intl.DateTimeFormat('it-IT', { month: 'long', year: 'numeric' }).format(now)
+  })
 
   const sanitizeHtml = (html) => {
     if (!html) return ''
