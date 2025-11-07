@@ -11,23 +11,21 @@
 
     <!-- Content state -->
     <div v-else-if="postData" id="post">
-      <SchemaMarkup :post="postData" :tag="null" />
-
       <!-- Post info section -->
       <section class="post-info-section flex flex-col md:flex-row py-20 px-2 md:px-10 w-11/12 mx-auto rounded-2xl print:py-2 print:px-0 print:w-full">
         <!-- Mobile slideshow -->
         <div v-if="featuredImage || (additionalImages && additionalImages.length > 0)" class="md:hidden w-full mb-8">
-          <ClientOnly>
-            <Suspense>
-              <Slideshow
-                :featured-image="featuredImage"
-                :additional-images="additionalImages"
-              />
-              <template #fallback>
-                <div class="animate-pulse bg-gray-200 h-64 w-full rounded-2xl" aria-hidden="true"></div>
-              </template>
-            </Suspense>
-          </ClientOnly>
+          <Suspense>
+            <Slideshow
+              :featured-image="featuredImage"
+              :additional-images="additionalImages"
+            />
+            <template #fallback>
+              <div class="bg-gray-200 h-60 w-full rounded-2xl flex items-center justify-center" aria-hidden="true">
+                <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
+              </div>
+            </template>
+          </Suspense>
         </div>
 
         <!-- Post information container -->
@@ -53,17 +51,17 @@
         <!-- Desktop slideshow and map -->
         <div class="w-full md:w-3/5 flex flex-col order-3 md:order-2">
           <div v-if="featuredImage || (additionalImages && additionalImages.length > 0)" class="md:block mr-16 mb-8">
-            <ClientOnly>
-              <Suspense>
-                <Slideshow
-                  :featured-image="featuredImage"
-                  :additional-images="additionalImages"
-                />
-                <template #fallback>
-                  <div class="animate-pulse bg-gray-200 h-64 w-full rounded-2xl" aria-hidden="true"></div>
-                </template>
-              </Suspense>
-            </ClientOnly>
+            <Suspense>
+              <Slideshow
+                :featured-image="featuredImage"
+                :additional-images="additionalImages"
+              />
+              <template #fallback>
+                <div class="bg-gray-200 h-60 w-full rounded-2xl flex items-center justify-center" aria-hidden="true">
+                  <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
+                </div>
+              </template>
+            </Suspense>
           </div>
           <ClientOnly>
             <Suspense>
@@ -106,7 +104,7 @@
                 @mouseenter="handleMouseEnterTag(tag.id)"
                 @mouseleave="handleMouseLeaveTag">
               {{ tag.name }}
-              <div v-if="activeTooltip === tag.id" 
+              <div v-if="activeTooltip === tag.id"
                   class="tooltip-custom fixed z-50 bg-white border border-blu rounded-lg shadow-xl text-sm text-gray-700"
                   :style="tooltipStyle"
                   @click.stop>
@@ -207,7 +205,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, defineAsyncComponent, onUnmounted } from 'vue';
+import { ref, computed, defineAsyncComponent, onMounted, onUnmounted, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import { useAsyncData, useHead } from '#app';
 import DOMPurify from 'isomorphic-dompurify'
@@ -223,7 +221,6 @@ import PostInfo from '@/components/posts/postinfo.vue';
 const Slideshow = defineAsyncComponent(() => import('@/components/posts/slideshow.vue'));
 const ObservationsMap = defineAsyncComponent(() => import('@/components/posts/observationsMap.vue'));
 const EditContentProposal = defineAsyncComponent(() => import('@/components/editContentProposal.vue'));
-const SchemaMarkup = defineAsyncComponent(() => import('@/components/schemaMarkup.vue'));
 
 const route = useRoute();
 const { query } = useGraphQL();
@@ -303,13 +300,9 @@ const { data: postData, pending, error } = await useAsyncData(
     try {
       const data = await query(FETCH_POST_BY_SLUG, { slug });
 
-      // Verifica critica mancante che causa l'errore in hard refresh
+      // Return null if post doesn't exist - error handling below
       if (!data?.postBy) {
-        throw createError({
-          statusCode: 404,
-          statusMessage: 'Pagina non trovata',
-          fatal: true
-        });
+        return null;
       }
 
       const post = data.postBy;
@@ -325,12 +318,8 @@ const { data: postData, pending, error } = await useAsyncData(
       };
     } catch (error) {
       console.error('Error fetching post:', error);
-      // Gestione errore mancante/inconsistente
-      throw createError({
-        statusCode: 404,
-        statusMessage: 'Pagina non trovata',
-        fatal: true
-      });
+      // Return null on error - error handling below
+      return null;
     }
   },
   {
@@ -345,7 +334,8 @@ const headings = computed(() => postData.value?.headings || []);
 const structuredContent = computed(() => postData.value?.structuredContent || []);
 
 // Handle error/404 - check after fetch completes
-if (error.value) {
+// Show 404 if there's an error OR if postData is null (not found)
+if (error.value || (!pending.value && !postData.value)) {
   throw createError({
     statusCode: 404,
     statusMessage: 'Pagina non trovata',
@@ -362,23 +352,7 @@ const seoImage = computed(() =>
   'https://wikiherbalist.com/media/og-image.jpg'
 );
 
-// Set meta tags with useHead at top level
-useHead({
-  title: seoTitle,
-  meta: [
-    { name: 'description', content: seoDescription },
-    { property: 'og:title', content: seoTitle },
-    { property: 'og:description', content: seoDescription },
-    { property: 'og:image', content: seoImage },
-    { property: 'og:type', content: 'article' },
-    { name: 'twitter:card', content: 'summary_large_image' },
-    { name: 'twitter:title', content: seoTitle },
-    { name: 'twitter:description', content: seoDescription },
-    { name: 'twitter:image', content: seoImage }
-  ]
-});
-
-// Computed properties for images
+// Computed properties for images (must be before useHead)
 const featuredImage = computed(() => {
   if (postData.value?.featuredImage?.node) {
     return {
@@ -397,6 +371,113 @@ const additionalImages = computed(() => {
     }));
   }
   return [];
+});
+
+// Set meta tags with useHead at top level
+useHead({
+  title: seoTitle,
+  meta: [
+    { name: 'description', content: seoDescription },
+    { property: 'og:title', content: seoTitle },
+    { property: 'og:description', content: seoDescription },
+    { property: 'og:image', content: seoImage },
+    { property: 'og:type', content: 'article' },
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: seoTitle },
+    { name: 'twitter:description', content: seoDescription },
+    { name: 'twitter:image', content: seoImage }
+  ],
+  link: computed(() => {
+    const links = [];
+    // Preload featured image for LCP optimization
+    if (featuredImage.value?.sourceUrl) {
+      links.push({
+        rel: 'preload',
+        as: 'image',
+        href: featuredImage.value.sourceUrl,
+        fetchpriority: 'high'
+      });
+    }
+    return links;
+  }),
+  script: computed(() => {
+    if (!postData.value) return [];
+
+    const baseUrl = 'https://wikiherbalist.com';
+    const fullUrl = `${baseUrl}${route.fullPath}`;
+
+    // Build breadcrumb list
+    const breadcrumbList = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      'itemListElement': [
+        {
+          '@type': 'ListItem',
+          'position': 1,
+          'name': 'Home',
+          'item': baseUrl
+        },
+        {
+          '@type': 'ListItem',
+          'position': 2,
+          'name': 'Piante medicinali',
+          'item': `${baseUrl}/piante-medicinali`
+        },
+        {
+          '@type': 'ListItem',
+          'position': 3,
+          'name': postData.value.title,
+          'item': fullUrl
+        }
+      ]
+    };
+
+    // Build main article schema
+    const article = {
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      '@id': `${fullUrl}#article`,
+      'headline': postData.value.title,
+      'description': postData.value.seo?.metaDesc || postData.value.title,
+      'image': featuredImage.value?.sourceUrl || `${baseUrl}/media/og-image.jpg`,
+      'datePublished': postData.value.date,
+      'dateModified': postData.value.modified || postData.value.date,
+      'author': {
+        '@type': 'Person',
+        'name': postData.value.authorName || 'Team Wikiherbalist'
+      },
+      'publisher': {
+        '@type': 'Organization',
+        'name': 'Wikiherbalist',
+        'logo': {
+          '@type': 'ImageObject',
+          'url': `${baseUrl}/media/logo.png`
+        }
+      },
+      'mainEntityOfPage': {
+        '@type': 'WebPage',
+        '@id': fullUrl
+      },
+      'about': {
+        '@type': ['MedicalEntity', 'Substance'],
+        'name': postData.value.title,
+        'alternateName': postData.value.nomeScientifico
+      },
+      'articleSection': 'Fitoterapia',
+      'inLanguage': 'it-IT'
+    };
+
+    return [
+      {
+        type: 'application/ld+json',
+        children: JSON.stringify(breadcrumbList)
+      },
+      {
+        type: 'application/ld+json',
+        children: JSON.stringify(article)
+      }
+    ];
+  })
 });
 
 // Compute all headings (now from server-processed data)
@@ -446,7 +527,16 @@ const handleMouseLeaveTag = () => {
   if (mouseEnterTimeout) clearTimeout(mouseEnterTimeout);
 };
 
+const smoothScroll = (target: string) => {
+  if (!process.client) return;
+  const element = document.querySelector(target);
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+};
+
 const handleScrollPage = () => {
+  if (!process.client) return;
   hideTooltip();
   isScrolling.value = true;
   if (scrollTimeout) clearTimeout(scrollTimeout);
