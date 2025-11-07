@@ -3,7 +3,9 @@
     <Header />
     <slot />
     <Footer />
-    <ScrollToTop />
+    <ClientOnly>
+      <ScrollToTop />
+    </ClientOnly>
     <ClientOnly>
       <component :is="FeedbackWidget" v-if="showFeedback" />
       <component :is="CookieBanner" v-if="showCookieBanner" />

@@ -3,7 +3,7 @@
     <div class="container mx-auto px-4 py-12">
       <h1 class="text-4xl font-bold mb-8 text-center text-blu">Disclaimer</h1>
       <div class="bg-white rounded-lg shadow-lg p-8">
-        <p class="text-sm text-gray-600 mb-6">Ultimo aggiornamento: {{ new Date().toLocaleDateString('it-IT') }}</p>
+        <p class="text-sm text-gray-600 mb-6">Ultimo aggiornamento: Novembre 2024</p>
 
         <div class="space-y-8">
           <section v-for="(section, index) in sections" :key="index">

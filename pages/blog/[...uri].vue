@@ -42,8 +42,8 @@
         </div>
       </section>
 
-      <!-- Index section - CLIENT SIDE ONLY -->
-      <section :class="['post-index-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto mt-4 rounded-2xl', { 'hidden': !isContentProcessed || headings.length === 0 }]">
+      <!-- Index section - Now SSR-rendered -->
+      <section :class="['post-index-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto mt-4 rounded-2xl', { 'hidden': headings.length === 0 }]">
         <div class="font-bold text-xl md:text-2xl flex items-center">
           <Icon name="ic:twotone-list" class="text-2xl md:text-3xl text-black rounded-full mr-2" />
           <div id="table-of-contents" class="font-bold text-xl md:text-2xl">Indice</div>
@@ -58,20 +58,14 @@
         </ul>
       </section>
 
-      <!-- RAW CONTENT for SSR - Googlebot sees this immediately -->
-      <section :class="['post-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4', { 'hidden': isContentProcessed }]">
-        <ContentTooltip v-if="blogPost?.content" :content="blogPost.content" />
-      </section>
-
-      <!-- PROCESSED CONTENT - Client-side only, with sections and styling -->
-      <!-- Introduction section -->
-      <section :class="['post-section-introduction flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4', { 'hidden': !isContentProcessed || !introSection }]">
+      <!-- Introduction section - Now SSR-rendered -->
+      <section :class="['post-section-introduction flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4', { 'hidden': !introSection }]">
         <ContentTooltip v-if="introSection" :content="introSection.content" />
       </section>
 
-      <!-- Content sections -->
+      <!-- Content sections - Now SSR-rendered -->
       <section v-for="(section, index) in sections"
-              :class="['post-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4', section.className, { 'hidden': !isContentProcessed }]"
+              :class="['post-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4', section.className]"
               :id="'section' + (index + 1)"
               :key="section.heading">
           <div class="flex items-center" v-if="section.heading !== 'Riferimenti'">
@@ -84,15 +78,18 @@
           <ContentTooltip v-if="section.content" :content="section.content" class="mt-4" />
         </section>
 
-      <EditContentProposal :sections="headings" />
+      <ClientOnly>
+        <EditContentProposal :sections="headings" />
+      </ClientOnly>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch, nextTick, defineAsyncComponent } from 'vue';
+import { ref, computed, defineAsyncComponent } from 'vue';
 import { useRoute } from 'vue-router';
 import { useGraphQL } from '~/composables/useGraphQL';
+import { useContentProcessor } from '~/composables/useContentProcessor';
 import { useHead } from '#app';
 
 // Import critical components directly for better SSR
@@ -108,11 +105,8 @@ const SchemaMarkup = defineAsyncComponent(() => import('~/components/schemaMarku
 const route = useRoute();
 const { query } = useGraphQL();
 
-// State management
-const headings = ref([]);
-const sections = ref([]);
+// State management - intro section still uses ref
 const introSection = ref(null);
-const isContentProcessed = ref(false);
 
 // GraphQL query definition
 const FETCH_BLOG_POST_BY_SLUG = `
@@ -145,11 +139,12 @@ const FETCH_BLOG_POST_BY_SLUG = `
   }
 `;
 
-// Fetch blog post data
+// Fetch blog post data with server-side content processing
 const { data: blogPost, pending, error } = await useAsyncData(
-  'blogPost',
+  `blog-post-${route.params.uri instanceof Array ? route.params.uri[0] : route.params.uri}`,
   async () => {
     const slug = route.params.uri instanceof Array ? route.params.uri[0] : route.params.uri;
+    const { processContent } = useContentProcessor();
 
     try {
       const data = await query(FETCH_BLOG_POST_BY_SLUG, { slug });
@@ -162,8 +157,16 @@ const { data: blogPost, pending, error } = await useAsyncData(
         });
       }
 
-      const postData = data.blogPostBy;
-      return postData;
+      const post = data.blogPostBy;
+
+      // Process content server-side
+      const processed = post.content ? await processContent(post.content) : { headings: [], structuredContent: [] };
+
+      return {
+        ...post,
+        headings: processed.headings,
+        structuredContent: processed.structuredContent
+      };
     } catch (error) {
       console.error('Error fetching blog post:', error);
       throw error;
@@ -171,9 +174,14 @@ const { data: blogPost, pending, error } = await useAsyncData(
   },
   {
     server: true,
-    lazy: false
+    lazy: false,
+    watch: [() => route.params.uri]
   }
 );
+
+// Computed properties for processed content (now from server)
+const headings = computed(() => blogPost.value?.headings || []);
+const sections = computed(() => blogPost.value?.structuredContent || []);
 
 // Handle error/404 - check after fetch completes
 if (error.value) {
@@ -209,170 +217,7 @@ useHead({
   ]
 });
 
-// Content processing function - CLIENT-SIDE ONLY
-// This runs after mount to create the fancy UI with sections, index, etc.
-// SSR shows raw content so Googlebot sees everything immediately
-async function processContent(content) {
-  // Safety check
-  if (!content || typeof content !== 'string') {
-    console.warn('processContent: invalid content');
-    isContentProcessed.value = true; // Mark as processed to avoid showing duplicate content
-    return;
-  }
-
-  try {
-    const cheerio = await import('cheerio');
-    const $ = cheerio.load(content);
-
-    const extractedHeadings = [];
-    const extractedSections = [];
-
-    // Extract introduction
-    const firstH3 = $('h3').first();
-    if (firstH3.length) {
-      const introContent = firstH3
-        .prevAll()
-        .map((_, el) => $.html(el))
-        .get()
-        .reverse()
-        .join('');
-
-      if (introContent.trim()) {
-        introSection.value = {
-          content: introContent,
-          className: 'post-section-introduction'
-        };
-      }
-    }
-
-    // Process main sections
-    let currentSection = null;
-
-    try {
-      // First try with 'body > *' selector
-      const bodyElements = $('body > *');
-
-      // If no body elements found, try with direct children of the root
-      const elements = bodyElements.length ? bodyElements : $('> *');
-
-      elements.each(function(index, element) {
-        try {
-          const $element = $(element);
-
-          // Check for h3 headings
-          if (element.tagName && element.tagName.toLowerCase() === 'h3') {
-            if (currentSection) {
-              extractedSections.push(currentSection);
-            }
-
-            const headingText = $element.text().trim();
-            extractedHeadings.push(headingText);
-
-            currentSection = {
-              heading: headingText,
-              content: '',
-              className: `post-section-${headingText.toLowerCase()
-                .replace(/[\s,\'\`]+/g, '-')
-                .replace(/[àáâãäå]/g, 'a')
-                .replace(/[èéêë]/g, 'e')
-                .replace(/[ìíîï]/g, 'i')
-                .replace(/[òóôõö]/g, 'o')
-                .replace(/[ùúûü]/g, 'u')}`
-            };
-          }
-          // Check for "Riferimenti" as a paragraph
-          else if (element.tagName && element.tagName.toLowerCase() === 'p' && $element.text().trim() === 'Riferimenti') {
-            if (currentSection) {
-              extractedSections.push(currentSection);
-            }
-
-            currentSection = null;
-
-            // Find all content after the "Riferimenti" paragraph
-            const referenceContent = $element
-              .nextAll()
-              .map((_, el) => $.html(el))
-              .get()
-              .join('');
-
-            if (referenceContent.trim()) {
-              extractedSections.push({
-                heading: 'Riferimenti',
-                content: referenceContent,
-                className: 'post-section-riferimenti'
-              });
-            }
-          }
-          // Add content to current section
-          else if (currentSection) {
-            currentSection.content += $.html(element);
-          }
-        } catch (elementError) {
-          console.warn('Error processing element:', elementError);
-          // Continue with next element
-        }
-      });
-    } catch (selectorError) {
-      console.error('Error with selector:', selectorError);
-      // Try a fallback approach - get all content
-      const allContent = $.html();
-      if (allContent) {
-        extractedSections.push({
-          heading: blogPost.value?.title || 'Contenuto',
-          content: allContent,
-          className: 'post-section-contenuto'
-        });
-      }
-    }
-
-    // Add the last section if exists and it's not references
-    if (currentSection) {
-      extractedSections.push(currentSection);
-    }
-
-    // Ensure we have at least one section
-    if (extractedSections.length === 0 && content.trim()) {
-      extractedSections.push({
-        heading: 'Contenuto',
-        content: content,
-        className: 'post-section-contenuto'
-      });
-    }
-
-    headings.value = extractedHeadings;
-    sections.value = extractedSections;
-
-    // Mark content as processed - this will trigger UI update to show sections
-    isContentProcessed.value = true;
-
-  } catch (error) {
-    console.error('Content processing error:', error);
-    // Don't throw - show raw content instead
-    isContentProcessed.value = true;
-  }
-}
-
-// Client-side content processing after mount
-onMounted(() => {
-  if (process.client && blogPost.value?.content) {
-    processContent(blogPost.value.content);
-  }
-});
-
-// Watch for route changes during SPA navigation (client-side only)
-// Watch the route params, not the content itself to avoid race conditions
-watch(() => route.params.uri, async () => {
-  if (process.client) {
-    // Wait for next tick to ensure data is updated
-    await nextTick();
-    if (blogPost.value?.content) {
-      // Reset flag to show raw content during processing
-      isContentProcessed.value = false;
-      // Process content
-      processContent(blogPost.value.content);
-    }
-  }
-});
+// Content is now processed server-side - no client processing needed
 
 // Navigation helper
 const smoothScroll = (target) => {

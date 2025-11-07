@@ -138,8 +138,22 @@ const formatDate = (dateStr: string): string => {
 };
 
 // Set page metadata
+const baseUrl = 'https://wikiherbalist.com'
+
 useHead({
-  title: 'Blog'
+  title: 'Blog',
+  meta: [
+    { name: 'description', content: 'Articoli su fitoterapia, erbe medicinali e salute naturale. Scopri gli ultimi studi e approfondimenti sulle piante officinali.' },
+    { property: 'og:title', content: 'Blog - Wikiherbalist' },
+    { property: 'og:description', content: 'Articoli su fitoterapia, erbe medicinali e salute naturale. Scopri gli ultimi studi e approfondimenti.' },
+    { property: 'og:url', content: `${baseUrl}/blog` },
+    { property: 'og:type', content: 'website' },
+    { name: 'twitter:title', content: 'Blog - Wikiherbalist' },
+    { name: 'twitter:description', content: 'Articoli su fitoterapia, erbe medicinali e salute naturale.' }
+  ],
+  link: [
+    { rel: 'canonical', href: `${baseUrl}/blog` }
+  ]
 })
 </script>
 

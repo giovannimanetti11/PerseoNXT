@@ -127,7 +127,7 @@
   </footer>
   <div class="flex flex-col md:flex-row justify-between items-center text-base text-black text-center m-auto px-4 md:px-14 py-2 w-11/12">
     <div class="text-sm mt-1.5 mb-2 md:mb-0">
-      © Wikiherbalist - all rights reserved - {{ currentYear }}
+      © Wikiherbalist - all rights reserved - 2024
     </div>
     <div class="text-sm mt-1.5 flex items-center justify-center gap-1">
       Un progetto Open Source
@@ -140,9 +140,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-
-const currentYear = computed(() => new Date().getFullYear())
+// No dynamic date - using static 2024 to avoid hydration mismatch
 </script>
 
 <style scoped>

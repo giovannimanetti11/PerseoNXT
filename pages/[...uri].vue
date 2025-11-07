@@ -76,8 +76,8 @@
         </div>
       </section>
 
-      <!-- Index section - CLIENT SIDE ONLY -->
-      <section :class="['post-index-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full', { 'hidden': !isContentProcessed }]">
+      <!-- Index section - Now SSR-rendered -->
+      <section class="post-index-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full">
         <div class="font-bold text-xl md:text-2xl flex items-center">
           <Icon name="ic:twotone-list" class="text-2xl md:text-3xl text-black rounded-full mr-2" aria-hidden="true" />
           <div id="table-of-contents" class="font-bold text-xl md:text-2xl">Indice</div>
@@ -92,13 +92,7 @@
         </ul>
       </section>
 
-      <!-- RAW CONTENT for SSR - Googlebot sees this immediately -->
-      <section :class="['post-content-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4', { 'hidden': isContentProcessed }]">
-        <ContentTooltip v-if="postData?.content" :content="postData.content" />
-      </section>
-
-      <!-- PROCESSED Dynamic content sections - CLIENT SIDE ONLY -->
-      <div :class="{ 'hidden': !isContentProcessed }">
+      <!-- Dynamic content sections - Now SSR-rendered -->
         <!-- Properties section -->
         <section v-if="postData.tags && postData.tags.nodes.length > 0" class="post-section-proprieta flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full" id="section1">
           <div class="flex items-center space-x-4">
@@ -204,19 +198,21 @@
             />
           </div>
         </section>
-      </div>
 
-      <EditContentProposal :sections="allHeadings" />
+      <ClientOnly>
+        <EditContentProposal :sections="allHeadings" />
+      </ClientOnly>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, nextTick, computed, defineAsyncComponent, onMounted, onUnmounted } from 'vue';
+import { ref, computed, defineAsyncComponent, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useAsyncData, useHead } from '#app';
 import DOMPurify from 'isomorphic-dompurify'
 import { useGraphQL } from '~/composables/useGraphQL';
+import { useContentProcessor } from '~/composables/useContentProcessor';
 
 // Import critical components directly to improve SEO
 import ContentTooltip from '@/components/contentTooltip.vue';
@@ -291,25 +287,22 @@ const FETCH_POST_BY_SLUG = `
   }
 `;
 
-// State management - simplified to use postData directly
-const headings = ref<string[]>([]);
-const structuredContent = ref<any[]>([]);
-const isContentProcessed = ref(false); // Flag to track if content has been processed client-side
-
+// State management - content is now processed server-side
 const activeTooltip = ref<string | null>(null);
 const isScrolling = ref(false);
 let mouseEnterTimeout: number | null = null;
 let scrollTimeout: number | null = null;
 
-// Fetch post data with SSR
+// Fetch post data with SSR + server-side content processing
 const { data: postData, pending, error } = await useAsyncData(
-  'postData',
+  `post-${Array.isArray(route.params.uri) ? route.params.uri[0] : route.params.uri}`,
   async () => {
     const slug = Array.isArray(route.params.uri) ? route.params.uri[0] : route.params.uri;
+    const { processContent } = useContentProcessor();
 
     try {
       const data = await query(FETCH_POST_BY_SLUG, { slug });
-      
+
       // Verifica critica mancante che causa l'errore in hard refresh
       if (!data?.postBy) {
         throw createError({
@@ -319,7 +312,17 @@ const { data: postData, pending, error } = await useAsyncData(
         });
       }
 
-      return data.postBy;
+      const post = data.postBy;
+
+      // Process content server-side (works with cheerio on both server and client)
+      const processed = post.content ? await processContent(post.content) : { headings: [], structuredContent: [] };
+
+      // Return post data with processed content
+      return {
+        ...post,
+        headings: processed.headings,
+        structuredContent: processed.structuredContent
+      };
     } catch (error) {
       console.error('Error fetching post:', error);
       // Gestione errore mancante/inconsistente
@@ -327,14 +330,19 @@ const { data: postData, pending, error } = await useAsyncData(
         statusCode: 404,
         statusMessage: 'Pagina non trovata',
         fatal: true
-      }); 
+      });
     }
   },
   {
     server: true,  // Importante per SSR
-    lazy: false    // Importante per evitare race conditions
+    lazy: false,   // Importante per evitare race conditions
+    watch: [() => route.params.uri]  // Re-fetch quando cambia URI (SPA navigation)
   }
 );
+
+// Computed properties for processed content (now comes from server)
+const headings = computed(() => postData.value?.headings || []);
+const structuredContent = computed(() => postData.value?.structuredContent || []);
 
 // Handle error/404 - check after fetch completes
 if (error.value) {
@@ -391,184 +399,7 @@ const additionalImages = computed(() => {
   return [];
 });
 
-// Content processing function - CLIENT-SIDE ONLY
-// This runs after mount to create the fancy UI with sections, index, etc.
-// SSR shows raw content so Googlebot sees everything immediately
-async function processContent(content: string) {
-  // Safety check
-  if (!content || typeof content !== 'string') {
-    console.warn('processContent: invalid content');
-    isContentProcessed.value = true; // Mark as processed to avoid showing duplicate content
-    return;
-  }
-
-  try {
-    const cheerio = await import('cheerio');
-    const $ = cheerio.load(content);
-
-    const extractedHeadings: string[] = [];
-    const extractedSections: any[] = [];
-
-    // Process main sections
-    let currentSection: any = null;
-    let currentSubSection: any = null;
-
-    try {
-      // First try with 'body > *' selector
-      const bodyElements = $('body > *');
-
-      // If no body elements found, try with direct children of the root
-      const elements = bodyElements.length ? bodyElements : $('> *');
-
-      elements.each(function(index, element) {
-        try {
-          const $element = $(element);
-
-          // h3 -> new section
-          if (element.tagName && element.tagName.toLowerCase() === 'h3') {
-            // Save current section/subsection
-            if (currentSection) {
-              if (currentSubSection) {
-                currentSection.subSections.push(currentSubSection);
-                currentSubSection = null;
-              }
-              extractedSections.push(currentSection);
-            }
-
-            const headingText = $element.text().trim();
-            extractedHeadings.push(headingText);
-
-            currentSection = {
-              heading: headingText,
-              content: '',
-              subSections: [],
-              className: `post-section-${headingText.toLowerCase()
-                .replace(/[\s,\'\`]+/g, '-')
-                .replace(/[àáâãäå]/g, 'a')
-                .replace(/[èéêë]/g, 'e')
-                .replace(/[ìíîï]/g, 'i')
-                .replace(/[òóôõö]/g, 'o')
-                .replace(/[ùúûü]/g, 'u')}`
-            };
-          }
-          // h4 -> subsection
-          else if (element.tagName && element.tagName.toLowerCase() === 'h4') {
-            if (currentSubSection) {
-              // push previous sub
-              if (currentSection) currentSection.subSections.push(currentSubSection);
-            }
-            currentSubSection = {
-              heading: $element.text().trim(),
-              content: ''
-            };
-          }
-          // "Riferimenti" paragraph special case
-          else if (element.tagName && element.tagName.toLowerCase() === 'p' && $element.text().trim() === 'Riferimenti') {
-            if (currentSection) {
-              if (currentSubSection) {
-                currentSection.subSections.push(currentSubSection);
-                currentSubSection = null;
-              }
-              extractedSections.push(currentSection);
-            }
-
-            currentSection = null;
-
-            // Gather everything after the "Riferimenti" paragraph
-            const referenceContent = $element
-              .nextAll()
-              .map((_, el) => $.html(el))
-              .get()
-              .join('');
-
-            if (referenceContent.trim()) {
-              extractedSections.push({
-                heading: 'Riferimenti',
-                content: referenceContent,
-                subSections: [],
-                className: 'post-section-riferimenti'
-              });
-            }
-          }
-          // Append content to current subsection or section
-          else if (currentSubSection) {
-            currentSubSection.content += $.html(element);
-          } else if (currentSection) {
-            currentSection.content += $.html(element);
-          }
-        } catch (elementError) {
-          console.warn('Error processing element:', elementError);
-          // Continue with next element
-        }
-      });
-    } catch (selectorError) {
-      console.error('Error with selector:', selectorError);
-      // Fallback: use full html as single section
-      const allContent = $.html();
-      if (allContent) {
-        extractedSections.push({
-          heading: postData.value?.title || 'Contenuto',
-          content: allContent,
-          subSections: [],
-          className: 'post-section-contenuto'
-        });
-      }
-    }
-
-    // Add the last section if exists
-    if (currentSection) {
-      if (currentSubSection) {
-        currentSection.subSections.push(currentSubSection);
-      }
-      extractedSections.push(currentSection);
-    }
-
-    // Ensure at least one section exists
-    if (extractedSections.length === 0 && content.trim()) {
-      extractedSections.push({
-        heading: 'Contenuto',
-        content: content,
-        subSections: [],
-        className: 'post-section-contenuto'
-      });
-    }
-
-    headings.value = extractedHeadings;
-    structuredContent.value = extractedSections;
-
-    // Mark content as processed - triggers UI update
-    isContentProcessed.value = true;
-
-  } catch (error) {
-    console.error('Content processing error:', error);
-    // Don't throw - show raw content instead
-    isContentProcessed.value = true;
-  }
-}
-
-// Client-side content processing after mount
-onMounted(() => {
-  if (process.client && postData.value?.content) {
-    processContent(postData.value.content);
-  }
-});
-
-// Watch for route changes during SPA navigation (client-side only)
-// Watch the route params, not the content itself to avoid race conditions
-watch(() => route.params.uri, async () => {
-  if (process.client) {
-    // Wait for next tick to ensure data is updated
-    await nextTick();
-    if (postData.value?.content) {
-      // Reset flag to show raw content during processing
-      isContentProcessed.value = false;
-      // Process content
-      processContent(postData.value.content);
-    }
-  }
-});
-
-// Compute all headings
+// Compute all headings (now from server-processed data)
 const allHeadings = computed(() => {
   const staticHeadings = ["Proprietà terapeutiche", "Nome scientifico", "Parti usate", "Nome comune"];
 
@@ -650,12 +481,7 @@ onMounted(() => {
   if (process.client) {
     window.addEventListener('click', handleClickOutside);
     window.addEventListener('scroll', handleScrollPage, { passive: true });
-
-    // Ensure we process content client-side as in URI BLOG POST
-    if (postData.value?.content) {
-      isContentProcessed.value = false;
-      processContent(postData.value.content);
-    }
+    // Content is now processed server-side - no client-side processing needed
   }
 });
 
