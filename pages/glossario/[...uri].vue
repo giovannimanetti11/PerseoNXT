@@ -11,8 +11,6 @@
 
     <!-- Content state -->
     <div v-else-if="glossaryTerm" id="post">
-      <SchemaMarkup :glossaryTerm="glossaryTerm" />
-
       <!-- Header section -->
       <section class="postGlossario-info-section flex flex-col md:flex-row py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl print:py-2 print:px-0 print:w-full">
         <div class="mt-10 md:mt-20 container mx-auto w-full md:w-3/5 px-2 md:px-4 print:mt-8 print:px-0">
@@ -83,7 +81,7 @@
 </template>
 
 <script setup>
-import { ref, computed, defineAsyncComponent } from 'vue';
+import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useGraphQL } from '~/composables/useGraphQL';
 import { useContentProcessor } from '~/composables/useContentProcessor';
@@ -93,11 +91,6 @@ import { useHead } from '#app';
 import ContentTooltip from '~/components/contentTooltip.vue';
 import GlossarioInfo from '~/components/glossario/glossarioinfo.vue';
 import Breadcrumbs from '~/components/breadcrumbs.vue';
-
-// Lazy load non-critical components
-const SchemaMarkup = defineAsyncComponent(() =>
-  import('~/components/schemaMarkup.vue')
-);
 
 const route = useRoute();
 const { query } = useGraphQL();
@@ -210,9 +203,13 @@ const seoImage = computed(() =>
   'https://wikiherbalist.com/images/default-og-image.jpg'
 );
 
+// Computed for featured image
+const featuredImage = computed(() => glossaryTerm.value?.featuredImage?.node || null);
+
 // Set meta tags with useHead at top level
 useHead({
   title: seoTitle,
+  titleTemplate: null, // Disable parent titleTemplate - WordPress already includes " | Wikiherbalist"
   meta: [
     { name: 'description', content: seoDescription },
     { property: 'og:title', content: seoTitle },
@@ -223,7 +220,101 @@ useHead({
     { name: 'twitter:title', content: seoTitle },
     { name: 'twitter:description', content: seoDescription },
     { name: 'twitter:image', content: seoImage }
-  ]
+  ],
+  link: computed(() => {
+    const links = [];
+
+    // Add canonical URL
+    const baseUrl = 'https://wikiherbalist.com';
+    links.push({
+      rel: 'canonical',
+      href: `${baseUrl}${route.path}`
+    });
+
+    // Preload featured image for LCP optimization
+    if (featuredImage.value?.sourceUrl) {
+      links.push({
+        rel: 'preload',
+        as: 'image',
+        href: featuredImage.value.sourceUrl,
+        fetchpriority: 'high'
+      });
+    }
+    return links;
+  }),
+  script: computed(() => {
+    if (!glossaryTerm.value) return [];
+
+    const baseUrl = 'https://wikiherbalist.com';
+    const fullUrl = `${baseUrl}${route.fullPath}`;
+
+    // Build breadcrumb list
+    const breadcrumbList = {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      'itemListElement': [
+        {
+          '@type': 'ListItem',
+          'position': 1,
+          'name': 'Home',
+          'item': baseUrl
+        },
+        {
+          '@type': 'ListItem',
+          'position': 2,
+          'name': 'Glossario',
+          'item': `${baseUrl}/glossario`
+        },
+        {
+          '@type': 'ListItem',
+          'position': 3,
+          'name': glossaryTerm.value.title,
+          'item': fullUrl
+        }
+      ]
+    };
+
+    // Build glossary term schema (DefinedTerm)
+    const definedTerm = {
+      '@context': 'https://schema.org',
+      '@type': 'DefinedTerm',
+      '@id': `${fullUrl}#term`,
+      'name': glossaryTerm.value.title,
+      'description': glossaryTerm.value.seo?.metaDesc || glossaryTerm.value.title,
+      'image': featuredImage.value?.sourceUrl || `${baseUrl}/images/default-og-image.jpg`,
+      'inDefinedTermSet': {
+        '@type': 'DefinedTermSet',
+        'name': 'Glossario di Fitoterapia',
+        'url': `${baseUrl}/glossario`
+      },
+      'datePublished': glossaryTerm.value.date,
+      'dateModified': glossaryTerm.value.modified || glossaryTerm.value.date,
+      'author': {
+        '@type': 'Person',
+        'name': glossaryTerm.value.authorName || 'Team Wikiherbalist'
+      },
+      'publisher': {
+        '@type': 'Organization',
+        'name': 'Wikiherbalist',
+        'logo': {
+          '@type': 'ImageObject',
+          'url': `${baseUrl}/media/logo.png`
+        }
+      },
+      'inLanguage': 'it-IT'
+    };
+
+    return [
+      {
+        type: 'application/ld+json',
+        children: JSON.stringify(breadcrumbList)
+      },
+      {
+        type: 'application/ld+json',
+        children: JSON.stringify(definedTerm)
+      }
+    ];
+  })
 });
 
 // Content is now processed server-side - no client processing needed

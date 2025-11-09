@@ -376,6 +376,7 @@ const additionalImages = computed(() => {
 // Set meta tags with useHead at top level
 useHead({
   title: seoTitle,
+  titleTemplate: null, // Disable parent titleTemplate - WordPress already includes " | Wikiherbalist"
   meta: [
     { name: 'description', content: seoDescription },
     { property: 'og:title', content: seoTitle },
@@ -389,6 +390,14 @@ useHead({
   ],
   link: computed(() => {
     const links = [];
+
+    // Add canonical URL
+    const baseUrl = 'https://wikiherbalist.com';
+    links.push({
+      rel: 'canonical',
+      href: `${baseUrl}${route.path}`
+    });
+
     // Preload featured image for LCP optimization
     if (featuredImage.value?.sourceUrl) {
       links.push({
