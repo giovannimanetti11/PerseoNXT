@@ -66,6 +66,10 @@ useHead({
     {
       name: 'description',
       content: computed(() => errorDescription.value)
+    },
+    {
+      name: 'robots',
+      content: 'noindex'
     }
   ]
 })

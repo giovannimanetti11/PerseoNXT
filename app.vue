@@ -1,5 +1,5 @@
 <template>
-  <div :class="['app-loading', { 'app-loaded': isLoaded }]">
+  <div>
     <NuxtLayout>
       <NuxtLoadingIndicator />
       <NuxtPage />
@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, nextTick } from 'vue'
+import { computed, watch } from 'vue'
 import { useRoute, useHead, useSeoMeta } from '#app'
 import { useGraphQL } from '~/composables/useGraphQL'
 
@@ -62,7 +62,6 @@ const GET_PAGE_SEO_DATA = `
 
 // State and setup
 const route = useRoute()
-const isLoaded = ref(false)
 const baseUrl = 'https://wikiherbalist.com'
 const { query } = useGraphQL()
 
@@ -77,9 +76,11 @@ const isHomepage = computed(() => route.path === '/')
 
 const isBlogPost = computed(() => route.path.startsWith('/blog/') && route.path !== '/blog' && route.path !== '/blog/')
 
+const isGlossaryPost = computed(() => route.path.startsWith('/glossario/') && route.path !== '/glossario' && route.path !== '/glossario/')
+
 const isPost = computed(() => {
   const routeName = route.name as string
-  return !['about', 'index'].includes(routeName) && route.path !== '/' && !isBlogPost.value
+  return !['about', 'index'].includes(routeName) && route.path !== '/' && !isBlogPost.value && !isGlossaryPost.value
 })
 
 // Async data fetching with useAsyncData
@@ -89,8 +90,8 @@ const { data: seoData } = useAsyncData(
     const routeName = route.name as string
 
     try {
-      // Skip SEO management for blog posts - handled in blog page component
-      if (isBlogPost.value) {
+      // Skip SEO management for blog posts, glossary posts, and plant posts - handled in their respective page components
+      if (isBlogPost.value || isGlossaryPost.value || isPost.value) {
         return null
       }
 
@@ -155,6 +156,11 @@ const { data: seoData } = useAsyncData(
 
 // Watch for SEO data changes and update meta tags
 watch(seoData, (newData) => {
+  // Skip SEO management for pages that handle their own SEO (blog posts, glossary posts, plant posts)
+  if (isBlogPost.value || isGlossaryPost.value || isPost.value) {
+    return
+  }
+
   if (!newData) return
 
   const seo = newData.seo || {}
@@ -197,25 +203,9 @@ watch(seoData, (newData) => {
     twitterImage: seo.opengraphImage?.sourceUrl || `${baseUrl}/media/og-image.jpg`
   })
 }, { immediate: true })
-
-// Lifecycle hooks
-onMounted(() => {
-  nextTick(() => {
-    isLoaded.value = true
-  })
-})
 </script>
 
 <style>
-.app-loading {
-  opacity: 0;
-  transition: opacity 0.3s ease-in;
-}
-
-.app-loaded {
-  opacity: 1;
-}
-
 .debug-info {
   position: fixed;
   bottom: 10px;

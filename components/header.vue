@@ -4,13 +4,13 @@
       <!-- Logo -->
       <div class="flex items-center">
         <a href="/" v-once>
-          <img 
-            src="/media/logo_wikiherbalist.svg" 
-            alt="Wikiherbalist Logo" 
-            width="144" 
-            height="18.53" 
-            class="w-28 lg:w-32 xl:w-36 mr-2" 
-            loading="lazy"
+          <img
+            src="/media/logo_wikiherbalist.svg"
+            alt="Wikiherbalist Logo"
+            width="144"
+            height="18.53"
+            class="w-28 lg:w-32 xl:w-36 mr-2"
+            loading="eager"
           />
         </a>
       </div>
