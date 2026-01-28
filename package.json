@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build && sudo chown -R ubuntu:www-data .output && sudo ln -sfn /var/www/admin.wikiherbalist.com/wp-content .output/public/wp-content",
+    "build": "nuxt build && sudo chown -R ubuntu:www-data .output && sudo ln -sfn /mnt/md0/www/admin.wikiherbalist.com/wp-content .output/public/wp-content",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
