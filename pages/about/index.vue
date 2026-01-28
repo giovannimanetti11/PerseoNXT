@@ -4,9 +4,12 @@
       <div v-if="pending" class="flex justify-center items-center h-64">
         <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
       </div>
-      <div v-else-if="error" class="text-center text-red-600 font-semibold">
-        {{ error.message }}
-      </div>
+      <ErrorState
+        v-else-if="error"
+        type="error"
+        title="Pagina non disponibile"
+        message="Impossibile caricare le informazioni. Prova a ricaricare la pagina."
+      />
       <div v-else>
         <!-- About Content -->
         <div class="mt-16 mb-20">

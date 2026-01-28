@@ -6,9 +6,12 @@
       <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
       <span class="sr-only">Caricamento in corso...</span>
     </div>
-    <div v-else-if="error" class="text-red-500 text-center" role="alert">
-      Si è verificato un errore nel caricamento dei dati. Riprova più tardi.
-    </div>
+    <ErrorState
+      v-else-if="error"
+      type="error"
+      title="Impossibile caricare il glossario"
+      message="Si è verificato un problema nel recuperare i termini. Prova a ricaricare la pagina."
+    />
     <div v-else-if="glossaryTerms.length" class="flex justify-center mt-14">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-4xl">
         <div v-for="(terms, letter) in groupedTerms" :key="letter" class="mb-6 flex flex-row ml-4 md:ml-0">
@@ -23,9 +26,14 @@
         </div>
       </div>
     </div>
-    <div v-else class="text-center mt-8" role="status" aria-live="polite">
-      Nessun termine trovato nel glossario.
-    </div>
+    <ErrorState
+      v-else
+      type="empty"
+      title="Nessun termine trovato"
+      message="Il glossario non contiene ancora termini. Torna a trovarci presto!"
+      :show-retry="false"
+      :show-contact="false"
+    />
   </section>
   <Contacts />
 </template>
