@@ -3,7 +3,7 @@ name: Test, Build and Deploy
 # Workflow triggers:
 # 1. Push automatico:
 #    - main/master: esegue test + deploy automatico
-#    - feature/**:   esegue solo test (no deploy)
+#    - feature/**:  esegue solo test (no deploy)
 # 2. Pull Request: esegue solo test
 # 3. Manuale (workflow_dispatch):
 #    - Vai su Actions → "Test, Build and Deploy" → "Run workflow"
@@ -74,7 +74,7 @@ jobs:
         run: npm run test:integration
 
   deploy:
-    name: Deploy to Production VPS
+    name: Deploy to Production Server
     runs-on: ubuntu-latest
     needs: test
     # Deploy se: push a main/master OPPURE workflow_dispatch con deploy=true
