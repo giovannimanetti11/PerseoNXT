@@ -4,9 +4,13 @@
       <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
     </div>
 
-    <div v-else-if="error" class="text-red-500 text-center mt-4">
-      Si è verificato un errore nel caricamento dei dati: {{ error }}
-    </div>
+    <ErrorState
+      v-else-if="error"
+      type="error"
+      title="Impossibile caricare le proprietà"
+      message="Si è verificato un problema nel recuperare i dati. Prova a ricaricare la pagina."
+      :show-contact="false"
+    />
 
     <div v-else>
       <!-- Alphabet navigation -->

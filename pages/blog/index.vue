@@ -6,9 +6,12 @@
       <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
       <span class="sr-only">Caricamento in corso...</span>
     </div>
-    <div v-else-if="error" class="text-red-500 text-center" role="alert">
-      Si è verificato un errore nel caricamento dei dati. Riprova più tardi.
-    </div>
+    <ErrorState
+      v-else-if="error"
+      type="error"
+      title="Impossibile caricare il blog"
+      message="Si è verificato un problema nel recuperare gli articoli. Prova a ricaricare la pagina."
+    />
     <template v-else>
       <div v-if="featuredPost" class="featured-post flex flex-col mb-6 w-11/12 md:w-2/3 m-auto mt-24 bg-white rounded-2xl p-4">
         <div class="flex flex-col md:flex-row w-full">

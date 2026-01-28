@@ -6,29 +6,13 @@
       <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
       <span class="sr-only">Caricamento in corso...</span>
     </div>
-    <div v-else-if="error" class="text-center mt-8" role="alert" aria-live="polite">
-      <div class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow text-left">
-        <p class="text-2xl font-semibold text-black mb-2">Ops — problema nel caricamento</p>
-        <p class="text-sm text-gray-600 mb-4">
-          Sembra ci sia stato un problema nel recuperare i dati. Prova a ricare la pagina o contattaci se il problema persiste.
-        </p>
-        <div class="flex justify-center gap-3">
-          <button
-            @click="refresh"
-            class="px-4 py-2 bg-blu text-white rounded-md hover:opacity-90 focus:outline-none"
-            aria-label="Riprova a caricare i contenuti"
-          >
-            Ricarica
-          </button>
-          <NuxtLink
-            to="/contact"
-            class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100"
-          >
-            Contattaci
-          </NuxtLink>
-        </div>
-      </div>
-    </div>
+    <ErrorState
+      v-else-if="error"
+      type="error"
+      title="Impossibile caricare le piante"
+      message="Si è verificato un problema nel recuperare le piante medicinali. Prova a ricaricare la pagina."
+      @retry="refresh"
+    />
     <div v-else-if="posts.length" class="flex justify-center mt-14">
       <div class="grid grid-cols-1 px-2 md:grid-cols-2 gap-4 w-full max-w-4xl">
         <div v-for="(posts, letter) in groupedPosts" :key="letter" class="mb-6 flex flex-row ml-4 md:ml-0">
@@ -44,9 +28,14 @@
         </div>
       </div>
     </div>
-    <div v-else class="text-center mt-8" role="status" aria-live="polite">
-      Nessuna pianta medicinale trovata.
-    </div>
+    <ErrorState
+      v-else
+      type="empty"
+      title="Nessuna pianta trovata"
+      message="Non ci sono ancora piante medicinali nel database. Torna a trovarci presto!"
+      :show-retry="false"
+      :show-contact="false"
+    />
   </section>
   <Contacts />
 </template>

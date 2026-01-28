@@ -19,9 +19,13 @@
         <div v-if="pending" class="flex justify-center items-center h-full">
           <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
         </div>
-        <div v-else-if="error" class="text-red-500 text-center">
-          Si è verificato un errore: {{ error }}
-        </div>
+        <ErrorState
+          v-else-if="error"
+          type="error"
+          title="Blog non disponibile"
+          message="Impossibile caricare gli articoli del blog."
+          :show-contact="false"
+        />
         <div v-else class="w-full flex flex-col xl:absolute xl:inset-0">
           <div v-for="(post, index) in posts" :key="post.uri"
                :class="[

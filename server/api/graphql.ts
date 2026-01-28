@@ -30,10 +30,8 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  // Prepare GraphQL endpoint
-  // Use HTTP localhost:8080 for SSR to avoid Cloudflare Origin Certificate issues
-  // Port 8080 is configured for local-only access in Apache
-  const endpoint = 'http://127.0.0.1:8080/graphql'
+  // Prepare GraphQL endpoint from environment variable
+  const endpoint = config.graphqlEndpoint
 
   // Prepare headers with Basic Auth
   const credentials = `${config.wpUsername}:${config.wpAppPassword}`

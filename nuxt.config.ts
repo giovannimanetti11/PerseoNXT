@@ -81,6 +81,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     // Private keys - only available server-side
     wpBaseUrl: process.env.WP_BASE_URL || 'https://admin.wikiherbalist.com/graphql',
+    graphqlEndpoint: process.env.GRAPHQL_ENDPOINT,
     wpUsername: process.env.WP_USERNAME,
     wpAppPassword: process.env.WP_APP_PASSWORD,
     pubMedApiKey: process.env.PUBMED_API_KEY,
@@ -105,6 +106,7 @@ export default defineNuxtConfig({
     public: {
       siteName: 'Wikiherbalist',
       recaptchaPublicKey: process.env.RECAPTCHA_PUBLIC_KEY,
+      paypalClientId: process.env.PAYPAL_CLIENT_ID,
       algolia: {
         applicationId: process.env.NUXT_PUBLIC_ALGOLIA_APP_ID,
         apiKey: process.env.NUXT_PUBLIC_ALGOLIA_SEARCH_API_KEY,
@@ -121,7 +123,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxtjs/seo',
     "nuxt-schema-org",
-    // 'simple-donation', // Temporarily disabled - incompatible with Nuxt 4
+    // 'simple-donation', // Using manual import due to Nuxt 4 incompatibility
     '@nuxtjs/algolia'
   ],
 
@@ -175,7 +177,10 @@ export default defineNuxtConfig({
   },
 
   // CSS configuration
-  css: ['~/assets/css/main.css'],
+  css: [
+    '~/assets/css/main.css',
+    'simple-donation/runtime/styles/style.css'
+  ],
 
   // Plugins configuration
   plugins: [
@@ -312,8 +317,8 @@ export default defineNuxtConfig({
         '/about',
         '/disclaimer',
         '/privacy-policy',
-        '/cookie-policy'
-        // '/donazioni'  // Disabled temporarily
+        '/cookie-policy',
+        '/donazioni'
       ]
     }
   },
