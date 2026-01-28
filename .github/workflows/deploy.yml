@@ -97,22 +97,7 @@ jobs:
         id: commit
         run: echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
-      - name: Clean old files on VPS
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          port: 2222
-          script: |
-            cd $DEPLOY_PATH
-            echo "=== Before cleanup ==="
-            ls -la pages/
-            sudo rm -rf .nuxt .output node_modules package-lock.json
-            sudo chown -R $USER:$USER .
-            echo "=== After cleanup ==="
-
-      - name: Deploy to VPS via rsync
+      - name: Deploy, build and restart
         uses: appleboy/ssh-action@v1.0.3
         env:
           COMMIT_SHA: ${{ steps.commit.outputs.sha }}
@@ -121,44 +106,30 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 2222
+          command_timeout: 20m
           envs: COMMIT_SHA
           script: |
             cd $DEPLOY_PATH
+
             echo "=== Pulling latest code ==="
             git fetch origin
-            echo "=== Deploying commit: $COMMIT_SHA ==="
             git reset --hard $COMMIT_SHA
-            echo "=== Current commit ==="
-            git log --oneline -1
-            echo "=== Files in pages/ ==="
-            ls -la pages/
-            echo "=== Content of pages/glossario/[...uri].vue (first 20 lines) ==="
-            head -20 pages/glossario/\[...uri\].vue
+            echo "Deploying commit: $(git log --oneline -1)"
 
-      - name: Build and restart on VPS
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USERNAME }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          port: 2222
-          script: |
-            cd $DEPLOY_PATH
+            echo "=== Cleaning build cache ==="
+            sudo rm -rf .nuxt
 
             echo "=== Installing dependencies ==="
             sudo npm install || { echo "npm install failed"; exit 1; }
 
-            echo "=== Building application ==="
+            echo "=== Building application (site stays up during build) ==="
             sudo npm run build || { echo "Build failed!"; exit 1; }
 
-            echo "=== Checking build output ==="
-            ls -la .output/server/
-
             echo "=== Restarting PM2 ==="
-            sudo pm2 restart wikiherbalist || { echo "PM2 restart failed!"; exit 1; }
-            
+            sudo pm2 restart wikiherbalist || sudo pm2 start .output/server/index.mjs --name wikiherbalist -- --port 3010
+            sudo pm2 save
+
             echo "=== PM2 status ==="
             sudo pm2 list
 
-            echo "=== Deployment completed successfully! ==="
-            echo "Deployed commit: $(git log --oneline -1)"
+            echo "=== Deployment completed! ==="
