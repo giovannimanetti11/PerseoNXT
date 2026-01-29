@@ -159,8 +159,8 @@ const goToPost = (uri) => {
   // Ensure URI is a string
   const uriString = typeof uri === 'string' ? uri : String(uri);
 
-  // Ensure URI starts with /
-  const cleanUri = uriString.startsWith('/') ? uriString : `/${uriString}`;
+  // Normalize URI: ensure single leading slash, remove double slashes
+  const cleanUri = ('/' + uriString.replace(/^\/+/, '')).replace(/\/\/+/g, '/');
 
   console.log('Navigating to:', cleanUri);
 
