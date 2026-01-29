@@ -1,30 +1,36 @@
 export default defineNuxtPlugin(() => {
     const route = useRoute()
     const baseUrl = 'https://wikiherbalist.com'
-  
+
     // Helper function to clean and normalize URLs
     const normalizeUrl = (url: string): string => {
+      // Remove double slashes in path (keep protocol //)
+      url = url.replace(/([^:])\/\/+/g, '$1/')
       // Remove trailing slashes except for homepage
-      if (url !== baseUrl && url.endsWith('/')) {
+      if (url !== baseUrl + '/' && url.endsWith('/')) {
         url = url.slice(0, -1)
       }
       return url
     }
-  
+
     // Watch route changes to update canonical
     watch(() => route.fullPath, () => {
       let url = `${baseUrl}${route.path}`
-      
+
       // Special handling for dynamic routes
       if (route.name === '[...uri]') {
-        const uri = Array.isArray(route.params.uri) 
-          ? route.params.uri.join('/') 
+        const uri = Array.isArray(route.params.uri)
+          ? route.params.uri.join('/')
           : route.params.uri
-        url = `${baseUrl}/${uri}`
+        if (uri) {
+          url = `${baseUrl}/${uri}`
+        } else {
+          url = baseUrl
+        }
       }
-  
+
       const normalizedUrl = normalizeUrl(url)
-  
+
       // Update canonical link
       useHead({
         link: [
