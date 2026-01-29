@@ -278,6 +278,13 @@ export default defineNuxtConfig({
   nitro: {
     compressPublicAssets: true,
     routeRules: {
+      // Block _ipx image proxy from indexing
+      '/_ipx/**': {
+        headers: {
+          'X-Robots-Tag': 'noindex, nofollow'
+        }
+      },
+
       // API routes: no cache + CORS headers
       '/api/**': {
         cache: false,

@@ -12,10 +12,13 @@ export function useGraphQL() {
   const transformMediaUrls = (data: any): any => {
     // Handle string values - replace admin domain with main domain for wp-content paths
     if (typeof data === 'string') {
-      return data.replace(
+      let result = data.replace(
         /https?:\/\/admin\.wikiherbalist\.com\/wp-content\//g,
         'https://wikiherbalist.com/wp-content/'
       )
+      // Fix double slashes in internal paths (but preserve protocol //)
+      result = result.replace(/([^:])\/\/+/g, '$1/')
+      return result
     }
 
     // Handle arrays recursively
