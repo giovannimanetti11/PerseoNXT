@@ -1,9 +1,9 @@
 User-agent: *
 Disallow: /_nuxt/
+Disallow: /_ipx/
 Disallow: /api/
 Disallow: /search/
 Disallow: /tag/
-Disallow: /\d+-\d+$
 Disallow: /algoliaBlogPostsUpdate
 Disallow: /algoliaGlossaryUpdate
 Disallow: /algoliaUpdate

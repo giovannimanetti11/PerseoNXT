@@ -117,10 +117,15 @@ const showTooltip = async (event: MouseEvent | Event) => {
     // Extract slug from absolute or relative link
     let slug = href;
     if (href.includes('wikiherbalist.com')) {
-      const url = new URL(href);
-      slug = url.pathname;
+      try {
+        const url = new URL(href, 'https://wikiherbalist.com');
+        slug = url.pathname;
+      } catch {
+        // If URL parsing fails, use href as-is
+      }
     }
-    slug = slug.replace(/^\//, '').replace(/^glossario\//, '');
+    // Remove leading slashes, double slashes, and glossario prefix
+    slug = slug.replace(/\/\/+/g, '/').replace(/^\//, '').replace(/^glossario\//, '');
     const isGlossary = href.includes('/glossario/');
 
     try {
