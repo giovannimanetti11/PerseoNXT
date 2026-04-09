@@ -171,29 +171,102 @@
         </section>
 
         <!-- Dynamic content sections -->
-        <section v-for="(section, index) in structuredContent"
-                 :class="['post-content-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4', section.className]"
-                 :id="'section' + (postData.costituenti && !hasFitochimicaSection ? 5 + index + 1 : 5 + index)"
-                 :key="section.heading">
-          <div class="flex items-center space-x-4" v-if="section.heading !== 'Riferimenti'">
-            <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">{{ postData.costituenti && !hasFitochimicaSection ? 5 + index + 1 : 5 + index }}</div>
-            <h3 class="text-xl md:text-2xl">{{ section.heading }}</h3>
-          </div>
-          <h3 v-else class="text-xl md:text-2xl mb-4">{{ section.heading }}</h3>
+        <template v-for="(section, index) in structuredContent" :key="section.heading">
+          <!-- Drug interactions section - inserted before Riferimenti -->
+          <section
+            v-if="section.heading === 'Riferimenti' && hasInteractions"
+            class="post-content-section post-section-interazioni flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full"
+            :id="'section' + (allHeadings.indexOf('Interazioni con farmaci') + 1)"
+          >
+            <div class="flex items-center space-x-4">
+              <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">{{ allHeadings.indexOf('Interazioni con farmaci') + 1 }}</div>
+              <h3 class="text-xl md:text-2xl">Interazioni con farmaci</h3>
+            </div>
 
-          <div class="mt-4">
-            <ContentTooltip
-              v-if="section.content"
-              :content="section.content"
-            />
+            <div class="mt-4 md:mt-8">
+              <!-- EMA source badge and PDF link -->
+              <div v-if="postData.interazioniSource === 'ema_assessment' || postData.interazioniSource === 'ema_monograph'" class="flex flex-wrap items-center gap-3 mb-4">
+                <span class="text-xs font-medium px-3 py-1 rounded-full bg-verde text-white">Fonte: EMA HMPC</span>
+                <a v-if="postData.emaMonografiaUrl" :href="postData.emaMonografiaUrl" target="_blank" rel="noopener noreferrer"
+                   class="ema-link text-xs font-medium px-3 py-1 rounded-full bg-blu text-white hover:bg-celeste transition-colors">
+                  Documento EMA (PDF)
+                </a>
+                <a v-if="postData.emaPageUrl" :href="postData.emaPageUrl" target="_blank" rel="noopener noreferrer"
+                   class="ema-link text-xs font-medium px-3 py-1 rounded-full border border-blu text-blu hover:bg-blu hover:text-white transition-colors">
+                  Pagina EMA
+                </a>
+              </div>
+              <!-- drugs.com source badge -->
+              <div v-else-if="postData.interazioniSource === 'drugscom'" class="flex flex-wrap items-center gap-3 mb-4">
+                <a v-if="postData.drugscomUrl" :href="postData.drugscomUrl" target="_blank" rel="noopener noreferrer"
+                   class="ema-link text-xs font-medium px-3 py-1 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors">
+                  Fonte: Drugs.com
+                </a>
+                <span v-else class="text-xs font-medium px-3 py-1 rounded-full bg-gray-200 text-gray-700">Fonte: Drugs.com</span>
+              </div>
+
+              <div class="mt-4 whitespace-pre-line">{{ postData.interazioniFarmaci }}</div>
+
+              <p class="mt-6 text-xs text-gray-500 italic">
+                Le informazioni sulle interazioni con farmaci sono fornite a scopo informativo e non sostituiscono il parere del medico o del farmacista. Consultare sempre un professionista sanitario prima di assumere rimedi fitoterapici in combinazione con farmaci.
+              </p>
+            </div>
+          </section>
+
+          <!-- Normal content section -->
+          <section
+            :class="['post-content-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4', section.className]"
+            :id="'section' + (allHeadings.indexOf(section.heading) + 1)"
+          >
+            <div class="flex items-center space-x-4" v-if="section.heading !== 'Riferimenti'">
+              <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">{{ allHeadings.indexOf(section.heading) + 1 }}</div>
+              <h3 class="text-xl md:text-2xl">{{ section.heading }}</h3>
+            </div>
+            <h3 v-else class="text-xl md:text-2xl mb-4">{{ section.heading }}</h3>
+
+            <div class="mt-4">
+              <ContentTooltip v-if="section.content" :content="section.content" />
+            </div>
+
+            <div v-for="(subSection, subIndex) in section.subSections" :key="subIndex" class="mt-6">
+              <h4 class="text-lg md:text-xl font-semibold mb-2">{{ subSection.heading }}</h4>
+              <ContentTooltip v-if="subSection.content" :content="subSection.content" />
+            </div>
+          </section>
+        </template>
+
+        <!-- Drug interactions section when no Riferimenti exists -->
+        <section
+          v-if="hasInteractions && !structuredContent.some(s => s.heading === 'Riferimenti')"
+          class="post-content-section post-section-interazioni flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4 print:py-2 print:px-0 print:w-full"
+          :id="'section' + (allHeadings.indexOf('Interazioni con farmaci') + 1)"
+        >
+          <div class="flex items-center space-x-4">
+            <div class="flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 bg-blu text-white rounded-full text-base md:text-lg font-bold" aria-hidden="true">{{ allHeadings.indexOf('Interazioni con farmaci') + 1 }}</div>
+            <h3 class="text-xl md:text-2xl">Interazioni con farmaci</h3>
           </div>
 
-          <div v-for="(subSection, subIndex) in section.subSections" :key="subIndex" class="mt-6">
-            <h4 class="text-lg md:text-xl font-semibold mb-2">{{ subSection.heading }}</h4>
-            <ContentTooltip
-              v-if="subSection.content"
-              :content="subSection.content"
-            />
+          <div class="mt-4 md:mt-8">
+            <div v-if="postData.interazioniSource === 'ema_assessment' || postData.interazioniSource === 'ema_monograph'" class="flex flex-wrap items-center gap-3 mb-4">
+              <span class="text-xs font-medium px-3 py-1 rounded-full bg-verde text-white">Fonte: EMA HMPC</span>
+              <a v-if="postData.emaMonografiaUrl" :href="postData.emaMonografiaUrl" target="_blank" rel="noopener noreferrer"
+                 class="text-xs font-medium px-3 py-1 rounded-full bg-blu text-white hover:bg-celeste transition-colors">
+                Documento EMA (PDF)
+              </a>
+              <a v-if="postData.emaPageUrl" :href="postData.emaPageUrl" target="_blank" rel="noopener noreferrer"
+                 class="text-xs font-medium px-3 py-1 rounded-full border border-blu text-blu hover:bg-blu hover:text-white transition-colors">
+                Pagina EMA
+              </a>
+            </div>
+            <div v-else-if="postData.interazioniSource === 'drugscom'" class="flex flex-wrap items-center gap-3 mb-4">
+              <span class="text-xs font-medium px-3 py-1 rounded-full bg-gray-200 text-gray-700">Fonte: Drugs.com</span>
+            </div>
+
+            <div class="bg-white rounded-xl p-4 md:p-6 text-sm leading-relaxed text-gray-700 whitespace-pre-line max-h-96 overflow-y-auto">{{ postData.interazioniFarmaci }}</div>
+
+            <p class="mt-4 text-xs text-gray-500 italic">
+              Le informazioni sulle interazioni con farmaci sono fornite a scopo informativo e non sostituiscono il parere del medico o del farmacista. Consultare sempre un professionista sanitario prima di assumere rimedi fitoterapici in combinazione con farmaci.
+            </p>
           </div>
         </section>
 
@@ -249,6 +322,11 @@ const FETCH_POST_BY_SLUG = `
       partiUsate
       nomeComune
       costituenti
+      interazioniFarmaci
+      emaMonografiaUrl
+      emaPageUrl
+      interazioniSource
+      drugscomUrl
       modified
       seo {
         title
@@ -441,10 +519,18 @@ useHead({
       ]
     };
 
-    // Build main article schema
+    // Build main article schema (MedicalWebPage for better medical content signals)
+    const tagNames = postData.value.tags?.nodes?.map((t: { name: string }) => t.name) || [];
+    const keywordParts = [
+      postData.value.title,
+      postData.value.nomeScientifico,
+      ...postData.value.nomeComune ? postData.value.nomeComune.split(/[;,]/).map((s: string) => s.trim()) : [],
+      ...tagNames
+    ].filter(Boolean);
+
     const article = {
       '@context': 'https://schema.org',
-      '@type': 'Article',
+      '@type': ['Article', 'MedicalWebPage'],
       '@id': `${fullUrl}#article`,
       'headline': postData.value.title,
       'description': postData.value.seo?.metaDesc || postData.value.title,
@@ -453,11 +539,17 @@ useHead({
       'dateModified': postData.value.modified || postData.value.date,
       'author': {
         '@type': 'Person',
-        'name': postData.value.authorName || 'Team Wikiherbalist'
+        'name': postData.value.authorName || 'Team Wikiherbalist',
+        'worksFor': {
+          '@type': 'Organization',
+          'name': 'Wikiherbalist',
+          'url': baseUrl
+        }
       },
       'publisher': {
         '@type': 'Organization',
         'name': 'Wikiherbalist',
+        'url': baseUrl,
         'logo': {
           '@type': 'ImageObject',
           'url': `${baseUrl}/media/logo.png`
@@ -468,12 +560,29 @@ useHead({
         '@id': fullUrl
       },
       'about': {
-        '@type': ['MedicalEntity', 'Substance'],
+        '@type': 'DietarySupplement',
         'name': postData.value.title,
-        'alternateName': postData.value.nomeScientifico
+        'alternateName': [
+          postData.value.nomeScientifico,
+          ...postData.value.nomeComune ? postData.value.nomeComune.split(/[;,]/).map((s: string) => s.trim()) : []
+        ].filter(Boolean),
+        'activeIngredient': postData.value.costituenti || undefined,
+        'relevantSpecialty': 'Phytotherapy'
       },
+      'specialty': 'Phytotherapy',
+      'medicalAudience': {
+        '@type': 'PatientConsumerAudience',
+        'audienceType': 'patient'
+      },
+      'keywords': keywordParts.join(', '),
       'articleSection': 'Fitoterapia',
-      'inLanguage': 'it-IT'
+      'inLanguage': 'it-IT',
+      'isPartOf': {
+        '@type': 'WebSite',
+        '@id': `${baseUrl}/#website`,
+        'name': 'Wikiherbalist',
+        'url': baseUrl
+      }
     };
 
     return [
@@ -490,15 +599,29 @@ useHead({
 });
 
 // Compute all headings (now from server-processed data)
+const hasInteractions = computed(() =>
+  !!(postData.value?.interazioniFarmaci && postData.value?.interazioniSource !== 'none')
+);
+
 const allHeadings = computed(() => {
   const staticHeadings = ["Proprietà terapeutiche", "Nome scientifico", "Parti usate", "Nome comune"];
 
-  // Only add "Fitochimica" to static headings if it doesn't exist in headings
   if (!headings.value.includes("Fitochimica") && postData.value?.costituenti) {
     staticHeadings.push("Fitochimica");
   }
 
-  return [...staticHeadings, ...headings.value];
+  const dynamicHeadings = [...headings.value];
+
+  if (hasInteractions.value) {
+    const rifIndex = dynamicHeadings.indexOf('Riferimenti');
+    if (rifIndex !== -1) {
+      dynamicHeadings.splice(rifIndex, 0, 'Interazioni con farmaci');
+    } else {
+      dynamicHeadings.push('Interazioni con farmaci');
+    }
+  }
+
+  return [...staticHeadings, ...dynamicHeadings];
 });
 
 // Parse comma-separated string into array

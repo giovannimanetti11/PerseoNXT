@@ -1,9 +1,10 @@
 # Config/AUTH
 .env
 
-# Documentation files (except README.md)
+# Documentation files (except README.md and CHANGELOG.md)
 *.md
 !README.md
+!CHANGELOG.md
 
 #pm2
 

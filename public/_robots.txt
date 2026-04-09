@@ -8,4 +8,29 @@ Disallow: /algoliaBlogPostsUpdate
 Disallow: /algoliaGlossaryUpdate
 Disallow: /algoliaUpdate
 
+# Block aggressive scrapers and training crawlers
+User-agent: CCBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: PetalBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DataForSeoBot
+Disallow: /
+
+# Allow AI search assistants (GEO)
+# GPTBot, Google-Extended, PerplexityBot -> allowed by default
+
 Sitemap: https://wikiherbalist.com/sitemap.xml
