@@ -161,8 +161,46 @@ const groupedPosts = computed<GroupedPosts>(() => {
   );
 });
 
+const baseUrl = 'https://wikiherbalist.com'
+
 useHead({
-  title: 'Piante medicinali'
+  title: 'Piante medicinali',
+  link: [
+    { rel: 'canonical', href: `${baseUrl}/piante-medicinali` }
+  ],
+  script: computed(() => {
+    if (!posts.value?.length) return []
+    const itemList = {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      'name': 'Enciclopedia delle piante medicinali',
+      'description': 'Elenco completo delle piante medicinali e aromatiche con monografie scientifiche.',
+      'url': `${baseUrl}/piante-medicinali`,
+      'numberOfItems': posts.value.length,
+      'itemListElement': posts.value.map((post, index) => ({
+        '@type': 'ListItem',
+        'position': index + 1,
+        'name': post.title,
+        'url': `${baseUrl}/${post.slug}`,
+        'item': {
+          '@type': 'DietarySupplement',
+          'name': post.title,
+          'alternateName': post.nomeScientifico || undefined,
+          'url': `${baseUrl}/${post.slug}`
+        }
+      }))
+    }
+    return [{ type: 'application/ld+json', children: JSON.stringify(itemList) }]
+  })
+})
+
+useSeoMeta({
+  description: 'Elenco completo delle piante medicinali e aromatiche: schede monografiche con proprietà, usi terapeutici, botanica e ricerca scientifica.',
+  ogTitle: 'Piante medicinali | Wikiherbalist',
+  ogDescription: 'Elenco completo delle piante medicinali e aromatiche: schede monografiche con proprietà, usi terapeutici, botanica e ricerca scientifica.',
+  ogUrl: 'https://wikiherbalist.com/piante-medicinali',
+  twitterTitle: 'Piante medicinali | Wikiherbalist',
+  twitterDescription: 'Elenco completo delle piante medicinali e aromatiche: schede monografiche con proprietà, usi terapeutici, botanica e ricerca scientifica.',
 })
 
 const refresh = () => {

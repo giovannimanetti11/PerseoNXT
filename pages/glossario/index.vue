@@ -119,7 +119,32 @@ useHead({
   ],
   link: [
     { rel: 'canonical', href: `${baseUrl}/glossario` }
-  ]
+  ],
+  script: computed(() => {
+    if (!glossaryTerms.value?.length) return []
+    const definedTermSet = {
+      '@context': 'https://schema.org',
+      '@type': ['ItemList', 'DefinedTermSet'],
+      'name': 'Glossario di Fitoterapia e Botanica',
+      'description': 'Glossario completo dei termini botanici, farmacologici e fitoterapici utilizzati nelle monografie di piante medicinali.',
+      'url': `${baseUrl}/glossario`,
+      'inLanguage': 'it-IT',
+      'numberOfItems': glossaryTerms.value.length,
+      'itemListElement': glossaryTerms.value.map((term, index) => ({
+        '@type': 'ListItem',
+        'position': index + 1,
+        'name': term.title,
+        'url': `${baseUrl}/glossario/${term.slug}`,
+        'item': {
+          '@type': 'DefinedTerm',
+          'name': term.title,
+          'url': `${baseUrl}/glossario/${term.slug}`,
+          'inDefinedTermSet': `${baseUrl}/glossario`
+        }
+      }))
+    }
+    return [{ type: 'application/ld+json', children: JSON.stringify(definedTermSet) }]
+  })
 })
 </script>
 

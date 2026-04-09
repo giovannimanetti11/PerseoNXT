@@ -15,4 +15,7 @@ All notable changes to this project are documented in this file.
 - `pages/[...uri].vue`: Added `keywords` field to schema, generated dynamically from plant name, scientific name, common names and therapeutic tags
 - `pages/[...uri].vue`: Enriched `author` schema with `worksFor` Organization node for stronger E-E-A-T signals
 - `pages/[...uri].vue`: Added `isPartOf` WebSite node to schema for better graph connectivity
+- `pages/piante-medicinali/index.vue`: Added `ItemList` + `DietarySupplement` JSON-LD schema with all monographs enumerated; added canonical link
+- `pages/glossario/index.vue`: Added `ItemList` + `DefinedTermSet` JSON-LD schema with all glossary terms enumerated
+- `server/api/sitemap.xml.ts`: Added image sitemap support — `featuredImage` fetched for each monograph, emitted as `<image:image>` nodes in sitemap XML; refactored date formatting and XML escaping helpers
 
