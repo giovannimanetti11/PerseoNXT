@@ -123,7 +123,7 @@ export default defineEventHandler(async (event) => {
 
       console.log('Blog URLs generated:', blogUrls.length);
 
-      // Posts (monographs): paging
+      // Posts (monographs): paging - include featuredImage for image sitemap
       const postsQuery = `
         query FETCH_POSTS($first: Int!, $after: String) {
           posts(first: $first, after: $after, where: { status: PUBLISH, orderby: { field: DATE, order: DESC } }) {
@@ -131,6 +131,14 @@ export default defineEventHandler(async (event) => {
               slug
               date
               modified
+              title
+              featuredImage {
+                node {
+                  sourceUrl
+                  altText
+                  title
+                }
+              }
             }
             pageInfo {
               hasNextPage
@@ -140,7 +148,7 @@ export default defineEventHandler(async (event) => {
         }
       `;
 
-      let postNodes: Array<{ slug: string; date?: string; modified?: string; }> = [];
+      let postNodes: Array<{ slug: string; date?: string; modified?: string; title?: string; featuredImage?: { node?: { sourceUrl?: string; altText?: string; title?: string } } }> = [];
       let postHasNext = true;
       let postAfter: string | null = null;
       while (postHasNext) {
@@ -156,7 +164,12 @@ export default defineEventHandler(async (event) => {
         url: `/${post.slug}`,
         lastmod: post.modified || post.date || new Date().toISOString(),
         changefreq: 'weekly',
-        priority: 0.7
+        priority: 0.7,
+        image: post.featuredImage?.node?.sourceUrl ? {
+          loc: post.featuredImage.node.sourceUrl,
+          title: post.featuredImage.node.altText || post.featuredImage.node.title || post.title || '',
+          caption: post.title || ''
+        } : undefined
       }));
 
       console.log('Post URLs generated:', postUrls.length);
@@ -214,35 +227,36 @@ export default defineEventHandler(async (event) => {
       // urls already contains staticUrls
     }
     
-    // Generate the XML sitemap with proper formatting for lastmod dates
+    // Generate the XML sitemap with image support
+    const formatDate = (raw: string | undefined): string => {
+      try {
+        const d = new Date(raw || '');
+        return isNaN(d.getTime()) ? new Date().toISOString().split('T')[0] : d.toISOString().split('T')[0];
+      } catch {
+        return new Date().toISOString().split('T')[0];
+      }
+    };
+
+    const escapeXml = (str: string): string =>
+      str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  ${urls.map(url => {
-    // Ensure lastmod is properly formatted
-    let lastmod = url.lastmod || new Date().toISOString();
-    // Make sure lastmod is a valid ISO date string
-    if (typeof lastmod === 'string' && lastmod.trim() !== '') {
-      try {
-        // Try to format as YYYY-MM-DD
-        const date = new Date(lastmod);
-        if (!isNaN(date.getTime())) {
-          lastmod = date.toISOString().split('T')[0];
-        }
-      } catch {
-        // If there's an error, use current date
-        lastmod = new Date().toISOString().split('T')[0];
-      }
-    } else {
-      lastmod = new Date().toISOString().split('T')[0];
-    }
-    
+  ${urls.map((url: any) => {
+    const loc = `${baseUrl}${url.url.startsWith('/') ? url.url : '/' + url.url}`;
+    const imageTag = url.image?.loc ? `
+    <image:image>
+      <image:loc>${escapeXml(url.image.loc)}</image:loc>${url.image.title ? `
+      <image:title>${escapeXml(url.image.title)}</image:title>` : ''}${url.image.caption ? `
+      <image:caption>${escapeXml(url.image.caption)}</image:caption>` : ''}
+    </image:image>` : '';
     return `
   <url>
-    <loc>${baseUrl}${url.url.startsWith('/') ? url.url : '/' + url.url}</loc>
-    <lastmod>${lastmod}</lastmod>
+    <loc>${loc}</loc>
+    <lastmod>${formatDate(url.lastmod)}</lastmod>
     <changefreq>${url.changefreq || 'weekly'}</changefreq>
-    <priority>${url.priority || 0.5}</priority>
+    <priority>${url.priority || 0.5}</priority>${imageTag}
   </url>`;
   }).join('')}
 </urlset>`
