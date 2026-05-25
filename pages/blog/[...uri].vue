@@ -302,11 +302,11 @@ useHead({
     return [
       {
         type: 'application/ld+json',
-        children: JSON.stringify(breadcrumbList)
+        innerHTML: JSON.stringify(breadcrumbList)
       },
       {
         type: 'application/ld+json',
-        children: JSON.stringify(article)
+        innerHTML: JSON.stringify(article)
       }
     ];
   })
