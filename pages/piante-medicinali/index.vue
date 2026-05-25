@@ -190,7 +190,7 @@ useHead({
         }
       }))
     }
-    return [{ type: 'application/ld+json', children: JSON.stringify(itemList) }]
+    return [{ type: 'application/ld+json', innerHTML: JSON.stringify(itemList) }]
   })
 })
 

@@ -528,6 +528,8 @@ useHead({
       ...tagNames
     ].filter(Boolean);
 
+    const addTz = (d?: string) => d ? (/[Z+\-]\d{2}:?\d{2}$/.test(d) || d.endsWith('Z') ? d : d + '+01:00') : undefined
+
     const article = {
       '@context': 'https://schema.org',
       '@type': ['Article', 'MedicalWebPage'],
@@ -535,17 +537,15 @@ useHead({
       'headline': postData.value.title,
       'description': postData.value.seo?.metaDesc || postData.value.title,
       'image': featuredImage.value?.sourceUrl || `${baseUrl}/media/og-image.jpg`,
-      'datePublished': postData.value.date,
-      'dateModified': postData.value.modified || postData.value.date,
-      'author': {
-        '@type': 'Person',
-        'name': postData.value.authorName || 'Team Wikiherbalist',
-        'worksFor': {
-          '@type': 'Organization',
-          'name': 'Wikiherbalist',
-          'url': baseUrl
+      'datePublished': addTz(postData.value.date),
+      'dateModified': addTz(postData.value.modified || postData.value.date),
+      'author': (() => {
+        const name = postData.value.authorName
+        if (name && name !== 'Redazione Wikiherbalist' && name !== 'Team Wikiherbalist') {
+          return { '@type': 'Person', 'name': name, 'url': baseUrl }
         }
-      },
+        return { '@type': 'Organization', 'name': 'Redazione Wikiherbalist', 'url': baseUrl }
+      })(),
       'publisher': {
         '@type': 'Organization',
         'name': 'Wikiherbalist',
@@ -560,7 +560,7 @@ useHead({
         '@id': fullUrl
       },
       'about': {
-        '@type': 'DietarySupplement',
+        '@type': ['Substance', 'MedicalEntity'],
         'name': postData.value.title,
         'alternateName': [
           postData.value.nomeScientifico,
@@ -588,11 +588,11 @@ useHead({
     return [
       {
         type: 'application/ld+json',
-        children: JSON.stringify(breadcrumbList)
+        innerHTML: JSON.stringify(breadcrumbList)
       },
       {
         type: 'application/ld+json',
-        children: JSON.stringify(article)
+        innerHTML: JSON.stringify(article)
       }
     ];
   })

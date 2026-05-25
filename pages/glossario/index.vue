@@ -143,7 +143,7 @@ useHead({
         }
       }))
     }
-    return [{ type: 'application/ld+json', children: JSON.stringify(definedTermSet) }]
+    return [{ type: 'application/ld+json', innerHTML: JSON.stringify(definedTermSet) }]
   })
 })
 </script>
