@@ -103,13 +103,14 @@ jobs:
           COMMIT_SHA: ${{ steps.commit.outputs.sha }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
           APP_PORT: ${{ secrets.APP_PORT }}
+          WP_CONTENT_PATH: ${{ secrets.WP_CONTENT_PATH }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 2222
           command_timeout: 20m
-          envs: COMMIT_SHA,DEPLOY_PATH,APP_PORT
+          envs: COMMIT_SHA,DEPLOY_PATH,APP_PORT,WP_CONTENT_PATH
           script: |
             cd "$DEPLOY_PATH"
 
@@ -126,6 +127,10 @@ jobs:
 
             echo "=== Building application (site stays up during build) ==="
             npm run build || { echo "Build failed!"; exit 1; }
+
+            echo "=== Linking WordPress uploads ==="
+            sudo chown -R ubuntu:www-data .output
+            sudo ln -sfn "$WP_CONTENT_PATH" .output/public/wp-content
 
             echo "=== Restarting PM2 ==="
             pm2 restart wikiherbalist || pm2 start .output/server/index.mjs --name wikiherbalist -- --port "$APP_PORT"
