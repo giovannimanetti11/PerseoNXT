@@ -21,7 +21,7 @@ export default [
         parser: parserTypeScript,
         ecmaVersion: 2020,
         sourceType: 'module',
-        project: './tsconfig.json',
+        project: ['./tsconfig.json', './.nuxt/tsconfig.server.json'],
         extraFileExtensions: ['.vue'],
       },
     },

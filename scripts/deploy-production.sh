@@ -34,13 +34,11 @@ mkdir -p "$BUILD_DIR" "$RELEASE_DIR"
 
 rsync -a   --exclude='.git'   --exclude='.output'   --exclude='node_modules'   --exclude='*.bak-*'   "$ROOT/" "$BUILD_DIR/"
 
-# Nuxt 4 writes build metadata under node_modules/.cache. Keep the dependency
-# tree local to the temporary build and deliberately exclude the live cache.
-mkdir -p "$BUILD_DIR/node_modules"
-rsync -a --exclude='.cache' "$ROOT/node_modules/" "$BUILD_DIR/node_modules/"
-
+# Install exactly the dependencies pinned in package-lock.json inside the
+# temporary build. Never mutate or reuse the dependency tree of the live release.
 (
   cd "$BUILD_DIR"
+  npm ci --no-fund --no-audit
   npm run build
 )
 
@@ -51,10 +49,10 @@ if [ -d "$ROOT/.output/public/_nuxt" ]; then
   rsync -a --ignore-existing     "$ROOT/.output/public/_nuxt/"     "$BUILD_DIR/.output/public/_nuxt/"
 fi
 mv "$BUILD_DIR/.output" "$RELEASE_DIR/.output"
+mv "$BUILD_DIR/node_modules" "$RELEASE_DIR/node_modules"
 chmod o+x "$RELEASE_DIR/.output"
 chmod -R o+rX "$RELEASE_DIR/.output/public"
 ln -sfn "$WP_CONTENT_PATH" "$RELEASE_DIR/.output/public/wp-content"
-ln -s "$ROOT/node_modules" "$RELEASE_DIR/node_modules"
 
 switch_release() {
   local target="$1"
