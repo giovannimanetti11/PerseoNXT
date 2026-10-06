@@ -1,14 +1,9 @@
 name: Test, Build and Deploy
 
 # Workflow triggers:
-# 1. Push automatico:
-#    - main/master: esegue test + deploy automatico
-#    - feature/**:  esegue solo test (no deploy)
-# 2. Pull Request: esegue solo test
-# 3. Manuale (workflow_dispatch):
-#    - Vai su Actions → "Test, Build and Deploy" → "Run workflow"
-#    - Scegli branch, commit specifico (opzionale) e se fare deploy
-#    - Esempio: branch="feature/xyz", commit="abc123", deploy="true"
+# 1. Push su main/master/feature: test e lint soltanto.
+# 2. Pull Request: test e lint soltanto.
+# 3. Il deploy richiede sempre workflow_dispatch esplicito con deploy=true.
 
 on:
   push:
@@ -40,6 +35,9 @@ on:
           - 'true'
           - 'false'
 
+permissions:
+  contents: read
+
 jobs:
   test:
     name: Run Tests and Linting
@@ -47,7 +45,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: ${{ github.event.inputs.branch || github.ref }}
 
@@ -56,7 +54,7 @@ jobs:
         run: git checkout ${{ github.event.inputs.commit }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: '20'
           cache: 'npm'
@@ -77,14 +75,12 @@ jobs:
     name: Deploy to Production Server
     runs-on: ubuntu-latest
     needs: test
-    # Deploy se: push a main/master OPPURE workflow_dispatch con deploy=true
-    if: |
-      (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')) ||
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'true')
+    # Il deploy non parte mai da un push: serve un'azione manuale esplicita.
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.deploy == 'true' 
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: ${{ github.event.inputs.branch || github.ref }}
           submodules: recursive
@@ -98,18 +94,19 @@ jobs:
         run: echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
       - name: Deploy, build and restart
-        uses: appleboy/ssh-action@v1.0.3
+        uses: appleboy/ssh-action@029f5b4aeeeb58fdfe1410a5d17f967dacf36262 # v1.0.3
         env:
           COMMIT_SHA: ${{ steps.commit.outputs.sha }}
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
           APP_PORT: ${{ secrets.APP_PORT }}
+          WP_CONTENT_PATH: ${{ secrets.WP_CONTENT_PATH }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 2222
           command_timeout: 20m
-          envs: COMMIT_SHA,DEPLOY_PATH,APP_PORT
+          envs: COMMIT_SHA,DEPLOY_PATH,APP_PORT,WP_CONTENT_PATH
           script: |
             cd "$DEPLOY_PATH"
 
@@ -122,10 +119,18 @@ jobs:
             rm -rf .nuxt
 
             echo "=== Installing dependencies ==="
-            npm install || { echo "npm install failed"; exit 1; }
+            npm ci || { echo "npm ci failed"; exit 1; }
 
             echo "=== Building application (site stays up during build) ==="
             npm run build || { echo "Build failed!"; exit 1; }
+
+            if [ -z "$WP_CONTENT_PATH" ] || [ ! -d "$WP_CONTENT_PATH" ]; then
+              echo "WP_CONTENT_PATH missing or invalid"
+              exit 1
+            fi
+            chmod o+x .output
+            chmod -R o+rX .output/public
+            ln -sfn "$WP_CONTENT_PATH" .output/public/wp-content
 
             echo "=== Restarting PM2 ==="
             pm2 restart wikiherbalist || pm2 start .output/server/index.mjs --name wikiherbalist -- --port "$APP_PORT"

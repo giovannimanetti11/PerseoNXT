@@ -16,9 +16,26 @@ interface ContactForm {
 
 interface RecaptchaResponse {
   success: boolean;
+  score?: number;
+  action?: string;
   challenge_ts?: string;
   hostname?: string;
   'error-codes'?: string[];
+}
+
+// Strip CRLF characters to prevent header injection
+function sanitizeField(value: string): string {
+  return String(value).replace(/[\r\n\t]/g, ' ').trim();
+}
+
+// Escape HTML entities for safe inclusion in HTML email body
+function escapeHtml(value: string): string {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 export default defineEventHandler(async (event: H3Event) => {
@@ -51,22 +68,33 @@ export default defineEventHandler(async (event: H3Event) => {
 
     const recaptchaResult: RecaptchaResponse = await recaptchaResponse.json();
 
-    if (!recaptchaResult.success) {
-      console.error('Recaptcha verification failed:', recaptchaResult);
+    const recaptchaValid = recaptchaResult.success
+      && (!recaptchaResult.action || recaptchaResult.action === 'submit')
+      && (typeof recaptchaResult.score !== 'number' || recaptchaResult.score >= 0.5)
+      && (!recaptchaResult.hostname || ['wikiherbalist.com', 'www.wikiherbalist.com'].includes(recaptchaResult.hostname));
+
+    if (!recaptchaValid) {
+      console.error('Recaptcha verification failed');
       throw new Error('Recaptcha verification failed');
     }
+
+    const nome = sanitizeField(form.nome);
+    const cognome = sanitizeField(form.cognome);
+    const email = sanitizeField(form.email);
+    const telefono = sanitizeField(form.telefono);
+    const richiesta = sanitizeField(form.richiesta);
 
     const msg: MailDataRequired = {
       to: 'info@wikiherbalist.com',
       from: 'info@wikiherbalist.com',
       subject: 'Nuova richiesta dal Form contatti di Wikiherbalist.com',
-      text: `Nome: ${form.nome}, Cognome: ${form.cognome}, Email: ${form.email}, Telefono: ${form.telefono}, Richiesta: ${form.richiesta}`,
+      text: `Nome: ${nome}, Cognome: ${cognome}, Email: ${email}, Telefono: ${telefono}, Richiesta: ${richiesta}`,
       html: `
-        <p><strong>Nome</strong>: ${form.nome}</p>
-        <p><strong>Cognome</strong>: ${form.cognome}</p>
-        <p><strong>Email</strong>: <a href="mailto:${form.email}">${form.email}</a></p>
-        <p><strong>Telefono</strong>: ${form.telefono}</p>
-        <p><strong>Richiesta</strong>: ${form.richiesta}</p>
+        <p><strong>Nome</strong>: ${escapeHtml(nome)}</p>
+        <p><strong>Cognome</strong>: ${escapeHtml(cognome)}</p>
+        <p><strong>Email</strong>: <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
+        <p><strong>Telefono</strong>: ${escapeHtml(telefono)}</p>
+        <p><strong>Richiesta</strong>: ${escapeHtml(richiesta)}</p>
       `,
     };
 

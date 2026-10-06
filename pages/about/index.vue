@@ -179,6 +179,15 @@ const getInitials = (name: string): string => {
 useHead({
   title: 'About'
 })
+
+useSeoMeta({
+  description: 'Scopri il progetto Wikiherbalist: chi siamo, la nostra missione e il team che cura l\'enciclopedia online di erbe medicinali e aromatiche.',
+  ogTitle: 'About | Wikiherbalist',
+  ogDescription: 'Scopri il progetto Wikiherbalist: chi siamo, la nostra missione e il team che cura l\'enciclopedia online di erbe medicinali e aromatiche.',
+  ogUrl: 'https://wikiherbalist.com/about',
+  twitterTitle: 'About | Wikiherbalist',
+  twitterDescription: 'Scopri il progetto Wikiherbalist: chi siamo, la nostra missione e il team dedicato alle erbe medicinali.',
+})
 </script>
 
 <style>

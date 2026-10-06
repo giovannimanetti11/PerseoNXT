@@ -171,7 +171,7 @@
         </section>
 
         <!-- Dynamic content sections -->
-        <template v-for="(section, index) in structuredContent" :key="section.heading">
+        <template v-for="section in structuredContent" :key="section.heading">
           <!-- Drug interactions section - inserted before Riferimenti -->
           <section
             v-if="section.heading === 'Riferimenti' && hasInteractions"

@@ -1,5 +1,6 @@
-import { defineEventHandler, readBody, createError } from 'h3'
+import { defineEventHandler, readBody, createError, getRequestHeader } from 'h3'
 import { apiConfig } from '@config'
+import { checkRateLimit, recordFailedAttempt, clearRateLimit, auditLog, verifyAdminPassword } from '~/server/utils/adminAuth'
 
 interface UpdateRequest {
   password: string
@@ -7,16 +8,39 @@ interface UpdateRequest {
 }
 
 export default defineEventHandler(async (event) => {
+  const ip = getRequestHeader(event, 'x-forwarded-for')?.split(',')[0]?.trim()
+    || event.node.req.socket?.remoteAddress
+    || 'unknown'
+
   try {
     const body = await readBody<UpdateRequest>(event)
-    
-    // Verifica password
-    if (body.password !== apiConfig.algoliaAccessPassword) {
+
+    // Rate limiting
+    const rateCheck = checkRateLimit(ip)
+    if (!rateCheck.allowed) {
+      auditLog('algolia-glossary-update', ip, false, `rate limited, retry after ${rateCheck.retryAfterSeconds}s`)
+      throw createError({
+        statusCode: 429,
+        statusMessage: `Too many attempts. Retry after ${rateCheck.retryAfterSeconds} seconds.`
+      })
+    }
+
+    // Verifica password (bcrypt se hash presente, altrimenti timing-safe)
+    const config = useRuntimeConfig()
+    const passwordHash = (config as any).algoliaAccessPasswordHash as string | undefined
+    const isValid = await verifyAdminPassword(body.password, passwordHash || null, apiConfig.algoliaAccessPassword || null)
+
+    if (!isValid) {
+      recordFailedAttempt(ip)
+      auditLog('algolia-glossary-update', ip, false, 'invalid password')
       throw createError({
         statusCode: 401,
         statusMessage: 'Unauthorized: Invalid password'
       })
     }
+
+    clearRateLimit(ip)
+    auditLog('algolia-glossary-update', ip, true)
 
     // Validazione input
     if (!Array.isArray(body.terms) || body.terms.length === 0) {
@@ -26,7 +50,6 @@ export default defineEventHandler(async (event) => {
       })
     }
 
-    const config = useRuntimeConfig()
     const applicationId = config.public.algolia.applicationId
     const apiKey = apiConfig.algoliaWriteAPIKey // Chiave sicura lato server
     const indexName = 'wikiherbalist'

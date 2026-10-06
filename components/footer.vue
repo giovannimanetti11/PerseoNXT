@@ -27,7 +27,6 @@
           <NuxtLink to="/disclaimer" class="hover:underline">Disclaimer</NuxtLink>
         </div>
         
-        <!-- Donation - DISABLED temporarily
         <div class="w-full flex flex-col items-center mb-8">
           <p class="text-lg font-semibold mb-2">Supporta la nostra attività di divulgazione</p>
           <NuxtLink to="/donazioni" class="w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-white hover:text-red-500 transition duration-300">
@@ -35,7 +34,6 @@
             <span class="inline-block align-middle">Donazione</span>
           </NuxtLink>
         </div>
-        -->
         
         <!-- Social Icons -->
         <div class="flex justify-center space-x-4">
@@ -61,18 +59,14 @@
                 width="200"
                 height="56"
               />
-              <!-- Donation - DISABLED temporarily
               <p class="mt-4 text-lg font-semibold">Supporta la nostra attività di divulgazione</p>
-              -->
             </div>
-            <!-- Donation button - DISABLED temporarily
             <NuxtLink to="/donazioni" class="flex flex-col items-center text-center w-full max-w-[200px]">
               <button class="mt-4 w-auto bg-red-500 text-white py-2 px-4 rounded hover:bg-white hover:text-red-500 transition duration-300">
                 <Icon name="ph:heart" class="text-3xl inline-block align-middle mr-2" />
                 <span class="inline-block align-middle">Donazione</span>
               </button>
             </NuxtLink>
-            -->
           </div>
         </div>
         <!-- Menu columns and social icons wrapper -->

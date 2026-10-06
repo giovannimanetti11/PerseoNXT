@@ -24,6 +24,7 @@
           <GlossarioInfo
             :title="glossaryTerm.title"
             :publishDate="glossaryTerm.date"
+            :updateDate="glossaryTerm.modified"
             :authorName="glossaryTerm.authorName"
             :readingTime="readingTime"
           />
@@ -71,11 +72,27 @@
             <div class="circle flex-shrink-0 flex items-center justify-center w-8 h-8 md:w-12 md:h-12 min-w-8 min-h-8 md:min-w-12 md:min-h-12 mr-4 bg-blu text-white rounded-full text-base md:text-lg font-bold">
               {{ index + 1 }}
             </div>
-            <h3 class="text-xl md:text-2xl">{{ section.heading }}</h3>
+            <h2 class="text-xl md:text-2xl">{{ section.heading }}</h2>
           </div>
-          <h3 v-else class="text-xl md:text-2xl mb-4">{{ section.heading }}</h3>
+          <h2 v-else class="text-xl md:text-2xl mb-4">{{ section.heading }}</h2>
           <ContentTooltip v-if="section.content" :content="section.content" class="mt-4" />
         </section>
+
+      <!-- Related terms section - internal linking for topical authority -->
+      <section v-if="relatedTerms.length" class="term-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4">
+        <h2 class="text-xl md:text-2xl mb-4">Termini correlati</h2>
+        <p class="flex flex-wrap items-center text-base md:text-lg">
+          <template v-for="(related, index) in relatedTerms" :key="related.slug">
+            <NuxtLink
+              :to="`/glossario/${related.slug}`"
+              class="text-blu hover:text-celeste transition-colors duration-300"
+            >
+              {{ related.title }}
+            </NuxtLink>
+            <span v-if="index < relatedTerms.length - 1" class="mx-2 text-gray-400" aria-hidden="true">&middot;</span>
+          </template>
+        </p>
+      </section>
     </div>
   </div>
 </template>
@@ -85,6 +102,7 @@ import { ref, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import { useGraphQL } from '~/composables/useGraphQL';
 import { useContentProcessor } from '~/composables/useContentProcessor';
+import { useGlossarioRelatedTerms } from '~/composables/useGlossarioRelatedTerms';
 import { useHead } from '#app';
 
 // Import critical components directly for better SSR
@@ -173,6 +191,10 @@ const { data: glossaryTerm, pending, error } = await useAsyncData(
 // Computed properties for processed content (now from server)
 const headings = computed(() => glossaryTerm.value?.headings || []);
 const sections = computed(() => glossaryTerm.value?.structuredContent || []);
+
+// Related glossary terms - internal links for topical authority (no backlinks needed)
+const { getRelatedTerms } = useGlossarioRelatedTerms();
+const relatedTerms = computed(() => getRelatedTerms(glossaryTerm.value?.slug));
 
 // Handle error/404 - check after fetch completes
 if (error.value) {
