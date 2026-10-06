@@ -1,21 +1,11 @@
 <template>
   <div class="container mx-auto px-4 py-8 mt-24">
     <h1 class="text-5xl font-bold text-center text-black mb-10 mt-12 py-4">Fai una donazione</h1>
-    <ClientOnly>
-      <SimpleDonation v-if="SimpleDonation" :faqs="customFaqs" />
-    </ClientOnly>
+    <SimpleDonation lang="it" :faqs="customFaqs" />
   </div>
 </template>
 
 <script setup>
-import { defineAsyncComponent } from 'vue'
-
-// Manual import due to simple-donation Nuxt 4 incompatibility
-const SimpleDonation = defineAsyncComponent(() =>
-  import('simple-donation/runtime/components/simpleDonation.vue')
-)
-
-// Custom FAQs
 const customFaqs = [
   {
     question: 'Come vengono utilizzate le donazioni?',
@@ -38,5 +28,3 @@ useHead({
   ]
 })
 </script>
-
-

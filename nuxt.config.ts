@@ -139,7 +139,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxtjs/robots',
     "nuxt-schema-org",
-    // 'simple-donation', // Using manual import due to Nuxt 4 incompatibility
+    'simple-donation',
     '@nuxtjs/algolia'
   ],
 
@@ -194,8 +194,7 @@ export default defineNuxtConfig({
 
   // CSS configuration
   css: [
-    '~/assets/css/main.css',
-    'simple-donation/runtime/styles/style.css'
+    '~/assets/css/main.css'
   ],
 
   // Plugins configuration
