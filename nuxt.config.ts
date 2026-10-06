@@ -137,7 +137,7 @@ export default defineNuxtConfig({
     '@nuxtjs/google-fonts',
     '@nuxt/icon',
     '@nuxt/image',
-    '@nuxtjs/seo',
+    '@nuxtjs/robots',
     "nuxt-schema-org",
     // 'simple-donation', // Using manual import due to Nuxt 4 incompatibility
     '@nuxtjs/algolia'
