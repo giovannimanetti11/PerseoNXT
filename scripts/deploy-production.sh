@@ -99,6 +99,12 @@ if [ "$ok" -ne 1 ]; then
   exit 1
 fi
 pm2 save >/dev/null
+
+# Keep local tooling aligned with the active release only after the new
+# application has passed its health check. Rollback paths retain their own
+# node_modules tree.
+ln -sfn "$RELEASE_DIR/node_modules" "$ROOT/node_modules"
+
 echo "WikiHerbalist deployed successfully."
 echo "Previous release: $PREVIOUS_TARGET"
 echo "Current release: $RELEASE_DIR/.output"
