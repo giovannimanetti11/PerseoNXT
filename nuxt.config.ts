@@ -2,6 +2,8 @@ import { defineNuxtConfig } from 'nuxt/config'
 import { fileURLToPath } from 'url'
 
 export default defineNuxtConfig({
+  devtools: { enabled: false },
+
   // Image handling configuration
   image: {
     domains: ['wikiherbalist.com', 'admin.wikiherbalist.com'],
@@ -261,9 +263,10 @@ export default defineNuxtConfig({
       rollupOptions: {
         output: {
           // Manual chunk splitting to avoid circular dependencies
-          manualChunks: {
-            'vue-core': ['vue', 'vue-router'],
-            'composables': ['@vueuse/core']
+          manualChunks(id) {
+            if (!id.includes('node_modules')) return
+            if (id.includes('/vue/') || id.includes('/vue-router/')) return 'vue-core'
+            if (id.includes('/@vueuse/core/')) return 'composables'
           }
         }
       }
