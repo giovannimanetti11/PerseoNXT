@@ -10,6 +10,8 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
 import { useRoute, useHead, useSeoMeta } from '#app'
+
+useHead({ htmlAttrs: { lang: 'it' } })
 import { useGraphQL } from '~/composables/useGraphQL'
 
 

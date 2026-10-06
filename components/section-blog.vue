@@ -102,15 +102,17 @@ const BLOG_POSTS_QUERY = `
 
 const { query } = useGraphQL();
 
-const { data: blogData, pending, error } = await useAsyncData('blogPosts', async () => {
+const { data: blogData, pending, error } = await useAsyncData('homepageBlogPosts', async () => {
   const data = await query(BLOG_POSTS_QUERY);
-  return data.blogPosts.nodes.map((post: any) => ({
-    ...post,
-    featuredImage: post.featuredImage?.node?.sourceUrl || '',
-    uri: post.uri.replace(/\/\/+/g, '/').replace(/\/$/, ''), // Normalize slashes
-  }));
+  return data.blogPosts.nodes
+    .filter((post: any) => typeof post?.uri === 'string' && post.uri.trim().length > 0)
+    .map((post: any) => ({
+      ...post,
+      featuredImage: post.featuredImage?.node?.sourceUrl || '',
+      uri: post.uri.replace(/\/\/+/g, '/').replace(/\/$/, ''), // Normalize slashes
+    }));
 }, {
-  server: true,  // Force SSR only - prevents client-side refetch
+  server: false, // Fetch client-side (lazy component non SSR-rendered)
   lazy: false
 });
 

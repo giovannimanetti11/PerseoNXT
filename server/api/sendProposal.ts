@@ -22,9 +22,26 @@ interface ProposalBody {
 // Interface for the reCAPTCHA response
 interface RecaptchaResponse {
   success: boolean;
+  score?: number;
+  action?: string;
   challenge_ts?: string;
   hostname?: string;
   'error-codes'?: string[];
+}
+
+// Strip CRLF characters to prevent header injection
+function sanitizeField(value: string): string {
+  return String(value).replace(/[\r\n\t]/g, ' ').trim();
+}
+
+// Escape HTML entities for safe inclusion in HTML email body
+function escapeHtml(value: string): string {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 export default defineEventHandler(async (event: H3Event) => {
@@ -32,30 +49,33 @@ export default defineEventHandler(async (event: H3Event) => {
     // Read and parse the request body
     const body = await readBody<ProposalBody>(event);
     const {
-      postUrl,
-      nome,
-      cognome,
-      email,
-      titoloStudio,
-      affiliazione,
-      section,
-      proposal,
-      reason,
+      postUrl: rawPostUrl,
+      nome: rawNome,
+      cognome: rawCognome,
+      email: rawEmail,
+      titoloStudio: rawTitoloStudio,
+      affiliazione: rawAffiliazione,
+      section: rawSection,
+      proposal: rawProposal,
+      reason: rawReason,
       recaptchaToken,
     } = body;
 
+    const postUrl = sanitizeField(rawPostUrl);
+    const nome = sanitizeField(rawNome);
+    const cognome = sanitizeField(rawCognome);
+    const email = sanitizeField(rawEmail);
+    const titoloStudio = sanitizeField(rawTitoloStudio);
+    const affiliazione = sanitizeField(rawAffiliazione);
+    const section = sanitizeField(rawSection);
+    const proposal = sanitizeField(rawProposal);
+    const reason = sanitizeField(rawReason);
+
     // Validate required fields
     if (
-      !postUrl ||
-      !nome ||
-      !cognome ||
-      !email ||
-      !titoloStudio ||
-      !affiliazione ||
-      !section ||
-      !proposal ||
-      !reason ||
-      !recaptchaToken
+      !postUrl || !nome || !cognome || !email ||
+      !titoloStudio || !affiliazione || !section ||
+      !proposal || !reason || !recaptchaToken
     ) {
       throw new Error('Incomplete form data');
     }
@@ -77,8 +97,12 @@ export default defineEventHandler(async (event: H3Event) => {
 
     const recaptchaResult: RecaptchaResponse = await recaptchaResponse.json();
 
-    // Handle failed reCAPTCHA verification
-    if (!recaptchaResult.success) {
+    // Handle failed/low-confidence reCAPTCHA verification
+    const recaptchaValid = recaptchaResult.success
+      && (!recaptchaResult.action || recaptchaResult.action === 'submit')
+      && (typeof recaptchaResult.score !== 'number' || recaptchaResult.score >= 0.5)
+      && (!recaptchaResult.hostname || ['wikiherbalist.com', 'www.wikiherbalist.com'].includes(recaptchaResult.hostname));
+    if (!recaptchaValid) {
       throw new Error('reCAPTCHA verification failed');
     }
 
@@ -101,15 +125,15 @@ export default defineEventHandler(async (event: H3Event) => {
       `,
       html: `
         <h1>Nuova proposta di modifica</h1>
-        <p><strong>URL del post:</strong> ${postUrl}</p>
-        <p><strong>Nome:</strong> ${nome}</p>
-        <p><strong>Cognome:</strong> ${cognome}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Titolo di studio:</strong> ${titoloStudio}</p>
-        <p><strong>Affiliazione:</strong> ${affiliazione}</p>
-        <p><strong>Sezione:</strong> ${section}</p>
-        <p><strong>Proposta:</strong> ${proposal}</p>
-        <p><strong>Motivazione:</strong> ${reason}</p>
+        <p><strong>URL del post:</strong> ${escapeHtml(postUrl)}</p>
+        <p><strong>Nome:</strong> ${escapeHtml(nome)}</p>
+        <p><strong>Cognome:</strong> ${escapeHtml(cognome)}</p>
+        <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+        <p><strong>Titolo di studio:</strong> ${escapeHtml(titoloStudio)}</p>
+        <p><strong>Affiliazione:</strong> ${escapeHtml(affiliazione)}</p>
+        <p><strong>Sezione:</strong> ${escapeHtml(section)}</p>
+        <p><strong>Proposta:</strong> ${escapeHtml(proposal)}</p>
+        <p><strong>Motivazione:</strong> ${escapeHtml(reason)}</p>
       `,
     };
 

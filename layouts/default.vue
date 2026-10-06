@@ -1,7 +1,12 @@
 <template>
   <div>
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[9999] focus:bg-white focus:px-4 focus:py-2 focus:rounded focus:shadow">
+      Vai al contenuto principale
+    </a>
     <Header />
-    <slot />
+    <main id="main-content">
+      <slot />
+    </main>
     <Footer />
     <ClientOnly>
       <ScrollToTop />
@@ -15,6 +20,9 @@
 
 <script setup>
 import { defineAsyncComponent, ref, onMounted } from 'vue'
+import { useHead } from '#app'
+
+useHead({ htmlAttrs: { lang: 'it' } })
 
 const FeedbackWidget = defineAsyncComponent(() => import('~/components/feedbackWidget.vue'))
 const CookieBanner = defineAsyncComponent(() => import('~/components/cookieBanner.vue'))

@@ -90,6 +90,10 @@ body {
   color: #5E9EF4;
 }
 
+.post-section-interazioni a.ema-link {
+  color: inherit !important;
+}
+
 .blogpost-content-section img, .term-section img {
   margin: 10px auto;
   border-radius: 15px;

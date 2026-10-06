@@ -10,10 +10,13 @@
           'focus-within:ring-2 focus-within:ring-celeste focus-within:ring-opacity-50'
         ]"
       >
+        <label for="wiki-search" class="sr-only">Cerca in Wikiherbalist</label>
         <Icon name="heroicons:magnifying-glass-16-solid" class="ml-2 sm:ml-5 text-celeste text-xl sm:text-2xl flex-shrink-0" />
         <input
+          id="wiki-search"
           type="text"
           placeholder="Cerca in Wikiherbalist"
+          aria-label="Cerca in Wikiherbalist"
           class="w-full py-2 px-2 sm:px-4 text-sm sm:text-base text-gray-700 leading-tight focus:outline-none"
           v-model="searchTerm"
           @input="handleInput"
@@ -148,6 +151,7 @@ import { ref, computed, onMounted, nextTick, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useDebounceFn } from '@vueuse/core';
 import { useRuntimeConfig } from '#app';
+import DOMPurify from 'dompurify';
 
 // Initialize router and config
 const router = useRouter();
@@ -411,10 +415,16 @@ const tooltipStyle = computed(() => ({
   transform: 'translate(-50%, -100%)'
 }));
 
-// Utility function
+// Utility function - sanitize Algolia highlight markup with DOMPurify
 function highlightMatch(text) {
   if (!text) return '';
-  return text.replace(/<em>/g, '<span class="bg-yellow-100 shadow-sm rounded">').replace(/<\/em>/g, '</span>');
+  const highlighted = text
+    .replace(/<em>/g, '<span class="bg-yellow-100 shadow-sm rounded">')
+    .replace(/<\/em>/g, '</span>');
+  return DOMPurify.sanitize(highlighted, {
+    ALLOWED_TAGS: ['span'],
+    ALLOWED_ATTR: ['class']
+  });
 }
 
 // Click outside handler

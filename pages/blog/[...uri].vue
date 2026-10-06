@@ -57,13 +57,13 @@
       </section>
 
       <!-- Introduction section - Now SSR-rendered -->
-      <section :class="['post-section-introduction flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4', { 'hidden': !introSection }]">
+      <section :class="['blogpost-content-section post-section-introduction flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4', { 'hidden': !introSection }]">
         <ContentTooltip v-if="introSection" :content="introSection.content" />
       </section>
 
       <!-- Content sections - Now SSR-rendered -->
       <section v-for="(section, index) in sections"
-              :class="['post-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4', section.className]"
+              :class="['blogpost-content-section post-section flex flex-col py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl mt-4', section.className]"
               :id="'section' + (index + 1)"
               :key="section.heading">
           <div class="flex items-center" v-if="section.heading !== 'Riferimenti'">

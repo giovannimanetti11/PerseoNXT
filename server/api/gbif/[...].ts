@@ -1,14 +1,33 @@
 import { defineEventHandler, createError, getQuery } from 'h3'
 
+// Whitelist of allowed GBIF API path patterns
+const ALLOWED_GBIF_PATHS = [
+  /^\/v1\/species\/match$/,
+  /^\/v1\/occurrence\/search$/,
+  /^\/v1\/species\/\d+$/,
+  /^\/v1\/species\/\d+\/synonyms$/,
+]
+
 export default defineEventHandler(async (event) => {
   try {
     // Get the catch-all path segments
     const params = event.context.params?._ || ''
     const query = getQuery(event)
 
+    const path = `/${params}`
+
+    // Validate against whitelist before proxying
+    const isAllowed = ALLOWED_GBIF_PATHS.some(pattern => pattern.test(path))
+    if (!isAllowed) {
+      throw createError({
+        statusCode: 403,
+        message: `GBIF path not allowed: ${path}`
+      })
+    }
+
     // Build the full path with query string
     const queryString = new URLSearchParams(query as Record<string, string>).toString()
-    const path = `/${params}${queryString ? `?${queryString}` : ''}`
+    const fullPath = `${path}${queryString ? `?${queryString}` : ''}`
 
     // Set up request headers
     const headers = {
@@ -18,7 +37,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // Make the request to GBIF
-    const response = await fetch(`https://api.gbif.org${path}`, { headers })
+    const response = await fetch(`https://api.gbif.org${fullPath}`, { headers })
 
     // Check if the response is ok
     if (!response.ok) {
@@ -33,7 +52,7 @@ export default defineEventHandler(async (event) => {
     
     // Set response headers
     event.node.res.setHeader('Content-Type', 'application/json')
-    event.node.res.setHeader('Cache-Control', 'public, max-age=300') // Cache for 5 minutes
+    event.node.res.setHeader('Cache-Control', 'public, max-age=300')
 
     return data
   } catch (error: any) {

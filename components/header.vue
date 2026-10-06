@@ -3,7 +3,7 @@
     <div :class="['flex justify-between items-center bg-white py-2 px-2 md:py-4 md:px-6 shadow-lg rounded-2xl', {'radius-bottom-none': menuOpen || mailingListMenuOpen}]">
       <!-- Logo -->
       <div class="flex items-center">
-        <a href="/" v-once>
+        <a href="/" v-once aria-label="Wikiherbalist - Torna alla homepage">
           <img
             src="/media/logo_wikiherbalist.svg"
             alt="Wikiherbalist Logo"

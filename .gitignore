@@ -56,3 +56,4 @@ temp
 
 # Local development modules
 modules/
+*.bak-*

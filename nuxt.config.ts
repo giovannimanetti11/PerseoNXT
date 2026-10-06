@@ -26,7 +26,9 @@ export default defineNuxtConfig({
   site: {
     name: 'Wikiherbalist',
     url: 'https://wikiherbalist.com',
-    baseURL: '/'
+    baseURL: '/',
+    defaultLocale: 'it',
+    language: 'it',
   },
 
   // Application head configuration
@@ -46,13 +48,24 @@ export default defineNuxtConfig({
         { property: 'og:site_name', content: 'Wikiherbalist' },
         { property: 'og:locale', content: 'it_IT' },
         { property: 'og:type', content: 'website' },
+        { property: 'og:image', content: 'https://wikiherbalist.com/media/og-wikiherbalist.jpg' },
         { property: 'og:image:width', content: '1200' },
         { property: 'og:image:height', content: '630' },
         { property: 'og:image:type', content: 'image/jpeg' },
         { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:image', content: 'https://wikiherbalist.com/media/og-wikiherbalist.jpg' },
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'alternate', hreflang: 'it', href: 'https://wikiherbalist.com' },
+        { rel: 'alternate', hreflang: 'x-default', href: 'https://wikiherbalist.com' },
+        { rel: 'preconnect', href: 'https://www.googletagmanager.com' },
+        { rel: 'preconnect', href: 'https://zxr67682v8-dsn.algolia.net' },
+        { rel: 'preconnect', href: 'https://ka-f.fontawesome.com' },
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+        { rel: 'dns-prefetch', href: 'https://www.google-analytics.com' },
+        { rel: 'dns-prefetch', href: 'https://analytics.ahrefs.com' },
       ],
       script: [
         {
@@ -88,6 +101,7 @@ export default defineNuxtConfig({
     amazonPollyAccess: process.env.AMAZON_POLLY_ACCESS_KEY,
     amazonPollySecret: process.env.AMAZON_POLLY_SECRET_KEY,
     algoliaAccessPassword: process.env.ALGOLIA_ACCESS_PASSWORD,
+    algoliaAccessPasswordHash: process.env.ALGOLIA_ACCESS_PASSWORD_HASH,
     algoliaWriteApiKey: process.env.ALGOLIA_WRITE_API_KEY,
     algoliaAdminApiKey: process.env.ALGOLIA_ADMIN_API_KEY,
     algoliaUsageApiKey: process.env.ALGOLIA_USAGE_API_KEY,

@@ -86,7 +86,7 @@
               <!-- Associated posts -->
               <p class="text-sm">
                 <template v-for="(post, index) in tag.posts.nodes" :key="post.id">
-                  <NuxtLink :to="post.uri" class="text-black hover:text-blu">{{ post.title }}</NuxtLink><span v-if="index < tag.posts.nodes.length - 1">, </span>
+                  <NuxtLink v-if="typeof post?.uri === 'string' && post.uri.trim()" :to="post.uri" class="text-black hover:text-blu">{{ post.title }}</NuxtLink><span v-else class="text-black">{{ post.title }}</span><span v-if="index < tag.posts.nodes.length - 1">, </span>
                 </template>
               </p>
             </div>

@@ -95,6 +95,9 @@ const saveConsent = (consent: CookieConsent): void => {
   const consentData = JSON.stringify(consent)
   setCookie(COOKIE_CONSENT_KEY, consentData, COOKIE_CONSENT_EXPIRY)
   localStorage.setItem(COOKIE_CONSENT_KEY, consentData)
+  window.dispatchEvent(new CustomEvent('perseo:analytics-consent', {
+    detail: { analytics: consent.analytics === true }
+  }))
 }
 
 const loadConsent = (): CookieConsent | null => {

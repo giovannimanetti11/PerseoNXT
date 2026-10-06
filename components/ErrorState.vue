@@ -64,7 +64,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   type: 'error',
-  title: 'Ops — problema nel caricamento',
+  title: 'Ops - problema nel caricamento',
   message: 'Sembra ci sia stato un problema nel recuperare i dati. Prova a ricaricare la pagina o contattaci se il problema persiste.',
   showRetry: true,
   showContact: true

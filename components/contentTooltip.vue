@@ -11,7 +11,7 @@
     >
       <div class="p-6 relative">
         <h4 class="text-2xl font-bold text-blu mb-4 mt-0">{{ activeTooltip.title }}</h4>
-        <p v-html="activeTooltip.excerpt"></p>
+        <p v-html="sanitizedTooltipExcerpt"></p>
       </div>
     </div>
 
@@ -29,7 +29,7 @@
           </svg>
         </button>
         <h4 class="text-2xl font-bold text-blu mb-4 mt-0">{{ activeTooltip.title }}</h4>
-        <p v-html="activeTooltip.excerpt"></p>
+        <p v-html="sanitizedTooltipExcerpt"></p>
         <button 
           @click="goToPost"
           @touchstart.stop="goToPost"
@@ -79,6 +79,15 @@ const sanitizedContent = computed(() => {
   return DOMPurify.sanitize(props.content, {
     ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'u', 'a', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'code', 'pre', 'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'span', 'div'],
     ALLOWED_ATTR: ['href', 'title', 'target', 'rel', 'src', 'alt', 'class', 'id', 'style'],
+    ALLOW_DATA_ATTR: false
+  });
+});
+
+const sanitizedTooltipExcerpt = computed(() => {
+  const excerpt = activeTooltip.value?.excerpt || '';
+  return DOMPurify.sanitize(excerpt, {
+    ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'a', 'span'],
+    ALLOWED_ATTR: ['href', 'title', 'target', 'rel', 'class'],
     ALLOW_DATA_ATTR: false
   });
 });

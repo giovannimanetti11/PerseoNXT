@@ -24,7 +24,7 @@
     </div>
     <!-- Publication and update dates -->
     <p class="mt-4 text-xs text-gray-500">
-      Scheda pubblicata il {{ formattedPublishDate }}
+      Scheda pubblicata il {{ formattedPublishDate }}<template v-if="showUpdateDate"> e aggiornata il {{ formattedUpdateDate }}</template>
     </p>
     <!-- Author name -->
     <p class="text-xs text-gray-500 mt-2">
@@ -84,6 +84,16 @@ const { openCiteModal, renderCiteModal, updateTitle, updateAuthorName, updatePub
 
 // Format the publication date
 const formattedPublishDate = computed(() => formatDate(props.publishDate));
+
+// Format the last update date, only shown if it differs from the publish date
+const formattedUpdateDate = computed(() => formatDate(props.updateDate));
+const showUpdateDate = computed(() => {
+  if (!props.updateDate || !props.publishDate) return false;
+  const publish = new Date(props.publishDate);
+  const update = new Date(props.updateDate);
+  if (isNaN(publish.getTime()) || isNaN(update.getTime())) return false;
+  return publish.toDateString() !== update.toDateString();
+});
 
 // Display author name, handling special cases
 const displayAuthorName = computed(() => props.authorName === 'wh_admin' ? 'Editors of Wikiherbalist' : props.authorName);
