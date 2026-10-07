@@ -103,18 +103,15 @@ const handleSubmit = async () => {
   }
 
   try {
-    console.log('Inizio processo di iscrizione/aggiornamento');
     
     // Execute reCAPTCHA
     const recaptchaToken = await $recaptcha.execute('submit');
-    console.log('reCAPTCHA token ottenuto');
 
     const { data, error } = await useFetch('/api/mailchimp', {
       method: 'POST',
       body: { ...form, recaptchaToken },
     });
 
-    console.log('Risposta dal server:', data.value, error.value);
 
     if (error.value) {
       throw new Error(`Errore nella richiesta: ${error.value.message}`);

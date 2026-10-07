@@ -201,7 +201,6 @@ const selectFeedback = (value: string) => {
 }
 
 const submitFeedback = async () => {
-  console.log('Submitting feedback...')
   
   // Validazioni pre-invio
   if (!selectedFeedback.value || (selectedFeedback.value !== 'yes' && selectedFeedback.value !== 'no')) {
@@ -248,7 +247,6 @@ const submitFeedback = async () => {
     const result = await response.json()
 
     if (response.ok && result.success) {
-      console.log('Feedback submitted successfully')
       submitted.value = true
       localStorage.setItem(`lastFeedback_${route.fullPath}`, Date.now().toString())
       setTimeout(() => {
