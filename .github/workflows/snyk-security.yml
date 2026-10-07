@@ -29,6 +29,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Verify Snyk token
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: |
+          if [ -z "$SNYK_TOKEN" ]; then
+            echo "::error::SNYK_TOKEN is not configured for this repository"
+            exit 1
+          fi
+
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/node@b075801f26076be9bb50521154cafab73f44da0c
         continue-on-error: true
