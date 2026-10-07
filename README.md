@@ -45,9 +45,9 @@ To get started with PerseoNXT, follow these steps:
    cd PerseoNXT
    ```
 
-3. **Install dependencies**:
+3. **Install dependencies from the lockfile**:
    ```bash
-   npm install
+   npm ci
    ```
 
 4. **Set up configuration** (see Configuration section below)
@@ -116,7 +116,9 @@ DB_NAME=your_database_name
 
 ### Production Deployment with PM2
 
-When deploying to production using PM2, environment variables must be configured in the `ecosystem.config.cjs` file. PM2 does not automatically load `.env` files, so all environment variables must be explicitly defined in the ecosystem configuration:
+Keep production secrets outside the repository. `ecosystem.config.cjs` should only reference environment variables and must never contain real passwords, API keys or tokens. PM2 does not automatically load `.env` files, so provide the environment through your service manager, deployment platform or secret store before starting the process.
+
+Example:
 
 ```javascript
 module.exports = {
@@ -127,21 +129,20 @@ module.exports = {
     exec_mode: 'cluster',
     env: {
       NODE_ENV: 'production',
-      PORT: 3001,
-      WP_BASE_URL: 'your_wordpress_url',
-      WP_APP_PASSWORD: 'your_password',
-      WP_USERNAME: 'your_username',
-      // ... add all other environment variables here
+      PORT: process.env.PORT || 3001,
+      WP_BASE_URL: process.env.WP_BASE_URL,
+      WP_APP_PASSWORD: process.env.WP_APP_PASSWORD,
+      WP_USERNAME: process.env.WP_USERNAME
     }
   }]
 }
 ```
 
-⚠️ **Important**: After updating environment variables in `ecosystem.config.cjs`, you must rebuild the application for changes to take effect:
+After changing build-time configuration, rebuild and reload PM2 with the updated environment:
 
 ```bash
 npm run build
-pm2 restart your-app-name
+pm2 startOrReload ecosystem.config.cjs --update-env
 ```
 
 ## Usage
