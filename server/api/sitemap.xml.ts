@@ -2,7 +2,6 @@ import { defineEventHandler, setResponseHeaders, getRequestURL } from 'h3'
 import { useApiConfig } from '../config'
 
 export default defineEventHandler(async (event) => {
-  console.log('=== SITEMAP.XML ENDPOINT CALLED ===');
 
   try {
     // Set the response headers for XML content with proper caching
@@ -36,7 +35,6 @@ export default defineEventHandler(async (event) => {
     // Fetch all URLs from GraphQL directly
     let urls = [...staticUrls];
     try {
-      console.log('Loading WordPress configuration from runtimeConfig...');
 
       const apiConfig = useApiConfig(event);
       const graphqlEndpoint = apiConfig.baseUrl;
@@ -66,7 +64,6 @@ export default defineEventHandler(async (event) => {
         } catch (err) {
           clearTimeout(timer);
           if (retries > 0) {
-            console.log(`Retrying... (${retries} attempts left)`);
             return await fetchWithRetry(input, init, retries - 1);
           }
           throw err;
@@ -121,7 +118,6 @@ export default defineEventHandler(async (event) => {
         priority: 0.7
       }));
 
-      console.log('Blog URLs generated:', blogUrls.length);
 
       // Posts (monographs): paging - include featuredImage for image sitemap
       const postsQuery = `
@@ -172,7 +168,6 @@ export default defineEventHandler(async (event) => {
         } : undefined
       }));
 
-      console.log('Post URLs generated:', postUrls.length);
 
       // Glossary: paging (aligned with pages/glossario/index.vue -> glossaryTerms)
       const glossaryQuery = `
@@ -213,17 +208,14 @@ export default defineEventHandler(async (event) => {
         priority: 0.6
       }));
 
-      console.log('Glossary URLs generated:', glossaryUrls.length);
 
       // Final merge + anti-Algolia filter
       urls = [...staticUrls, ...blogUrls, ...postUrls, ...glossaryUrls]
         .filter(item => !/algolia/i.test(item.url));
 
-      console.log('Total URLs in sitemap:', urls.length);
 
     } catch (error) {
       console.error('Error fetching sitemap URLs from GraphQL:', error);
-      console.log('Using static URLs only');
       // urls already contains staticUrls
     }
     

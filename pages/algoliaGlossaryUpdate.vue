@@ -189,7 +189,6 @@ async function fetchAlgoliaCount() {
     const data = await response.json()
     algoliaTermCount.value = data.count
     algoliaStatus.value = 'Ready'
-    console.log('Algolia glossary terms count:', data.count)
     return data.count
   } catch (error) {
     console.error('Error fetching Algolia count:', error)
@@ -275,7 +274,6 @@ async function updateAlgoliaIndex() {
     lastUpdateTime.value = Date.now()
     localStorage.setItem('last_algolia_glossary_update', lastUpdateTime.value.toString())
     
-    console.log('Update result:', result)
   } catch (error) {
     console.error('Error updating Algolia index:', error)
     updateSuccess.value = false

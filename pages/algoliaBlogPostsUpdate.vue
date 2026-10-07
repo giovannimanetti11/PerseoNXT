@@ -178,7 +178,6 @@ async function fetchAlgoliaCount() {
     algoliaPostCount.value = data.count || 0
     algoliaStatus.value = 'Ready'
     
-    console.log('Algolia count fetched successfully:', algoliaPostCount.value)
   } catch (error) {
     console.error('Error fetching Algolia count:', error)
     algoliaStatus.value = 'Error'
@@ -285,7 +284,6 @@ async function updateAlgoliaIndex() {
     updateSuccess.value = true
     statusMessage.value = result.message || `Successfully updated ${totalPosts} blog posts`
     
-    console.log('Update result:', result)
   } catch (error) {
     console.error('Error updating Algolia index:', error)
     updateSuccess.value = false

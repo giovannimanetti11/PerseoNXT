@@ -162,7 +162,6 @@ const goToPost = (uri) => {
   // Normalize URI: ensure single leading slash, remove double slashes
   const cleanUri = ('/' + uriString.replace(/^\/+/, '')).replace(/\/\/+/g, '/');
 
-  console.log('Navigating to:', cleanUri);
 
   // Navigate
   router.push(cleanUri).catch(err => {

@@ -3,6 +3,7 @@ import { fileURLToPath } from 'url'
 
 export default defineNuxtConfig({
   devtools: { enabled: false },
+  buildDir: '.nuxt',
 
   // Image handling configuration
   image: {

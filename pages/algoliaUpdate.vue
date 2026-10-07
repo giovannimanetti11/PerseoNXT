@@ -190,13 +190,6 @@ function getAlgoliaIndex() {
 
 // Computed properties
 const isReady = computed(() => {
-  const readyState = {
-    algoliaStatus: algoliaStatus.value,
-    wordpressStatus: wordpressStatus.value,
-    postsCount: posts.value.length
-  };
-  console.log('Ready state:', readyState);
-
   return algoliaStatus.value === 'Ready' &&
          wordpressStatus.value === 'Ready' &&
          posts.value.length > 0;
@@ -242,14 +235,12 @@ async function initialize() {
   if (process.server) return;
 
   try {
-    console.log('Starting initialization with index:', ALGOLIA_INDEX_NAME);
     
     if (!$algolia) {
       throw new Error('Algolia client not initialized');
     }
 
     const index = getAlgoliaIndex();
-    console.log('Index initialized');
     
     try {
       const { nbHits } = await index.search('', {
@@ -259,10 +250,8 @@ async function initialize() {
       
       algoliaPostCount.value = nbHits;
       algoliaStatus.value = 'Ready';
-      console.log('Algolia connected successfully with', nbHits, 'posts');
     } catch (searchError) {
       if (searchError.status === 404) {
-        console.log('Index does not exist yet - will be created on first update');
         algoliaStatus.value = 'Ready';
         algoliaPostCount.value = 0;
       } else {
@@ -301,7 +290,6 @@ async function fetchWordPressPosts() {
 
     wordpressPostCount.value = posts.value.length;
     wordpressStatus.value = 'Ready';
-    console.log('WordPress ready with', posts.value.length, 'posts');
 
     return posts.value;
   } catch (error) {
@@ -348,7 +336,6 @@ async function updateAlgoliaIndex() {
       if (countResponse.ok) {
         const data = await countResponse.json();
         algoliaPostCount.value = data.count;
-        console.log('Final count:', data.count);
       }
     } catch (error) {
       console.error('Error verifying count:', error);
@@ -360,7 +347,6 @@ async function updateAlgoliaIndex() {
     lastUpdateTime.value = Date.now();
     localStorage.setItem('last_algolia_update', lastUpdateTime.value.toString());
     
-    console.log('Update result:', result);
   } catch (error) {
     console.error('Error updating Algolia index:', error);
     updateSuccess.value = false;

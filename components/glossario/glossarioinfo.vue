@@ -112,7 +112,6 @@ const speakTitle = () => {
     utterance.lang = 'it-IT';
     window.speechSynthesis.speak(utterance);
   } else {
-    console.log('Speech synthesis is not supported in this browser or we are not on the client side.');
   }
 };
 
