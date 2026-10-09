@@ -32,7 +32,7 @@ fi
 PREVIOUS_TARGET="$(readlink -f "$ROOT/.output")"
 mkdir -p "$BUILD_DIR" "$RELEASE_DIR"
 
-rsync -a   --exclude='.git'   --exclude='.output'   --exclude='node_modules'   --exclude='*.bak-*'   "$ROOT/" "$BUILD_DIR/"
+rsync -a   --exclude='.git'   --exclude='.github'   --exclude='modules/simple-donation'   --exclude='.output'   --exclude='node_modules'   --exclude='*.bak-*'   "$ROOT/" "$BUILD_DIR/"
 
 # Install exactly the dependencies pinned in package-lock.json inside the
 # temporary build. Never mutate or reuse the dependency tree of the live release.
