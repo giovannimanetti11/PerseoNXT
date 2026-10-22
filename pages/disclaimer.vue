@@ -1,8 +1,8 @@
 <template>
-  <div class="bg-gradient-to-b from-ghiaccio to-white min-h-screen">
-    <div class="container mx-auto px-4 py-12">
+  <div class="mx-auto mt-24 w-11/12 max-w-7xl rounded-2xl bg-gradient-to-b from-ghiaccio to-white">
+    <div class="py-12">
       <h1 class="text-4xl font-bold mb-8 text-center text-blu">Disclaimer</h1>
-      <div class="bg-white rounded-lg shadow-lg p-8">
+      <div class="w-full rounded-2xl bg-white p-5 shadow-lg sm:p-8">
         <p class="text-sm text-gray-600 mb-6">Ultimo aggiornamento: {{ lastUpdate }}</p>
 
         <div class="space-y-8">

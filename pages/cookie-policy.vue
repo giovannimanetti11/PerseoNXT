@@ -1,14 +1,14 @@
 <template>
-    <div class="bg-gradient-to-b from-ghiaccio to-white min-h-screen">
-      <div class="container mx-auto px-4 py-12">
+    <div class="mx-auto mt-24 w-11/12 max-w-7xl rounded-2xl bg-gradient-to-b from-ghiaccio to-white">
+      <div class="py-12">
         <h1 class="text-4xl font-bold mb-8 text-center text-blu">Cookie Policy</h1>
-        <div class="bg-white rounded-lg shadow-lg p-8">
+        <div class="w-full rounded-2xl bg-white p-5 shadow-lg sm:p-8">
           <p class="text-sm text-gray-600 mb-6">Ultimo aggiornamento: {{ lastUpdate }}</p>
           
           <div class="space-y-8">
             <section v-for="(section, index) in sections" :key="index">
               <h2 class="text-2xl font-semibold mb-4 text-verde">{{ index + 1 }}. {{ section.title }}</h2>
-              <div class="prose max-w-none" v-html="sanitizeHtml(section.content)"></div>
+              <div class="prose max-w-none overflow-x-auto" v-html="sanitizeHtml(section.content)"></div>
             </section>
           </div>
   
