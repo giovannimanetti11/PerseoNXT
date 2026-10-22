@@ -18,14 +18,14 @@
       />
 
       <template v-else-if="pageData">
-        <article v-if="featuredPost" class="mt-14 overflow-hidden rounded-2xl bg-white shadow-md">
+        <article v-if="featuredPost" class="blog-card-surface mt-14 overflow-hidden rounded-2xl border border-transparent bg-white shadow-md">
           <NuxtLink :to="postUrl(featuredPost)" class="flex flex-col md:flex-row focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blu">
             <div class="w-full bg-ghiaccio md:w-5/12">
               <NuxtImg
                 v-if="featuredPost.featuredImage?.node?.sourceUrl"
                 :src="featuredPost.featuredImage.node.sourceUrl"
                 :alt="featuredPost.featuredImage.node.altText || featuredPost.title"
-                class="h-64 w-full object-cover md:h-full md:min-h-80"
+                class="blog-card-image h-64 w-full object-cover md:h-full md:min-h-80"
                 width="640"
                 height="400"
                 loading="eager"
@@ -54,14 +54,14 @@
           <article
             v-for="post in otherPosts"
             :key="post.databaseId"
-            class="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm"
+            class="blog-card-surface overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm"
           >
             <NuxtLink :to="postUrl(post)" class="flex h-full flex-col focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blu">
               <NuxtImg
                 v-if="post.featuredImage?.node?.sourceUrl"
                 :src="post.featuredImage.node.sourceUrl"
                 :alt="post.featuredImage.node.altText || post.title"
-                class="h-48 w-full object-cover"
+                class="blog-card-image h-48 w-full object-cover"
                 width="480"
                 height="288"
                 loading="lazy"
@@ -264,5 +264,43 @@ useHead({
 <style scoped>
 .blog-page-section {
   background: linear-gradient(180deg, rgba(224, 237, 253, 1) 0%, rgba(245, 245, 245, 1) 82%);
+}
+
+/* Subtle, consistent hover without shifting surrounding layout or recoloring the content. */
+.blog-card-surface {
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+
+.blog-card-image {
+  transition: transform 320ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .blog-card-surface:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(3, 98, 151, 0.14);
+    border-color: rgba(13, 166, 164, 0.35);
+  }
+
+  .blog-card-surface:hover .blog-card-image {
+    transform: scale(1.025);
+  }
+}
+
+.blog-card-surface:focus-within {
+  border-color: rgba(13, 166, 164, 0.6);
+  box-shadow: 0 8px 22px rgba(3, 98, 151, 0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blog-card-surface,
+  .blog-card-image {
+    transition: none;
+  }
+
+  .blog-card-surface:hover,
+  .blog-card-surface:hover .blog-card-image {
+    transform: none;
+  }
 }
 </style>
