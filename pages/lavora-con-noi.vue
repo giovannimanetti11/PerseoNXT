@@ -1,8 +1,8 @@
 <template>
   <main>
-    <section class="wiki-reference-gradient mt-20 w-11/12 m-auto rounded-2xl py-14 md:mt-28">
+    <section class="wiki-reference-gradient py-14 w-11/12 m-auto rounded-2xl">
       <div class="mx-auto max-w-6xl px-5 sm:px-8 lg:px-10">
-        <div class="mx-auto max-w-4xl text-center">
+        <div class="mx-auto mt-16 max-w-4xl text-center sm:mt-20">
           <p class="mb-3 text-xs font-bold uppercase tracking-widest text-blu sm:text-sm">Entra nella redazione</p>
           <h1 class="text-3xl font-bold leading-tight text-gray-900 sm:text-5xl">Lavora con noi</h1>
           <p class="mx-auto mt-5 max-w-3xl text-base leading-relaxed text-gray-700 sm:mt-6 sm:text-lg">

@@ -1,5 +1,5 @@
 <template>
-  <section class="wiki-reference-gradient mt-20 w-11/12 m-auto rounded-2xl py-14 md:mt-28">
+  <section class="wiki-reference-gradient py-14 w-11/12 m-auto rounded-2xl">
     <div class="mx-auto max-w-6xl px-5 sm:px-8 lg:px-10">
       <div v-if="pending" class="flex h-64 items-center justify-center" role="status">
         <div class="h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-blu"></div>
@@ -14,7 +14,7 @@
       />
 
       <template v-else>
-        <div class="mb-9 text-center sm:mb-12">
+        <div class="mb-9 mt-16 text-center sm:mb-12 sm:mt-20">
           <p class="mb-3 text-xs font-bold uppercase tracking-widest text-blu sm:text-sm">Chi siamo</p>
           <h1 class="text-3xl font-bold leading-tight text-gray-900 sm:text-5xl">Il progetto Wikiherbalist</h1>
         </div>
