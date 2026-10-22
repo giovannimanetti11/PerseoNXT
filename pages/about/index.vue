@@ -1,52 +1,66 @@
 <template>
-  <section class="wiki-reference-gradient py-14 w-11/12 m-auto rounded-2xl">
-    <div class="px-5 sm:px-10">
-    <div class="w-full">
-      <div v-if="pending" class="flex justify-center items-center h-64">
-        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
+  <section class="wiki-reference-gradient mt-20 w-11/12 m-auto rounded-2xl py-14 md:mt-28">
+    <div class="mx-auto max-w-6xl px-5 sm:px-8 lg:px-10">
+      <div v-if="pending" class="flex h-64 items-center justify-center" role="status">
+        <div class="h-12 w-12 animate-spin rounded-full border-b-2 border-t-2 border-blu"></div>
+        <span class="sr-only">Caricamento in corso...</span>
       </div>
+
       <ErrorState
         v-else-if="error"
         type="error"
         title="Pagina non disponibile"
         message="Impossibile caricare le informazioni. Prova a ricaricare la pagina."
       />
-      <div v-else>
-        <!-- About Content -->
-        <div class="mb-12 mt-5 sm:mb-16 sm:mt-8">
-          <h1 class="text-4xl sm:text-5xl font-bold text-gray-800 mb-8 text-center">Il progetto Wikiherbalist</h1>
-          <div v-html="formattedAboutContent" class="about-content w-full mx-auto text-base sm:text-lg text-gray-700 leading-relaxed"></div>
+
+      <template v-else>
+        <div class="mb-9 text-center sm:mb-12">
+          <p class="mb-3 text-xs font-bold uppercase tracking-widest text-blu sm:text-sm">Chi siamo</p>
+          <h1 class="text-3xl font-bold leading-tight text-gray-900 sm:text-5xl">Il progetto Wikiherbalist</h1>
         </div>
 
-        <!-- Members Section -->
-        <div v-if="members.length > 0" class="mb-16">
-          <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-12 text-center">Staff</h2>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div v-for="member in reversedMembers" :key="member.id" class="overflow-hidden rounded-2xl border border-blu/10 transition duration-300 ease-in-out hover:-translate-y-1 hover:shadow-md">
-              <div class="p-6">
-                <div class="w-32 h-32 sm:w-40 sm:h-40 mx-auto mb-4 overflow-hidden rounded-full border-4 border-blue-100">
-                  <NuxtImg 
-                    v-if="member.featuredImage?.node?.sourceUrl" 
-                    :src="member.featuredImage.node.sourceUrl" 
-                    :alt="member.title"
-                    class="w-full h-full object-cover"
-                  />
-                  <div v-else class="w-full h-full flex items-center justify-center bg-blue-100 text-blue-500">
-                    <span class="text-2xl sm:text-4xl">{{ getInitials(member.title) }}</span>
-                  </div>
-                </div>
-                <h3 class="text-xl font-semibold text-gray-800 text-center mb-2">{{ member.title }}</h3>
-                <p v-if="member.affiliation" class="text-sm text-gray-600 text-center mb-3">{{ member.affiliation }}</p>
-                <div v-html="formatContent(member.content)" class="text-sm text-gray-600 text-center mt-4 border-t pt-4"></div>
-              </div>
-            </div>
+        <div
+          v-html="formattedAboutContent"
+          class="about-content mx-auto max-w-5xl text-base leading-7 text-gray-700 sm:text-lg sm:leading-8"
+        ></div>
+
+        <section v-if="members.length > 0" class="mt-12 border-t border-blu/15 pt-10 sm:mt-16 sm:pt-12" aria-labelledby="staff-title">
+          <div class="mb-8 text-center sm:mb-10">
+            <h2 id="staff-title" class="text-3xl font-bold text-gray-900 sm:text-4xl">Staff</h2>
+            <p class="mt-3 text-base text-gray-600">Le persone che contribuiscono al progetto</p>
           </div>
-        </div>
-      </div>
-    </div>
+
+          <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+            <article
+              v-for="member in reversedMembers"
+              :key="member.id"
+              class="rounded-2xl border border-blu/15 bg-blu/5 p-5 transition-colors duration-200 hover:border-verde/40 sm:p-6"
+            >
+              <div class="mx-auto mb-5 flex h-28 w-28 items-center justify-center overflow-hidden rounded-full border-2 border-blu/10 sm:h-36 sm:w-36">
+                <NuxtImg
+                  v-if="member.featuredImage?.node?.sourceUrl"
+                  :src="member.featuredImage.node.sourceUrl"
+                  :alt="member.title"
+                  class="h-full w-full object-cover"
+                  width="144"
+                  height="144"
+                  loading="lazy"
+                />
+                <div v-else class="flex h-full w-full items-center justify-center bg-blu/10 text-blu">
+                  <span class="text-3xl font-semibold sm:text-4xl">{{ getInitials(member.title) }}</span>
+                </div>
+              </div>
+              <h3 class="mb-2 text-center text-lg font-bold leading-snug text-blu sm:text-xl">{{ member.title }}</h3>
+              <p v-if="member.affiliation" class="text-center text-sm leading-relaxed text-gray-700">{{ member.affiliation }}</p>
+              <div v-if="member.content" v-html="formatContent(member.content)" class="mt-4 border-t border-blu/10 pt-4 text-center text-sm leading-relaxed text-gray-700"></div>
+            </article>
+          </div>
+        </section>
+      </template>
     </div>
   </section>
 </template>
+
 
 <script setup lang="ts">
 import { computed } from 'vue'
@@ -192,9 +206,32 @@ useSeoMeta({
 })
 </script>
 
-<style>
-  .about-content h4 {
-    color: #5E9EF4;
-    margin: 10px 0;
-  }
+<style scoped>
+.about-content :deep(h2),
+.about-content :deep(h3),
+.about-content :deep(h4) {
+  color: #036297;
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 1.5rem 0 0.65rem;
+}
+
+.about-content :deep(p) {
+  margin: 0 0 1rem;
+}
+
+.about-content :deep(a) {
+  color: #036297;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.about-content :deep(a:hover) {
+  color: #0DA6A4;
+}
+
+.about-content :deep(ul),
+.about-content :deep(ol) {
+  margin: 0.75rem 0 1.25rem;
+}
 </style>
