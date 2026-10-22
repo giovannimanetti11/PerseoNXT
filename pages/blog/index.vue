@@ -1,7 +1,7 @@
 <template>
   <section class="blog-page-section mx-auto w-11/12 rounded-2xl py-14">
     <div class="mx-auto max-w-6xl px-4 sm:px-6">
-      <h1 class="mb-10 mt-12 py-4 text-center text-5xl font-bold text-black">Blog</h1>
+      <h1 class="mb-8 mt-8 py-3 text-center text-4xl font-bold text-black sm:mb-10 sm:mt-12 sm:py-4 sm:text-5xl">Blog</h1>
       <Searchfield />
       <div ref="articlesAnchor" class="scroll-mt-24" aria-hidden="true"></div>
 
@@ -18,14 +18,14 @@
       />
 
       <template v-else-if="pageData">
-        <article v-if="featuredPost" class="blog-card-surface mt-14 overflow-hidden rounded-2xl border border-transparent bg-white shadow-md">
+        <article v-if="featuredPost" class="blog-card-surface mt-8 overflow-hidden sm:mt-14 rounded-2xl border border-transparent bg-white shadow-md">
           <NuxtLink :to="postUrl(featuredPost)" class="flex flex-col md:flex-row focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blu">
             <div class="w-full bg-ghiaccio md:w-5/12">
               <NuxtImg
                 v-if="featuredPost.featuredImage?.node?.sourceUrl"
                 :src="featuredPost.featuredImage.node.sourceUrl"
                 :alt="featuredPost.featuredImage.node.altText || featuredPost.title"
-                class="blog-card-image h-64 w-full object-cover md:h-full md:min-h-80"
+                class="blog-card-image h-52 w-full object-cover sm:h-64 md:h-full md:min-h-80"
                 width="640"
                 height="400"
                 loading="eager"
@@ -43,14 +43,14 @@
               <p class="mb-6 line-clamp-4 text-base leading-relaxed text-gray-700">
                 {{ plainBlogExcerpt(featuredPost.excerpt) }}
               </p>
-              <span class="inline-flex w-fit items-center rounded-xl border border-verde bg-verde px-6 py-2.5 font-semibold text-white ">
+              <span class="inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-verde bg-verde px-6 py-2.5 text-center font-semibold text-white sm:w-fit">
                 Leggi di più <span aria-hidden="true" class="ml-2">→</span>
               </span>
             </div>
           </NuxtLink>
         </article>
 
-        <div v-if="otherPosts.length" class="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div v-if="otherPosts.length" class="mt-7 grid grid-cols-1 gap-5 sm:mt-10 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
           <article
             v-for="post in otherPosts"
             :key="post.databaseId"
@@ -61,7 +61,7 @@
                 v-if="post.featuredImage?.node?.sourceUrl"
                 :src="post.featuredImage.node.sourceUrl"
                 :alt="post.featuredImage.node.altText || post.title"
-                class="blog-card-image h-48 w-full object-cover"
+                class="blog-card-image h-44 w-full object-cover sm:h-48"
                 width="480"
                 height="288"
                 loading="lazy"
@@ -78,7 +78,7 @@
                   <p class="mb-4 text-sm text-gray-500">
                     {{ post.authorName }} · <time :datetime="post.date">{{ formatDate(post.date) }}</time>
                   </p>
-                  <span class="inline-flex items-center rounded-xl border border-verde bg-verde px-5 py-2 font-semibold text-white ">
+                  <span class="inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-verde bg-verde px-5 py-2.5 text-center font-semibold text-white sm:w-fit">
                     Leggi di più <span aria-hidden="true" class="ml-2">→</span>
                   </span>
                 </div>
