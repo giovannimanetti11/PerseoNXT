@@ -1,5 +1,6 @@
 <template>
-  <div class="wiki-reference-gradient mx-auto mt-24 w-11/12 max-w-7xl rounded-2xl px-5 py-12 sm:px-10 sm:py-16">
+  <section class="wiki-reference-gradient py-14 w-11/12 m-auto rounded-2xl">
+    <div class="px-5 sm:px-10">
     <div class="w-full">
       <h1 class="text-4xl font-bold mb-8 text-center text-blu">Disclaimer</h1>
       <div class="w-full">
@@ -20,7 +21,8 @@
         </div>
       </div>
     </div>
-  </div>
+    </div>
+  </section>
 </template>
 
 <script setup>

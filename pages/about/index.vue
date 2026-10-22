@@ -1,5 +1,6 @@
 <template>
-  <div class="wiki-reference-gradient mx-auto mt-24 w-11/12 max-w-7xl rounded-2xl px-5 py-12 sm:px-10 sm:py-16">
+  <section class="wiki-reference-gradient py-14 w-11/12 m-auto rounded-2xl">
+    <div class="px-5 sm:px-10">
     <div class="w-full">
       <div v-if="pending" class="flex justify-center items-center h-64">
         <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
@@ -43,7 +44,8 @@
         </div>
       </div>
     </div>
-  </div>
+    </div>
+  </section>
 </template>
 
 <script setup lang="ts">
