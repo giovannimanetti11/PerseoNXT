@@ -16,7 +16,7 @@
       </div>
     </section>
 
-    <section aria-labelledby="profili-title" class="mx-auto mt-6 max-w-6xl rounded-2xl bg-gray-50 px-5 py-10 sm:px-10 sm:py-12">
+    <section aria-labelledby="profili-title" class="mt-6 rounded-2xl bg-gray-50 px-5 py-10 sm:px-10 sm:py-12">
       <h2 id="profili-title" class="text-center text-3xl font-bold text-gray-900">Chi cerchiamo</h2>
       <p class="mx-auto mt-3 max-w-3xl text-center leading-relaxed text-gray-700">
         Cerchiamo soprattutto collaboratori e collaboratrici per la redazione e la revisione scientifica:
@@ -30,7 +30,7 @@
       </div>
     </section>
 
-    <section class="mx-auto mt-6 grid max-w-6xl grid-cols-1 gap-6 lg:grid-cols-2">
+    <section class="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
       <div class="rounded-2xl bg-ghiaccio p-6 sm:p-8">
         <h2 class="text-2xl font-bold text-gray-900">Di cosa ti occuperai</h2>
         <ul class="mt-5 space-y-3 leading-relaxed text-gray-700">
@@ -64,7 +64,7 @@
       </div>
     </section>
 
-    <section id="candidatura" aria-labelledby="candidatura-title" class="mx-auto mt-6 max-w-6xl scroll-mt-28 rounded-2xl bg-gradient-to-b from-ghiaccio to-gray-50 px-5 py-10 sm:px-10 sm:py-12">
+    <section id="candidatura" aria-labelledby="candidatura-title" class="mt-6 scroll-mt-28 rounded-2xl bg-gradient-to-b from-ghiaccio to-gray-50 px-5 py-10 sm:px-10 sm:py-12">
       <div class="mx-auto max-w-3xl text-center">
         <h2 id="candidatura-title" class="text-3xl font-bold text-gray-900">Vuoi collaborare con noi?</h2>
         <p class="mt-4 leading-relaxed text-gray-700">
@@ -72,10 +72,10 @@
           gli argomenti che vorresti approfondire e la tua disponibilità.
           Se hai già pubblicato articoli o altri lavori divulgativi, puoi aggiungere i relativi link.
         </p>
-        <a href="mailto:info@wikiherbalist.com?subject=Candidatura%20collaborazione%20redazionale%20Wikiherbalist"
+        <NuxtLink to="/#section-contacts"
           class="mt-7 inline-flex min-h-12 w-full items-center justify-center rounded-xl border border-verde bg-verde px-6 py-3 font-semibold text-white transition-colors hover:bg-white hover:text-verde focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blu sm:w-auto">
           Scrivi alla redazione <span class="ml-2" aria-hidden="true">→</span>
-        </a>
+        </NuxtLink>
         <p class="mt-4 text-sm text-gray-600">
           In alternativa: <a href="mailto:info@wikiherbalist.com" class="font-semibold text-blu underline underline-offset-2 hover:text-verde">info@wikiherbalist.com</a>.
           Per il trattamento dei dati personali consulta la nostra
