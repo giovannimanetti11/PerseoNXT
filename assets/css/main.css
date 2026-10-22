@@ -329,3 +329,8 @@ body {
     text-shadow: none !important;
   }
 }
+/* Shared content background: matches Glossario, Blog and Piante medicinali. */
+.wiki-reference-gradient {
+  background: rgb(224, 237, 253);
+  background: linear-gradient(180deg, rgba(224, 237, 253, 1) 0%, rgba(245, 245, 245, 1) 82%);
+}

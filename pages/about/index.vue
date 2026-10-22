@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-gray-50 min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-7xl mx-auto">
+  <div class="wiki-reference-gradient mx-auto mt-24 w-11/12 max-w-7xl rounded-2xl px-5 py-12 sm:px-10 sm:py-16">
+    <div class="w-full">
       <div v-if="pending" class="flex justify-center items-center h-64">
         <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blu"></div>
       </div>
@@ -12,16 +12,16 @@
       />
       <div v-else>
         <!-- About Content -->
-        <div class="mt-16 mb-20">
+        <div class="mb-12 mt-5 sm:mb-16 sm:mt-8">
           <h1 class="text-4xl sm:text-5xl font-bold text-gray-800 mb-8 text-center">Il progetto Wikiherbalist</h1>
-          <div v-html="formattedAboutContent" class="about-content w-full mx-auto bg-white shadow-lg rounded-lg p-6 sm:p-8 text-base sm:text-lg text-gray-700 leading-relaxed"></div>
+          <div v-html="formattedAboutContent" class="about-content w-full mx-auto text-base sm:text-lg text-gray-700 leading-relaxed"></div>
         </div>
 
         <!-- Members Section -->
         <div v-if="members.length > 0" class="mb-16">
           <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-12 text-center">Staff</h2>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div v-for="member in reversedMembers" :key="member.id" class="bg-white shadow-lg rounded-lg overflow-hidden transition duration-300 ease-in-out hover:scale-105">
+            <div v-for="member in reversedMembers" :key="member.id" class="overflow-hidden rounded-2xl border border-blu/10 transition duration-300 ease-in-out hover:-translate-y-1 hover:shadow-md">
               <div class="p-6">
                 <div class="w-32 h-32 sm:w-40 sm:h-40 mx-auto mb-4 overflow-hidden rounded-full border-4 border-blue-100">
                   <NuxtImg 

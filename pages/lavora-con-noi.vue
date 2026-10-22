@@ -1,6 +1,6 @@
 <template>
-  <main class="mx-auto mt-24 w-11/12 max-w-7xl">
-    <section class="rounded-2xl bg-gradient-to-b from-ghiaccio to-gray-50 px-5 py-12 sm:px-10 sm:py-16">
+  <main class="wiki-reference-gradient mx-auto mt-24 w-11/12 max-w-7xl rounded-2xl px-5 py-12 sm:px-10 sm:py-16">
+    <section class="py-4 sm:py-6">
       <div class="mx-auto max-w-4xl text-center">
         <p class="mb-3 text-sm font-bold uppercase tracking-widest text-blu">Entra nella redazione</p>
         <h1 class="text-4xl font-bold text-gray-900 sm:text-5xl">Lavora con noi</h1>
@@ -9,29 +9,29 @@
           alla fitoterapia e all'informazione scientifica. Cerchiamo persone competenti
           che vogliano contribuire, come volontarie e volontari, alla qualità dei nostri contenuti.
         </p>
-        <a href="#candidatura"
+        <NuxtLink to="/#section-contacts"
           class="mt-8 inline-flex min-h-12 w-full items-center justify-center rounded-xl border border-verde bg-verde px-6 py-3 font-semibold text-white transition-colors hover:bg-white hover:text-verde focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blu sm:w-auto">
           Proponi la tua collaborazione <span class="ml-2" aria-hidden="true">→</span>
-        </a>
+        </NuxtLink>
       </div>
     </section>
 
-    <section aria-labelledby="profili-title" class="mt-6 rounded-2xl bg-gray-50 px-5 py-10 sm:px-10 sm:py-12">
+    <section aria-labelledby="profili-title" class="mt-6 border-t border-blu/10 pt-10 sm:pt-12">
       <h2 id="profili-title" class="text-center text-3xl font-bold text-gray-900">Chi cerchiamo</h2>
       <p class="mx-auto mt-3 max-w-3xl text-center leading-relaxed text-gray-700">
         Cerchiamo soprattutto collaboratori e collaboratrici per la redazione e la revisione scientifica:
         professionisti, ricercatori e persone con una preparazione verificabile nelle discipline pertinenti.
       </p>
       <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <article v-for="profile in profiles" :key="profile.title" class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+        <article v-for="profile in profiles" :key="profile.title" class="rounded-2xl border border-blu/10 p-6">
           <h3 class="text-xl font-bold text-blu">{{ profile.title }}</h3>
           <p class="mt-3 leading-relaxed text-gray-700">{{ profile.description }}</p>
         </article>
       </div>
     </section>
 
-    <section class="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
-      <div class="rounded-2xl bg-ghiaccio p-6 sm:p-8">
+    <section class="mt-8 grid grid-cols-1 gap-6 border-t border-blu/10 pt-10 sm:pt-12 lg:grid-cols-2">
+      <div class="rounded-2xl border border-blu/10 p-6 sm:p-8">
         <h2 class="text-2xl font-bold text-gray-900">Di cosa ti occuperai</h2>
         <ul class="mt-5 space-y-3 leading-relaxed text-gray-700">
           <li v-for="activity in activities" :key="activity" class="flex items-start gap-3">
@@ -44,7 +44,7 @@
           alle competenze e alla disponibilità di ciascuno.
         </p>
       </div>
-      <div class="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm sm:p-8">
+      <div class="rounded-2xl border border-blu/10 p-6 sm:p-8">
         <h2 class="text-2xl font-bold text-gray-900">Una collaborazione volontaria</h2>
         <p class="mt-5 leading-relaxed text-gray-700">
           Wikiherbalist opera come associazione di volontariato. Questa proposta
@@ -64,7 +64,7 @@
       </div>
     </section>
 
-    <section id="candidatura" aria-labelledby="candidatura-title" class="mt-6 scroll-mt-28 rounded-2xl bg-gradient-to-b from-ghiaccio to-gray-50 px-5 py-10 sm:px-10 sm:py-12">
+    <section id="candidatura" aria-labelledby="candidatura-title" class="mt-8 scroll-mt-28 border-t border-blu/10 pt-10 sm:pt-12">
       <div class="mx-auto max-w-3xl text-center">
         <h2 id="candidatura-title" class="text-3xl font-bold text-gray-900">Vuoi collaborare con noi?</h2>
         <p class="mt-4 leading-relaxed text-gray-700">
