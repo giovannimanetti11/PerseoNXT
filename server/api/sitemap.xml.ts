@@ -30,6 +30,7 @@ export default defineEventHandler(async (event) => {
       { url: '/glossario', lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.8 },
       { url: '/blog', lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.8 },
       { url: '/donazioni', lastmod: new Date().toISOString(), changefreq: 'monthly', priority: 0.5 },
+      { url: '/lavora-con-noi', lastmod: new Date().toISOString(), changefreq: 'monthly', priority: 0.6 },
     ];
 
     // Fetch all URLs from GraphQL directly

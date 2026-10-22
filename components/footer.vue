@@ -21,7 +21,7 @@
           <NuxtLink to="/blog" class="hover:underline">Blog</NuxtLink>
           <NuxtLink to="/about" class="hover:underline">About</NuxtLink>
           <NuxtLink to="/#section-contacts" class="hover:underline">Contattaci</NuxtLink>
-          <span class="hover:underline">Lavora con Noi</span>
+          <NuxtLink to="/lavora-con-noi" class="hover:underline">Lavora con Noi</NuxtLink>
           <span class="hover:underline">Prossimi Eventi</span>
           <span class="hover:underline">Newsletter</span>
           <NuxtLink to="/disclaimer" class="hover:underline">Disclaimer</NuxtLink>
@@ -92,10 +92,7 @@
             </div>
             <div class="w-1/3 px-4 flex justify-center">
               <div class="flex flex-col space-y-2 items-center">
-                <div class="relative">
-                  <span class="text-gray-600">Lavora con Noi</span>
-                  <img src="@/assets/coming_soon.svg" alt="Coming Soon" class="absolute top-0 -right-16 w-16 h-auto" />
-                </div>
+                <NuxtLink to="/lavora-con-noi" class="hover:underline">Lavora con Noi</NuxtLink>
                 <div class="relative">
                   <span class="text-gray-600">Prossimi Eventi</span>
                   <img src="@/assets/coming_soon.svg" alt="Coming Soon" class="absolute top-0 -right-16 w-16 h-auto" />

@@ -105,13 +105,12 @@
                 </a>
               </div>
               <div>
-                <button class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde overflow-hidden flex items-center" aria-label="Collabora con noi">
+                <NuxtLink to="/lavora-con-noi" class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde overflow-hidden flex items-center" aria-label="Collabora con noi">
                   <div class="absolute left-2 top-1/2 w-12 h-12 -translate-y-1/2 bg-white p-2 rounded-2xl border border-transparent flex justify-center items-center">
                     <Icon name="mdi:handshake" class="inner-icon text-celeste text-3xl group-hover:text-verde" />
                   </div>
                   <span class="absolute left-16 right-4 text-center">Collabora con noi</span>
-                  <img src="@/assets/coming_soon.svg" alt="Coming Soon" class="absolute top-0 right-0 w-16 h-auto mt-1 mr-1" />
-                </button>
+                </NuxtLink>
               </div>
               <div>
                 <a href="/#section-contacts" class="mega-menu-button relative text-white py-4 px-4 bg-celeste rounded-lg w-full h-16 transition-all duration-500 ease-in-out group hover:bg-verde overflow-hidden flex items-center" aria-label="Contattaci">
