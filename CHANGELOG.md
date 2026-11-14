@@ -19,3 +19,12 @@ All notable changes to this project are documented in this file.
 - `pages/glossario/index.vue`: Added `ItemList` + `DefinedTermSet` JSON-LD schema with all glossary terms enumerated
 - `server/api/sitemap.xml.ts`: Added image sitemap support — `featuredImage` fetched for each monograph, emitted as `<image:image>` nodes in sitemap XML; refactored date formatting and XML escaping helpers
 
+## [3.0.1] - 2026-11-14
+
+### Security
+- Dependencies: `npm audit fix` without major upgrades; critical (dompurify, vitest) and high (node-forge, undici, follow-redirects, js-cookie, minimatch, editorconfig) advisories resolved, 0 critical / 0 high remaining
+- `overrides`: undici 7.29.1 -> 7.30.2, nested `nuxt` -> undici 8.12.4
+
+### Fixed
+- `npm ci` failed on npm 11 during `nuxt prepare` because `nuxt-site-config` was only an optional peer at the tree root; now declared explicitly (`^3.2.21`, same version as the previous production release), so `scripts/deploy-production.sh` builds again from the lockfile
+

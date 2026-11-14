@@ -1,6 +1,6 @@
 {
   "name": "nuxt-app",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -41,6 +41,7 @@
     "mysql2": "^3.11.3",
     "nuxt": "^4.6.0",
     "nuxt-schema-org": "^6.4.3",
+    "nuxt-site-config": "^3.2.21",
     "ol": "^10.2.1",
     "sharp": "^0.35.5",
     "simple-donation": "^1.4.0",
@@ -73,9 +74,13 @@
   "overrides": {
     "simple-git": "4.0.2",
     "@simple-git/argv-parser": "2.0.1",
-    "undici": "7.29.1",
+    "undici": "7.30.2",
     "postcss-selector-parser": "7.1.6",
     "unhead": "3.4.2",
-    "@unhead/vue": "3.4.2"
+    "@unhead/vue": "3.4.2",
+    "nuxt": {
+      ".": "^4.6.0",
+      "undici": "8.12.4"
+    }
   }
 }
