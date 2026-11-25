@@ -1,5 +1,18 @@
 const SITE_URL = 'https://wikiherbalist.com'
-const GA_MEASUREMENT_ID = 'G-GZ4J8CZ4CW'
+// Google Analytics 4 measurement ID, read at build time. Without it the GA
+// scripts are not added to the page.
+const GA_MEASUREMENT_ID = process.env.NUXT_PUBLIC_GA_ID || ''
+
+const analyticsScripts = GA_MEASUREMENT_ID
+  ? [
+      // Consent Mode: analytics storage stays denied until the cookie banner
+      // records an explicit choice (see app/components/CookieBanner.vue).
+      {
+        innerHTML: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});gtag('js',new Date());gtag('config','${GA_MEASUREMENT_ID}');`,
+      },
+      { src: `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`, async: true },
+    ]
+  : []
 
 export default defineNuxtConfig({
   compatibilityDate: '2026-11-01',
@@ -53,12 +66,7 @@ export default defineNuxtConfig({
         { rel: 'dns-prefetch', href: 'https://analytics.ahrefs.com' },
       ],
       script: [
-        // Consent Mode: analytics storage stays denied until the cookie banner
-        // records an explicit choice (see components/cookieBanner.vue).
-        {
-          innerHTML: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});gtag('js',new Date());gtag('config','${GA_MEASUREMENT_ID}');`,
-        },
-        { src: `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`, async: true },
+        ...analyticsScripts,
         { src: 'https://analytics.ahrefs.com/analytics.js', 'data-key': '/ZokPG3lG0QlPl7i+ZSBZg', async: true },
       ],
     },
