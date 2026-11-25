@@ -17,6 +17,10 @@ body {
   background: linear-gradient(180deg, rgb(224 237 253) 0%, rgb(245 245 245) 82%);
 }
 
+.detail-gradient {
+  background: linear-gradient(180deg, rgb(224 237 253) 0%, rgb(245 245 245) 100%);
+}
+
 .section-gradient {
   background: linear-gradient(180deg, rgb(245 245 245) 0%, rgb(224 237 253) 100%);
 }
@@ -44,11 +48,15 @@ body {
   font-size: 1.5rem;
 }
 
-.content-section h3,
-.about-content h4 {
-  color: #036297;
+.content-section h3 {
+  color: #5E9EF4;
   font-size: 1.1rem;
   font-weight: 700;
+  margin-top: 20px;
+}
+
+.about-content h4 {
+  color: #5E9EF4;
   margin-top: 20px;
 }
 
@@ -253,7 +261,11 @@ body {
 
   .content-section,
   .soft-gradient,
-  .section-gradient {
+  .detail-gradient {
+  background: linear-gradient(180deg, rgb(224 237 253) 0%, rgb(245 245 245) 100%);
+}
+
+.section-gradient {
     background: none !important;
   }
 

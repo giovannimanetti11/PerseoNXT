@@ -20,7 +20,7 @@
 
           <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 pr-10 sm:pr-12">
             <div class="flex-1">
-              <h2 id="cookie-banner-title" class="text-base sm:text-lg font-bold text-blu mb-2">Cookie e privacy</h2>
+              <h2 id="cookie-banner-title" class="text-base sm:text-lg font-bold text-blu mb-2">🍪 Cookie e Privacy</h2>
               <p id="cookie-banner-description" class="text-xs sm:text-sm text-gray-700 leading-relaxed">
                 Usiamo cookie tecnici, necessari al funzionamento del sito, e cookie analitici di Google Analytics,
                 attivi solo con il tuo consenso. I dettagli sono nella
@@ -36,14 +36,14 @@
                 class="px-4 sm:px-6 py-2 text-sm sm:text-base border-2 border-blu text-blu rounded-lg hover:bg-ghiaccio transition-colors duration-300 font-semibold whitespace-nowrap"
                 @click="save(false)"
               >
-                Solo tecnici
+                Solo Essenziali
               </button>
               <button
                 type="button"
                 class="px-4 sm:px-6 py-2 text-sm sm:text-base bg-verde text-white rounded-lg hover:bg-celeste transition-colors duration-300 font-semibold whitespace-nowrap"
                 @click="save(true)"
               >
-                Accetta tutti
+                Accetta Tutti
               </button>
             </div>
           </div>

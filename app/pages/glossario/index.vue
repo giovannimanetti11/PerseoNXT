@@ -4,7 +4,20 @@
     <SiteSearch />
     <LoadingSpinner v-if="pending" />
     <ErrorState v-else-if="error" title="Impossibile caricare il glossario" message="I termini non sono disponibili in questo momento. Ricarica la pagina tra poco." />
-    <LetterIndex v-else-if="entries.length" :entries="entries" />
+    <div v-else-if="groups.length" class="flex justify-center mt-14">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-4xl">
+        <div v-for="group in groups" :key="group.letter" class="mb-6 flex flex-row ml-4 md:ml-0">
+          <div class="letter-heading flex items-center justify-center text-xl font-bold w-16 h-16 min-w-16 min-h-16 rounded-full bg-celeste text-white">{{ group.letter }}</div>
+          <ul class="ml-4 flex flex-row flex-wrap gap-4 self-center">
+            <li v-for="entry in group.entries" :key="entry.path">
+              <NuxtLink :to="entry.path" class="text-black hover:text-blu">
+                <h2>{{ entry.title }}</h2>
+              </NuxtLink>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
     <ErrorState v-else type="empty" title="Nessun termine trovato" message="Il glossario è vuoto." :show-retry="false" :show-contact="false" />
   </section>
   <ContactSection />
@@ -12,7 +25,6 @@
 
 <script setup lang="ts">
 import type { WpConnection } from '#shared/types/wordpress'
-import type { IndexEntry } from '~/components/LetterIndex.vue'
 
 const ALL_TERMS = `
   query AllGlossaryTerms {
@@ -27,10 +39,13 @@ const { data: terms, pending, error } = await useAsyncData('all-glossary-terms',
   return glossaryTerms.nodes
 })
 
-const entries = computed<IndexEntry[]>(() => (terms.value ?? []).map((term) => ({
+const entries = computed(() => (terms.value ?? []).map((term) => ({
   title: decodeEntities(term.title),
   path: contentPath('glossary', term.slug),
 })))
+
+// Terms keep the WordPress order inside each letter, as before.
+const groups = computed(() => groupByInitial(entries.value, false))
 
 const description = 'Glossario dei termini di botanica, fitochimica e fitoterapia usati nelle schede delle piante medicinali.'
 

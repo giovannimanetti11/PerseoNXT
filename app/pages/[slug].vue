@@ -1,26 +1,30 @@
 <template>
   <div id="post">
-    <section class="soft-gradient flex flex-col md:flex-row py-20 px-2 md:px-10 w-11/12 mx-auto rounded-2xl print:py-2 print:px-0 print:w-full">
+    <section class="detail-gradient flex flex-col md:flex-row py-20 px-2 md:px-10 w-11/12 mx-auto rounded-2xl print:py-2 print:px-0 print:w-full">
       <div class="w-full md:w-2/5 md:mt-28 mx-auto px-2 print:mt-8 print:px-0 order-2 md:order-1">
         <Breadcrumbs class="mb-12" :current-page-name="plant.title" parent-path="/piante-medicinali" parent-name="Piante medicinali" />
         <PlantInfo :plant="plant" />
       </div>
       <div class="w-full md:w-3/5 flex flex-col order-1 md:order-2 mb-8 md:mb-0">
-        <PlantGallery class="md:mr-16 md:mt-24 mb-8" :featured="plant.featuredImage" :additional="plant.additionalImages" />
+        <PlantGallery class="md:mr-16 mb-8" :featured="plant.featuredImage" :additional="plant.additionalImages" />
         <LazyObservationsMap v-if="plant.nomeScientifico" :nome-scientifico="plant.nomeScientifico" class="mt-8 md:mt-0 pb-4" />
       </div>
     </section>
 
-    <TableOfContents :headings="toc" />
+    <TableOfContents :headings="toc" item-width="w-full sm:w-2/5 md:w-1/5 flex-grow-0 flex-shrink-0" />
 
     <NumberedSection v-if="plant.tags.length" heading="Proprietà terapeutiche" :number="numberOf('Proprietà terapeutiche')">
       <ul class="mt-4 md:mt-8 flex flex-wrap justify-start gap-2 md:gap-4">
-        <li v-for="tag in plant.tags" :key="tag.id" class="w-full sm:w-2/5 md:w-1/5">
+        <li
+          v-for="tag in plant.tags"
+          :key="tag.id"
+          class="relative hover:bg-blu hover:text-white text-center bg-white text-blu rounded-xl text-xs md:text-sm cursor-pointer w-full sm:w-2/5 md:w-1/5 flex-grow-0 flex-shrink-0"
+        >
           <button
             type="button"
-            class="w-full text-center py-2 md:py-4 px-2 md:px-4 bg-white text-blu rounded-xl text-xs md:text-sm hover:bg-blu hover:text-white"
-            :disabled="!tag.description"
+            class="w-full h-full py-2 md:py-4 px-2 md:px-4"
             @click="openTag = tag"
+            @mouseenter="tag.description ? (openTag = tag) : undefined"
           >
             {{ tag.name }}
           </button>
@@ -71,7 +75,7 @@
       :number="numberOf(INTERACTIONS)"
     />
 
-    <InfoDialog :open="openTag !== null" :title="openTag?.name ?? ''" @close="openTag = null">
+    <InfoDialog tooltip :open="openTag !== null" :title="openTag?.name ?? ''" @close="openTag = null">
       <div v-html="sanitizeHtml(openTag?.description)"></div>
     </InfoDialog>
 

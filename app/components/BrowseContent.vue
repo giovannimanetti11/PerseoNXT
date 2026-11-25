@@ -23,7 +23,7 @@
           Sfoglia le <span class="text-blu">monografie</span> delle piante medicinali
         </template>
         <template v-else>
-          Cerca per <span class="text-blu">proprietà terapeutica</span>
+          Scopri le <span class="text-blu">proprietà terapeutiche</span> delle piante medicinali
         </template>
       </h2>
 

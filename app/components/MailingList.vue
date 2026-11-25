@@ -1,8 +1,8 @@
 <template>
-  <div class="w-full bg-white p-6 rounded-b-2xl">
+  <div class="menu-container w-full bg-white p-6 rounded-bl-2xl rounded-br-2xl transition-all duration-500 ease-out">
     <div class="mx-auto px-4 flex flex-col md:flex-row gap-4">
       <p class="w-full md:w-1/3 text-gray-700 text-lg">
-        Iscriviti alla <span class="text-blu">mailing list</span> di Wikiherbalist per ricevere i nuovi articoli e le monografie aggiornate.
+        Amplia le tue conoscenze erboristiche, iscriviti alla <span class="text-blu">mailing list</span> di Wikiherbalist
       </p>
       <div class="w-full md:w-2/3 flex flex-col items-center">
         <form class="w-full md:w-2/3 flex flex-col gap-2" @submit.prevent="onSubmit">

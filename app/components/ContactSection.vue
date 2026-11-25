@@ -6,6 +6,14 @@
         Per informazioni, segnalazioni o proposte di collaborazione usa il modulo: arriva direttamente alla redazione.
         Se preferisci l'email, scrivi a <a href="mailto:info@wikiherbalist.com" class="text-blu hover:text-celeste">info@wikiherbalist.com</a>.
       </p>
+      <div class="flex mt-4 w-12 h-12">
+        <a href="#" aria-label="Facebook" class="pointer-events-none bg-white text-blu p-2 rounded-2xl transition-colors duration-300 hover:bg-verde hover:text-white mr-2">
+          <Icon name="uil:facebook-f" class="text-3xl" />
+        </a>
+        <a href="#" aria-label="Instagram" class="pointer-events-none bg-white text-blu p-2 rounded-2xl transition-colors duration-300 hover:bg-verde hover:text-white">
+          <Icon name="uil:instagram" class="text-3xl" />
+        </a>
+      </div>
     </div>
     <div class="w-full md:w-3/5 p-2">
       <ContactForm />

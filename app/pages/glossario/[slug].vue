@@ -1,6 +1,6 @@
 <template>
   <div id="post">
-    <section class="soft-gradient flex flex-col md:flex-row py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl print:py-2 print:px-0 print:w-full">
+    <section class="detail-gradient flex flex-col md:flex-row py-10 md:py-20 px-4 md:px-10 w-11/12 mx-auto rounded-2xl print:py-2 print:px-0 print:w-full">
       <div class="mt-10 md:mt-20 mx-auto w-full md:w-3/5 px-2 md:px-4 print:mt-8 print:px-0">
         <Breadcrumbs class="mb-12" :current-page-name="term.title" parent-path="/glossario" parent-name="Glossario" />
         <ContentHeader
@@ -8,6 +8,7 @@
           :author="term.authorName"
           :published="term.date"
           :modified="term.modified"
+          kind="glossary"
           :reading-time="term.readingTime"
           speakable
         />

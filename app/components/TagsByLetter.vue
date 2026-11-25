@@ -1,56 +1,63 @@
 <template>
-  <section>
+  <div class="flex flex-col relative w-11/12 m-auto -my-4">
     <LoadingSpinner v-if="pending" />
-    <ErrorState v-else-if="error" title="Impossibile caricare le proprietà" :show-contact="false" />
 
-    <template v-else>
-      <AlphabetNav v-model="letter" :available="available" />
+    <ErrorState
+      v-else-if="error"
+      type="error"
+      title="Impossibile caricare le proprietà"
+      message="Si è verificato un problema nel recuperare i dati. Prova a ricaricare la pagina."
+      :show-contact="false"
+    />
 
-      <p class="text-center mt-4" aria-live="polite">{{ summary }}</p>
+    <div v-else>
+      <AlphabetNav v-model="letter" size="w-10 h-10 md:w-11 md:h-11 xl:w-12 xl:h-12" />
 
-      <div v-if="filtered.length" class="mt-8">
-        <div class="flex items-center justify-center text-xl font-bold w-16 h-16 rounded-full bg-celeste text-white mb-4">
-          {{ letter }}
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          <div v-for="tag in visible" :key="tag.id" class="mb-4">
-            <h3 class="font-semibold text-lg text-blu mb-2 flex items-center">
-              {{ tag.name }}
-              <button
-                v-if="tag.description"
-                type="button"
-                class="ml-2 text-celeste"
-                :aria-label="`Che cosa significa ${tag.name}`"
-                @click="openTag = tag"
-              >
-                <Icon name="mdi:information-outline" />
-              </button>
-            </h3>
-            <p class="text-sm">
-              <template v-for="(plant, index) in tag.plants" :key="plant.uri">
-                <NuxtLink :to="plant.uri" class="text-black hover:text-blu">{{ plant.title }}</NuxtLink>
-                <span v-if="index < tag.plants.length - 1">, </span>
-              </template>
-            </p>
+      <div class="text-center mt-4">
+        <p aria-live="polite">{{ summary }}</p>
+      </div>
+
+      <div class="mt-8">
+        <div v-if="filtered.length > 0" class="mb-6">
+          <div class="letter-heading flex items-center justify-center text-xl font-bold w-16 h-16 min-w-16 min-h-16 rounded-full bg-celeste text-white mb-4">
+            <span class="m-auto content-center text-white">{{ letter }}</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            <div v-for="tag in visible" :key="tag.id" class="mb-4">
+              <h3 class="font-semibold text-lg text-blu mb-2 flex items-center">
+                {{ tag.name }}
+                <button
+                  v-if="tag.description"
+                  type="button"
+                  class="relative ml-2"
+                  :aria-label="`Che cosa significa ${tag.name}`"
+                  @click.stop="openTag = openTag?.id === tag.id ? null : tag"
+                  @mouseenter="openTag = tag"
+                >
+                  <Icon name="mdi:information-outline" class="text-celeste cursor-pointer" />
+                </button>
+              </h3>
+              <p class="text-sm">
+                <template v-for="(plant, index) in tag.plants" :key="plant.uri">
+                  <NuxtLink :to="plant.uri" class="text-black hover:text-blu">{{ plant.title }}</NuxtLink><span v-if="index < tag.plants.length - 1">, </span>
+                </template>
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
       <div v-if="visible.length < filtered.length" class="text-center mt-8">
-        <button type="button" class="text-blu py-2 px-4 border border-blu rounded-xl hover:text-verde hover:border-verde" @click="pages++">
-          Mostra altre proprietà
+        <button type="button" class="bg-transparent text-blu py-2 px-4 border border-blu rounded-xl hover:text-verde hover:border-verde" @click="pages++">
+          Mostra più proprietà
         </button>
       </div>
-    </template>
+    </div>
 
-    <InfoDialog
-      :open="openTag !== null"
-      :title="openTag?.name ?? ''"
-      @close="openTag = null"
-    >
+    <InfoDialog tooltip :open="openTag !== null" :title="openTag?.name ?? ''" @close="openTag = null">
       <div class="font-normal" v-html="sanitizeHtml(openTag?.description)"></div>
     </InfoDialog>
-  </section>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -102,7 +109,6 @@ const { data: tags, pending, error } = await useAsyncData('property-tags', async
     .sort((a, b) => a.name.localeCompare(b.name, 'it', { sensitivity: 'base' }))
 })
 
-const available = computed(() => new Set((tags.value ?? []).map((tag) => initialLetter(tag.name))))
 
 const filtered = computed(() => {
   const term = props.searchTerm.trim().toLowerCase()
@@ -115,7 +121,7 @@ const visible = computed(() => filtered.value.slice(0, pages.value * PAGE_SIZE))
 const summary = computed(() => {
   const search = props.searchTerm.trim() ? ` e la ricerca "${props.searchTerm.trim()}"` : ''
   const count = filtered.value.length
-  if (!count) return `Nessuna proprietà per la lettera ${letter.value}${search}`
+  if (!count) return `Nessuna proprietà trovata per la lettera ${letter.value}${search}`
   return `${count} ${count === 1 ? 'proprietà trovata' : 'proprietà trovate'} per la lettera ${letter.value}${search}`
 })
 

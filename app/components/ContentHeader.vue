@@ -18,9 +18,12 @@
     <ContentActions :title="title" :author="author" :published="published" />
 
     <p class="mt-4 text-xs text-gray-500">
-      Pubblicato il {{ formatItalianDate(published) }}<template v-if="isDifferentDay(published, modified)">, aggiornato il {{ formatItalianDate(modified) }}</template>
+      <template v-if="kind === 'blog'">Articolo pubblicato il {{ date(published) }}</template>
+      <template v-else>
+        Scheda pubblicata il {{ date(published) }}<template v-if="isDifferentDay(published, modified)"> e {{ kind === 'plant' ? 'modificata' : 'aggiornata' }} il {{ date(modified) }}</template>
+      </template>
     </p>
-    <p class="text-xs text-gray-500 mt-2">Di {{ author }}</p>
+    <p class="text-xs text-gray-500 mt-2">Di: {{ author }}</p>
     <p class="flex items-center mt-2 text-xs text-gray-500">
       <Icon name="ph:clock-fill" class="text-sm text-gray-600 mr-1.5" />
       Tempo di lettura: {{ readingTime }} min
@@ -35,8 +38,16 @@ const props = withDefaults(defineProps<{
   published: string
   modified?: string
   readingTime: number
+  kind: 'plant' | 'glossary' | 'blog'
   speakable?: boolean
 }>(), { modified: '', speakable: false })
+
+const date = (value: string) => {
+  const parsed = new Date(value)
+  return Number.isNaN(parsed.getTime())
+    ? 'data non disponibile'
+    : parsed.toLocaleDateString('it-IT', { day: '2-digit', month: 'long', year: 'numeric' })
+}
 
 function speak() {
   if (!('speechSynthesis' in window)) return

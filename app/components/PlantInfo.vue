@@ -4,6 +4,7 @@
     :author="plant.authorName"
     :published="plant.date"
     :modified="plant.modified"
+    kind="plant"
     :reading-time="plant.readingTime"
     speakable
   >

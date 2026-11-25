@@ -4,7 +4,21 @@
     <SiteSearch />
     <LoadingSpinner v-if="pending" />
     <ErrorState v-else-if="error" title="Impossibile caricare le piante" message="L'elenco delle piante non è disponibile in questo momento. Ricarica la pagina tra poco." />
-    <LetterIndex v-else-if="entries.length" :entries="entries" />
+    <div v-else-if="groups.length" class="flex justify-center mt-14">
+      <div class="grid grid-cols-1 px-2 md:grid-cols-2 gap-4 w-full max-w-4xl">
+        <div v-for="group in groups" :key="group.letter" class="mb-6 flex flex-row ml-4 md:ml-0">
+          <div class="letter-heading flex items-center justify-center text-xl font-bold w-16 h-16 min-w-16 min-h-16 rounded-full bg-celeste text-white">{{ group.letter }}</div>
+          <ul class="ml-4 flex flex-col flex-wrap gap-4">
+            <li v-for="entry in group.entries" :key="entry.path" class="flex flex-row">
+              <NuxtLink :to="entry.path" class="text-black hover:text-blu">
+                <h2>{{ entry.title }}</h2>
+                <h3 class="italic">{{ entry.subtitle }}</h3>
+              </NuxtLink>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
     <ErrorState v-else type="empty" title="Nessuna pianta trovata" message="L'elenco è vuoto." :show-retry="false" :show-contact="false" />
   </section>
   <ContactSection />
@@ -12,7 +26,6 @@
 
 <script setup lang="ts">
 import type { WpConnection } from '#shared/types/wordpress'
-import type { IndexEntry } from '~/components/LetterIndex.vue'
 
 interface PlantNode {
   title: string
@@ -33,11 +46,13 @@ const { data: plants, pending, error } = await useAsyncData('all-plants', async 
   return posts.nodes
 })
 
-const entries = computed<IndexEntry[]>(() => (plants.value ?? []).map((plant) => ({
+const entries = computed(() => (plants.value ?? []).map((plant) => ({
   title: decodeEntities(plant.title),
   subtitle: plant.nomeScientifico ?? '',
   path: contentPath('plant', plant.slug),
 })))
+
+const groups = computed(() => groupByInitial(entries.value, true))
 
 const description = 'Elenco delle piante medicinali e aromatiche di Wikiherbalist: schede con proprietà, usi, botanica e ricerca scientifica.'
 

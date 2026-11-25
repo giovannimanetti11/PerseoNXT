@@ -20,28 +20,28 @@
         <p class="text-xl font-bold mb-4 text-blu">Trovi utile questa pagina?</p>
         <div class="flex space-x-4">
           <button type="button" class="flex-1 font-bold py-3 px-6 rounded-xl transition-colors bg-verde text-white hover:bg-white hover:text-verde" @click="choose('yes')">
-            Sì
+            SI
           </button>
           <button type="button" class="flex-1 font-bold py-3 px-6 rounded-xl transition-colors bg-red-500 text-white hover:bg-white hover:text-red-500" @click="choose('no')">
-            No
+            NO
           </button>
         </div>
       </template>
 
       <form v-else-if="step === 'comment'" @submit.prevent="send">
         <label for="feedback-comment" class="block text-lg font-semibold mb-3 text-blu">
-          {{ answer === 'yes' ? 'Cosa ti è stato utile?' : 'Cosa manca o cosa miglioreresti?' }}
+          Come miglioreresti Wikiherbalist?
         </label>
         <textarea
           id="feedback-comment"
           v-model="comment"
           class="w-full p-3 border border-celeste rounded-xl focus:outline-none focus:ring-2 focus:ring-blu"
           rows="4"
-          placeholder="Facoltativo"
+          placeholder="La tua opinione (opzionale, max 200 caratteri)"
           :maxlength="FEEDBACK_COMMENT_MAX"
         ></textarea>
         <div class="flex justify-between items-center mt-2 text-sm">
-          <span class="text-gray-500">{{ comment.length }}/{{ FEEDBACK_COMMENT_MAX }}</span>
+          <span class="text-gray-500">{{ comment.length }}/{{ FEEDBACK_COMMENT_MAX }} caratteri</span>
           <span v-if="commentError" class="text-red-500">{{ commentError }}</span>
         </div>
         <div class="flex justify-end mt-3">
@@ -56,12 +56,12 @@
       </form>
 
       <div v-else-if="step === 'done'" class="text-center" role="status">
-        <p class="text-xl font-bold mb-2 text-verde">Grazie!</p>
-        <p class="text-sm text-gray-600">La tua risposta è stata registrata.</p>
+        <p class="text-xl font-bold mb-2 text-verde">Grazie per il tuo feedback!</p>
+        <p class="text-sm text-gray-600">La tua opinione è importante per migliorare il sito.</p>
       </div>
 
       <div v-else class="text-center" role="alert">
-        <p class="text-xl font-bold mb-2 text-red-500">Invio non riuscito</p>
+        <p class="text-xl font-bold mb-2 text-red-500">Si è verificato un errore</p>
         <p class="text-sm text-gray-600">{{ errorMessage }}</p>
         <button type="button" class="mt-3 bg-blu text-white font-bold py-2 px-4 rounded-xl hover:bg-celeste transition-colors duration-300" @click="step = 'comment'">
           Riprova

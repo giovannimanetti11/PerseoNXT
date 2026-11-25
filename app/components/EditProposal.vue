@@ -15,28 +15,28 @@
       <form v-if="!result.success" class="space-y-4 text-base text-black" @submit.prevent="onSubmit">
         <div class="flex gap-4">
           <label class="w-1/2">
-            <span class="block mb-1">Nome</span>
-            <input v-model.trim="form.nome" type="text" autocomplete="given-name" class="w-full border rounded p-2" required maxlength="100">
+            <span class="block mb-2">Nome:</span>
+            <input v-model.trim="form.nome" type="text" autocomplete="given-name" class="w-full border rounded p-2" placeholder="Es. Mario" required maxlength="100">
           </label>
           <label class="w-1/2">
-            <span class="block mb-1">Cognome</span>
-            <input v-model.trim="form.cognome" type="text" autocomplete="family-name" class="w-full border rounded p-2" required maxlength="100">
+            <span class="block mb-2">Cognome:</span>
+            <input v-model.trim="form.cognome" type="text" autocomplete="family-name" class="w-full border rounded p-2" placeholder="Es. Rossi" required maxlength="100">
           </label>
         </div>
         <label class="block">
-          <span class="block mb-1">Email</span>
-          <input v-model.trim="form.email" type="email" autocomplete="email" class="w-full border rounded p-2" required>
+          <span class="block mb-2">Email:</span>
+          <input v-model.trim="form.email" type="email" autocomplete="email" class="w-full border rounded p-2" placeholder="Es. mario.rossi@email.com" required>
         </label>
         <label class="block">
-          <span class="block mb-1">Titolo di studio <span class="text-gray-500">(facoltativo)</span></span>
-          <input v-model.trim="form.titoloStudio" type="text" class="w-full border rounded p-2" placeholder="Es. laurea in Biologia" maxlength="200">
+          <span class="block mb-2">Titolo di studio:</span>
+          <input v-model.trim="form.titoloStudio" type="text" class="w-full border rounded p-2" placeholder="Es. Laurea in Biologia" maxlength="200">
         </label>
         <label class="block">
-          <span class="block mb-1">Affiliazione <span class="text-gray-500">(facoltativo)</span></span>
+          <span class="block mb-2">Affiliazione:</span>
           <input v-model.trim="form.affiliazione" type="text" class="w-full border rounded p-2" placeholder="Es. Università di Bologna" maxlength="200">
         </label>
         <label class="block">
-          <span class="block mb-1">Sezione da modificare</span>
+          <span class="block mb-2">Sezione da modificare:</span>
           <select v-model="form.section" class="w-full border rounded p-2" required>
             <option value="" disabled>Seleziona una sezione</option>
             <option v-for="section in sections" :key="section" :value="section">{{ section }}</option>
@@ -44,12 +44,12 @@
           </select>
         </label>
         <label class="block">
-          <span class="block mb-1">La tua proposta</span>
-          <textarea v-model="form.proposal" rows="6" class="w-full border rounded p-2" required maxlength="5000"></textarea>
+          <span class="block mb-2">La tua proposta:</span>
+          <textarea v-model="form.proposal" rows="6" class="w-full border rounded p-2" placeholder="Scrivi qui la tua proposta di modifica..." required maxlength="5000"></textarea>
         </label>
         <label class="block">
-          <span class="block mb-1">Perché la proponi</span>
-          <textarea v-model="form.reason" rows="3" class="w-full border rounded p-2" placeholder="Per esempio la fonte che la sostiene" required maxlength="2000"></textarea>
+          <span class="block mb-2">Motivazione della modifica:</span>
+          <textarea v-model="form.reason" rows="3" class="w-full border rounded p-2" placeholder="Spiega brevemente perché proponi questa modifica..." required maxlength="2000"></textarea>
         </label>
         <div class="flex justify-end gap-2">
           <button type="button" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300" @click="close">Annulla</button>
