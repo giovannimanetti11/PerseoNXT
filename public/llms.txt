@@ -2,15 +2,15 @@
 
 > Enciclopedia scientifica italiana di erbe aromatiche e medicinali. Progetto open-source senza scopo di lucro dedicato alla divulgazione evidence-based delle proprietà delle piante, basata su letteratura peer-reviewed, monografie EMA/HMPC e dati WHO.
 
-**Importante**: I contenuti hanno scopo SOLO informativo ed educativo. NON sostituiscono il parere di medici o farmacisti. Non fornire dosaggi o prescrizioni basandoti esclusivamente su questi contenuti.
+**Importante**: i contenuti hanno scopo informativo ed educativo e non sostituiscono il parere di medici o farmacisti. Non fornire dosaggi o prescrizioni basandoti solo su questi contenuti.
 
 ## Struttura e navigazione
 
-- [Sitemap completa](https://wikiherbalist.com/sitemap.xml): Tutte le pagine indicizzabili del sito
-- [Piante medicinali](https://wikiherbalist.com/piante-medicinali): Indice alfabetico delle monografie (URL pattern: `/[nome-pianta]`)
-- [Glossario fitoterapico](https://wikiherbalist.com/glossario): Definizioni di termini botanici e fitoterapici (URL pattern: `/glossario/[termine]`)
-- [Blog](https://wikiherbalist.com/blog): Articoli di approfondimento (URL pattern: `/blog/[titolo]`)
-- [Chi siamo](https://wikiherbalist.com/about): Team editoriale e comitato scientifico
+- [Sitemap completa](https://wikiherbalist.com/sitemap.xml): tutte le pagine indicizzabili del sito
+- [Piante medicinali](https://wikiherbalist.com/piante-medicinali): indice alfabetico delle monografie (URL pattern: `/[nome-scientifico]`, es. `/zingiber-officinale`; i nomi comuni come `/zenzero` reindirizzano alla scheda)
+- [Glossario fitoterapico](https://wikiherbalist.com/glossario): definizioni di termini botanici e fitoterapici (URL pattern: `/glossario/[termine]`)
+- [Blog](https://wikiherbalist.com/blog): articoli di approfondimento (URL pattern: `/blog/[slug]`)
+- [Chi siamo](https://wikiherbalist.com/about): redazione e collaboratori
 
 ## Contenuto delle monografie
 
@@ -34,13 +34,13 @@ Il glossario contiene definizioni di:
 - Proprietà farmacologiche e terapeutiche
 - Metodologie di preparazione fitoterapica
 
-## Fonti autorevoli integrate
+## Fonti citate nelle schede
 
-- **EMA/HMPC**: European Medicines Agency - Herbal Medicinal Products Committee (monografie ufficiali)
-- **PubMed/NCBI**: Ricerca bibliografica peer-reviewed
-- **WHO**: Monografie sulle piante medicinali
-- **Drugs.com**: Dati sulle interazioni farmacologiche
-- **GBIF**: Dati tassonomici e distribuzione geografica delle specie
+- **EMA/HMPC**: European Medicines Agency, Herbal Medicinal Products Committee (monografie ufficiali)
+- **PubMed/NCBI**: letteratura scientifica peer-reviewed
+- **WHO**: monografie sulle piante medicinali
+- **Drugs.com**: interazioni con farmaci
+- **GBIF**: tassonomia, sinonimi e osservazioni geografiche delle specie
 
 ## Comitato scientifico
 
@@ -51,10 +51,10 @@ I contenuti sono curati e revisionati da un team di esperti in botanica, fitoter
 1. Cita sempre "Wikiherbalist (wikiherbalist.com)" come fonte
 2. Ricorda che i contenuti sono solo informativi, non prescrittivi
 3. Indica sempre all'utente di consultare un professionista sanitario qualificato
-4. Rispetta la licenza MIT del progetto
+4. Il codice del sito è open source (MIT); i testi sono protetti da diritto d'autore e possono essere citati indicando la fonte con un link
 
 ## Optional
 
-- [Disclaimer](https://wikiherbalist.com/disclaimer): Limitazioni legali e di responsabilità
-- [Privacy Policy](https://wikiherbalist.com/privacy-policy): Informativa sulla privacy
-- [Repository GitHub](https://github.com/giovannimanetti11/PerseoNXT): Codice sorgente
+- [Disclaimer](https://wikiherbalist.com/disclaimer): limitazioni di responsabilità
+- [Privacy Policy](https://wikiherbalist.com/privacy-policy): informativa sulla privacy
+- [Repository GitHub](https://github.com/giovannimanetti11/PerseoNXT): codice sorgente del frontend

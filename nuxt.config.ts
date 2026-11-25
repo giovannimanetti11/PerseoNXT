@@ -1,48 +1,33 @@
-import { defineNuxtConfig } from 'nuxt/config'
-import { fileURLToPath } from 'url'
+const SITE_URL = 'https://wikiherbalist.com'
+const GA_MEASUREMENT_ID = 'G-GZ4J8CZ4CW'
 
 export default defineNuxtConfig({
+  compatibilityDate: '2026-11-01',
   devtools: { enabled: false },
-  buildDir: '.nuxt',
-
-  // Image handling configuration
-  image: {
-    domains: ['wikiherbalist.com', 'admin.wikiherbalist.com'],
-    alias: {
-      media: '/media',
-    },
-    provider: 'ipx',
-    ipx: {
-      modifiers: {
-        format: ['webp', 'jpg', 'png'],
-        quality: 90,
-        fit: 'cover',
-      },
-      maxAge: 60 * 60 * 24 * 365
-    }
-  },
-
-  // Server configuration
   ssr: true,
 
-  // Site and URL configuration
+  modules: [
+    '@nuxtjs/tailwindcss',
+    '@nuxt/fonts',
+    '@nuxt/icon',
+    '@nuxt/image',
+    '@nuxtjs/robots',
+    'nuxt-schema-org',
+    'simple-donation',
+  ],
+
+  css: ['~/assets/css/main.css'],
+
   site: {
     name: 'Wikiherbalist',
-    url: 'https://wikiherbalist.com',
-    baseURL: '/',
+    url: SITE_URL,
     defaultLocale: 'it',
-    language: 'it',
   },
 
-  // Application head configuration
   app: {
-    name: 'Wikiherbalist',
-    baseURL: '/',
     head: {
       titleTemplate: '%s | Wikiherbalist',
-      htmlAttrs: {
-        lang: 'it',
-      },
+      htmlAttrs: { lang: 'it' },
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -51,308 +36,127 @@ export default defineNuxtConfig({
         { property: 'og:site_name', content: 'Wikiherbalist' },
         { property: 'og:locale', content: 'it_IT' },
         { property: 'og:type', content: 'website' },
-        { property: 'og:image', content: 'https://wikiherbalist.com/media/og-wikiherbalist.jpg' },
-        { property: 'og:image:width', content: '1200' },
-        { property: 'og:image:height', content: '630' },
+        { property: 'og:image', content: `${SITE_URL}/media/default-og-image.jpg` },
+        { property: 'og:image:width', content: '1042' },
+        { property: 'og:image:height', content: '596' },
         { property: 'og:image:type', content: 'image/jpeg' },
         { name: 'twitter:card', content: 'summary_large_image' },
-        { name: 'twitter:image', content: 'https://wikiherbalist.com/media/og-wikiherbalist.jpg' },
+        { name: 'twitter:image', content: `${SITE_URL}/media/default-og-image.jpg` },
       ],
       link: [
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-        { rel: 'alternate', hreflang: 'it', href: 'https://wikiherbalist.com' },
-        { rel: 'alternate', hreflang: 'x-default', href: 'https://wikiherbalist.com' },
+        { rel: 'alternate', hreflang: 'it', href: SITE_URL },
+        { rel: 'alternate', hreflang: 'x-default', href: SITE_URL },
         { rel: 'preconnect', href: 'https://www.googletagmanager.com' },
         { rel: 'preconnect', href: 'https://zxr67682v8-dsn.algolia.net' },
-        { rel: 'preconnect', href: 'https://ka-f.fontawesome.com' },
-        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
         { rel: 'dns-prefetch', href: 'https://www.google-analytics.com' },
         { rel: 'dns-prefetch', href: 'https://analytics.ahrefs.com' },
       ],
       script: [
+        // Consent Mode: analytics storage stays denied until the cookie banner
+        // records an explicit choice (see components/cookieBanner.vue).
         {
-          src: 'https://www.googletagmanager.com/gtag/js?id=G-GZ4J8CZ4CW',
-          async: true
+          innerHTML: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied'});gtag('js',new Date());gtag('config','${GA_MEASUREMENT_ID}');`,
         },
-        {
-          innerHTML: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-GZ4J8CZ4CW');
-          `,
-          type: 'text/javascript'
-        },
-        {
-          src: 'https://analytics.ahrefs.com/analytics.js',
-          'data-key': '/ZokPG3lG0QlPl7i+ZSBZg',
-          async: true
-        },
-      ]
+        { src: `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`, async: true },
+        { src: 'https://analytics.ahrefs.com/analytics.js', 'data-key': '/ZokPG3lG0QlPl7i+ZSBZg', async: true },
+      ],
     },
   },
 
-  // Runtime configuration
+  // Values are read from the environment at build time and can be overridden
+  // at runtime with the matching NUXT_* variable (e.g. NUXT_SENDGRID_API_KEY).
   runtimeConfig: {
-    // Private keys - only available server-side
-    wpBaseUrl: process.env.WP_BASE_URL || 'https://admin.wikiherbalist.com/graphql',
-    graphqlEndpoint: process.env.GRAPHQL_ENDPOINT,
-    wpUsername: process.env.WP_USERNAME,
-    wpAppPassword: process.env.WP_APP_PASSWORD,
-    pubMedApiKey: process.env.PUBMED_API_KEY,
-    amazonPollyAccess: process.env.AMAZON_POLLY_ACCESS_KEY,
-    amazonPollySecret: process.env.AMAZON_POLLY_SECRET_KEY,
-    algoliaAccessPassword: process.env.ALGOLIA_ACCESS_PASSWORD,
-    algoliaAccessPasswordHash: process.env.ALGOLIA_ACCESS_PASSWORD_HASH,
-    algoliaWriteApiKey: process.env.ALGOLIA_WRITE_API_KEY,
-    algoliaAdminApiKey: process.env.ALGOLIA_ADMIN_API_KEY,
-    algoliaUsageApiKey: process.env.ALGOLIA_USAGE_API_KEY,
-    algoliaMonitoringApiKey: process.env.ALGOLIA_MONITORING_API_KEY,
-    sendGridApiKey: process.env.SENDGRID_API_KEY,
-    recaptchaSecretKey: process.env.RECAPTCHA_SECRET_KEY,
-    mailchimpApiKey: process.env.MAILCHIMP_API_KEY,
-    mailchimpListId: process.env.MAILCHIMP_LIST_ID,
+    wpGraphqlUrl: process.env.GRAPHQL_ENDPOINT || process.env.WP_BASE_URL || 'https://admin.wikiherbalist.com/graphql',
+    pubmedApiKey: process.env.PUBMED_API_KEY || '',
+    algoliaAccessPassword: process.env.ALGOLIA_ACCESS_PASSWORD || '',
+    algoliaAccessPasswordHash: process.env.ALGOLIA_ACCESS_PASSWORD_HASH || '',
+    algoliaWriteApiKey: process.env.ALGOLIA_WRITE_API_KEY || '',
+    sendgridApiKey: process.env.SENDGRID_API_KEY || '',
+    recaptchaSecretKey: process.env.RECAPTCHA_SECRET_KEY || '',
+    mailchimpApiKey: process.env.MAILCHIMP_API_KEY || '',
+    mailchimpListId: process.env.MAILCHIMP_LIST_ID || '',
     mailchimpServerPrefix: process.env.MAILCHIMP_SERVER_PREFIX || 'us17',
     dbHost: process.env.DB_HOST || 'localhost',
-    dbUser: process.env.DB_USER,
-    dbPassword: process.env.DB_PASSWORD,
-    dbName: process.env.DB_NAME,
-
-    // Public keys - available on both client and server
+    dbUser: process.env.DB_USER || '',
+    dbPassword: process.env.DB_PASSWORD || '',
+    dbName: process.env.DB_NAME || '',
+    redisPassword: process.env.REDIS_PASSWORD || '',
     public: {
-      siteName: 'Wikiherbalist',
-      recaptchaPublicKey: process.env.RECAPTCHA_PUBLIC_KEY,
-      paypalClientId: process.env.PAYPAL_CLIENT_ID,
+      siteUrl: SITE_URL,
+      recaptchaSiteKey: process.env.RECAPTCHA_PUBLIC_KEY || '',
       algolia: {
-        applicationId: process.env.NUXT_PUBLIC_ALGOLIA_APP_ID,
-        apiKey: process.env.NUXT_PUBLIC_ALGOLIA_SEARCH_API_KEY,
-        indexName: 'wikiherbalist'
-      }
-    }
-  },
-
-  // Modules configuration
-  modules: [
-    '@nuxtjs/tailwindcss',
-    '@nuxtjs/google-fonts',
-    '@nuxt/icon',
-    '@nuxt/image',
-    '@nuxtjs/robots',
-    "nuxt-schema-org",
-    'simple-donation',
-    '@nuxtjs/algolia'
-  ],
-
-  // Schema.org configuration
-  schemaOrg: {
-    host: 'https://wikiherbalist.com',
-    siteName: 'Wikiherbalist',
-    canonicalHost: 'https://wikiherbalist.com'
-  },
-
-  algolia: {
-    apiKey: process.env.NUXT_PUBLIC_ALGOLIA_SEARCH_API_KEY,
-    applicationId: process.env.NUXT_PUBLIC_ALGOLIA_APP_ID,
-    lite: true,
-    search: true,
-    indexName: 'wikiherbalist'
-  },
-
-  // Simple donation module configuration
-  simpleDonation: {
-    paypal: {
-      clientId: process.env.PAYPAL_CLIENT_ID
+        applicationId: process.env.NUXT_PUBLIC_ALGOLIA_APP_ID || '',
+        searchApiKey: process.env.NUXT_PUBLIC_ALGOLIA_SEARCH_API_KEY || '',
+        indexName: 'wikiherbalist',
+      },
     },
+  },
+
+  fonts: {
+    families: [{ name: 'Lato', weights: [300, 400, 700, 900], provider: 'google' }],
+    defaults: { styles: ['normal', 'italic'] },
+  },
+
+  image: {
+    domains: ['wikiherbalist.com', 'admin.wikiherbalist.com'],
+    provider: 'ipx',
+    ipx: {
+      modifiers: { quality: 90 },
+      maxAge: 60 * 60 * 24 * 365,
+    },
+  },
+
+  schemaOrg: {
+    identity: {
+      type: 'Organization',
+      name: 'Wikiherbalist',
+      url: SITE_URL,
+      logo: `${SITE_URL}/media/logo.png`,
+    },
+  },
+
+  simpleDonation: {
+    paypal: { clientId: process.env.PAYPAL_CLIENT_ID || '' },
     colors: {
       primary: '#036297',
       secondary: '#5E9EF4',
       accent: '#0DA6A4',
-      background: '#f5f5f5'
+      background: '#f5f5f5',
     },
   },
 
-  // Robots.txt configuration
-  robots: {
-    UserAgent: '*',
-    Allow: '/',
-    Disallow: '',
-    Sitemap: 'https://wikiherbalist.com/sitemap.xml',
-  },
-
-  // Google Fonts configuration
-  googleFonts: {
-    families: {
-      Lato: [300, 400, 700, 900],
-    },
-    display: 'swap',
-    preload: true,
-    preconnect: true,
-    useStylesheet: true,
-    download: true,
-    base64: false,
-  },
-
-  // CSS configuration
-  css: [
-    '~/assets/css/main.css'
-  ],
-
-  // Plugins configuration
-  plugins: [
-    // Apollo plugin removed - using native useGraphQL composable instead
-  ],
-
-  // PostCSS configuration
-  postcss: {
-    plugins: {
-      tailwindcss: {},
-      autoprefixer: {},
-    },
-  },
-
-  // Aliases configuration
-  alias: {
-    '@config': fileURLToPath(new URL('./config.js', import.meta.url)),
-  },
-
-  // Build configuration
   build: {
-    transpile: ['vue-easy-lightbox', 'cheerio'],
-    analyze: false,
-    extractCSS: false,
-    optimizeCSS: false,
-    optimization: {
-      splitChunks: {
-        chunks: 'all',
-        automaticNameDelimiter: '.',
-        name: undefined,
-        cacheGroups: {
-          vendor: {
-            test: /[\\/]node_modules[\\/]/,
-            name(module: { context: string }): string {
-              const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
-              return `npm.${packageName.replace('@', '')}`;
-            },
-          },
-        }
-      }
-    },
+    transpile: ['vue-easy-lightbox'],
   },
 
-  // Router configuration (Nuxt 4 compatible)
-  router: {
-    options: {
-      strict: false
-    }
-  },
-
-  // Vite configuration
-  vite: {
-    server: {
-      hmr: {
-        protocol: 'ws',
-        host: 'localhost'
-      }
-    },
-    optimizeDeps: {
-      include: ['vue', 'vue-router', '@vueuse/core'],
-      force: true  // Force re-optimization to fix TDZ errors
-    },
-    build: {
-      rollupOptions: {
-        output: {
-          // Manual chunk splitting to avoid circular dependencies
-          manualChunks(id) {
-            if (!id.includes('node_modules')) return
-            if (id.includes('/vue/') || id.includes('/vue-router/')) return 'vue-core'
-            if (id.includes('/@vueuse/core/')) return 'composables'
-          }
-        }
-      }
-    }
-  },
-
-  // Disable module-generated static sitemap; use dynamic API endpoint instead
-  sitemap: {
-    enabled: false
-  },
-
-  // SEO configuration
-  seo: {
-    baseUrl: 'https://wikiherbalist.com',
-    name: 'Wikiherbalist',
-    title: 'Enciclopedia di erbe aromatiche e medicinali',
-    description: 'Enciclopedia online di erbe aromatiche e medicinali. Scopri proprietà, usi e benefici delle piante.',
-  },
-
-  // Link checker configuration
-  linkChecker: {
-    enabled: false, // Disable link checker during build to avoid localhost errors
-  },
-
-  // Nitro server configuration
   nitro: {
     compressPublicAssets: true,
     routeRules: {
-      // Block _ipx image proxy from indexing
-      '/_ipx/**': {
-        headers: {
-          'X-Robots-Tag': 'noindex, nofollow'
-        }
-      },
-
-      // API routes: no cache + CORS headers
+      '/_ipx/**': { headers: { 'X-Robots-Tag': 'noindex, nofollow' } },
+      '/algoliaUpdate': { headers: { 'X-Robots-Tag': 'noindex, nofollow' } },
       '/api/**': {
         cache: false,
         headers: {
           'Access-Control-Allow-Origin': 'https://admin.wikiherbalist.com',
           'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
           'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-          'Access-Control-Allow-Credentials': 'true'
-        }
+          'Access-Control-Allow-Credentials': 'true',
+        },
       },
-
-      // Sitemap proxy
-      '/sitemap.xml': {
-        proxy: '/api/sitemap.xml',
-        cache: false
-      },
-
-      // Default: ISR with Stale-While-Revalidate for all other routes
-      // TEMPORARILY DISABLED - Causing client-side routing errors in Nuxt 4.2.0
-      // '/**': {
-      //   swr: 3600,  // 1 hour cache with background revalidation
-      //   headers: {
-      //     'X-Robots-Tag': 'index, follow'
-      //   }
-      // }
+      '/sitemap.xml': { proxy: '/api/sitemap.xml' },
+      // Old admin pages, merged into /algoliaUpdate
+      '/algoliaGlossaryUpdate': { redirect: { to: '/algoliaUpdate?type=glossary', statusCode: 301 } },
+      '/algoliaBlogPostsUpdate': { redirect: { to: '/algoliaUpdate?type=blog', statusCode: 301 } },
     },
     prerender: {
-      crawlLinks: false, // Disable crawling to avoid 403 errors from WordPress during build
-      ignore: [
-        '/_ipx/**',
-        '/api/**',
-        '/_ipx/f_webp**',
-        '/sitemap.xml'
-      ],
-      routes: [
-        '/',
-        '/about',
-        '/disclaimer',
-        '/privacy-policy',
-        '/cookie-policy',
-        '/donazioni'
-      ]
-    }
+      // WordPress answers 403 to the build crawler, so only static pages are prerendered.
+      crawlLinks: false,
+      routes: ['/', '/about', '/disclaimer', '/privacy-policy', '/cookie-policy', '/donazioni', '/lavora-con-noi'],
+    },
   },
 
-  // Future flags for Nuxt 4 compatibility
-  future: {
-    compatibilityVersion: 4
+  typescript: {
+    strict: true,
   },
-
-  // Compatibility date
-  compatibilityDate: '2024-11-01',
-
-});
+})

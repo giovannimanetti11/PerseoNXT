@@ -1,102 +1,86 @@
-import { createError, getHeader, readRawBody } from 'h3'
+import type { GraphqlResponse } from '#shared/types/wordpress'
 import { GraphqlSecurityError, validateGraphqlReadOnly } from '../utils/graphqlSecurity'
 
 const MAX_GRAPHQL_BODY_BYTES = 64 * 1024
 const ALLOWED_BODY_KEYS = new Set(['query', 'variables', 'operationName'])
 
-export default defineEventHandler(async (event) => {
-  if (event.method !== 'POST') {
-    throw createError({ statusCode: 405, statusMessage: 'Method not allowed' })
+function rethrowSecurityError(error: unknown): never {
+  if (error instanceof GraphqlSecurityError) {
+    throw createError({ statusCode: error.statusCode, statusMessage: error.message })
   }
+  throw error
+}
 
+async function readGraphqlBody(event: Parameters<typeof readRawBody>[0]): Promise<Record<string, unknown>> {
   const contentLength = Number(getHeader(event, 'content-length') || 0)
   if (Number.isFinite(contentLength) && contentLength > MAX_GRAPHQL_BODY_BYTES) {
-    throw createError({ statusCode: 413, statusMessage: 'GraphQL request too large' })
+    throw new GraphqlSecurityError(413, 'GraphQL request too large')
   }
+  const raw = await readRawBody(event, 'utf8')
+  if (!raw || Buffer.byteLength(raw, 'utf8') > MAX_GRAPHQL_BODY_BYTES) {
+    throw new GraphqlSecurityError(413, 'GraphQL request too large')
+  }
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(raw)
+  } catch {
+    throw new GraphqlSecurityError(400, 'Invalid request body')
+  }
+  if (!parsed || Array.isArray(parsed) || typeof parsed !== 'object') {
+    throw new GraphqlSecurityError(400, 'Invalid GraphQL request body')
+  }
+  return parsed as Record<string, unknown>
+}
+
+/**
+ * Public read-only GraphQL proxy towards WordPress. It never forwards the
+ * WordPress credentials: with them, any valid read query sent by a visitor
+ * would run with server privileges.
+ */
+export default defineEventHandler(async (event) => {
+  assertMethod(event, 'POST')
 
   let body: Record<string, unknown>
+  let safe: ReturnType<typeof validateGraphqlReadOnly>
   try {
-    const raw = await readRawBody(event, 'utf8')
-    if (!raw || Buffer.byteLength(raw, 'utf8') > MAX_GRAPHQL_BODY_BYTES) {
-      throw new GraphqlSecurityError(413, 'GraphQL request too large')
-    }
-    const parsed = JSON.parse(raw)
-    if (!parsed || Array.isArray(parsed) || typeof parsed !== 'object') {
-      throw new GraphqlSecurityError(400, 'Invalid GraphQL request body')
-    }
-    body = parsed as Record<string, unknown>
-  } catch (error) {
-    if (error instanceof GraphqlSecurityError) {
-      throw createError({ statusCode: error.statusCode, statusMessage: error.message })
-    }
-    throw createError({ statusCode: 400, statusMessage: 'Invalid request body' })
-  }
+    body = await readGraphqlBody(event)
+    const unsupported = Object.keys(body).find((key) => !ALLOWED_BODY_KEYS.has(key))
+    if (unsupported) throw new GraphqlSecurityError(400, `Unsupported GraphQL request field: ${unsupported}`)
 
-  for (const key of Object.keys(body)) {
-    if (!ALLOWED_BODY_KEYS.has(key)) {
-      throw createError({ statusCode: 400, statusMessage: `Unsupported GraphQL request field: ${key}` })
+    const { operationName } = body
+    if (operationName !== undefined && (
+      typeof operationName !== 'string'
+      || operationName.length > 128
+      || !/^[_A-Za-z][_0-9A-Za-z]*$/.test(operationName)
+    )) {
+      throw new GraphqlSecurityError(400, 'Invalid GraphQL operation name')
     }
-  }
-
-  const operationName = body.operationName
-  if (operationName !== undefined && (
-    typeof operationName !== 'string'
-    || operationName.length > 128
-    || !/^[_A-Za-z][_0-9A-Za-z]*$/.test(operationName)
-  )) {
-    throw createError({ statusCode: 400, statusMessage: 'Invalid GraphQL operation name' })
-  }
-
-  let safe
-  try {
     safe = validateGraphqlReadOnly(body.query, body.variables)
   } catch (error) {
-    if (error instanceof GraphqlSecurityError) {
-      throw createError({ statusCode: error.statusCode, statusMessage: error.message })
-    }
-    throw error
+    rethrowSecurityError(error)
   }
 
-  const config = useRuntimeConfig()
-  const endpoint = config.graphqlEndpoint || config.wpBaseUrl
-  if (!endpoint) {
-    throw createError({ statusCode: 503, statusMessage: 'GraphQL service unavailable' })
-  }
-
-  // Public read-only proxy: never forward WordPress credentials. Authenticated
-  // upstream access here would effectively expose server privileges to anyone
-  // able to submit an otherwise valid read query.
+  const endpoint = useRuntimeConfig(event).wpGraphqlUrl
+  let result: GraphqlResponse<unknown>
   try {
-    const result = await $fetch<any>(endpoint, {
+    result = await $fetch<GraphqlResponse<unknown>>(endpoint, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
       body: {
         query: safe.query,
         variables: safe.variables,
-        ...(operationName ? { operationName } : {})
-      }
+        ...(typeof body.operationName === 'string' ? { operationName: body.operationName } : {}),
+      },
+      timeout: 20_000,
     })
-
-    if (result.errors) {
-      console.error(`GraphQL upstream returned ${result.errors.length} error(s)`)
-      throw createError({
-        statusCode: 502,
-        statusMessage: 'Upstream GraphQL query failed'
-      })
-    }
-
-    return result
-  } catch (error: any) {
-    if (error?.statusCode === 502 && error?.statusMessage === 'Upstream GraphQL query failed') {
-      throw error
-    }
-    const upstreamStatus = error?.response?.status || error?.statusCode || 'unknown'
-    console.error(`GraphQL upstream request failed (status=${upstreamStatus})`)
-    throw createError({
-      statusCode: 502,
-      statusMessage: 'GraphQL upstream unavailable'
-    })
+  } catch (error) {
+    const status = error instanceof Error && 'statusCode' in error ? error.statusCode : 'unknown'
+    console.error(`[graphql] upstream request failed (status=${String(status)})`)
+    throw createError({ statusCode: 502, statusMessage: 'GraphQL upstream unavailable' })
   }
+
+  if (result.errors?.length) {
+    console.error(`[graphql] upstream returned ${result.errors.length} error(s)`)
+    throw createError({ statusCode: 502, statusMessage: 'Upstream GraphQL query failed' })
+  }
+  return result
 })

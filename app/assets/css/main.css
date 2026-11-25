@@ -1,0 +1,266 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+  background-color: #fff;
+}
+
+/* Backgrounds shared by index, informational and legal pages */
+.soft-gradient {
+  background: linear-gradient(180deg, rgb(224 237 253) 0%, rgb(245 245 245) 82%);
+}
+
+.section-gradient {
+  background: linear-gradient(180deg, rgb(245 245 245) 0%, rgb(224 237 253) 100%);
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* -------------------------------------------------------------------------
+   WordPress content (monographs, glossary, blog). Markup comes from the
+   editor, so it is styled by element rather than with utility classes.
+   ------------------------------------------------------------------------- */
+
+.content-section h2 {
+  font-size: 1.5rem;
+}
+
+.content-section h3,
+.about-content h4 {
+  color: #036297;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 20px;
+}
+
+.content-section p {
+  margin-top: 10px;
+}
+
+.content-section a {
+  color: #036297;
+}
+
+.content-section a:hover {
+  color: #5E9EF4;
+}
+
+.content-section a.source-link {
+  color: inherit;
+}
+
+.content-section img {
+  margin: 10px auto;
+  border-radius: 15px;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+.content-section ul {
+  margin: 10px 0;
+  padding-left: 10px;
+}
+
+.content-section ul li {
+  margin-top: 5px;
+  margin-left: 25px;
+  list-style-type: disc;
+}
+
+.content-section ul li ul li {
+  list-style-type: circle;
+}
+
+.content-section ol {
+  padding-left: 15px;
+  list-style-type: decimal;
+}
+
+.content-section table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 800px;
+  margin: 15px auto;
+  box-shadow: 0 0 10px rgb(0 0 0 / 0.1);
+}
+
+.content-section table th {
+  background-color: #333;
+  color: #fff;
+}
+
+.content-section table th,
+.content-section table td {
+  text-align: left;
+  padding: 8px;
+  border: 1px solid #555;
+}
+
+.content-section table tr:nth-child(even) {
+  background-color: #ddd;
+}
+
+.content-section table tr:hover {
+  background-color: #bbb;
+}
+
+.content-section table td:first-child {
+  font-weight: bold;
+}
+
+.content-section figcaption,
+.wp-caption-text {
+  color: gray;
+  font-style: italic;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+.aligncenter {
+  text-align: center;
+  margin: 0 auto;
+}
+
+/* Tables inserted with the "post-table" class: stacked cards on phones */
+.content-section .post-table {
+  font-size: 15px;
+  box-shadow: none;
+}
+
+.content-section .post-table th,
+.content-section .post-table td {
+  border: 1px solid #ddd;
+  word-break: break-word;
+}
+
+.content-section .post-table th {
+  background-color: #f4f4f4;
+  color: inherit;
+}
+
+@media screen and (max-width: 768px) {
+  .content-section .post-table thead {
+    display: none;
+  }
+
+  .content-section .post-table,
+  .content-section .post-table tbody,
+  .content-section .post-table tr,
+  .content-section .post-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .content-section .post-table tr {
+    margin-bottom: 16px;
+    border-bottom: 2px solid #ccc;
+    padding: 6px 0;
+  }
+
+  .content-section .post-table td {
+    position: relative;
+    padding: 6px 8px 6px 50%;
+    margin-bottom: 6px;
+    border: none;
+    text-align: right;
+    min-height: 28px;
+  }
+
+  .content-section .post-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    top: 6px;
+    left: 8px;
+    width: 45%;
+    padding-right: 10px;
+    font-weight: bold;
+    color: #333;
+    text-align: left;
+    line-height: 1.2;
+  }
+}
+
+/* Legal pages */
+.legal-text p + p,
+.legal-text ul {
+  margin-top: 0.75rem;
+}
+
+.legal-text ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
+
+/* -------------------------------------------------------------------------
+   Print: content only, no chrome, no fixed widgets
+   ------------------------------------------------------------------------- */
+@media print {
+  body {
+    color: #000;
+    background: #fff;
+    font-size: 12pt;
+  }
+
+  header,
+  footer,
+  .grecaptcha-badge,
+  [id*="recaptcha"] {
+    display: none !important;
+  }
+
+  @page {
+    margin: 2cm;
+  }
+
+  h1, h2, h3 {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+
+  img, table, figure {
+    page-break-inside: avoid;
+    max-width: 100% !important;
+  }
+
+  p, h2, h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  a {
+    text-decoration: none;
+    word-wrap: break-word;
+  }
+
+  .content-section,
+  .soft-gradient,
+  .section-gradient {
+    background: none !important;
+  }
+
+  * {
+    position: static !important;
+    float: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+}

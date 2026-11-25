@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { BLOG_POSTS_PER_PAGE, loadBlogPosts, paginateBlogPosts, parseBlogPage, plainBlogExcerpt } from '../../../utils/blogPagination'
+import { BLOG_POSTS_PER_PAGE, loadBlogPosts, paginateBlogPosts, parseBlogPage, plainBlogExcerpt } from '../../../shared/utils/blogPagination'
 
 describe('blog pagination', () => {
   it('validates page query parameters', () => {

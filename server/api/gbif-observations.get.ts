@@ -1,164 +1,107 @@
-import { defineEventHandler, getQuery, createError } from 'h3'
-import Redis from 'ioredis'
+import type { ObservationMessage } from '#shared/types/content'
 
-const redis = new Redis({
-  host: '127.0.0.1',
-  port: 6379,
-  password: process.env.REDIS_PASSWORD,
-  lazyConnect: true,
-})
+interface GbifPoint {
+  lat: number
+  lon: number
+}
 
-// Redis is an optional cache for this endpoint: keep connection errors handled
-// so a temporary cache outage does not emit unhandled error events.
-redis.on('error', () => {})
+interface GbifOccurrencePage {
+  count?: number
+  endOfRecords?: boolean
+  results?: { decimalLatitude?: number | null; decimalLongitude?: number | null }[]
+}
 
-const CACHE_TTL = 60 * 60 * 24
-const YEAR = '2025'
-const MAX_BATCHES = 11
+interface ObservationBatch {
+  points: GbifPoint[]
+  total: number
+  endOfRecords: boolean
+}
+
+const CACHE_TTL_SECONDS = 60 * 60 * 24
 const BATCH_SIZE = 300
+const MAX_BATCHES = 11
+const headers = { 'User-Agent': 'Wikiherbalist/1.0 (wikiherbalist.com)' }
 
-interface GbifPoint { lat: number; lon: number }
-
-async function fetchTaxonKey(name: string): Promise<number | null> {
-  const res = await fetch(`https://api.gbif.org/v1/species/match?name=${encodeURIComponent(name)}`, {
-    headers: { 'User-Agent': 'Wikiherbalist/1.0 (wikiherbalist.com)' }
-  })
-  if (!res.ok) return null
-  const data = await res.json()
-  return data.usageKey ?? null
+/** Last complete calendar year: the current one is still filling up. */
+function observationYear(): number {
+  return new Date().getFullYear() - 1
 }
 
-async function fetchBatch(taxonKey: number, offset: number): Promise<{ points: GbifPoint[]; total: number; endOfRecords: boolean }> {
-  const params = new URLSearchParams({
-    taxon_key: String(taxonKey),
-    year: YEAR,
-    hasCoordinate: 'true',
-    basisOfRecord: 'HUMAN_OBSERVATION',
-    offset: String(offset),
-    limit: String(BATCH_SIZE),
+async function taxonKey(name: string): Promise<number | null> {
+  const match = await $fetch<{ usageKey?: number }>('https://api.gbif.org/v1/species/match', {
+    query: { name }, headers, timeout: 10_000,
   })
-  const res = await fetch(`https://api.gbif.org/v1/occurrence/search?${params}`, {
-    headers: { 'User-Agent': 'Wikiherbalist/1.0 (wikiherbalist.com)' }
-  })
-  if (!res.ok) return { points: [], total: 0, endOfRecords: true }
-  const data = await res.json()
-  const points: GbifPoint[] = (data.results ?? [])
-    .filter((r: any) => r.decimalLongitude != null && r.decimalLatitude != null)
-    .map((r: any) => ({ lon: r.decimalLongitude, lat: r.decimalLatitude }))
-  return { points, total: data.count ?? 0, endOfRecords: data.endOfRecords ?? true }
+  return match.usageKey ?? null
 }
 
-export default defineEventHandler(async (event) => {
-  const { name, stream } = getQuery(event) as { name?: string; stream?: string }
-
-  if (!name || typeof name !== 'string' || name.trim().length === 0) {
-    throw createError({ statusCode: 400, message: 'Missing name parameter' })
-  }
-
-  const cacheKey = `gbif:obs:${name.trim().toLowerCase()}:${YEAR}`
-
-  // --- SSE streaming mode ---
-  if (stream === '1') {
-    event.node.res.setHeader('Content-Type', 'text/event-stream')
-    event.node.res.setHeader('Cache-Control', 'no-cache')
-    event.node.res.setHeader('Connection', 'keep-alive')
-    event.node.res.setHeader('X-Accel-Buffering', 'no')
-
-    const send = (data: object) => {
-      event.node.res.write(`data: ${JSON.stringify(data)}\n\n`)
-    }
-
-    return new Promise<void>(async (resolve) => {
-      try {
-        // Cache hit: single event with all data
-        try {
-          await redis.connect().catch(() => {})
-          const cached = await redis.get(cacheKey)
-          if (cached) {
-            const parsed = JSON.parse(cached)
-            send({ points: parsed.points, done: true })
-            event.node.res.end()
-            return resolve()
-          }
-        } catch { /* Redis non disponibile */ }
-
-        const taxonKey = await fetchTaxonKey(name.trim())
-        if (!taxonKey) {
-          send({ error: `Taxon not found: ${name}` })
-          event.node.res.end()
-          return resolve()
-        }
-
-        // Primo batch: ottieni total e prima tranche di punti
-        const { points: firstPoints, total, endOfRecords: firstEnd } = await fetchBatch(taxonKey, 0)
-        const allPoints: GbifPoint[] = [...firstPoints]
-        send({ points: firstPoints, done: false })
-
-        if (!firstEnd && total > BATCH_SIZE) {
-          // Calcola batch rimanenti e lancia tutto in parallelo
-          const remainingCount = Math.min(Math.ceil(total / BATCH_SIZE) - 1, MAX_BATCHES - 1)
-          const batchPromises = Array.from({ length: remainingCount }, (_, i) =>
-            fetchBatch(taxonKey, (i + 1) * BATCH_SIZE)
-          )
-
-          // Streamma ogni batch appena completato
-          await Promise.all(
-            batchPromises.map(async (p) => {
-              const { points } = await p
-              if (points.length) {
-                allPoints.push(...points)
-                send({ points, done: false })
-              }
-            })
-          )
-        }
-
-        send({ points: [], done: true })
-        event.node.res.end()
-
-        // Salva in cache Redis
-        try {
-          await redis.set(cacheKey, JSON.stringify({ points: allPoints, total }), 'EX', CACHE_TTL)
-        } catch { /* ignora */ }
-
-        resolve()
-      } catch (err) {
-        send({ error: String(err) })
-        event.node.res.end()
-        resolve()
-      }
+async function fetchBatch(key: number, year: number, offset: number): Promise<ObservationBatch> {
+  try {
+    const page = await $fetch<GbifOccurrencePage>('https://api.gbif.org/v1/occurrence/search', {
+      query: { taxon_key: key, year, hasCoordinate: true, basisOfRecord: 'HUMAN_OBSERVATION', offset, limit: BATCH_SIZE },
+      headers,
+      timeout: 20_000,
     })
+    const points = (page.results ?? []).flatMap((r) =>
+      typeof r.decimalLatitude === 'number' && typeof r.decimalLongitude === 'number'
+        ? [{ lat: r.decimalLatitude, lon: r.decimalLongitude }]
+        : [])
+    return { points, total: page.count ?? 0, endOfRecords: page.endOfRecords ?? true }
+  } catch {
+    return { points: [], total: 0, endOfRecords: true }
   }
+}
 
-  // --- JSON mode (usato internamente se cache hit) ---
-  try {
-    await redis.connect().catch(() => {})
-    const cached = await redis.get(cacheKey)
+/**
+ * Streams the GBIF observations of a species as Server-Sent Events, one message
+ * per batch, so the map fills up while the remaining batches load.
+ */
+export default defineEventHandler(async (event) => {
+  const name = String(getQuery(event).name ?? '').trim()
+  if (!name || name.length > 200) throw createError({ statusCode: 400, statusMessage: 'Parametro name mancante' })
+
+  const year = observationYear()
+  const cacheKey = `gbif:obs:${name.toLowerCase()}:${year}`
+  const stream = createEventStream(event)
+  setResponseHeader(event, 'X-Accel-Buffering', 'no')
+  const send = (message: ObservationMessage) => stream.push(JSON.stringify(message))
+
+  const run = async () => {
+    const cached = await cacheGet<GbifPoint[]>(cacheKey)
     if (cached) {
-      event.node.res.setHeader('X-Cache', 'HIT')
-      return JSON.parse(cached)
+      await send({ year, points: cached, done: true })
+      return
     }
-  } catch { /* Redis non disponibile */ }
 
-  const taxonKey = await fetchTaxonKey(name.trim())
-  if (!taxonKey) throw createError({ statusCode: 404, message: `Taxon not found for: ${name}` })
+    const key = await taxonKey(name).catch(() => null)
+    if (!key) {
+      await send({ year, points: [], done: true, error: 'Specie non trovata su GBIF' })
+      return
+    }
 
-  const { points: firstPoints, total, endOfRecords: firstEnd } = await fetchBatch(taxonKey, 0)
-  const allPoints: GbifPoint[] = [...firstPoints]
+    const first = await fetchBatch(key, year, 0)
+    const all = [...first.points]
+    await send({ year, points: first.points, done: false })
 
-  if (!firstEnd && total > BATCH_SIZE) {
-    const remainingCount = Math.min(Math.ceil(total / BATCH_SIZE) - 1, MAX_BATCHES - 1)
-    const results = await Promise.all(
-      Array.from({ length: remainingCount }, (_, i) => fetchBatch(taxonKey, (i + 1) * BATCH_SIZE))
-    )
-    for (const { points } of results) allPoints.push(...points)
+    if (!first.endOfRecords && first.total > BATCH_SIZE) {
+      const remaining = Math.min(Math.ceil(first.total / BATCH_SIZE) - 1, MAX_BATCHES - 1)
+      await Promise.all(Array.from({ length: remaining }, async (_, i) => {
+        const batch = await fetchBatch(key, year, (i + 1) * BATCH_SIZE)
+        if (!batch.points.length) return
+        all.push(...batch.points)
+        await send({ year, points: batch.points, done: false })
+      }))
+    }
+
+    await send({ year, points: [], done: true })
+    await cacheSet(cacheKey, all, CACHE_TTL_SECONDS)
   }
 
-  const result = { points: allPoints, total }
-  try {
-    await redis.set(cacheKey, JSON.stringify(result), 'EX', CACHE_TTL)
-    event.node.res.setHeader('X-Cache', 'MISS')
-  } catch { /* ignora */ }
+  run()
+    .catch(async (error: unknown) => {
+      console.error('[gbif-observations]', error instanceof Error ? error.message : error)
+      await send({ year, points: [], done: true, error: 'Osservazioni non disponibili' })
+    })
+    .finally(() => stream.close())
 
-  return result
+  return stream.send()
 })

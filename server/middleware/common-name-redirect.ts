@@ -1,117 +1,73 @@
 /**
- * Redirect da nomi comuni a slug scientifici
+ * Monographs live at /<scientific-slug>. Visitors (and old links) often use
+ * the common name instead, e.g. /zenzero: when a first-level path matches a
+ * plant title or one of its common names, answer with a 301 to the real slug.
  *
- * Intercetta richieste a /:slug/ di primo livello.
- * Se lo slug non corrisponde a un post WordPress (nome scientifico),
- * cerca nei campi nomeComune di tutti i post e fa un redirect 301
- * verso lo slug scientifico corretto.
- *
- * La mappa nomeComune -> slug viene costruita al primo avvio e cachata in memoria.
+ * The lookup map is built on first use and refreshed every 6 hours.
  */
 
-// Cache module-level: nomeComune (lowercase, trimmed) -> scientific slug
-let commonNameMap: Map<string, string> | null = null
-let cacheBuilding = false
+import type { WpConnection } from '#shared/types/wordpress'
 
-// Route di primo livello che non sono piante medicinali
-const KNOWN_ROUTES = new Set([
-  'about', 'disclaimer', 'privacy-policy', 'cookie-policy', 'donazioni',
+interface NameNode {
+  slug: string
+  title: string | null
+  nomeComune: string | null
+}
+
+const REFRESH_MS = 6 * 60 * 60 * 1000
+const RETRY_AFTER_FAILURE_MS = 5 * 60 * 1000
+
+// First-level routes that are never plant names.
+const RESERVED = new Set([
+  'about', 'disclaimer', 'privacy-policy', 'cookie-policy', 'donazioni', 'lavora-con-noi',
   'piante-medicinali', 'glossario', 'blog', 'algoliaUpdate', 'algoliaGlossaryUpdate',
-  'algoliaBlogPostsUpdate', 'api', '_nuxt', '_ipx', 'sitemap.xml', 'robots.txt',
-  'llms.txt', 'favicon.ico'
+  'algoliaBlogPostsUpdate', 'api', 'media', 'wp-content',
 ])
 
-async function buildCommonNameMap(config: ReturnType<typeof useRuntimeConfig>) {
-  const endpoint = config.wpBaseUrl as string
-  const username = config.wpUsername as string
-  const password = config.wpAppPassword as string
-
-  if (!endpoint || !username || !password) return
-
-  const auth = `Basic ${Buffer.from(`${username}:${password}`).toString('base64')}`
-
-  const query = `
-    query FetchNomiComuni($first: Int!, $after: String) {
-      posts(first: $first, after: $after, where: { status: PUBLISH }) {
-        nodes { slug title nomeComune }
-        pageInfo { hasNextPage endCursor }
-      }
+const NAMES_QUERY = `
+  query CommonNames($first: Int!, $after: String) {
+    posts(first: $first, after: $after, where: { status: PUBLISH }) {
+      nodes { slug title nomeComune }
+      pageInfo { hasNextPage endCursor }
     }
-  `
+  }
+`
 
-  const map = new Map<string, string>()
-  let after: string | null = null
-  let hasNext = true
+let names = new Map<string, string>()
+let nextRefresh = 0
+let loading: Promise<void> | null = null
 
-  while (hasNext) {
-    const res = await $fetch<any>(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': auth },
-      body: JSON.stringify({ query, variables: { first: 100, after } })
-    })
-
-    const nodes = res?.data?.posts?.nodes || []
+async function refresh(event: Parameters<typeof wpQueryAll>[0]): Promise<void> {
+  try {
+    const nodes = await wpQueryAll<{ posts: WpConnection<NameNode> }, NameNode>(event, NAMES_QUERY, (data) => data.posts)
+    const map = new Map<string, string>()
     for (const node of nodes) {
-      if (!node.slug) continue
-
-      const toKey = (str: string) =>
-        str.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '').replace(/-+/g, '-')
-
-      // Titolo articolo (es. "Achillea" -> "achillea")
-      if (node.title) {
-        const key = toKey(node.title)
+      for (const name of [node.title ?? '', ...splitList(node.nomeComune)]) {
+        const key = slugify(decodeEntities(name))
         if (key && key !== node.slug) map.set(key, node.slug)
       }
-
-      // nomeComune: stringa con nomi separati da virgola, newline, o punto e virgola
-      if (node.nomeComune) {
-        const names = node.nomeComune.split(/[,;\n]+/)
-        for (const name of names) {
-          const key = toKey(name)
-          if (key && key !== node.slug) map.set(key, node.slug)
-        }
-      }
     }
-
-    hasNext = Boolean(res?.data?.posts?.pageInfo?.hasNextPage)
-    after = res?.data?.posts?.pageInfo?.endCursor || null
+    names = map
+    nextRefresh = Date.now() + REFRESH_MS
+  } catch (error) {
+    console.error('[common-name-redirect] cannot load plant names:', error instanceof Error ? error.message : error)
+    nextRefresh = Date.now() + RETRY_AFTER_FAILURE_MS
   }
-
-  return map
 }
 
 export default defineEventHandler(async (event) => {
-  const path = event.path || getRequestURL(event).pathname
+  const match = event.path.match(/^\/([^/?#]+)\/?(?:\?.*)?$/)
+  const segment = match?.[1]
+  if (!segment || RESERVED.has(segment) || segment.startsWith('_') || segment.includes('.')) return
 
-  // Considera solo percorsi di primo livello: /slug o /slug/
-  const match = path.match(/^\/([^/]+)\/?$/)
-  if (!match) return
-
-  const slug = match[1]
-
-  // Salta route note, asset, api, ecc.
-  if (KNOWN_ROUTES.has(slug) || slug.startsWith('_') || slug.includes('.')) return
-
-  // Avvia costruzione mappa se non ancora pronta
-  if (!commonNameMap && !cacheBuilding) {
-    cacheBuilding = true
-    try {
-      const config = useRuntimeConfig()
-      commonNameMap = await buildCommonNameMap(config) || new Map()
-    } catch (e) {
-      console.error('[common-name-redirect] Errore build mappa:', e)
-      commonNameMap = new Map()
-    } finally {
-      cacheBuilding = false
-    }
+  if (Date.now() >= nextRefresh) {
+    loading ??= refresh(event).finally(() => { loading = null })
+    // Only the very first request waits; later refreshes happen in the background.
+    if (!names.size) await loading
   }
 
-  // Aspetta che la mappa sia pronta (race condition iniziale)
-  if (!commonNameMap) return
-
-  const scientificSlug = commonNameMap.get(slug.toLowerCase())
-  if (scientificSlug && scientificSlug !== slug) {
-    const trailingSlash = path.endsWith('/') ? '/' : ''
-    return sendRedirect(event, `/${scientificSlug}${trailingSlash}`, 301)
+  const target = names.get(segment.toLowerCase())
+  if (target && target !== segment) {
+    return sendRedirect(event, `/${target}`, 301)
   }
 })

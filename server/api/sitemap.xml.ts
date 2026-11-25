@@ -1,282 +1,105 @@
-import { defineEventHandler, setResponseHeaders, getRequestURL } from 'h3'
-import { useApiConfig } from '../config'
+import type { SitemapEntry } from '../utils/sitemap'
+import type { ContentType } from '#shared/types/content'
+import type { WpConnection, WpImageEdge } from '#shared/types/wordpress'
 
-export default defineEventHandler(async (event) => {
+interface SitemapNode {
+  slug: string
+  date?: string | null
+  modified?: string | null
+  title?: string | null
+  featuredImage?: WpImageEdge | null
+}
+
+const STATIC_PAGES: SitemapEntry[] = [
+  { path: '/', changefreq: 'daily', priority: 1 },
+  { path: '/piante-medicinali', changefreq: 'weekly', priority: 0.8 },
+  { path: '/glossario', changefreq: 'weekly', priority: 0.8 },
+  { path: '/blog', changefreq: 'weekly', priority: 0.8 },
+  { path: '/about', changefreq: 'monthly', priority: 0.8 },
+  { path: '/lavora-con-noi', changefreq: 'monthly', priority: 0.6 },
+  { path: '/donazioni', changefreq: 'monthly', priority: 0.5 },
+  { path: '/disclaimer', changefreq: 'monthly', priority: 0.5 },
+  { path: '/privacy-policy', changefreq: 'monthly', priority: 0.5 },
+  { path: '/cookie-policy', changefreq: 'monthly', priority: 0.5 },
+]
+
+const SOURCES: { type: ContentType; connection: string; query: string; changefreq: SitemapEntry['changefreq']; priority: number }[] = [
+  {
+    type: 'plant',
+    connection: 'posts',
+    changefreq: 'weekly',
+    priority: 0.7,
+    query: `query SitemapPlants($first: Int!, $after: String) {
+      posts(first: $first, after: $after, where: { status: PUBLISH }) {
+        nodes { slug date modified title featuredImage { node { sourceUrl altText } } }
+        pageInfo { hasNextPage endCursor }
+      }
+    }`,
+  },
+  {
+    type: 'blog',
+    connection: 'blogPosts',
+    changefreq: 'weekly',
+    priority: 0.7,
+    query: `query SitemapBlog($first: Int!, $after: String) {
+      blogPosts(first: $first, after: $after) {
+        nodes { slug date modified }
+        pageInfo { hasNextPage endCursor }
+      }
+    }`,
+  },
+  {
+    type: 'glossary',
+    connection: 'glossaryTerms',
+    changefreq: 'monthly',
+    priority: 0.6,
+    query: `query SitemapGlossary($first: Int!, $after: String) {
+      glossaryTerms(first: $first, after: $after) {
+        nodes { slug date modified }
+        pageInfo { hasNextPage endCursor }
+      }
+    }`,
+  },
+]
+
+async function contentEntries(event: Parameters<typeof wpQueryAll>[0]): Promise<SitemapEntry[]> {
+  const groups = await Promise.all(SOURCES.map(async (source) => {
+    const nodes = await wpQueryAll<Record<string, WpConnection<SitemapNode>>, SitemapNode>(
+      event,
+      source.query,
+      (data) => data[source.connection],
+      { timeoutMs: 30_000, retries: 2 },
+    )
+    return nodes.filter((node) => node.slug).map((node): SitemapEntry => {
+      const image = node.featuredImage?.node
+      return {
+        path: contentPath(source.type, node.slug),
+        lastmod: node.modified || node.date || undefined,
+        changefreq: source.changefreq,
+        priority: source.priority,
+        image: image?.sourceUrl
+          ? { loc: publicMediaUrl(image.sourceUrl), title: image.altText || decodeEntities(node.title ?? '') }
+          : undefined,
+      }
+    })
+  }))
+  return groups.flat()
+}
+
+export default defineCachedEventHandler(async (event) => {
+  setResponseHeader(event, 'content-type', 'application/xml; charset=utf-8')
+  setResponseHeader(event, 'x-content-type-options', 'nosniff')
 
   try {
-    // Set the response headers for XML content with proper caching
-    const isDev = process.env.NODE_ENV !== 'production'
-    const cacheControl = isDev
-      ? 'no-store'
-      : 'public, max-age=3600, s-maxage=86400'
-    setResponseHeaders(event, {
-      'content-type': 'application/xml',
-      'cache-control': cacheControl,
-      'x-content-type-options': 'nosniff'
-    })
-
-    // Compute base URL from current request
-    const { origin } = getRequestURL(event)
-    const baseUrl = origin || 'https://wikiherbalist.com'
-
-    // Static URLs that are always included in the sitemap
-    const staticUrls = [
-      { url: '/', lastmod: new Date().toISOString(), changefreq: 'daily', priority: 1 },
-      { url: '/disclaimer', lastmod: new Date().toISOString(), changefreq: 'monthly', priority: 0.5 },
-      { url: '/cookie-policy', lastmod: new Date().toISOString(), changefreq: 'monthly', priority: 0.5 },
-      { url: '/privacy-policy', lastmod: new Date().toISOString(), changefreq: 'monthly', priority: 0.5 },
-      { url: '/about', lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.8 },
-      { url: '/piante-medicinali', lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.8 },
-      { url: '/glossario', lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.8 },
-      { url: '/blog', lastmod: new Date().toISOString(), changefreq: 'weekly', priority: 0.8 },
-      { url: '/donazioni', lastmod: new Date().toISOString(), changefreq: 'monthly', priority: 0.5 },
-      { url: '/lavora-con-noi', lastmod: new Date().toISOString(), changefreq: 'monthly', priority: 0.6 },
-    ];
-
-    // Fetch all URLs from GraphQL directly
-    let urls = [...staticUrls];
-    try {
-
-      const apiConfig = useApiConfig(event);
-      const graphqlEndpoint = apiConfig.baseUrl;
-      const username = apiConfig.username;
-      const appPassword = apiConfig.appPassword;
-
-      if (!graphqlEndpoint || !username || !appPassword) {
-        console.error('WordPress credentials missing in runtimeConfig', {
-          hasEndpoint: !!graphqlEndpoint,
-          hasUsername: !!username,
-          hasPassword: !!appPassword
-        });
-        throw new Error('WordPress credentials not configured');
-      }
-
-      const authorization = `Basic ${Buffer.from(`${username}:${appPassword}`).toString('base64')}`;
-
-      const fetchWithRetry = async (input: RequestInfo | URL, init: RequestInit & { timeoutMs?: number }, retries = 2): Promise<any> => {
-        const { timeoutMs = 30000, ...rest } = init;
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), timeoutMs);
-        try {
-          const res = await fetch(input, { ...rest, signal: controller.signal });
-          clearTimeout(timer);
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          return await res.json();
-        } catch (err) {
-          clearTimeout(timer);
-          if (retries > 0) {
-            return await fetchWithRetry(input, init, retries - 1);
-          }
-          throw err;
-        }
-      };
-
-      const fetchGraphQL = async (query: string, variables?: Record<string, any>) => {
-        return await fetchWithRetry(graphqlEndpoint, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': authorization
-          },
-          body: JSON.stringify({ query, variables }),
-          timeoutMs: 30000
-        }, 2);
-      };
-
-      // BlogPosts: paging until all results are fetched
-      const blogQuery = `
-        query FETCH_BLOG_POSTS($first: Int!, $after: String) {
-          blogPosts(first: $first, after: $after, where: { orderby: { field: DATE, order: DESC } }) {
-            nodes {
-              slug
-              date
-              modified
-            }
-            pageInfo {
-              hasNextPage
-              endCursor
-            }
-          }
-        }
-      `;
-
-      let blogNodes: Array<{ slug: string; date?: string; modified?: string; }> = [];
-      let blogHasNext = true;
-      let blogAfter: string | null = null;
-      while (blogHasNext) {
-        const res: any = await fetchGraphQL(blogQuery, { first: 100, after: blogAfter });
-        const conn = res?.data?.blogPosts;
-        const nodes = conn?.nodes || [];
-        blogNodes.push(...nodes);
-        blogHasNext = Boolean(conn?.pageInfo?.hasNextPage);
-        blogAfter = conn?.pageInfo?.endCursor || null;
-      }
-
-      const blogUrls = blogNodes.map(post => ({
-        url: `/blog/${post.slug}`,
-        lastmod: post.modified || post.date || new Date().toISOString(),
-        changefreq: 'weekly',
-        priority: 0.7
-      }));
-
-
-      // Posts (monographs): paging - include featuredImage for image sitemap
-      const postsQuery = `
-        query FETCH_POSTS($first: Int!, $after: String) {
-          posts(first: $first, after: $after, where: { status: PUBLISH, orderby: { field: DATE, order: DESC } }) {
-            nodes {
-              slug
-              date
-              modified
-              title
-              featuredImage {
-                node {
-                  sourceUrl
-                  altText
-                  title
-                }
-              }
-            }
-            pageInfo {
-              hasNextPage
-              endCursor
-            }
-          }
-        }
-      `;
-
-      let postNodes: Array<{ slug: string; date?: string; modified?: string; title?: string; featuredImage?: { node?: { sourceUrl?: string; altText?: string; title?: string } } }> = [];
-      let postHasNext = true;
-      let postAfter: string | null = null;
-      while (postHasNext) {
-        const res: any = await fetchGraphQL(postsQuery, { first: 100, after: postAfter });
-        const conn = res?.data?.posts;
-        const nodes = conn?.nodes || [];
-        postNodes.push(...nodes);
-        postHasNext = Boolean(conn?.pageInfo?.hasNextPage);
-        postAfter = conn?.pageInfo?.endCursor || null;
-      }
-
-      const postUrls = postNodes.map(post => ({
-        url: `/${post.slug}`,
-        lastmod: post.modified || post.date || new Date().toISOString(),
-        changefreq: 'weekly',
-        priority: 0.7,
-        image: post.featuredImage?.node?.sourceUrl ? {
-          loc: post.featuredImage.node.sourceUrl,
-          title: post.featuredImage.node.altText || post.featuredImage.node.title || post.title || '',
-          caption: post.title || ''
-        } : undefined
-      }));
-
-
-      // Glossary: paging (aligned with pages/glossario/index.vue -> glossaryTerms)
-      const glossaryQuery = `
-        query FETCH_GLOSSARY_TERMS($first: Int!, $after: String) {
-          glossaryTerms(first: $first, after: $after) {
-            nodes {
-              slug
-              date
-              modified
-            }
-            pageInfo {
-              hasNextPage
-              endCursor
-            }
-          }
-        }
-      `;
-
-      let termNodes: Array<{ slug: string; date?: string; modified?: string; }> = [];
-      let termHasNext = true;
-      let termAfter: string | null = null;
-      while (termHasNext) {
-        const res: any = await fetchGraphQL(glossaryQuery, { first: 100, after: termAfter });
-        if (res?.errors) {
-          console.error('GraphQL errors (glossaryTerms):', JSON.stringify(res.errors));
-        }
-        const conn = res?.data?.glossaryTerms;
-        const nodes = conn?.nodes || [];
-        termNodes.push(...nodes);
-        termHasNext = Boolean(conn?.pageInfo?.hasNextPage);
-        termAfter = conn?.pageInfo?.endCursor || null;
-      }
-
-      const glossaryUrls = termNodes.map(term => ({
-        url: `/glossario/${term.slug}`,
-        lastmod: term.modified || term.date || new Date().toISOString(),
-        changefreq: 'monthly',
-        priority: 0.6
-      }));
-
-
-      // Final merge + anti-Algolia filter
-      urls = [...staticUrls, ...blogUrls, ...postUrls, ...glossaryUrls]
-        .filter(item => !/algolia/i.test(item.url));
-
-
-    } catch (error) {
-      console.error('Error fetching sitemap URLs from GraphQL:', error);
-      // urls already contains staticUrls
-    }
-    
-    // Generate the XML sitemap with image support
-    const formatDate = (raw: string | undefined): string => {
-      try {
-        const d = new Date(raw || '');
-        return isNaN(d.getTime()) ? new Date().toISOString().split('T')[0] : d.toISOString().split('T')[0];
-      } catch {
-        return new Date().toISOString().split('T')[0];
-      }
-    };
-
-    const escapeXml = (str: string): string =>
-      str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-
-    const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  ${urls.map((url: any) => {
-    const loc = `${baseUrl}${url.url.startsWith('/') ? url.url : '/' + url.url}`;
-    const imageTag = url.image?.loc ? `
-    <image:image>
-      <image:loc>${escapeXml(url.image.loc)}</image:loc>${url.image.title ? `
-      <image:title>${escapeXml(url.image.title)}</image:title>` : ''}${url.image.caption ? `
-      <image:caption>${escapeXml(url.image.caption)}</image:caption>` : ''}
-    </image:image>` : '';
-    return `
-  <url>
-    <loc>${loc}</loc>
-    <lastmod>${formatDate(url.lastmod)}</lastmod>
-    <changefreq>${url.changefreq || 'weekly'}</changefreq>
-    <priority>${url.priority || 0.5}</priority>${imageTag}
-  </url>`;
-  }).join('')}
-</urlset>`
-    
-    // Return the XML content
-    return xml;
+    return renderSitemap([...STATIC_PAGES, ...(await contentEntries(event))])
   } catch (error) {
-    console.error('Error generating sitemap:', error);
-    
-    // Set error response headers
-    setResponseHeaders(event, {
-      'content-type': 'application/xml',
-      'cache-control': 'no-cache'
-    });
-    
-    // Return a minimal sitemap with just the homepage in case of error
-    const { origin } = getRequestURL(event);
-    const baseUrl = origin || 'https://wikiherbalist.com';
-    
-    return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${baseUrl}</loc>
-    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-</urlset>`;
+    // 503 tells crawlers to come back later; error responses are not cached.
+    console.error('[sitemap] WordPress unavailable:', error instanceof Error ? error.message : error)
+    setResponseHeader(event, 'cache-control', 'no-cache')
+    throw createError({ statusCode: 503, statusMessage: 'Sitemap temporaneamente non disponibile' })
   }
+}, {
+  name: 'sitemap',
+  maxAge: 60 * 60,
+  swr: true,
 })
