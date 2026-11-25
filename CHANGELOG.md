@@ -4,9 +4,6 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
-### Fixed
-- Restored the 3.0.1 look that 3.1.0 had changed: footer (mobile and desktop layouts, "Prossimi Eventi" and "Newsletter" with the coming soon badge, social icons), header mega menu ("Prossimi eventi", "Monografie", "Seguici"), plant and glossary index lists, home blog cards (click to move), search results (pagination with arrows, type tooltip), alphabet navigation, property lists, image gallery, contact section, error state, date and author labels on content pages; the functional fixes of 3.1.0 are kept
-
 ### Changed
 - Google Analytics measurement ID read from `NUXT_PUBLIC_GA_ID` at build time instead of being hardcoded in `nuxt.config.ts`; without it the GA scripts are omitted
 
@@ -44,7 +41,7 @@ All notable changes to this project are documented in this file.
 - Shared components for headers, table of contents, sections, dialogs, share/cite actions and legal pages replace per-page copies
 - Common-name redirects use slugs without accents and refresh every 6 hours
 - TypeScript everywhere with no `any`; tests cover content splitting, helpers, citations, sitemap, GraphQL guard and blog pagination
-- Removed the unserved root `robots.txt` (the module serves `public/_robots.txt`); removed placeholder social links and "coming soon" entries from header and footer; removed the `SearchAction` that pointed to an unsupported `/?q=` URL
+- Removed the unserved root `robots.txt` (the module serves `public/_robots.txt`); removed the `SearchAction` that pointed to an unsupported `/?q=` URL
 
 ### Added
 - `robots.txt`: Block aggressive scrapers and training crawlers (CCBot, Bytespider, PetalBot, SemrushBot, DotBot, MJ12bot, DataForSeoBot); GPTBot, Google-Extended and PerplexityBot remain allowed
