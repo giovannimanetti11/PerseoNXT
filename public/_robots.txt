@@ -29,7 +29,6 @@ Disallow: /
 User-agent: DataForSeoBot
 Disallow: /
 
-# Allow AI search assistants (GEO)
-# GPTBot, Google-Extended, PerplexityBot -> allowed by default
+# GPTBot, Google-Extended e PerplexityBot non sono bloccati
 
 Sitemap: https://wikiherbalist.com/sitemap.xml

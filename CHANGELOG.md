@@ -2,10 +2,10 @@
 
 All notable changes to this project are documented in this file.
 
-## [Unreleased]
+## [3.1.0] - 2026-11-25
 
 ### Upgrade
-- Nuxt 4.6 -> 4.7.0, Vue 3.5.43 -> 3.5.46, vue-router 4 -> 5.5.1, Vite 8, nuxt-schema-org 7, @nuxtjs/robots 7, nuxt-site-config 5, VueUse 15, ESLint 9 with eslint-plugin-vue 10, vue-tsc for `npm run typecheck`
+- Nuxt 4.6 -> 4.7.0, Vue 3.5.43 -> 3.5.46, vue-router 4 -> 5.5.1, Vite 8, nuxt-schema-org 7, @nuxtjs/robots 7, nuxt-site-config 5, VueUse 15, ESLint 10 with eslint-plugin-vue 10, vue-tsc for `npm run typecheck`
 - Nuxt 4 directory layout: `app/`, `server/`, `shared/`; `media/` moved to `public/media/`
 - `@nuxtjs/google-fonts` (deprecated) replaced by `@nuxt/fonts`; `@mailchimp/mailchimp_marketing` replaced by a direct call to the Mailchimp API (drops the vulnerable superagent 3)
 - Removed unused dependencies: `@nuxtjs/algolia`, `@nuxtjs/recaptcha`, `@vuelidate/*`, `dompurify`, `dom-serializer`, `domhandler`, `htmlparser2`, `h3` (provided by Nuxt), `ts-node`, `unplugin`, `eslint-plugin-unicorn`; `ioredis` is now a declared dependency
@@ -36,11 +36,11 @@ All notable changes to this project are documented in this file.
 - Shared components for headers, table of contents, sections, dialogs, share/cite actions and legal pages replace per-page copies
 - Common-name redirects use slugs without accents and refresh every 6 hours
 - TypeScript everywhere with no `any`; tests cover content splitting, helpers, citations, sitemap, GraphQL guard and blog pagination
-- Removed placeholder social links and "coming soon" entries from header and footer; removed the `SearchAction` that pointed to an unsupported `/?q=` URL
+- Removed the unserved root `robots.txt` (the module serves `public/_robots.txt`); removed placeholder social links and "coming soon" entries from header and footer; removed the `SearchAction` that pointed to an unsupported `/?q=` URL
 
 ### Added
-- `robots.txt`: Block aggressive scrapers and training crawlers (CCBot, Bytespider, PetalBot, SemrushBot, DotBot, MJ12bot, DataForSeoBot); AI search assistants (GPTBot, Google-Extended, PerplexityBot) remain allowed for GEO visibility
-- `public/llms.txt`: Expanded GEO-oriented description with full monograph structure, source references, scientific committee info and usage guidelines for AI systems
+- `robots.txt`: Block aggressive scrapers and training crawlers (CCBot, Bytespider, PetalBot, SemrushBot, DotBot, MJ12bot, DataForSeoBot); GPTBot, Google-Extended and PerplexityBot remain allowed
+- `public/llms.txt`: Expanded description with monograph structure, source references, scientific committee info and reuse guidelines
 - `public/_robots.txt`: Synced bot blocking rules
 
 ### Changed

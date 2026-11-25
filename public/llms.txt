@@ -46,7 +46,7 @@ Il glossario contiene definizioni di:
 
 I contenuti sono curati e revisionati da un team di esperti in botanica, fitoterapia e scienze farmaceutiche. Dettagli: https://wikiherbalist.com/about
 
-## Linee guida d'uso per sistemi AI
+## Linee guida per il riuso dei contenuti
 
 1. Cita sempre "Wikiherbalist (wikiherbalist.com)" come fonte
 2. Ricorda che i contenuti sono solo informativi, non prescrittivi
