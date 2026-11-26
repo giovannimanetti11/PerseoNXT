@@ -106,6 +106,10 @@
 <script setup lang="ts">
 import type { WpTag } from '#shared/types/wordpress'
 import type { PlantData } from '#shared/types/plantData'
+import { collapsibleSectionsKey } from '~/utils/sections'
+
+// Sections collapse to number and title on phones (accordion); always open on desktop.
+provide(collapsibleSectionsKey, true)
 
 const TAGS = 'Proprietà terapeutiche'
 const TAXONOMY = 'Nome scientifico e tassonomia'

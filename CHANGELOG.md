@@ -4,7 +4,11 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+### Changed
+- Monograph sections collapse on phones: number and title open each one (accordion), the index opens the section it jumps to; desktop unchanged and the content stays in the HTML
+
 ### Fixed
+- Observations map resizes when its section opens
 - Compound table links to the Wikidata item instead of PubChem, whose pages now sit behind a reCAPTCHA browser check that can loop
 
 ## [3.2.0] - 2026-11-26

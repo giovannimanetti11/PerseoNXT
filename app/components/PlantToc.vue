@@ -14,7 +14,7 @@
             :href="`#section${index + 1}`"
             :aria-current="active === index + 1 ? 'true' : undefined"
             :class="['group/item flex items-center gap-2 rounded-xl px-2 py-1.5 text-sm transition-colors duration-300', active === index + 1 ? 'bg-verde text-white' : 'hover:bg-white']"
-            @click="onNavigate"
+            @click="onNavigate(index + 1)"
           >
             <span :class="['shrink-0 grid place-items-center w-6 h-6 rounded-full text-xs font-bold', active === index + 1 ? 'bg-white text-verde' : 'bg-verde text-white']">{{ index + 1 }}</span>
             <span class="min-w-0">{{ heading }}</span>
@@ -27,6 +27,7 @@
 
 <script setup lang="ts">
 import { useMediaQuery } from '@vueuse/core'
+import { requestSectionOpen } from '~/utils/sections'
 
 const props = defineProps<{ headings: string[] }>()
 
@@ -38,8 +39,9 @@ const openOnLoad = ref(false)
 const active = ref(0)
 let observer: IntersectionObserver | null = null
 
-/** On phones the index closes after a jump, so the section is not hidden behind it. */
-function onNavigate() {
+/** On phones the index closes after a jump, so the section is not hidden behind it, and the section opens. */
+function onNavigate(number: number) {
+  requestSectionOpen(`section${number}`)
   if (!isWide.value && panel.value) panel.value.open = false
 }
 

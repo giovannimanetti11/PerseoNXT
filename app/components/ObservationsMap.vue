@@ -50,6 +50,7 @@ const error = ref('')
 
 const source = new VectorSource()
 let map: OlMap | null = null
+let resizeObserver: ResizeObserver | null = null
 let events: EventSource | null = null
 
 const CLUSTER_COLORS: [number, string][] = [[250, '#036297'], [100, '#0475a8'], [50, '#0683b9'], [35, '#2791ca'], [20, '#48a0db'], [10, '#69aeeb']]
@@ -110,6 +111,9 @@ onMounted(() => {
     view: new View({ center: fromLonLat([0, 0]), zoom: 2 }),
     controls: defaultControls({ attribution: false, rotate: false, zoom: false }),
   })
+  // The map can mount inside a closed section (accordion on phones): resize it when it becomes visible.
+  resizeObserver = new ResizeObserver(() => map?.updateSize())
+  resizeObserver.observe(mapElement.value)
   load(props.nomeScientifico)
 })
 
@@ -118,6 +122,7 @@ watch(() => props.nomeScientifico, (name, previous) => {
 })
 
 onBeforeUnmount(() => {
+  resizeObserver?.disconnect()
   stop()
   map?.setTarget(undefined)
   map?.dispose()
