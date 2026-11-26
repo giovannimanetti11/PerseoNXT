@@ -37,10 +37,11 @@
             <td class="py-2.5 pr-4 align-top whitespace-nowrap text-gray-700">
               <template v-for="(part, index) in formulaParts(compound.formula)" :key="index"><sub v-if="part.sub">{{ part.text }}</sub><template v-else>{{ part.text }}</template></template>
             </td>
-            <td class="hidden md:table-cell py-2.5 pr-4 align-top text-right tabular-nums text-gray-700">{{ compound.molecularWeight ? formatNumber(compound.molecularWeight) : '–' }}</td>
-            <td class="hidden md:table-cell py-2.5 pr-4 align-top text-right tabular-nums">{{ compound.references.length || '–' }}</td>
+            <td class="hidden md:table-cell py-2.5 pr-4 align-top text-right tabular-nums text-gray-700">{{ compound.molecularWeight ? formatNumber(compound.molecularWeight) : '-' }}</td>
+            <td class="hidden md:table-cell py-2.5 pr-4 align-top text-right tabular-nums">{{ compound.references.length || '-' }}</td>
             <td class="py-2.5 pr-4 align-top text-right">
-              <a v-if="compound.pubchemCid" :href="`https://pubchem.ncbi.nlm.nih.gov/compound/${compound.pubchemCid}`" target="_blank" rel="noopener noreferrer" class="text-blu hover:text-celeste text-xs whitespace-nowrap">PubChem</a>
+              <!-- PubChem pages sit behind a reCAPTCHA browser check that can loop: Wikidata links PubChem, ChEBI and CAS anyway. -->
+              <a v-if="compound.wikidataId" :href="`https://www.wikidata.org/wiki/${compound.wikidataId}`" target="_blank" rel="noopener noreferrer" class="text-blu hover:text-celeste text-xs whitespace-nowrap" :title="compound.pubchemCid ? `PubChem CID ${compound.pubchemCid}` : undefined">Scheda</a>
             </td>
           </tr>
           <tr v-if="!items.length && !loading">

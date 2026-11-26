@@ -2,6 +2,11 @@
 
 All notable changes to this project are documented in this file.
 
+## [Unreleased]
+
+### Fixed
+- Compound table links to the Wikidata item instead of PubChem, whose pages now sit behind a reCAPTCHA browser check that can loop
+
 ## [3.2.0] - 2026-11-26
 
 ### Added
