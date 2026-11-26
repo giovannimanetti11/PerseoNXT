@@ -21,13 +21,13 @@
     </div>
 
     <div class="mt-4 bg-white rounded-xl overflow-x-auto">
-      <table class="w-full text-sm min-w-[560px]">
+      <table class="w-full text-sm">
         <thead>
           <tr class="text-left text-[11px] uppercase tracking-wider text-gray-500">
             <th scope="col" class="py-3 pl-4 pr-4 font-bold">Composto</th>
             <th scope="col" class="py-3 pr-4 font-bold">Formula</th>
-            <th scope="col" class="py-3 pr-4 font-bold text-right">g/mol</th>
-            <th scope="col" class="py-3 pr-4 font-bold text-right" title="Articoli che segnalano il composto nella specie">Articoli</th>
+            <th scope="col" class="hidden md:table-cell py-3 pr-4 font-bold text-right">g/mol</th>
+            <th scope="col" class="hidden md:table-cell py-3 pr-4 font-bold text-right" title="Articoli che segnalano il composto nella specie">Articoli</th>
             <th scope="col" class="py-3 pr-4"><span class="sr-only">Collegamento</span></th>
           </tr>
         </thead>
@@ -37,8 +37,8 @@
             <td class="py-2.5 pr-4 align-top whitespace-nowrap text-gray-700">
               <template v-for="(part, index) in formulaParts(compound.formula)" :key="index"><sub v-if="part.sub">{{ part.text }}</sub><template v-else>{{ part.text }}</template></template>
             </td>
-            <td class="py-2.5 pr-4 align-top text-right tabular-nums text-gray-700">{{ compound.molecularWeight ? formatNumber(compound.molecularWeight) : '–' }}</td>
-            <td class="py-2.5 pr-4 align-top text-right tabular-nums">{{ compound.references.length || '–' }}</td>
+            <td class="hidden md:table-cell py-2.5 pr-4 align-top text-right tabular-nums text-gray-700">{{ compound.molecularWeight ? formatNumber(compound.molecularWeight) : '–' }}</td>
+            <td class="hidden md:table-cell py-2.5 pr-4 align-top text-right tabular-nums">{{ compound.references.length || '–' }}</td>
             <td class="py-2.5 pr-4 align-top text-right">
               <a v-if="compound.pubchemCid" :href="`https://pubchem.ncbi.nlm.nih.gov/compound/${compound.pubchemCid}`" target="_blank" rel="noopener noreferrer" class="text-blu hover:text-celeste text-xs whitespace-nowrap">PubChem</a>
             </td>
