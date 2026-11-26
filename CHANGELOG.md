@@ -11,6 +11,7 @@ All notable changes to this project are documented in this file.
 - Server proxy `/api/plant-data/[slug]`, `/api/plant-data/[slug]/compounds` and `/api/plant-data/[slug]/trials` (with status filter), URL from `PLANT_DATA_URL`
 - Publications chart: hover, tap or arrow keys show the count for each year with a link to the PubMed search for that year
 - Registered trials: full list with "show more", filter by status from the chips or the status bar, NCT ID on each card
+- Registered trials open in place with sponsor, countries, start and completion dates, interventions, registry summary and whether results were posted: the ClinicalTrials.gov study page can show "403 Forbidden" when its own internal API blocks the browser
 - Research figures link to the matching PubMed search; registered trials count added next to the PubMed figures, with a note on why published and registered trials differ
 
 ### Changed

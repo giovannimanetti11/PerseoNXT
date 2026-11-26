@@ -1,5 +1,8 @@
 import type { H3Event } from 'h3'
 
+/** Trials embedded in the page payload; the same number the monograph shows before "show more". */
+export const TRIALS_PREVIEW = 4
+
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
 
 export function plantSlug(event: H3Event): string {

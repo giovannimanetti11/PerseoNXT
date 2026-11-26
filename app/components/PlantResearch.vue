@@ -124,18 +124,55 @@
       </div>
 
       <ul class="mt-2 grid gap-2" :aria-busy="loading">
-        <li v-for="trial in shown" :key="trial.nctId" class="bg-white rounded-xl p-4 grid gap-2 md:grid-cols-[minmax(0,1fr)_auto] md:gap-4">
-          <div class="min-w-0">
-            <a :href="trial.url" target="_blank" rel="noopener noreferrer" class="text-sm font-bold text-blu hover:text-celeste leading-snug">{{ trial.title }}</a>
-            <p class="mt-1 text-xs text-gray-500">
-              <span class="font-mono">{{ trial.nctId }}</span><template v-if="trial.conditions.length"> · {{ trial.conditions.slice(0, 3).join(', ') }}</template>
-            </p>
-          </div>
-          <div class="flex flex-wrap md:flex-col md:items-end gap-2 text-xs text-gray-600">
-            <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 bg-ghiaccio text-gray-800 text-[11px] font-bold whitespace-nowrap">
-              <span class="w-2 h-2 rounded-full" :style="{ background: trialStatus(trial.status).color }"></span>{{ trialStatus(trial.status).label }}
+        <li v-for="trial in shown" :key="trial.nctId" class="bg-white rounded-xl">
+          <button
+            type="button"
+            class="group w-full text-left p-4 grid gap-2 md:grid-cols-[minmax(0,1fr)_auto] md:gap-4 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-celeste"
+            :aria-expanded="isOpen(trial.nctId)"
+            :aria-controls="`trial-${trial.nctId}`"
+            @click="toggleTrial(trial.nctId)"
+          >
+            <span class="min-w-0 block">
+              <span class="block text-sm font-bold text-blu group-hover:text-celeste leading-snug">{{ trial.title }}</span>
+              <span class="block mt-1 text-xs text-gray-500">
+                <span class="font-mono">{{ trial.nctId }}</span><template v-if="trial.conditions.length"> · {{ trial.conditions.slice(0, 3).join(', ') }}</template>
+              </span>
             </span>
-            <span>{{ trialPhases(trial.phases) }}<template v-if="trial.startDate"> · dal {{ trial.startDate.slice(0, 7) }}</template><template v-if="trial.enrollment"> · {{ formatNumber(trial.enrollment) }} partecipanti</template></span>
+            <span class="flex flex-wrap md:flex-col md:items-end gap-2 text-xs text-gray-600">
+              <span class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 bg-ghiaccio text-gray-800 text-[11px] font-bold whitespace-nowrap">
+                <span class="w-2 h-2 rounded-full" :style="{ background: trialStatus(trial.status).color }"></span>{{ trialStatus(trial.status).label }}
+              </span>
+              <span>{{ trialPhases(trial.phases) }}<template v-if="trial.startDate"> · dal {{ trial.startDate.slice(0, 7) }}</template><template v-if="trial.enrollment"> · {{ formatNumber(trial.enrollment) }} partecipanti</template></span>
+              <span class="inline-flex items-center gap-1 font-bold text-blu group-hover:text-celeste">
+                {{ isOpen(trial.nctId) ? 'Chiudi' : 'Dettagli' }}
+                <svg :class="['w-3 h-3 transition-transform', isOpen(trial.nctId) ? 'rotate-180' : '']" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              </span>
+            </span>
+          </button>
+          <div v-if="isOpen(trial.nctId)" :id="`trial-${trial.nctId}`" class="px-4 pb-4 pt-3 border-t border-ghiaccio grid gap-4 text-sm text-gray-700">
+            <dl class="grid gap-x-6 gap-y-2 text-xs sm:grid-cols-2">
+              <div v-if="trial.sponsor"><dt class="text-gray-500">Promotore</dt><dd class="font-bold text-gray-800">{{ trial.sponsor }}</dd></div>
+              <div v-if="trial.countries.length"><dt class="text-gray-500">{{ trial.countries.length === 1 ? 'Paese' : 'Paesi' }}</dt><dd class="font-bold text-gray-800">{{ trial.countries.join(', ') }}</dd></div>
+              <div v-if="trial.startDate"><dt class="text-gray-500">Inizio</dt><dd class="font-bold text-gray-800">{{ formatTrialDate(trial.startDate) }}</dd></div>
+              <div v-if="trial.completionDate"><dt class="text-gray-500">{{ ENDED.has(trial.status) ? 'Conclusione' : 'Conclusione prevista' }}</dt><dd class="font-bold text-gray-800">{{ formatTrialDate(trial.completionDate) }}</dd></div>
+              <div><dt class="text-gray-500">Risultati nel registro</dt><dd class="font-bold text-gray-800">{{ trial.hasResults ? 'Pubblicati' : 'Non pubblicati' }}</dd></div>
+            </dl>
+            <div v-if="trial.interventions.length">
+              <p class="text-xs font-bold uppercase tracking-wider text-gray-500">Trattamenti</p>
+              <div class="mt-2 grid gap-2">
+                <div v-for="item in trial.interventions" :key="item.name" class="rounded-lg bg-ghiaccio/60 px-3 py-2">
+                  <p class="text-sm font-bold text-gray-800">
+                    {{ item.name }} <span class="ml-1 text-[10px] font-bold uppercase tracking-wide text-blu">{{ interventionType(item.type) }}</span>
+                  </p>
+                  <p v-if="item.description" class="mt-1 text-xs leading-relaxed whitespace-pre-line [overflow-wrap:anywhere]" lang="en">{{ item.description }}</p>
+                </div>
+              </div>
+            </div>
+            <div v-if="trial.summary">
+              <p class="text-xs font-bold uppercase tracking-wider text-gray-500">Sintesi dal registro <span class="normal-case tracking-normal font-normal">(in inglese)</span></p>
+              <p class="mt-2 text-xs leading-relaxed whitespace-pre-line [overflow-wrap:anywhere]" lang="en">{{ trial.summary }}</p>
+            </div>
+            <a :href="trial.url" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-blu hover:text-celeste">Scheda completa su ClinicalTrials.gov →</a>
           </div>
         </li>
       </ul>
@@ -256,6 +293,14 @@ let request = 0
 const statusTotal = computed(() => props.trials?.byStatus.reduce((sum, item) => sum + item.count, 0) || 1)
 const statusSummary = computed(() => (props.trials?.byStatus ?? []).map((item) => `${trialStatus(item.status).label}: ${item.count}`).join(', '))
 const shown = computed(() => loaded.value.slice(0, limit.value))
+
+/** Statuses whose completion date is in the past, not a forecast. */
+const ENDED = new Set(['COMPLETED', 'TERMINATED', 'WITHDRAWN'])
+const opened = ref<string[]>([])
+const isOpen = (nctId: string) => opened.value.includes(nctId)
+function toggleTrial(nctId: string) {
+  opened.value = isOpen(nctId) ? opened.value.filter((id) => id !== nctId) : [...opened.value, nctId]
+}
 const expanded = computed(() => limit.value > PREVIEW)
 
 async function fetchTrials(offset: number): Promise<Page<ClinicalTrial> | null> {
@@ -318,6 +363,7 @@ const toggleStatus = (value: string) => setStatus(status.value === value ? '' : 
 watch(() => props.slug, () => {
   hovered.value = null
   selected.value = null
+  opened.value = []
   void setStatus('')
 })
 </script>

@@ -109,6 +109,12 @@ export interface Literature {
   recentTrials: Publication[]
 }
 
+export interface TrialIntervention {
+  name: string
+  type: string
+  description: string | null
+}
+
 export interface ClinicalTrial {
   nctId: string
   title: string
@@ -118,6 +124,12 @@ export interface ClinicalTrial {
   conditions: string[]
   enrollment: number | null
   startDate: string | null
+  completionDate: string | null
+  summary: string | null
+  interventions: TrialIntervention[]
+  sponsor: string | null
+  countries: string[]
+  hasResults: boolean
   url: string
 }
 

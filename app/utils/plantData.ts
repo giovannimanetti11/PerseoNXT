@@ -67,3 +67,18 @@ export function pubmedUrl(term: string, filter: 'all' | 'reviews' | 'trials' | n
         : term
   return `https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(query)}`
 }
+
+const INTERVENTION_TYPES: Record<string, string> = {
+  DRUG: 'Farmaco', DIETARY_SUPPLEMENT: 'Integratore', BEHAVIORAL: 'Comportamentale', BIOLOGICAL: 'Biologico',
+  DEVICE: 'Dispositivo', PROCEDURE: 'Procedura', RADIATION: 'Radiazioni', DIAGNOSTIC_TEST: 'Test diagnostico',
+  GENETIC: 'Genetico', COMBINATION_PRODUCT: 'Prodotto combinato', OTHER: 'Altro',
+}
+export const interventionType = (type: string) => INTERVENTION_TYPES[type] ?? 'Altro'
+
+/** "2026-10" or "2026-10-31" -> "ottobre 2026" / "31 ottobre 2026". */
+export function formatTrialDate(value: string): string {
+  const [year, month, day] = value.split('-').map(Number)
+  if (!year || !month) return value
+  const date = new Date(Date.UTC(year, month - 1, day || 1))
+  return date.toLocaleDateString('it-IT', { ...(day ? { day: 'numeric' } : {}), month: 'long', year: 'numeric', timeZone: 'UTC' })
+}
