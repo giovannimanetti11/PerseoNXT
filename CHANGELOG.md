@@ -9,6 +9,7 @@ All notable changes to this project are documented in this file.
 
 ### Fixed
 - Observations map resizes when its section opens
+- Monographs: the "Riferimenti" section shows its number, as in the index
 - Compound table links to the Wikidata item instead of PubChem, whose pages now sit behind a reCAPTCHA browser check that can loop
 
 ## [3.2.0] - 2026-11-26

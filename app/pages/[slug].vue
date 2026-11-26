@@ -49,7 +49,7 @@
           <PlantCompounds v-if="hasCompounds && extra" :slug="plant.slug" :scientific-name="extra.taxonomy?.acceptedName ?? plant.nomeScientifico" :total="extra.compounds.total" :initial="extra.compounds.items" />
         </NumberedSection>
 
-        <ContentSections :content="plant.content" :toc="toc" section-width="w-full">
+        <ContentSections :content="plant.content" :toc="toc" section-width="w-full" number-references>
           <template #before="{ heading }">
             <template v-if="heading === REFERENCES">
               <NumberedSection v-if="showResearch && !hasResearchHeading" :heading="RESEARCH" :number="numberOf(RESEARCH)" extra-class="w-full">

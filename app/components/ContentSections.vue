@@ -8,7 +8,7 @@
     <NumberedSection
       :heading="section.heading"
       :number="numberOf(section.heading)"
-      :hide-number="section.heading === 'Riferimenti'"
+      :hide-number="!numberReferences && section.heading === 'Riferimenti'"
       :extra-class="`${sectionWidth} ${section.className}`"
     >
       <RichContent v-if="section.html" class="mt-4" :content="section.html" />
@@ -31,7 +31,9 @@ const props = withDefaults(defineProps<{
   toc: string[]
   /** Width classes of each section: monographs put them in a column next to the index. */
   sectionWidth?: string
-}>(), { sectionWidth: 'w-11/12' })
+  /** Show the number on "Riferimenti" too, as the index does (monographs). */
+  numberReferences?: boolean
+}>(), { sectionWidth: 'w-11/12', numberReferences: false })
 
 const numberOf = (heading: string) => props.toc.indexOf(heading) + 1
 </script>
