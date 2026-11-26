@@ -51,6 +51,11 @@ body {
   font-size: 1.5rem;
 }
 
+.rich-content {
+  /* Long URLs in references must wrap instead of widening the page on phones. */
+  overflow-wrap: break-word;
+}
+
 .rich-content h3,
 .subsection-heading {
   color: #5E9EF4;
