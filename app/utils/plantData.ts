@@ -55,3 +55,15 @@ const PHASES: Record<string, string> = {
 }
 
 export const trialPhases = (phases: string[]) => (phases.length ? phases.map((phase) => PHASES[phase] ?? phase).join(', ') : 'Non applicabile')
+
+const REVIEW_FILTER = '(systematic review[pt] OR meta-analysis[pt] OR review[pt])'
+const TRIAL_FILTER = '(randomized controlled trial[pt] OR clinical trial[pt])'
+
+/** PubMed search links with the same filters the data service counts with. */
+export function pubmedUrl(term: string, filter: 'all' | 'reviews' | 'trials' | number = 'all'): string {
+  const query = filter === 'reviews' ? `${term} AND ${REVIEW_FILTER}`
+    : filter === 'trials' ? `${term} AND ${TRIAL_FILTER}`
+      : typeof filter === 'number' ? `${term} AND ${filter}[pdat]`
+        : term
+  return `https://pubmed.ncbi.nlm.nih.gov/?term=${encodeURIComponent(query)}`
+}

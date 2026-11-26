@@ -53,7 +53,7 @@
           <template #before="{ heading }">
             <template v-if="heading === REFERENCES">
               <NumberedSection v-if="showResearch && !hasResearchHeading" :heading="RESEARCH" :number="numberOf(RESEARCH)" extra-class="w-full">
-                <PlantResearch :literature="extra?.literature ?? null" :trials="extra?.trials ?? null" />
+                <PlantResearch :slug="plant.slug" :literature="extra?.literature ?? null" :trials="extra?.trials ?? null" />
               </NumberedSection>
               <DrugInteractions v-if="plant.interazioni" :interactions="plant.interazioni" :number="numberOf(INTERACTIONS)" width="w-full" />
               <NumberedSection v-if="plant.nomeScientifico" :heading="DISTRIBUTION" :number="numberOf(DISTRIBUTION)" extra-class="w-full">
@@ -72,14 +72,14 @@
           </template>
           <template #after="{ heading }">
             <NumberedSection v-if="heading === RESEARCH_EDITORIAL && showResearch" :heading="RESEARCH" :number="numberOf(RESEARCH)" extra-class="w-full">
-              <PlantResearch :literature="extra?.literature ?? null" :trials="extra?.trials ?? null" />
+              <PlantResearch :slug="plant.slug" :literature="extra?.literature ?? null" :trials="extra?.trials ?? null" />
             </NumberedSection>
           </template>
         </ContentSections>
 
         <template v-if="!hasReferences">
           <NumberedSection v-if="showResearch && !hasResearchHeading" :heading="RESEARCH" :number="numberOf(RESEARCH)" extra-class="w-full">
-            <PlantResearch :literature="extra?.literature ?? null" :trials="extra?.trials ?? null" />
+            <PlantResearch :slug="plant.slug" :literature="extra?.literature ?? null" :trials="extra?.trials ?? null" />
           </NumberedSection>
           <DrugInteractions v-if="plant.interazioni" :interactions="plant.interazioni" :number="numberOf(INTERACTIONS)" width="w-full" />
           <NumberedSection v-if="plant.nomeScientifico" :heading="DISTRIBUTION" :number="numberOf(DISTRIBUTION)" extra-class="w-full">

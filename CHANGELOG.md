@@ -8,7 +8,10 @@ All notable changes to this project are documented in this file.
 - Monographs show open data from the plant data service (wikiherbalist-data): facts strip under the gallery, taxonomy with classification, synonyms and database links, common names from GBIF, Wikidata and iNaturalist, compound table with search (LOTUS via Wikidata, PubChem), "La ricerca in numeri" (PubMed counts by year, recent reviews, ClinicalTrials.gov studies), distribution next to the observations map, data sources and image credits
 - Gallery includes Wikimedia Commons and iNaturalist images (CC0, CC BY, CC BY-SA) with author and license
 - Sticky index next to the sections on desktop, collapsible on phones
-- Server proxy `/api/plant-data/[slug]` and `/api/plant-data/[slug]/compounds`, URL from `PLANT_DATA_URL`
+- Server proxy `/api/plant-data/[slug]`, `/api/plant-data/[slug]/compounds` and `/api/plant-data/[slug]/trials` (with status filter), URL from `PLANT_DATA_URL`
+- Publications chart: hover, tap or arrow keys show the count for each year with a link to the PubMed search for that year
+- Registered trials: full list with "show more", filter by status from the chips or the status bar, NCT ID on each card
+- Research figures link to the matching PubMed search; registered trials count added next to the PubMed figures, with a note on why published and registered trials differ
 
 ### Changed
 - Classification, synonyms and the PubMed count moved from the monograph header to the new sections; `/api/taxonomy` and `/api/pubmed-count` removed
