@@ -1,0 +1,2894 @@
+{
+ "heterotypic": [
+  {
+   "created": "2026-10-29T16:37:48.667514",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:48.667514",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5B2HN",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086143,
+   "name": {
+    "created": "2026-10-29T16:37:48.667514",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:48.667514",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "PGGxbJ9Ofqu3BG0hjnvzo0",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086143,
+    "namesIndexId": 9469708,
+    "scientificName": "Verbena adulterina",
+    "authorship": "Hausskn.",
+    "rank": "species",
+    "genus": "Verbena",
+    "specificEpithet": "adulterina",
+    "combinationAuthorship": {
+     "authors": [
+      "Hausskn."
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "3dae7c75-242d-48ac-8509-cc351eb7d99a",
+    "publishedInPage": "65",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "3dae7c75-242d-48ac-8509-cc351eb7d99a"
+   ],
+   "label": "Verbena adulterina Hausskn.",
+   "labelHtml": "<i>Verbena adulterina</i> Hausskn."
+  },
+  {
+   "created": "2026-10-29T16:37:48.667514",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:48.667514",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5B2S9",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086139,
+   "name": {
+    "created": "2026-10-29T16:37:48.667514",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:48.667514",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "wkObZSLdwM7J2SiaODXBC2",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086139,
+    "namesIndexId": 9470819,
+    "scientificName": "Verbena macrostachya",
+    "authorship": "F.Muell.",
+    "rank": "species",
+    "genus": "Verbena",
+    "specificEpithet": "macrostachya",
+    "combinationAuthorship": {
+     "authors": [
+      "F.Muell."
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "82c742da-1a44-4915-b189-72350bd736fc",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "82c742da-1a44-4915-b189-72350bd736fc"
+   ],
+   "label": "Verbena macrostachya F.Muell.",
+   "labelHtml": "<i>Verbena macrostachya</i> F.Muell."
+  },
+  {
+   "created": "2026-10-29T16:37:48.667514",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:48.667514",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "99WJT",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086145,
+   "name": {
+    "created": "2026-10-29T16:37:48.667514",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:48.667514",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "s_NiFCtxDB9J8Sfrrgdfe1",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086145,
+    "namesIndexId": 9470874,
+    "scientificName": "Verbena menthiifolia",
+    "authorship": "Benth.",
+    "rank": "species",
+    "genus": "Verbena",
+    "specificEpithet": "menthiifolia",
+    "combinationAuthorship": {
+     "authors": [
+      "Benth."
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "ed794f02-5508-4e96-bbdf-a625477f67e8",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "ed794f02-5508-4e96-bbdf-a625477f67e8"
+   ],
+   "label": "Verbena menthiifolia Benth.",
+   "labelHtml": "<i>Verbena menthiifolia</i> Benth."
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "7N9PT",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086178,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "2pscWKpM6ZtEDG08fnKmD1",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086178,
+    "namesIndexId": 9471028,
+    "scientificName": "Verbena officinalis f. albiflora",
+    "authorship": "S.H.Jin & D.D.Ma",
+    "rank": "form",
+    "genus": "Verbena",
+    "specificEpithet": "officinalis",
+    "infraspecificEpithet": "albiflora",
+    "combinationAuthorship": {
+     "authors": [
+      "S.H.Jin",
+      "D.D.Ma"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "21a96850-217e-4fbc-a53f-cbb17b5b41c0",
+    "publishedInPage": "1701",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "21a96850-217e-4fbc-a53f-cbb17b5b41c0"
+   ],
+   "label": "Verbena officinalis f. albiflora S.H.Jin & D.D.Ma",
+   "labelHtml": "<i>Verbena officinalis</i> f. <i>albiflora</i> S.H.Jin &amp; D.D.Ma"
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5T49F",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086180,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "OhwupoGaq3ey4dSq_wuia2",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086180,
+    "namesIndexId": 9471030,
+    "scientificName": "Verbena officinalis f. anomala",
+    "authorship": "Moldenke",
+    "rank": "form",
+    "genus": "Verbena",
+    "specificEpithet": "officinalis",
+    "infraspecificEpithet": "anomala",
+    "combinationAuthorship": {
+     "authors": [
+      "Moldenke"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "56243490-1c9b-4fb8-90db-692b6cee8039",
+    "publishedInPage": "163",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "56243490-1c9b-4fb8-90db-692b6cee8039"
+   ],
+   "label": "Verbena officinalis f. anomala Moldenke",
+   "labelHtml": "<i>Verbena officinalis</i> f. <i>anomala</i> Moldenke"
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5T49G",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086181,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "LvW5Pw824tcV5C6tjtRy-1",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086181,
+    "namesIndexId": 9471040,
+    "scientificName": "Verbena officinalis f. fimbriata",
+    "authorship": "Kereszty",
+    "rank": "form",
+    "genus": "Verbena",
+    "specificEpithet": "officinalis",
+    "infraspecificEpithet": "fimbriata",
+    "combinationAuthorship": {
+     "authors": [
+      "Kereszty"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "576a9212-6846-4a22-92a2-bbe85341a1e2",
+    "publishedInPage": "102",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "576a9212-6846-4a22-92a2-bbe85341a1e2"
+   ],
+   "label": "Verbena officinalis f. fimbriata Kereszty",
+   "labelHtml": "<i>Verbena officinalis</i> f. <i>fimbriata</i> Kereszty"
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5T49H",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086182,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "qWPc-OVmFT7B60lBtm5fQ1",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086182,
+    "namesIndexId": 9471046,
+    "scientificName": "Verbena officinalis f. lobata",
+    "authorship": "Kereszty",
+    "rank": "form",
+    "genus": "Verbena",
+    "specificEpithet": "officinalis",
+    "infraspecificEpithet": "lobata",
+    "combinationAuthorship": {
+     "authors": [
+      "Kereszty"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "576a9212-6846-4a22-92a2-bbe85341a1e2",
+    "publishedInPage": "102",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "576a9212-6846-4a22-92a2-bbe85341a1e2"
+   ],
+   "label": "Verbena officinalis f. lobata Kereszty",
+   "labelHtml": "<i>Verbena officinalis</i> f. <i>lobata</i> Kereszty"
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5T49J",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086183,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "-jpl023Km_95DGquIh8F50",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086183,
+    "namesIndexId": 9471048,
+    "scientificName": "Verbena officinalis f. microphylla",
+    "authorship": "Kereszty",
+    "rank": "form",
+    "genus": "Verbena",
+    "specificEpithet": "officinalis",
+    "infraspecificEpithet": "microphylla",
+    "combinationAuthorship": {
+     "authors": [
+      "Kereszty"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "576a9212-6846-4a22-92a2-bbe85341a1e2",
+    "publishedInPage": "102",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "576a9212-6846-4a22-92a2-bbe85341a1e2"
+   ],
+   "label": "Verbena officinalis f. microphylla Kereszty",
+   "labelHtml": "<i>Verbena officinalis</i> f. <i>microphylla</i> Kereszty"
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "TMDJM",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086151,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "B69HLEQaFxvlDdKMTMIQ32",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086151,
+    "namesIndexId": 9471080,
+    "scientificName": "Verbena officinalis var. anarrhinoides",
+    "authorship": "Murr",
+    "rank": "variety",
+    "genus": "Verbena",
+    "specificEpithet": "officinalis",
+    "infraspecificEpithet": "anarrhinoides",
+    "combinationAuthorship": {
+     "authors": [
+      "Murr"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "84d7107d-16c2-4acf-a43c-eef6d37701ca",
+    "publishedInPage": "19",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "84d7107d-16c2-4acf-a43c-eef6d37701ca"
+   ],
+   "label": "Verbena officinalis var. anarrhinoides Murr",
+   "labelHtml": "<i>Verbena officinalis</i> var. <i>anarrhinoides</i> Murr"
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5S295",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086153,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "iqAzO2j17E7QE4KshaH1M2",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086153,
+    "namesIndexId": 9471029,
+    "scientificName": "Verbena officinalis var. anatolica",
+    "authorship": "Kereszty",
+    "rank": "variety",
+    "genus": "Verbena",
+    "specificEpithet": "officinalis",
+    "infraspecificEpithet": "anatolica",
+    "combinationAuthorship": {
+     "authors": [
+      "Kereszty"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "910f6e26-487e-42e6-8005-43d59a4ef631",
+    "publishedInPage": "97",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "910f6e26-487e-42e6-8005-43d59a4ef631"
+   ],
+   "label": "Verbena officinalis var. anatolica Kereszty",
+   "labelHtml": "<i>Verbena officinalis</i> var. <i>anatolica</i> Kereszty"
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5S296",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086155,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "e9OhuUcHawvr40fpMSciV",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086155,
+    "namesIndexId": 9471032,
+    "scientificName": "Verbena officinalis var. eremicola",
+    "authorship": "Munir",
+    "rank": "variety",
+    "genus": "Verbena",
+    "specificEpithet": "officinalis",
+    "infraspecificEpithet": "eremicola",
+    "combinationAuthorship": {
+     "authors": [
+      "Munir"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "b83d0118-bfd7-4ef7-83a6-b61cf47ba21f",
+    "publishedInPage": "88",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "b83d0118-bfd7-4ef7-83a6-b61cf47ba21f"
+   ],
+   "label": "Verbena officinalis var. eremicola Munir",
+   "labelHtml": "<i>Verbena officinalis</i> var. <i>eremicola</i> Munir"
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5S299",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086157,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "SnlFffHH3Rc_-85_G-tJS2",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086157,
+    "namesIndexId": 9471054,
+    "scientificName": "Verbena officinalis var. grandiflora",
+    "authorship": "Hausskn.",
+    "rank": "variety",
+    "genus": "Verbena",
+    "specificEpithet": "officinalis",
+    "infraspecificEpithet": "grandiflora",
+    "combinationAuthorship": {
+     "authors": [
+      "Hausskn."
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "3dae7c75-242d-48ac-8509-cc351eb7d99a",
+    "publishedInPage": "65",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "3dae7c75-242d-48ac-8509-cc351eb7d99a"
+   ],
+   "label": "Verbena officinalis var. grandiflora Hausskn.",
+   "labelHtml": "<i>Verbena officinalis</i> var. <i>grandiflora</i> Hausskn."
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5S29C",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086158,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "Ck77-hpHocf_ECt5uttKv1",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086158,
+    "namesIndexId": 9471058,
+    "scientificName": "Verbena officinalis var. illyrica",
+    "authorship": "Kereszty",
+    "rank": "variety",
+    "genus": "Verbena",
+    "specificEpithet": "officinalis",
+    "infraspecificEpithet": "illyrica",
+    "combinationAuthorship": {
+     "authors": [
+      "Kereszty"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "b5f583b7-00b7-480d-b331-20a4a25751c5",
+    "publishedInPage": "99",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "b5f583b7-00b7-480d-b331-20a4a25751c5"
+   ],
+   "label": "Verbena officinalis var. illyrica Kereszty",
+   "labelHtml": "<i>Verbena officinalis</i> var. <i>illyrica</i> Kereszty"
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "9VJYL",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086160,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "WVMc8dH_TMsF9x2av_3Bh2",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086160,
+    "namesIndexId": 9471093,
+    "scientificName": "Verbena officinalis var. latiloba",
+    "authorship": "Sennen",
+    "rank": "variety",
+    "genus": "Verbena",
+    "specificEpithet": "officinalis",
+    "infraspecificEpithet": "latiloba",
+    "combinationAuthorship": {
+     "authors": [
+      "Sennen"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "8b568cdc-504b-4030-b867-9951517d1267",
+    "publishedInPage": "38",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "8b568cdc-504b-4030-b867-9951517d1267"
+   ],
+   "label": "Verbena officinalis var. latiloba Sennen",
+   "labelHtml": "<i>Verbena officinalis</i> var. <i>latiloba</i> Sennen"
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5S29D",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086162,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "2UtTld-96JA96ddRnF7Ar2",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086162,
+    "namesIndexId": 9471059,
+    "scientificName": "Verbena officinalis var. macrophylla",
+    "authorship": "Kereszty",
+    "rank": "variety",
+    "genus": "Verbena",
+    "specificEpithet": "officinalis",
+    "infraspecificEpithet": "macrophylla",
+    "combinationAuthorship": {
+     "authors": [
+      "Kereszty"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "b5f583b7-00b7-480d-b331-20a4a25751c5",
+    "publishedInPage": "99",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "b5f583b7-00b7-480d-b331-20a4a25751c5"
+   ],
+   "label": "Verbena officinalis var. macrophylla Kereszty",
+   "labelHtml": "<i>Verbena officinalis</i> var. <i>macrophylla</i> Kereszty"
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "7N2XS",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086163,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "QJPYFOAO-icCCKhQQy0Sg",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086163,
+    "namesIndexId": 9471061,
+    "scientificName": "Verbena officinalis var. macrostachya",
+    "authorship": "(F.Muell.) Benth.",
+    "rank": "variety",
+    "genus": "Verbena",
+    "specificEpithet": "officinalis",
+    "infraspecificEpithet": "macrostachya",
+    "combinationAuthorship": {
+     "authors": [
+      "Benth."
+     ]
+    },
+    "basionymAuthorship": {
+     "authors": [
+      "F.Muell."
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "2233bb92-d355-4561-b6e9-5a75084fddb5",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "2233bb92-d355-4561-b6e9-5a75084fddb5"
+   ],
+   "label": "Verbena officinalis var. macrostachya (F.Muell.) Benth.",
+   "labelHtml": "<i>Verbena officinalis</i> var. <i>macrostachya</i> (F.Muell.) Benth."
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5S29F",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086164,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "RQGP8BWFHAsm-h0iuKWzU2",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086164,
+    "namesIndexId": 9471062,
+    "scientificName": "Verbena officinalis var. minima",
+    "authorship": "Kereszty",
+    "rank": "variety",
+    "genus": "Verbena",
+    "specificEpithet": "officinalis",
+    "infraspecificEpithet": "minima",
+    "combinationAuthorship": {
+     "authors": [
+      "Kereszty"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "7bdbee20-59b9-43a4-ace9-a01aa2473097",
+    "publishedInPage": "101",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "7bdbee20-59b9-43a4-ace9-a01aa2473097"
+   ],
+   "label": "Verbena officinalis var. minima Kereszty",
+   "labelHtml": "<i>Verbena officinalis</i> var. <i>minima</i> Kereszty"
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5S29K",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086166,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "6bupC7TqWpNb20EAC3S0M",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086166,
+    "namesIndexId": 9471067,
+    "scientificName": "Verbena officinalis var. orientalis",
+    "authorship": "Kereszty",
+    "rank": "variety",
+    "genus": "Verbena",
+    "specificEpithet": "officinalis",
+    "infraspecificEpithet": "orientalis",
+    "combinationAuthorship": {
+     "authors": [
+      "Kereszty"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "7bdbee20-59b9-43a4-ace9-a01aa2473097",
+    "publishedInPage": "101",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "7bdbee20-59b9-43a4-ace9-a01aa2473097"
+   ],
+   "label": "Verbena officinalis var. orientalis Kereszty",
+   "labelHtml": "<i>Verbena officinalis</i> var. <i>orientalis</i> Kereszty"
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5S29L",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086167,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "HpNVwJ0AiiOiB0INLduAq",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086167,
+    "namesIndexId": 9471068,
+    "scientificName": "Verbena officinalis var. prostrata",
+    "authorship": "Gren.",
+    "rank": "variety",
+    "genus": "Verbena",
+    "specificEpithet": "officinalis",
+    "infraspecificEpithet": "prostrata",
+    "combinationAuthorship": {
+     "authors": [
+      "Gren."
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "c02c4344-7d5a-46a4-96b6-55260904384b",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "c02c4344-7d5a-46a4-96b6-55260904384b"
+   ],
+   "label": "Verbena officinalis var. prostrata Gren.",
+   "labelHtml": "<i>Verbena officinalis</i> var. <i>prostrata</i> Gren."
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5S29M",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086168,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "NJldOT1a7jQP2xm3iH9kZ1",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086168,
+    "namesIndexId": 9471070,
+    "scientificName": "Verbena officinalis var. racemosa",
+    "authorship": "Kereszty",
+    "rank": "variety",
+    "genus": "Verbena",
+    "specificEpithet": "officinalis",
+    "infraspecificEpithet": "racemosa",
+    "combinationAuthorship": {
+     "authors": [
+      "Kereszty"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "576a9212-6846-4a22-92a2-bbe85341a1e2",
+    "publishedInPage": "102",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "576a9212-6846-4a22-92a2-bbe85341a1e2"
+   ],
+   "label": "Verbena officinalis var. racemosa Kereszty",
+   "labelHtml": "<i>Verbena officinalis</i> var. <i>racemosa</i> Kereszty"
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5S29N",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086170,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "h03E7i58nJeg7OoQN05_U0",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086170,
+    "namesIndexId": 9471071,
+    "scientificName": "Verbena officinalis var. ramosa",
+    "authorship": "H.Lév.",
+    "rank": "variety",
+    "genus": "Verbena",
+    "specificEpithet": "officinalis",
+    "infraspecificEpithet": "ramosa",
+    "combinationAuthorship": {
+     "authors": [
+      "H.Lév."
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "507bafb0-5b79-4915-bd70-64e16baf45fb",
+    "publishedInPage": "440",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "507bafb0-5b79-4915-bd70-64e16baf45fb"
+   ],
+   "label": "Verbena officinalis var. ramosa H.Lév.",
+   "labelHtml": "<i>Verbena officinalis</i> var. <i>ramosa</i> H.Lév."
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "TMDLF",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086171,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "Z9nDgzdQrOO5ElA7nLzON",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086171,
+    "namesIndexId": 9471103,
+    "scientificName": "Verbena officinalis var. resedifolia",
+    "authorship": "Murr",
+    "rank": "variety",
+    "genus": "Verbena",
+    "specificEpithet": "officinalis",
+    "infraspecificEpithet": "resedifolia",
+    "combinationAuthorship": {
+     "authors": [
+      "Murr"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "d5b7181c-9e4e-4153-8c87-18ca20287e69",
+    "publishedInPage": "52",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "d5b7181c-9e4e-4153-8c87-18ca20287e69"
+   ],
+   "label": "Verbena officinalis var. resedifolia Murr",
+   "labelHtml": "<i>Verbena officinalis</i> var. <i>resedifolia</i> Murr"
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5S29P",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086173,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "o-ZvCU1_Bpvp20L25pG_L0",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086173,
+    "namesIndexId": 9471073,
+    "scientificName": "Verbena officinalis var. spuria",
+    "authorship": "(L.) Hook.",
+    "rank": "variety",
+    "genus": "Verbena",
+    "specificEpithet": "officinalis",
+    "infraspecificEpithet": "spuria",
+    "combinationAuthorship": {
+     "authors": [
+      "Hook."
+     ]
+    },
+    "basionymAuthorship": {
+     "authors": [
+      "L."
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "ca47df30-5d68-4017-87b9-bad403b628df",
+    "publishedInPage": "176",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "ca47df30-5d68-4017-87b9-bad403b628df"
+   ],
+   "label": "Verbena officinalis var. spuria (L.) Hook.",
+   "labelHtml": "<i>Verbena officinalis</i> var. <i>spuria</i> (L.) Hook."
+  },
+  {
+   "created": "2026-10-29T16:37:48.667514",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:48.667514",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "VLHK5",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086140,
+   "name": {
+    "created": "2026-10-29T16:37:48.667514",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:48.667514",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5Oz1Kl8L26ua6pjH3n-wO",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086140,
+    "namesIndexId": 9471427,
+    "scientificName": "Verbena riparia",
+    "authorship": "Raf. ex Small & A.Heller",
+    "rank": "species",
+    "genus": "Verbena",
+    "specificEpithet": "riparia",
+    "combinationAuthorship": {
+     "authors": [
+      "Small",
+      "A.Heller"
+     ],
+     "exAuthors": [
+      "Raf."
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "f174382e-7ac1-460e-87da-5317051cda84",
+    "publishedInPage": "12",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "f174382e-7ac1-460e-87da-5317051cda84"
+   ],
+   "label": "Verbena riparia Raf. ex Small & A.Heller",
+   "labelHtml": "<i>Verbena riparia</i> Raf. ex Small &amp; A.Heller"
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5B2WT",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086146,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "AODMn1aI3guKDxSUSV4HI",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086146,
+    "namesIndexId": 9471446,
+    "scientificName": "Verbena rumelica",
+    "authorship": "Velen.",
+    "rank": "species",
+    "genus": "Verbena",
+    "specificEpithet": "rumelica",
+    "combinationAuthorship": {
+     "authors": [
+      "Velen."
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "ca1cf8d6-0374-472e-badc-cf26952f8f80",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "ca1cf8d6-0374-472e-badc-cf26952f8f80"
+   ],
+   "label": "Verbena rumelica Velen.",
+   "labelHtml": "<i>Verbena rumelica</i> Velen."
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "7G2B7",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086147,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "Ag7Rp6bjYQctEOl4el08K2",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086147,
+    "namesIndexId": 9471588,
+    "scientificName": "Verbena sororia",
+    "authorship": "D.Don",
+    "rank": "species",
+    "genus": "Verbena",
+    "specificEpithet": "sororia",
+    "combinationAuthorship": {
+     "authors": [
+      "D.Don"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "2437877d-997a-44a1-aad3-c6e239796f85",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "2437877d-997a-44a1-aad3-c6e239796f85"
+   ],
+   "label": "Verbena sororia D.Don",
+   "labelHtml": "<i>Verbena sororia</i> D.Don"
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "8X97Z",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086148,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "RHn5-EnO997U14PVQHdaR1",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086148,
+    "namesIndexId": 9471618,
+    "scientificName": "Verbena spicata",
+    "authorship": "Gilib.",
+    "rank": "species",
+    "genus": "Verbena",
+    "specificEpithet": "spicata",
+    "combinationAuthorship": {
+     "authors": [
+      "Gilib."
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "be6711a9-2d72-49e4-8162-bfab332b1ced",
+    "publishedInPage": "92",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "be6711a9-2d72-49e4-8162-bfab332b1ced"
+   ],
+   "label": "Verbena spicata Gilib.",
+   "labelHtml": "<i>Verbena spicata</i> Gilib."
+  },
+  {
+   "created": "2026-10-29T16:37:48.667514",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:48.667514",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5B2Y4",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086142,
+   "name": {
+    "created": "2026-10-29T16:37:48.667514",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:48.667514",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "qRkvcBUnliPN4d9p-tps72",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086142,
+    "namesIndexId": 9471624,
+    "scientificName": "Verbena spuria",
+    "authorship": "L.",
+    "rank": "species",
+    "genus": "Verbena",
+    "specificEpithet": "spuria",
+    "combinationAuthorship": {
+     "authors": [
+      "L."
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "f38eb020-6ffb-49e7-8c99-73e594a2272a",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "f38eb020-6ffb-49e7-8c99-73e594a2272a"
+   ],
+   "label": "Verbena spuria L.",
+   "labelHtml": "<i>Verbena spuria</i> L."
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5S2BK",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086175,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "gpoEACxe-PNnC4rKHzxe41",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086175,
+    "namesIndexId": 9471828,
+    "scientificName": "Verbena urticifolia var. riparia",
+    "authorship": "(Raf. ex Small & A.Heller) Britton",
+    "rank": "variety",
+    "genus": "Verbena",
+    "specificEpithet": "urticifolia",
+    "infraspecificEpithet": "riparia",
+    "combinationAuthorship": {
+     "authors": [
+      "Britton"
+     ]
+    },
+    "basionymAuthorship": {
+     "authors": [
+      "Small",
+      "A.Heller"
+     ],
+     "exAuthors": [
+      "Raf."
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "1005f302-b2ed-45ba-ab90-769525a37079",
+    "publishedInPage": "276",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "1005f302-b2ed-45ba-ab90-769525a37079"
+   ],
+   "label": "Verbena urticifolia var. riparia (Raf. ex Small & A.Heller) Britton",
+   "labelHtml": "<i>Verbena urticifolia</i> var. <i>riparia</i> (Raf. ex Small &amp; A.Heller) Britton"
+  },
+  {
+   "created": "2026-10-29T16:37:55.814172",
+   "createdBy": 102,
+   "modified": "2026-10-29T16:37:55.814172",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5B326",
+   "sectorKey": 66236,
+   "verbatimSourceKey": 367086150,
+   "name": {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "ztdJOg7HJ4cK80D7fej2r1",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086150,
+    "namesIndexId": 9471869,
+    "scientificName": "Verbena vulgaris",
+    "authorship": "Bubani",
+    "rank": "species",
+    "genus": "Verbena",
+    "specificEpithet": "vulgaris",
+    "combinationAuthorship": {
+     "authors": [
+      "Bubani"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "cd46276f-9f94-4bd7-8069-28f0b07938a4",
+    "origin": "source",
+    "type": "scientific",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5B2TY",
+   "referenceIds": [
+    "cd46276f-9f94-4bd7-8069-28f0b07938a4"
+   ],
+   "label": "Verbena vulgaris Bubani",
+   "labelHtml": "<i>Verbena vulgaris</i> Bubani"
+  }
+ ],
+ "heterotypicGroups": [
+  [
+   {
+    "created": "2026-10-29T16:37:48.667514",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:48.667514",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5B2HN",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086143,
+    "name": {
+     "created": "2026-10-29T16:37:48.667514",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:48.667514",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "PGGxbJ9Ofqu3BG0hjnvzo0",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086143,
+     "namesIndexId": 9469708,
+     "scientificName": "Verbena adulterina",
+     "authorship": "Hausskn.",
+     "rank": "species",
+     "genus": "Verbena",
+     "specificEpithet": "adulterina",
+     "combinationAuthorship": {
+      "authors": [
+       "Hausskn."
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "3dae7c75-242d-48ac-8509-cc351eb7d99a",
+     "publishedInPage": "65",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "3dae7c75-242d-48ac-8509-cc351eb7d99a"
+    ],
+    "label": "Verbena adulterina Hausskn.",
+    "labelHtml": "<i>Verbena adulterina</i> Hausskn."
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:48.667514",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:48.667514",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5B2S9",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086139,
+    "name": {
+     "created": "2026-10-29T16:37:48.667514",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:48.667514",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "wkObZSLdwM7J2SiaODXBC2",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086139,
+     "namesIndexId": 9470819,
+     "scientificName": "Verbena macrostachya",
+     "authorship": "F.Muell.",
+     "rank": "species",
+     "genus": "Verbena",
+     "specificEpithet": "macrostachya",
+     "combinationAuthorship": {
+      "authors": [
+       "F.Muell."
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "82c742da-1a44-4915-b189-72350bd736fc",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "82c742da-1a44-4915-b189-72350bd736fc"
+    ],
+    "label": "Verbena macrostachya F.Muell.",
+    "labelHtml": "<i>Verbena macrostachya</i> F.Muell."
+   },
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "7N2XS",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086163,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "QJPYFOAO-icCCKhQQy0Sg",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086163,
+     "namesIndexId": 9471061,
+     "scientificName": "Verbena officinalis var. macrostachya",
+     "authorship": "(F.Muell.) Benth.",
+     "rank": "variety",
+     "genus": "Verbena",
+     "specificEpithet": "officinalis",
+     "infraspecificEpithet": "macrostachya",
+     "combinationAuthorship": {
+      "authors": [
+       "Benth."
+      ]
+     },
+     "basionymAuthorship": {
+      "authors": [
+       "F.Muell."
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "2233bb92-d355-4561-b6e9-5a75084fddb5",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "2233bb92-d355-4561-b6e9-5a75084fddb5"
+    ],
+    "label": "Verbena officinalis var. macrostachya (F.Muell.) Benth.",
+    "labelHtml": "<i>Verbena officinalis</i> var. <i>macrostachya</i> (F.Muell.) Benth."
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:48.667514",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:48.667514",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "99WJT",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086145,
+    "name": {
+     "created": "2026-10-29T16:37:48.667514",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:48.667514",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "s_NiFCtxDB9J8Sfrrgdfe1",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086145,
+     "namesIndexId": 9470874,
+     "scientificName": "Verbena menthiifolia",
+     "authorship": "Benth.",
+     "rank": "species",
+     "genus": "Verbena",
+     "specificEpithet": "menthiifolia",
+     "combinationAuthorship": {
+      "authors": [
+       "Benth."
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "ed794f02-5508-4e96-bbdf-a625477f67e8",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "ed794f02-5508-4e96-bbdf-a625477f67e8"
+    ],
+    "label": "Verbena menthiifolia Benth.",
+    "labelHtml": "<i>Verbena menthiifolia</i> Benth."
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "7N9PT",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086178,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "2pscWKpM6ZtEDG08fnKmD1",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086178,
+     "namesIndexId": 9471028,
+     "scientificName": "Verbena officinalis f. albiflora",
+     "authorship": "S.H.Jin & D.D.Ma",
+     "rank": "form",
+     "genus": "Verbena",
+     "specificEpithet": "officinalis",
+     "infraspecificEpithet": "albiflora",
+     "combinationAuthorship": {
+      "authors": [
+       "S.H.Jin",
+       "D.D.Ma"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "21a96850-217e-4fbc-a53f-cbb17b5b41c0",
+     "publishedInPage": "1701",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "21a96850-217e-4fbc-a53f-cbb17b5b41c0"
+    ],
+    "label": "Verbena officinalis f. albiflora S.H.Jin & D.D.Ma",
+    "labelHtml": "<i>Verbena officinalis</i> f. <i>albiflora</i> S.H.Jin &amp; D.D.Ma"
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5T49F",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086180,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "OhwupoGaq3ey4dSq_wuia2",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086180,
+     "namesIndexId": 9471030,
+     "scientificName": "Verbena officinalis f. anomala",
+     "authorship": "Moldenke",
+     "rank": "form",
+     "genus": "Verbena",
+     "specificEpithet": "officinalis",
+     "infraspecificEpithet": "anomala",
+     "combinationAuthorship": {
+      "authors": [
+       "Moldenke"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "56243490-1c9b-4fb8-90db-692b6cee8039",
+     "publishedInPage": "163",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "56243490-1c9b-4fb8-90db-692b6cee8039"
+    ],
+    "label": "Verbena officinalis f. anomala Moldenke",
+    "labelHtml": "<i>Verbena officinalis</i> f. <i>anomala</i> Moldenke"
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5T49G",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086181,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "LvW5Pw824tcV5C6tjtRy-1",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086181,
+     "namesIndexId": 9471040,
+     "scientificName": "Verbena officinalis f. fimbriata",
+     "authorship": "Kereszty",
+     "rank": "form",
+     "genus": "Verbena",
+     "specificEpithet": "officinalis",
+     "infraspecificEpithet": "fimbriata",
+     "combinationAuthorship": {
+      "authors": [
+       "Kereszty"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "576a9212-6846-4a22-92a2-bbe85341a1e2",
+     "publishedInPage": "102",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "576a9212-6846-4a22-92a2-bbe85341a1e2"
+    ],
+    "label": "Verbena officinalis f. fimbriata Kereszty",
+    "labelHtml": "<i>Verbena officinalis</i> f. <i>fimbriata</i> Kereszty"
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5T49H",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086182,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "qWPc-OVmFT7B60lBtm5fQ1",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086182,
+     "namesIndexId": 9471046,
+     "scientificName": "Verbena officinalis f. lobata",
+     "authorship": "Kereszty",
+     "rank": "form",
+     "genus": "Verbena",
+     "specificEpithet": "officinalis",
+     "infraspecificEpithet": "lobata",
+     "combinationAuthorship": {
+      "authors": [
+       "Kereszty"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "576a9212-6846-4a22-92a2-bbe85341a1e2",
+     "publishedInPage": "102",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "576a9212-6846-4a22-92a2-bbe85341a1e2"
+    ],
+    "label": "Verbena officinalis f. lobata Kereszty",
+    "labelHtml": "<i>Verbena officinalis</i> f. <i>lobata</i> Kereszty"
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5T49J",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086183,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "-jpl023Km_95DGquIh8F50",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086183,
+     "namesIndexId": 9471048,
+     "scientificName": "Verbena officinalis f. microphylla",
+     "authorship": "Kereszty",
+     "rank": "form",
+     "genus": "Verbena",
+     "specificEpithet": "officinalis",
+     "infraspecificEpithet": "microphylla",
+     "combinationAuthorship": {
+      "authors": [
+       "Kereszty"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "576a9212-6846-4a22-92a2-bbe85341a1e2",
+     "publishedInPage": "102",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "576a9212-6846-4a22-92a2-bbe85341a1e2"
+    ],
+    "label": "Verbena officinalis f. microphylla Kereszty",
+    "labelHtml": "<i>Verbena officinalis</i> f. <i>microphylla</i> Kereszty"
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "TMDJM",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086151,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "B69HLEQaFxvlDdKMTMIQ32",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086151,
+     "namesIndexId": 9471080,
+     "scientificName": "Verbena officinalis var. anarrhinoides",
+     "authorship": "Murr",
+     "rank": "variety",
+     "genus": "Verbena",
+     "specificEpithet": "officinalis",
+     "infraspecificEpithet": "anarrhinoides",
+     "combinationAuthorship": {
+      "authors": [
+       "Murr"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "84d7107d-16c2-4acf-a43c-eef6d37701ca",
+     "publishedInPage": "19",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "84d7107d-16c2-4acf-a43c-eef6d37701ca"
+    ],
+    "label": "Verbena officinalis var. anarrhinoides Murr",
+    "labelHtml": "<i>Verbena officinalis</i> var. <i>anarrhinoides</i> Murr"
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5S295",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086153,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "iqAzO2j17E7QE4KshaH1M2",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086153,
+     "namesIndexId": 9471029,
+     "scientificName": "Verbena officinalis var. anatolica",
+     "authorship": "Kereszty",
+     "rank": "variety",
+     "genus": "Verbena",
+     "specificEpithet": "officinalis",
+     "infraspecificEpithet": "anatolica",
+     "combinationAuthorship": {
+      "authors": [
+       "Kereszty"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "910f6e26-487e-42e6-8005-43d59a4ef631",
+     "publishedInPage": "97",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "910f6e26-487e-42e6-8005-43d59a4ef631"
+    ],
+    "label": "Verbena officinalis var. anatolica Kereszty",
+    "labelHtml": "<i>Verbena officinalis</i> var. <i>anatolica</i> Kereszty"
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5S296",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086155,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "e9OhuUcHawvr40fpMSciV",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086155,
+     "namesIndexId": 9471032,
+     "scientificName": "Verbena officinalis var. eremicola",
+     "authorship": "Munir",
+     "rank": "variety",
+     "genus": "Verbena",
+     "specificEpithet": "officinalis",
+     "infraspecificEpithet": "eremicola",
+     "combinationAuthorship": {
+      "authors": [
+       "Munir"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "b83d0118-bfd7-4ef7-83a6-b61cf47ba21f",
+     "publishedInPage": "88",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "b83d0118-bfd7-4ef7-83a6-b61cf47ba21f"
+    ],
+    "label": "Verbena officinalis var. eremicola Munir",
+    "labelHtml": "<i>Verbena officinalis</i> var. <i>eremicola</i> Munir"
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5S299",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086157,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "SnlFffHH3Rc_-85_G-tJS2",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086157,
+     "namesIndexId": 9471054,
+     "scientificName": "Verbena officinalis var. grandiflora",
+     "authorship": "Hausskn.",
+     "rank": "variety",
+     "genus": "Verbena",
+     "specificEpithet": "officinalis",
+     "infraspecificEpithet": "grandiflora",
+     "combinationAuthorship": {
+      "authors": [
+       "Hausskn."
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "3dae7c75-242d-48ac-8509-cc351eb7d99a",
+     "publishedInPage": "65",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "3dae7c75-242d-48ac-8509-cc351eb7d99a"
+    ],
+    "label": "Verbena officinalis var. grandiflora Hausskn.",
+    "labelHtml": "<i>Verbena officinalis</i> var. <i>grandiflora</i> Hausskn."
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5S29C",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086158,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "Ck77-hpHocf_ECt5uttKv1",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086158,
+     "namesIndexId": 9471058,
+     "scientificName": "Verbena officinalis var. illyrica",
+     "authorship": "Kereszty",
+     "rank": "variety",
+     "genus": "Verbena",
+     "specificEpithet": "officinalis",
+     "infraspecificEpithet": "illyrica",
+     "combinationAuthorship": {
+      "authors": [
+       "Kereszty"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "b5f583b7-00b7-480d-b331-20a4a25751c5",
+     "publishedInPage": "99",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "b5f583b7-00b7-480d-b331-20a4a25751c5"
+    ],
+    "label": "Verbena officinalis var. illyrica Kereszty",
+    "labelHtml": "<i>Verbena officinalis</i> var. <i>illyrica</i> Kereszty"
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "9VJYL",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086160,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "WVMc8dH_TMsF9x2av_3Bh2",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086160,
+     "namesIndexId": 9471093,
+     "scientificName": "Verbena officinalis var. latiloba",
+     "authorship": "Sennen",
+     "rank": "variety",
+     "genus": "Verbena",
+     "specificEpithet": "officinalis",
+     "infraspecificEpithet": "latiloba",
+     "combinationAuthorship": {
+      "authors": [
+       "Sennen"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "8b568cdc-504b-4030-b867-9951517d1267",
+     "publishedInPage": "38",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "8b568cdc-504b-4030-b867-9951517d1267"
+    ],
+    "label": "Verbena officinalis var. latiloba Sennen",
+    "labelHtml": "<i>Verbena officinalis</i> var. <i>latiloba</i> Sennen"
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5S29D",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086162,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "2UtTld-96JA96ddRnF7Ar2",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086162,
+     "namesIndexId": 9471059,
+     "scientificName": "Verbena officinalis var. macrophylla",
+     "authorship": "Kereszty",
+     "rank": "variety",
+     "genus": "Verbena",
+     "specificEpithet": "officinalis",
+     "infraspecificEpithet": "macrophylla",
+     "combinationAuthorship": {
+      "authors": [
+       "Kereszty"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "b5f583b7-00b7-480d-b331-20a4a25751c5",
+     "publishedInPage": "99",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "b5f583b7-00b7-480d-b331-20a4a25751c5"
+    ],
+    "label": "Verbena officinalis var. macrophylla Kereszty",
+    "labelHtml": "<i>Verbena officinalis</i> var. <i>macrophylla</i> Kereszty"
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5S29F",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086164,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "RQGP8BWFHAsm-h0iuKWzU2",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086164,
+     "namesIndexId": 9471062,
+     "scientificName": "Verbena officinalis var. minima",
+     "authorship": "Kereszty",
+     "rank": "variety",
+     "genus": "Verbena",
+     "specificEpithet": "officinalis",
+     "infraspecificEpithet": "minima",
+     "combinationAuthorship": {
+      "authors": [
+       "Kereszty"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "7bdbee20-59b9-43a4-ace9-a01aa2473097",
+     "publishedInPage": "101",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "7bdbee20-59b9-43a4-ace9-a01aa2473097"
+    ],
+    "label": "Verbena officinalis var. minima Kereszty",
+    "labelHtml": "<i>Verbena officinalis</i> var. <i>minima</i> Kereszty"
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5S29K",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086166,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "6bupC7TqWpNb20EAC3S0M",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086166,
+     "namesIndexId": 9471067,
+     "scientificName": "Verbena officinalis var. orientalis",
+     "authorship": "Kereszty",
+     "rank": "variety",
+     "genus": "Verbena",
+     "specificEpithet": "officinalis",
+     "infraspecificEpithet": "orientalis",
+     "combinationAuthorship": {
+      "authors": [
+       "Kereszty"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "7bdbee20-59b9-43a4-ace9-a01aa2473097",
+     "publishedInPage": "101",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "7bdbee20-59b9-43a4-ace9-a01aa2473097"
+    ],
+    "label": "Verbena officinalis var. orientalis Kereszty",
+    "labelHtml": "<i>Verbena officinalis</i> var. <i>orientalis</i> Kereszty"
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5S29L",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086167,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "HpNVwJ0AiiOiB0INLduAq",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086167,
+     "namesIndexId": 9471068,
+     "scientificName": "Verbena officinalis var. prostrata",
+     "authorship": "Gren.",
+     "rank": "variety",
+     "genus": "Verbena",
+     "specificEpithet": "officinalis",
+     "infraspecificEpithet": "prostrata",
+     "combinationAuthorship": {
+      "authors": [
+       "Gren."
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "c02c4344-7d5a-46a4-96b6-55260904384b",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "c02c4344-7d5a-46a4-96b6-55260904384b"
+    ],
+    "label": "Verbena officinalis var. prostrata Gren.",
+    "labelHtml": "<i>Verbena officinalis</i> var. <i>prostrata</i> Gren."
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5S29M",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086168,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "NJldOT1a7jQP2xm3iH9kZ1",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086168,
+     "namesIndexId": 9471070,
+     "scientificName": "Verbena officinalis var. racemosa",
+     "authorship": "Kereszty",
+     "rank": "variety",
+     "genus": "Verbena",
+     "specificEpithet": "officinalis",
+     "infraspecificEpithet": "racemosa",
+     "combinationAuthorship": {
+      "authors": [
+       "Kereszty"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "576a9212-6846-4a22-92a2-bbe85341a1e2",
+     "publishedInPage": "102",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "576a9212-6846-4a22-92a2-bbe85341a1e2"
+    ],
+    "label": "Verbena officinalis var. racemosa Kereszty",
+    "labelHtml": "<i>Verbena officinalis</i> var. <i>racemosa</i> Kereszty"
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5S29N",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086170,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "h03E7i58nJeg7OoQN05_U0",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086170,
+     "namesIndexId": 9471071,
+     "scientificName": "Verbena officinalis var. ramosa",
+     "authorship": "H.Lév.",
+     "rank": "variety",
+     "genus": "Verbena",
+     "specificEpithet": "officinalis",
+     "infraspecificEpithet": "ramosa",
+     "combinationAuthorship": {
+      "authors": [
+       "H.Lév."
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "507bafb0-5b79-4915-bd70-64e16baf45fb",
+     "publishedInPage": "440",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "507bafb0-5b79-4915-bd70-64e16baf45fb"
+    ],
+    "label": "Verbena officinalis var. ramosa H.Lév.",
+    "labelHtml": "<i>Verbena officinalis</i> var. <i>ramosa</i> H.Lév."
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "TMDLF",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086171,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "Z9nDgzdQrOO5ElA7nLzON",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086171,
+     "namesIndexId": 9471103,
+     "scientificName": "Verbena officinalis var. resedifolia",
+     "authorship": "Murr",
+     "rank": "variety",
+     "genus": "Verbena",
+     "specificEpithet": "officinalis",
+     "infraspecificEpithet": "resedifolia",
+     "combinationAuthorship": {
+      "authors": [
+       "Murr"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "d5b7181c-9e4e-4153-8c87-18ca20287e69",
+     "publishedInPage": "52",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "d5b7181c-9e4e-4153-8c87-18ca20287e69"
+    ],
+    "label": "Verbena officinalis var. resedifolia Murr",
+    "labelHtml": "<i>Verbena officinalis</i> var. <i>resedifolia</i> Murr"
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5S29P",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086173,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "o-ZvCU1_Bpvp20L25pG_L0",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086173,
+     "namesIndexId": 9471073,
+     "scientificName": "Verbena officinalis var. spuria",
+     "authorship": "(L.) Hook.",
+     "rank": "variety",
+     "genus": "Verbena",
+     "specificEpithet": "officinalis",
+     "infraspecificEpithet": "spuria",
+     "combinationAuthorship": {
+      "authors": [
+       "Hook."
+      ]
+     },
+     "basionymAuthorship": {
+      "authors": [
+       "L."
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "ca47df30-5d68-4017-87b9-bad403b628df",
+     "publishedInPage": "176",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "ca47df30-5d68-4017-87b9-bad403b628df"
+    ],
+    "label": "Verbena officinalis var. spuria (L.) Hook.",
+    "labelHtml": "<i>Verbena officinalis</i> var. <i>spuria</i> (L.) Hook."
+   },
+   {
+    "created": "2026-10-29T16:37:48.667514",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:48.667514",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5B2Y4",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086142,
+    "name": {
+     "created": "2026-10-29T16:37:48.667514",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:48.667514",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "qRkvcBUnliPN4d9p-tps72",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086142,
+     "namesIndexId": 9471624,
+     "scientificName": "Verbena spuria",
+     "authorship": "L.",
+     "rank": "species",
+     "genus": "Verbena",
+     "specificEpithet": "spuria",
+     "combinationAuthorship": {
+      "authors": [
+       "L."
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "f38eb020-6ffb-49e7-8c99-73e594a2272a",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "f38eb020-6ffb-49e7-8c99-73e594a2272a"
+    ],
+    "label": "Verbena spuria L.",
+    "labelHtml": "<i>Verbena spuria</i> L."
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:48.667514",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:48.667514",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "VLHK5",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086140,
+    "name": {
+     "created": "2026-10-29T16:37:48.667514",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:48.667514",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "5Oz1Kl8L26ua6pjH3n-wO",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086140,
+     "namesIndexId": 9471427,
+     "scientificName": "Verbena riparia",
+     "authorship": "Raf. ex Small & A.Heller",
+     "rank": "species",
+     "genus": "Verbena",
+     "specificEpithet": "riparia",
+     "combinationAuthorship": {
+      "authors": [
+       "Small",
+       "A.Heller"
+      ],
+      "exAuthors": [
+       "Raf."
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "f174382e-7ac1-460e-87da-5317051cda84",
+     "publishedInPage": "12",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "f174382e-7ac1-460e-87da-5317051cda84"
+    ],
+    "label": "Verbena riparia Raf. ex Small & A.Heller",
+    "labelHtml": "<i>Verbena riparia</i> Raf. ex Small &amp; A.Heller"
+   },
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5S2BK",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086175,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "gpoEACxe-PNnC4rKHzxe41",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086175,
+     "namesIndexId": 9471828,
+     "scientificName": "Verbena urticifolia var. riparia",
+     "authorship": "(Raf. ex Small & A.Heller) Britton",
+     "rank": "variety",
+     "genus": "Verbena",
+     "specificEpithet": "urticifolia",
+     "infraspecificEpithet": "riparia",
+     "combinationAuthorship": {
+      "authors": [
+       "Britton"
+      ]
+     },
+     "basionymAuthorship": {
+      "authors": [
+       "Small",
+       "A.Heller"
+      ],
+      "exAuthors": [
+       "Raf."
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "1005f302-b2ed-45ba-ab90-769525a37079",
+     "publishedInPage": "276",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "1005f302-b2ed-45ba-ab90-769525a37079"
+    ],
+    "label": "Verbena urticifolia var. riparia (Raf. ex Small & A.Heller) Britton",
+    "labelHtml": "<i>Verbena urticifolia</i> var. <i>riparia</i> (Raf. ex Small &amp; A.Heller) Britton"
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5B2WT",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086146,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "AODMn1aI3guKDxSUSV4HI",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086146,
+     "namesIndexId": 9471446,
+     "scientificName": "Verbena rumelica",
+     "authorship": "Velen.",
+     "rank": "species",
+     "genus": "Verbena",
+     "specificEpithet": "rumelica",
+     "combinationAuthorship": {
+      "authors": [
+       "Velen."
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "ca1cf8d6-0374-472e-badc-cf26952f8f80",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "ca1cf8d6-0374-472e-badc-cf26952f8f80"
+    ],
+    "label": "Verbena rumelica Velen.",
+    "labelHtml": "<i>Verbena rumelica</i> Velen."
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "7G2B7",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086147,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "Ag7Rp6bjYQctEOl4el08K2",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086147,
+     "namesIndexId": 9471588,
+     "scientificName": "Verbena sororia",
+     "authorship": "D.Don",
+     "rank": "species",
+     "genus": "Verbena",
+     "specificEpithet": "sororia",
+     "combinationAuthorship": {
+      "authors": [
+       "D.Don"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "2437877d-997a-44a1-aad3-c6e239796f85",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "2437877d-997a-44a1-aad3-c6e239796f85"
+    ],
+    "label": "Verbena sororia D.Don",
+    "labelHtml": "<i>Verbena sororia</i> D.Don"
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "8X97Z",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086148,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "RHn5-EnO997U14PVQHdaR1",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086148,
+     "namesIndexId": 9471618,
+     "scientificName": "Verbena spicata",
+     "authorship": "Gilib.",
+     "rank": "species",
+     "genus": "Verbena",
+     "specificEpithet": "spicata",
+     "combinationAuthorship": {
+      "authors": [
+       "Gilib."
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "be6711a9-2d72-49e4-8162-bfab332b1ced",
+     "publishedInPage": "92",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "be6711a9-2d72-49e4-8162-bfab332b1ced"
+    ],
+    "label": "Verbena spicata Gilib.",
+    "labelHtml": "<i>Verbena spicata</i> Gilib."
+   }
+  ],
+  [
+   {
+    "created": "2026-10-29T16:37:55.814172",
+    "createdBy": 102,
+    "modified": "2026-10-29T16:37:55.814172",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5B326",
+    "sectorKey": 66236,
+    "verbatimSourceKey": 367086150,
+    "name": {
+     "created": "2026-10-29T16:37:55.814172",
+     "createdBy": 102,
+     "modified": "2026-10-29T16:37:55.814172",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "ztdJOg7HJ4cK80D7fej2r1",
+     "sectorKey": 66236,
+     "verbatimSourceKey": 367086150,
+     "namesIndexId": 9471869,
+     "scientificName": "Verbena vulgaris",
+     "authorship": "Bubani",
+     "rank": "species",
+     "genus": "Verbena",
+     "specificEpithet": "vulgaris",
+     "combinationAuthorship": {
+      "authors": [
+       "Bubani"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "cd46276f-9f94-4bd7-8069-28f0b07938a4",
+     "origin": "source",
+     "type": "scientific",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5B2TY",
+    "referenceIds": [
+     "cd46276f-9f94-4bd7-8069-28f0b07938a4"
+    ],
+    "label": "Verbena vulgaris Bubani",
+    "labelHtml": "<i>Verbena vulgaris</i> Bubani"
+   }
+  ]
+ ]
+}

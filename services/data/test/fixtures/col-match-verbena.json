@@ -1,0 +1,131 @@
+{
+ "usage": {
+  "id": "5B2TY",
+  "name": "Verbena officinalis",
+  "authorship": "L.",
+  "rank": "species",
+  "code": "botanical",
+  "status": "accepted",
+  "namesIndexId": 9471019,
+  "sectorKey": 66236,
+  "classification": [
+   {
+    "id": "99FT5",
+    "name": "Verbena",
+    "authorship": "L.",
+    "rank": "genus",
+    "code": "botanical",
+    "status": "accepted",
+    "namesIndexId": 18507,
+    "sectorKey": 66236,
+    "label": "Verbena L.",
+    "parentId": "V592G",
+    "labelHtml": "<i>Verbena</i> L."
+   },
+   {
+    "id": "V592G",
+    "name": "Verbeneae",
+    "authorship": "Dumort.",
+    "rank": "tribe",
+    "code": "botanical",
+    "status": "accepted",
+    "namesIndexId": 9471928,
+    "sectorKey": 66236,
+    "label": "Verbeneae Dumort.",
+    "parentId": "TMFZP",
+    "labelHtml": "Verbeneae Dumort."
+   },
+   {
+    "id": "TMFZP",
+    "name": "Verbenaceae",
+    "authorship": "J.St.-Hil.",
+    "rank": "family",
+    "code": "botanical",
+    "status": "accepted",
+    "namesIndexId": 18508,
+    "sectorKey": 66236,
+    "label": "Verbenaceae J.St.-Hil.",
+    "parentId": "3F4",
+    "labelHtml": "Verbenaceae J.St.-Hil."
+   },
+   {
+    "id": "3F4",
+    "name": "Lamiales",
+    "authorship": "Bromhead",
+    "rank": "order",
+    "code": "botanical",
+    "status": "accepted",
+    "namesIndexId": 17456,
+    "sectorKey": 66236,
+    "label": "Lamiales Bromhead",
+    "parentId": "MG",
+    "labelHtml": "Lamiales Bromhead"
+   },
+   {
+    "id": "MG",
+    "name": "Magnoliopsida",
+    "rank": "class",
+    "status": "accepted",
+    "namesIndexId": 17544,
+    "label": "Magnoliopsida",
+    "parentId": "TP",
+    "labelHtml": "Magnoliopsida"
+   },
+   {
+    "id": "TP",
+    "name": "Tracheophyta",
+    "rank": "phylum",
+    "status": "accepted",
+    "namesIndexId": 18442,
+    "label": "Tracheophyta",
+    "parentId": "CMQ8S",
+    "labelHtml": "Tracheophyta"
+   },
+   {
+    "id": "CMQ8S",
+    "name": "Pteridobiotina",
+    "authorship": "Britton & Brown",
+    "rank": "subkingdom",
+    "status": "accepted",
+    "namesIndexId": 7638084,
+    "label": "Pteridobiotina Britton & Brown",
+    "parentId": "P",
+    "labelHtml": "Pteridobiotina Britton &amp; Brown"
+   },
+   {
+    "id": "P",
+    "name": "Plantae",
+    "rank": "kingdom",
+    "status": "accepted",
+    "namesIndexId": 17869,
+    "label": "Plantae",
+    "parentId": "CS5HF",
+    "labelHtml": "Plantae"
+   },
+   {
+    "id": "CS5HF",
+    "name": "Eukaryota",
+    "authorship": "(Chatton, 1925) Whittaker & Margulis, 1978",
+    "rank": "domain",
+    "status": "accepted",
+    "namesIndexId": 3444548,
+    "label": "Eukaryota (Chatton, 1925) Whittaker & Margulis, 1978",
+    "labelHtml": "Eukaryota (Chatton, 1925) Whittaker &amp; Margulis, 1978"
+   }
+  ],
+  "label": "Verbena officinalis L.",
+  "parentId": "99FT5",
+  "labelHtml": "<i>Verbena officinalis</i> L."
+ },
+ "sectorKey": 66236,
+ "type": "variant",
+ "original": {
+  "name": "Verbena officinalis",
+  "status": "accepted",
+  "label": "Verbena officinalis",
+  "labelHtml": "Verbena officinalis"
+ },
+ "issues": {},
+ "id": "5B2TY",
+ "match": true
+}

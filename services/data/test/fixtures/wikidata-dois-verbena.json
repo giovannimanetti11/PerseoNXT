@@ -1,0 +1,282 @@
+{
+ "head": {
+  "vars": [
+   "ref",
+   "doi"
+  ]
+ },
+ "results": {
+  "bindings": [
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q34571482"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1248/CPB.54.1421"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q42036148"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1002/PS.1278"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q42170865"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1248/CPB.51.872"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q42938710"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1080/10286020.2010.489820"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q44450889"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1021/NP020577P"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q46703477"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1016/S0305-1978(99)00114-3"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q47662839"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1002/1099-1573(200009)14:6<463::AID-PTR611>3.0.CO;2-G"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q71538312"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1055/S-2006-958152"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q74661567"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1007/BF02820025"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q85572803"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1016/S0944-7113(98)80043-3"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q103813316"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1021/NP50017A018"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q104387399"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1002/1099-1565(200011/12)11:6<351::AID-PCA544>3.0.CO;2-S"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q104388931"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1007/BF02496313"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q104415073"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1007/S10600-011-9920-6"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q104914533"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1016/S0031-9422(00)81424-7"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q104988095"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1016/0031-9422(89)85017-4"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q104992904"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1021/NP50035A033"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q104992920"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1002/ARDP.19863190306"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q104992927"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1365/S10337-004-0359-9"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q105030384"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1016/S0040-4039(01)95971-4"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q105030385"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1002/HLCA.19460290624"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q105030387"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1016/S0040-4020(01)99268-3"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q105030388"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1039/P19830001943"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q105030389"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1016/0031-9422(83)80179-4"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q105142974"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1016/S0031-9422(00)86964-2"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q105187830"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1016/S0031-9422(97)01004-2"
+    }
+   },
+   {
+    "ref": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q110066841"
+    },
+    "doi": {
+     "type": "literal",
+     "value": "10.1515/ZNC-1979-5-601"
+    }
+   }
+  ]
+ }
+}

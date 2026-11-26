@@ -1,0 +1,21 @@
+{
+ "header": {
+  "type": "esearch",
+  "version": "0.3"
+ },
+ "esearchresult": {
+  "count": "6",
+  "retmax": "6",
+  "retstart": "0",
+  "idlist": [
+   "30000912",
+   "37895122",
+   "32937665",
+   "21220003",
+   "15619562",
+   "10920504"
+  ],
+  "translationset": [],
+  "querytranslation": "\"Verbena officinalis\"[All Fields] AND (\"systematic review\"[Publication Type] OR \"meta-analysis\"[Publication Type] OR \"review\"[Publication Type])"
+ }
+}

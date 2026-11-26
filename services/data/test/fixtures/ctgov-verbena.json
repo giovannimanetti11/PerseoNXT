@@ -1,0 +1,33 @@
+{
+ "totalCount": 1,
+ "studies": [
+  {
+   "protocolSection": {
+    "identificationModule": {
+     "nctId": "NCT00456755",
+     "briefTitle": "Herbal Treatment for Perennial Allergic Rhinitis"
+    },
+    "statusModule": {
+     "overallStatus": "COMPLETED",
+     "startDateStruct": {
+      "date": "2004-03"
+     }
+    },
+    "conditionsModule": {
+     "conditions": [
+      "Perennial Allergic Rhinitis"
+     ]
+    },
+    "designModule": {
+     "studyType": "INTERVENTIONAL",
+     "phases": [
+      "PHASE2"
+     ],
+     "enrollmentInfo": {
+      "count": 126
+     }
+    }
+   }
+  }
+ ]
+}

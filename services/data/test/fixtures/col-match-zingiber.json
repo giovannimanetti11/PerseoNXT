@@ -1,0 +1,116 @@
+{
+ "usage": {
+  "id": "5D5GX",
+  "name": "Zingiber officinale",
+  "authorship": "Roscoe",
+  "rank": "species",
+  "code": "botanical",
+  "status": "accepted",
+  "namesIndexId": 9694818,
+  "sectorKey": 67360,
+  "classification": [
+   {
+    "id": "8W4TG",
+    "name": "Zingiber",
+    "authorship": "Mill.",
+    "rank": "genus",
+    "code": "botanical",
+    "status": "accepted",
+    "namesIndexId": 9694569,
+    "sectorKey": 67360,
+    "label": "Zingiber Mill.",
+    "parentId": "J2F",
+    "labelHtml": "<i>Zingiber</i> Mill."
+   },
+   {
+    "id": "J2F",
+    "name": "Zingiberaceae",
+    "rank": "family",
+    "code": "botanical",
+    "status": "accepted",
+    "namesIndexId": 18557,
+    "sectorKey": 67360,
+    "label": "Zingiberaceae",
+    "parentId": "4C2",
+    "labelHtml": "Zingiberaceae"
+   },
+   {
+    "id": "4C2",
+    "name": "Zingiberales",
+    "authorship": "Griseb.",
+    "rank": "order",
+    "code": "botanical",
+    "status": "accepted",
+    "namesIndexId": 18558,
+    "label": "Zingiberales Griseb.",
+    "parentId": "L2L",
+    "labelHtml": "Zingiberales Griseb."
+   },
+   {
+    "id": "L2L",
+    "name": "Liliopsida",
+    "rank": "class",
+    "status": "accepted",
+    "namesIndexId": 17499,
+    "label": "Liliopsida",
+    "parentId": "TP",
+    "labelHtml": "Liliopsida"
+   },
+   {
+    "id": "TP",
+    "name": "Tracheophyta",
+    "rank": "phylum",
+    "status": "accepted",
+    "namesIndexId": 18442,
+    "label": "Tracheophyta",
+    "parentId": "CMQ8S",
+    "labelHtml": "Tracheophyta"
+   },
+   {
+    "id": "CMQ8S",
+    "name": "Pteridobiotina",
+    "authorship": "Britton & Brown",
+    "rank": "subkingdom",
+    "status": "accepted",
+    "namesIndexId": 7638084,
+    "label": "Pteridobiotina Britton & Brown",
+    "parentId": "P",
+    "labelHtml": "Pteridobiotina Britton &amp; Brown"
+   },
+   {
+    "id": "P",
+    "name": "Plantae",
+    "rank": "kingdom",
+    "status": "accepted",
+    "namesIndexId": 17869,
+    "label": "Plantae",
+    "parentId": "CS5HF",
+    "labelHtml": "Plantae"
+   },
+   {
+    "id": "CS5HF",
+    "name": "Eukaryota",
+    "authorship": "(Chatton, 1925) Whittaker & Margulis, 1978",
+    "rank": "domain",
+    "status": "accepted",
+    "namesIndexId": 3444548,
+    "label": "Eukaryota (Chatton, 1925) Whittaker & Margulis, 1978",
+    "labelHtml": "Eukaryota (Chatton, 1925) Whittaker &amp; Margulis, 1978"
+   }
+  ],
+  "label": "Zingiber officinale Roscoe",
+  "parentId": "8W4TG",
+  "labelHtml": "<i>Zingiber officinale</i> Roscoe"
+ },
+ "sectorKey": 67360,
+ "type": "variant",
+ "original": {
+  "name": "Zingiber officinale",
+  "status": "accepted",
+  "label": "Zingiber officinale",
+  "labelHtml": "Zingiber officinale"
+ },
+ "issues": {},
+ "id": "5D5GX",
+ "match": true
+}

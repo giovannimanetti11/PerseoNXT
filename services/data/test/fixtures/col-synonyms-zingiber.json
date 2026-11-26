@@ -1,0 +1,1622 @@
+{
+ "homotypic": [
+  {
+   "created": "2026-08-05T22:30:20.199318",
+   "createdBy": 102,
+   "modified": "2026-08-05T22:30:20.199318",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "CWS5",
+   "sectorKey": 67360,
+   "verbatimSourceKey": 347449213,
+   "name": {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "BcfzeZndZZf63S7QDaKrF1",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449213,
+    "namesIndexId": 463010,
+    "identifier": [
+     "ipni:795704-1"
+    ],
+    "scientificName": "Amomum zingiber",
+    "authorship": "L.",
+    "rank": "species",
+    "genus": "Amomum",
+    "specificEpithet": "zingiber",
+    "combinationAuthorship": {
+     "authors": [
+      "L."
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "b60ef1d1-bb6c-4997-8d65-202eb84c46c3",
+    "origin": "source",
+    "type": "scientific",
+    "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:795704-1",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5D5GX",
+   "label": "Amomum zingiber L.",
+   "labelHtml": "<i>Amomum zingiber</i> L."
+  },
+  {
+   "created": "2026-08-05T22:30:20.199318",
+   "createdBy": 102,
+   "modified": "2026-08-05T22:30:20.199318",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "8XBPK",
+   "sectorKey": 67360,
+   "verbatimSourceKey": 347449229,
+   "name": {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "K1Cu_9P3idtW6pks1GwcS",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449229,
+    "namesIndexId": 9694977,
+    "identifier": [
+     "ipni:77248586-1"
+    ],
+    "scientificName": "Zingiber zingiber",
+    "authorship": "(L.) H.Karst.",
+    "rank": "species",
+    "genus": "Zingiber",
+    "specificEpithet": "zingiber",
+    "combinationAuthorship": {
+     "authors": [
+      "H.Karst."
+     ]
+    },
+    "basionymAuthorship": {
+     "authors": [
+      "L."
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "e08d0bcc-93ea-48e7-a397-3ee93e694c4f",
+    "origin": "source",
+    "type": "scientific",
+    "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:77248586-1",
+    "remarks": ", not validly publ.",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5D5GX",
+   "label": "Zingiber zingiber (L.) H.Karst.",
+   "labelHtml": "<i>Zingiber zingiber</i> (L.) H.Karst."
+  },
+  {
+   "created": "2026-08-05T22:30:20.199318",
+   "createdBy": 102,
+   "modified": "2026-08-05T22:30:20.199318",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "CWDQ",
+   "sectorKey": 67360,
+   "verbatimSourceKey": 347449216,
+   "name": {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "acIEiThHyvQY-ClQGvFrd",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449216,
+    "namesIndexId": 461773,
+    "identifier": [
+     "ipni:795456-1"
+    ],
+    "scientificName": "Amomum angustifolium",
+    "authorship": "Salisb.",
+    "rank": "species",
+    "genus": "Amomum",
+    "specificEpithet": "angustifolium",
+    "combinationAuthorship": {
+     "authors": [
+      "Salisb."
+     ]
+    },
+    "code": "botanical",
+    "nomStatus": "unacceptable",
+    "publishedInId": "c87ccef2-cb5c-4f8a-bd5d-7733209ece04",
+    "origin": "source",
+    "type": "scientific",
+    "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:795456-1",
+    "remarks": ", nom. illeg.",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "ambiguous synonym",
+   "origin": "source",
+   "parentId": "5D5GX",
+   "label": "Amomum angustifolium Salisb.",
+   "labelHtml": "<i>Amomum angustifolium</i> Salisb."
+  }
+ ],
+ "heterotypic": [
+  {
+   "created": "2026-08-05T22:30:20.199318",
+   "createdBy": 102,
+   "modified": "2026-08-05T22:30:20.199318",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "8W646",
+   "sectorKey": 67360,
+   "verbatimSourceKey": 347449217,
+   "name": {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "CR4vUxjaQ2tmDSlK0rffD2",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449217,
+    "namesIndexId": 463012,
+    "identifier": [
+     "ipni:795705-1"
+    ],
+    "scientificName": "Amomum zinziba",
+    "authorship": "Hill",
+    "rank": "species",
+    "genus": "Amomum",
+    "specificEpithet": "zinziba",
+    "combinationAuthorship": {
+     "authors": [
+      "Hill"
+     ]
+    },
+    "code": "botanical",
+    "nomStatus": "not established",
+    "publishedInId": "3c89c291-c4f1-400e-9b64-a4511cff7e53",
+    "origin": "source",
+    "type": "scientific",
+    "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:795705-1",
+    "remarks": ", orth. var.",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5D5GX",
+   "label": "Amomum zinziba Hill",
+   "labelHtml": "<i>Amomum zinziba</i> Hill"
+  },
+  {
+   "created": "2026-08-05T22:30:20.199318",
+   "createdBy": 102,
+   "modified": "2026-08-05T22:30:20.199318",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5D5CD",
+   "sectorKey": 67360,
+   "verbatimSourceKey": 347449220,
+   "name": {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "DGFJWH96P7sHBl5b-8ZVI1",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449220,
+    "namesIndexId": 9694607,
+    "identifier": [
+     "ipni:798318-1"
+    ],
+    "scientificName": "Zingiber blancoi",
+    "authorship": "Hassk.",
+    "rank": "species",
+    "genus": "Zingiber",
+    "specificEpithet": "blancoi",
+    "combinationAuthorship": {
+     "authors": [
+      "Hassk."
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "84a651ee-740c-4f0b-8afa-9d7c8de7544c",
+    "origin": "source",
+    "type": "scientific",
+    "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:798318-1",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5D5GX",
+   "label": "Zingiber blancoi Hassk.",
+   "labelHtml": "<i>Zingiber blancoi</i> Hassk."
+  },
+  {
+   "created": "2026-08-05T22:30:20.199318",
+   "createdBy": 102,
+   "modified": "2026-08-05T22:30:20.199318",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "7GFGB",
+   "sectorKey": 67360,
+   "verbatimSourceKey": 347449222,
+   "name": {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "vzQyCPfBFXvx8G-6hqoS92",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449222,
+    "namesIndexId": 9694634,
+    "identifier": [
+     "ipni:798325-1"
+    ],
+    "scientificName": "Zingiber cholmondeleyi",
+    "authorship": "(F.M.Bailey) K.Schum.",
+    "rank": "species",
+    "genus": "Zingiber",
+    "specificEpithet": "cholmondeleyi",
+    "combinationAuthorship": {
+     "authors": [
+      "K.Schum."
+     ]
+    },
+    "basionymAuthorship": {
+     "authors": [
+      "F.M.Bailey"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "ea98e24a-8c3a-4472-870f-cb1a2982ae8f",
+    "origin": "source",
+    "type": "scientific",
+    "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:798325-1",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5D5GX",
+   "label": "Zingiber cholmondeleyi (F.M.Bailey) K.Schum.",
+   "labelHtml": "<i>Zingiber cholmondeleyi</i> (F.M.Bailey) K.Schum."
+  },
+  {
+   "created": "2026-08-05T22:30:20.199318",
+   "createdBy": 102,
+   "modified": "2026-08-05T22:30:20.199318",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "TWRHZ",
+   "sectorKey": 67360,
+   "verbatimSourceKey": 347449224,
+   "name": {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "enqO9az2Z08o5KX1ATQ_k",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449224,
+    "namesIndexId": 9694647,
+    "identifier": [
+     "ipni:798332-1"
+    ],
+    "scientificName": "Zingiber confine",
+    "authorship": "Miq.",
+    "rank": "species",
+    "genus": "Zingiber",
+    "specificEpithet": "confine",
+    "combinationAuthorship": {
+     "authors": [
+      "Miq."
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "66d513d5-9a09-4365-b25e-b50bbecd58ce",
+    "origin": "source",
+    "type": "scientific",
+    "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:798332-1",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5D5GX",
+   "label": "Zingiber confine Miq.",
+   "labelHtml": "<i>Zingiber confine</i> Miq."
+  },
+  {
+   "created": "2026-08-05T22:30:20.199318",
+   "createdBy": 102,
+   "modified": "2026-08-05T22:30:20.199318",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "CFBHZ",
+   "sectorKey": 67360,
+   "verbatimSourceKey": 347449226,
+   "name": {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "UpKuTRuLmeO7403o9yCXa",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449226,
+    "namesIndexId": 9694787,
+    "identifier": [
+     "ipni:798365-1"
+    ],
+    "scientificName": "Zingiber missionis",
+    "authorship": "Wall. ex Baker",
+    "rank": "species",
+    "genus": "Zingiber",
+    "specificEpithet": "missionis",
+    "combinationAuthorship": {
+     "authors": [
+      "Baker"
+     ],
+     "exAuthors": [
+      "Wall."
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "a0d92cf4-1959-4382-a96e-09d2b55a8bd5",
+    "origin": "source",
+    "type": "scientific",
+    "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:798365-1",
+    "remarks": ", pro syn.",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5D5GX",
+   "label": "Zingiber missionis Wall. ex Baker",
+   "labelHtml": "<i>Zingiber missionis</i> Wall. ex Baker"
+  },
+  {
+   "created": "2026-08-05T22:30:20.199318",
+   "createdBy": 102,
+   "modified": "2026-08-05T22:30:20.199318",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5T4XS",
+   "sectorKey": 67360,
+   "verbatimSourceKey": 347449240,
+   "name": {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "Uli9sLuzXlfz20APm3CnX",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449240,
+    "namesIndexId": 9694820,
+    "identifier": [
+     "ipni:892808-1"
+    ],
+    "scientificName": "Zingiber officinale f. macrorhizonum",
+    "authorship": "(Makino) M.Hiroe",
+    "rank": "form",
+    "genus": "Zingiber",
+    "specificEpithet": "officinale",
+    "infraspecificEpithet": "macrorhizonum",
+    "combinationAuthorship": {
+     "authors": [
+      "M.Hiroe"
+     ]
+    },
+    "basionymAuthorship": {
+     "authors": [
+      "Makino"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "38d73abc-351a-4a4b-b619-45c97c9c97a1",
+    "origin": "source",
+    "type": "scientific",
+    "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:892808-1",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5D5GX",
+   "label": "Zingiber officinale f. macrorhizonum (Makino) M.Hiroe",
+   "labelHtml": "<i>Zingiber officinale</i> f. <i>macrorhizonum</i> (Makino) M.Hiroe"
+  },
+  {
+   "created": "2026-08-05T22:30:20.199318",
+   "createdBy": 102,
+   "modified": "2026-08-05T22:30:20.199318",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5T4XT",
+   "sectorKey": 67360,
+   "verbatimSourceKey": 347449242,
+   "name": {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "qVzlbKrgCM8F5_r-uvAUL2",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449242,
+    "namesIndexId": 9694821,
+    "identifier": [
+     "ipni:892809-1"
+    ],
+    "scientificName": "Zingiber officinale f. rubens",
+    "authorship": "(Makino) M.Hiroe",
+    "rank": "form",
+    "genus": "Zingiber",
+    "specificEpithet": "officinale",
+    "infraspecificEpithet": "rubens",
+    "combinationAuthorship": {
+     "authors": [
+      "M.Hiroe"
+     ]
+    },
+    "basionymAuthorship": {
+     "authors": [
+      "Makino"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "38d73abc-351a-4a4b-b619-45c97c9c97a1",
+    "origin": "source",
+    "type": "scientific",
+    "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:892809-1",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5D5GX",
+   "label": "Zingiber officinale f. rubens (Makino) M.Hiroe",
+   "labelHtml": "<i>Zingiber officinale</i> f. <i>rubens</i> (Makino) M.Hiroe"
+  },
+  {
+   "created": "2026-08-05T22:30:20.199318",
+   "createdBy": 102,
+   "modified": "2026-08-05T22:30:20.199318",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5S67V",
+   "sectorKey": 67360,
+   "verbatimSourceKey": 347449231,
+   "name": {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "sUnSpmi07DQ0BWC8FuVz50",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449231,
+    "namesIndexId": 9694819,
+    "identifier": [
+     "ipni:51942-3"
+    ],
+    "scientificName": "Zingiber officinale var. cholmondeleyi",
+    "authorship": "F.M.Bailey",
+    "rank": "variety",
+    "genus": "Zingiber",
+    "specificEpithet": "officinale",
+    "infraspecificEpithet": "cholmondeleyi",
+    "combinationAuthorship": {
+     "authors": [
+      "F.M.Bailey"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "639e5709-4c11-49ad-a481-15ed62565aca",
+    "origin": "source",
+    "type": "scientific",
+    "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:51942-3",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5D5GX",
+   "label": "Zingiber officinale var. cholmondeleyi F.M.Bailey",
+   "labelHtml": "<i>Zingiber officinale</i> var. <i>cholmondeleyi</i> F.M.Bailey"
+  },
+  {
+   "created": "2026-08-05T22:30:20.199318",
+   "createdBy": 102,
+   "modified": "2026-08-05T22:30:20.199318",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5S67W",
+   "sectorKey": 67360,
+   "verbatimSourceKey": 347449233,
+   "name": {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "nuM5PWZUf0dj5OqVi3akx",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449233,
+    "namesIndexId": 9694820,
+    "scientificName": "Zingiber officinale var. macrorhizonum",
+    "authorship": "Makino",
+    "rank": "variety",
+    "genus": "Zingiber",
+    "specificEpithet": "officinale",
+    "infraspecificEpithet": "macrorhizonum",
+    "combinationAuthorship": {
+     "authors": [
+      "Makino"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "1219f6e2-ebec-48a1-91ec-f54eb1c1d65a",
+    "origin": "source",
+    "type": "scientific",
+    "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:273364-4",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5D5GX",
+   "label": "Zingiber officinale var. macrorhizonum Makino",
+   "labelHtml": "<i>Zingiber officinale</i> var. <i>macrorhizonum</i> Makino"
+  },
+  {
+   "created": "2026-08-05T22:30:20.199318",
+   "createdBy": 102,
+   "modified": "2026-08-05T22:30:20.199318",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5S67X",
+   "sectorKey": 67360,
+   "verbatimSourceKey": 347449235,
+   "name": {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "OsZPZX9UShfl8GxjM_svs1",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449235,
+    "namesIndexId": 9694821,
+    "scientificName": "Zingiber officinale var. rubens",
+    "authorship": "Makino",
+    "rank": "variety",
+    "genus": "Zingiber",
+    "specificEpithet": "officinale",
+    "infraspecificEpithet": "rubens",
+    "combinationAuthorship": {
+     "authors": [
+      "Makino"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "1219f6e2-ebec-48a1-91ec-f54eb1c1d65a",
+    "origin": "source",
+    "type": "scientific",
+    "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:273366-4",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5D5GX",
+   "label": "Zingiber officinale var. rubens Makino",
+   "labelHtml": "<i>Zingiber officinale</i> var. <i>rubens</i> Makino"
+  },
+  {
+   "created": "2026-08-05T22:30:20.199318",
+   "createdBy": 102,
+   "modified": "2026-08-05T22:30:20.199318",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5S67Y",
+   "sectorKey": 67360,
+   "verbatimSourceKey": 347449236,
+   "name": {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "7kCu9wNnnisb38Z4pu2G21",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449236,
+    "namesIndexId": 9694822,
+    "identifier": [
+     "ipni:1001098-1"
+    ],
+    "scientificName": "Zingiber officinale var. rubrum",
+    "authorship": "Theilade",
+    "rank": "variety",
+    "genus": "Zingiber",
+    "specificEpithet": "officinale",
+    "infraspecificEpithet": "rubrum",
+    "combinationAuthorship": {
+     "authors": [
+      "Theilade"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "559b36cb-cace-43f2-a816-ff76ce9fea18",
+    "origin": "source",
+    "type": "scientific",
+    "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:1001098-1",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5D5GX",
+   "label": "Zingiber officinale var. rubrum Theilade",
+   "labelHtml": "<i>Zingiber officinale</i> var. <i>rubrum</i> Theilade"
+  },
+  {
+   "created": "2026-08-05T22:30:20.199318",
+   "createdBy": 102,
+   "modified": "2026-08-05T22:30:20.199318",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5S67Z",
+   "sectorKey": 67360,
+   "verbatimSourceKey": 347449238,
+   "name": {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "oZGLrEEGUjOZClQ_88VbZ",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449238,
+    "namesIndexId": 9694823,
+    "scientificName": "Zingiber officinale var. sichuanense",
+    "authorship": "(Z.Y.Zhu, S.L.Zhang & S.X.Chen) Z.Y.Zhu, S.L.Zhang & S.X.Chen",
+    "rank": "variety",
+    "genus": "Zingiber",
+    "specificEpithet": "officinale",
+    "infraspecificEpithet": "sichuanense",
+    "combinationAuthorship": {
+     "authors": [
+      "Z.Y.Zhu",
+      "S.L.Zhang",
+      "S.X.Chen"
+     ]
+    },
+    "basionymAuthorship": {
+     "authors": [
+      "Z.Y.Zhu",
+      "S.L.Zhang",
+      "S.X.Chen"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "3c68790d-063c-45a3-8344-710ccdb52318",
+    "origin": "source",
+    "type": "scientific",
+    "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:273368-4",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5D5GX",
+   "label": "Zingiber officinale var. sichuanense (Z.Y.Zhu, S.L.Zhang & S.X.Chen) Z.Y.Zhu, S.L.Zhang & S.X.Chen",
+   "labelHtml": "<i>Zingiber officinale</i> var. <i>sichuanense</i> (Z.Y.Zhu, S.L.Zhang &amp; S.X.Chen) Z.Y.Zhu, S.L.Zhang &amp; S.X.Chen"
+  },
+  {
+   "created": "2026-08-05T22:30:20.199318",
+   "createdBy": 102,
+   "modified": "2026-08-05T22:30:20.199318",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "8YCDH",
+   "sectorKey": 67360,
+   "verbatimSourceKey": 347449227,
+   "name": {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "mI6Ehp9sRbck4Sd3_cPi_",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449227,
+    "namesIndexId": 9694885,
+    "identifier": [
+     "ipni:77248263-1"
+    ],
+    "scientificName": "Zingiber sianginensis",
+    "authorship": "Tatum & A.K.Das",
+    "rank": "species",
+    "genus": "Zingiber",
+    "specificEpithet": "sianginensis",
+    "combinationAuthorship": {
+     "authors": [
+      "Tatum",
+      "A.K.Das"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "232d2f21-d6b6-4c6f-b6e5-b8390fff0bd6",
+    "origin": "source",
+    "type": "scientific",
+    "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:77248263-1",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5D5GX",
+   "label": "Zingiber sianginensis Tatum & A.K.Das",
+   "labelHtml": "<i>Zingiber sianginensis</i> Tatum &amp; A.K.Das"
+  },
+  {
+   "created": "2026-08-05T22:30:20.199318",
+   "createdBy": 102,
+   "modified": "2026-08-05T22:30:20.199318",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5D5J7",
+   "sectorKey": 67360,
+   "verbatimSourceKey": 347449214,
+   "name": {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "lBbLET6I_CQEDC8-2eS_P0",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449214,
+    "namesIndexId": 9694886,
+    "identifier": [
+     "ipni:982539-1"
+    ],
+    "scientificName": "Zingiber sichuanense",
+    "authorship": "Z.Y.Zhu, S.L.Zhang & S.X.Chen",
+    "rank": "species",
+    "genus": "Zingiber",
+    "specificEpithet": "sichuanense",
+    "combinationAuthorship": {
+     "authors": [
+      "Z.Y.Zhu",
+      "S.L.Zhang",
+      "S.X.Chen"
+     ]
+    },
+    "code": "botanical",
+    "publishedInId": "7ccde0d1-daf8-4fbd-ad1e-13d434c95031",
+    "origin": "source",
+    "type": "scientific",
+    "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:982539-1",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "synonym",
+   "origin": "source",
+   "parentId": "5D5GX",
+   "label": "Zingiber sichuanense Z.Y.Zhu, S.L.Zhang & S.X.Chen",
+   "labelHtml": "<i>Zingiber sichuanense</i> Z.Y.Zhu, S.L.Zhang &amp; S.X.Chen"
+  },
+  {
+   "created": "2026-08-05T22:30:20.199318",
+   "createdBy": 102,
+   "modified": "2026-08-05T22:30:20.199318",
+   "modifiedBy": 102,
+   "datasetKey": 317005,
+   "id": "5D5C2",
+   "sectorKey": 67360,
+   "verbatimSourceKey": 347449219,
+   "name": {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "1dGQsmrPNxea2hIB9U7C-0",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449219,
+    "namesIndexId": 9694586,
+    "identifier": [
+     "ipni:798315-1"
+    ],
+    "scientificName": "Zingiber aromaticum",
+    "authorship": "Noronha",
+    "rank": "species",
+    "genus": "Zingiber",
+    "specificEpithet": "aromaticum",
+    "combinationAuthorship": {
+     "authors": [
+      "Noronha"
+     ]
+    },
+    "code": "botanical",
+    "nomStatus": "not established",
+    "publishedInId": "c50280f8-fc7f-4972-bc60-685912587e33",
+    "origin": "source",
+    "type": "scientific",
+    "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:798315-1",
+    "remarks": ", nom. nud.",
+    "parsed": true,
+    "notho": []
+   },
+   "status": "ambiguous synonym",
+   "origin": "source",
+   "parentId": "5D5GX",
+   "label": "Zingiber aromaticum Noronha",
+   "labelHtml": "<i>Zingiber aromaticum</i> Noronha"
+  }
+ ],
+ "heterotypicGroups": [
+  [
+   {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "8W646",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449217,
+    "name": {
+     "created": "2026-08-05T22:30:20.199318",
+     "createdBy": 102,
+     "modified": "2026-08-05T22:30:20.199318",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "CR4vUxjaQ2tmDSlK0rffD2",
+     "sectorKey": 67360,
+     "verbatimSourceKey": 347449217,
+     "namesIndexId": 463012,
+     "identifier": [
+      "ipni:795705-1"
+     ],
+     "scientificName": "Amomum zinziba",
+     "authorship": "Hill",
+     "rank": "species",
+     "genus": "Amomum",
+     "specificEpithet": "zinziba",
+     "combinationAuthorship": {
+      "authors": [
+       "Hill"
+      ]
+     },
+     "code": "botanical",
+     "nomStatus": "not established",
+     "publishedInId": "3c89c291-c4f1-400e-9b64-a4511cff7e53",
+     "origin": "source",
+     "type": "scientific",
+     "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:795705-1",
+     "remarks": ", orth. var.",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5D5GX",
+    "label": "Amomum zinziba Hill",
+    "labelHtml": "<i>Amomum zinziba</i> Hill"
+   }
+  ],
+  [
+   {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5D5C2",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449219,
+    "name": {
+     "created": "2026-08-05T22:30:20.199318",
+     "createdBy": 102,
+     "modified": "2026-08-05T22:30:20.199318",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "1dGQsmrPNxea2hIB9U7C-0",
+     "sectorKey": 67360,
+     "verbatimSourceKey": 347449219,
+     "namesIndexId": 9694586,
+     "identifier": [
+      "ipni:798315-1"
+     ],
+     "scientificName": "Zingiber aromaticum",
+     "authorship": "Noronha",
+     "rank": "species",
+     "genus": "Zingiber",
+     "specificEpithet": "aromaticum",
+     "combinationAuthorship": {
+      "authors": [
+       "Noronha"
+      ]
+     },
+     "code": "botanical",
+     "nomStatus": "not established",
+     "publishedInId": "c50280f8-fc7f-4972-bc60-685912587e33",
+     "origin": "source",
+     "type": "scientific",
+     "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:798315-1",
+     "remarks": ", nom. nud.",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "ambiguous synonym",
+    "origin": "source",
+    "parentId": "5D5GX",
+    "label": "Zingiber aromaticum Noronha",
+    "labelHtml": "<i>Zingiber aromaticum</i> Noronha"
+   }
+  ],
+  [
+   {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5D5CD",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449220,
+    "name": {
+     "created": "2026-08-05T22:30:20.199318",
+     "createdBy": 102,
+     "modified": "2026-08-05T22:30:20.199318",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "DGFJWH96P7sHBl5b-8ZVI1",
+     "sectorKey": 67360,
+     "verbatimSourceKey": 347449220,
+     "namesIndexId": 9694607,
+     "identifier": [
+      "ipni:798318-1"
+     ],
+     "scientificName": "Zingiber blancoi",
+     "authorship": "Hassk.",
+     "rank": "species",
+     "genus": "Zingiber",
+     "specificEpithet": "blancoi",
+     "combinationAuthorship": {
+      "authors": [
+       "Hassk."
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "84a651ee-740c-4f0b-8afa-9d7c8de7544c",
+     "origin": "source",
+     "type": "scientific",
+     "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:798318-1",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5D5GX",
+    "label": "Zingiber blancoi Hassk.",
+    "labelHtml": "<i>Zingiber blancoi</i> Hassk."
+   }
+  ],
+  [
+   {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "7GFGB",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449222,
+    "name": {
+     "created": "2026-08-05T22:30:20.199318",
+     "createdBy": 102,
+     "modified": "2026-08-05T22:30:20.199318",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "vzQyCPfBFXvx8G-6hqoS92",
+     "sectorKey": 67360,
+     "verbatimSourceKey": 347449222,
+     "namesIndexId": 9694634,
+     "identifier": [
+      "ipni:798325-1"
+     ],
+     "scientificName": "Zingiber cholmondeleyi",
+     "authorship": "(F.M.Bailey) K.Schum.",
+     "rank": "species",
+     "genus": "Zingiber",
+     "specificEpithet": "cholmondeleyi",
+     "combinationAuthorship": {
+      "authors": [
+       "K.Schum."
+      ]
+     },
+     "basionymAuthorship": {
+      "authors": [
+       "F.M.Bailey"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "ea98e24a-8c3a-4472-870f-cb1a2982ae8f",
+     "origin": "source",
+     "type": "scientific",
+     "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:798325-1",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5D5GX",
+    "label": "Zingiber cholmondeleyi (F.M.Bailey) K.Schum.",
+    "labelHtml": "<i>Zingiber cholmondeleyi</i> (F.M.Bailey) K.Schum."
+   },
+   {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5S67V",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449231,
+    "name": {
+     "created": "2026-08-05T22:30:20.199318",
+     "createdBy": 102,
+     "modified": "2026-08-05T22:30:20.199318",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "sUnSpmi07DQ0BWC8FuVz50",
+     "sectorKey": 67360,
+     "verbatimSourceKey": 347449231,
+     "namesIndexId": 9694819,
+     "identifier": [
+      "ipni:51942-3"
+     ],
+     "scientificName": "Zingiber officinale var. cholmondeleyi",
+     "authorship": "F.M.Bailey",
+     "rank": "variety",
+     "genus": "Zingiber",
+     "specificEpithet": "officinale",
+     "infraspecificEpithet": "cholmondeleyi",
+     "combinationAuthorship": {
+      "authors": [
+       "F.M.Bailey"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "639e5709-4c11-49ad-a481-15ed62565aca",
+     "origin": "source",
+     "type": "scientific",
+     "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:51942-3",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5D5GX",
+    "label": "Zingiber officinale var. cholmondeleyi F.M.Bailey",
+    "labelHtml": "<i>Zingiber officinale</i> var. <i>cholmondeleyi</i> F.M.Bailey"
+   }
+  ],
+  [
+   {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "TWRHZ",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449224,
+    "name": {
+     "created": "2026-08-05T22:30:20.199318",
+     "createdBy": 102,
+     "modified": "2026-08-05T22:30:20.199318",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "enqO9az2Z08o5KX1ATQ_k",
+     "sectorKey": 67360,
+     "verbatimSourceKey": 347449224,
+     "namesIndexId": 9694647,
+     "identifier": [
+      "ipni:798332-1"
+     ],
+     "scientificName": "Zingiber confine",
+     "authorship": "Miq.",
+     "rank": "species",
+     "genus": "Zingiber",
+     "specificEpithet": "confine",
+     "combinationAuthorship": {
+      "authors": [
+       "Miq."
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "66d513d5-9a09-4365-b25e-b50bbecd58ce",
+     "origin": "source",
+     "type": "scientific",
+     "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:798332-1",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5D5GX",
+    "label": "Zingiber confine Miq.",
+    "labelHtml": "<i>Zingiber confine</i> Miq."
+   }
+  ],
+  [
+   {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "CFBHZ",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449226,
+    "name": {
+     "created": "2026-08-05T22:30:20.199318",
+     "createdBy": 102,
+     "modified": "2026-08-05T22:30:20.199318",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "UpKuTRuLmeO7403o9yCXa",
+     "sectorKey": 67360,
+     "verbatimSourceKey": 347449226,
+     "namesIndexId": 9694787,
+     "identifier": [
+      "ipni:798365-1"
+     ],
+     "scientificName": "Zingiber missionis",
+     "authorship": "Wall. ex Baker",
+     "rank": "species",
+     "genus": "Zingiber",
+     "specificEpithet": "missionis",
+     "combinationAuthorship": {
+      "authors": [
+       "Baker"
+      ],
+      "exAuthors": [
+       "Wall."
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "a0d92cf4-1959-4382-a96e-09d2b55a8bd5",
+     "origin": "source",
+     "type": "scientific",
+     "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:798365-1",
+     "remarks": ", pro syn.",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5D5GX",
+    "label": "Zingiber missionis Wall. ex Baker",
+    "labelHtml": "<i>Zingiber missionis</i> Wall. ex Baker"
+   }
+  ],
+  [
+   {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5T4XS",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449240,
+    "name": {
+     "created": "2026-08-05T22:30:20.199318",
+     "createdBy": 102,
+     "modified": "2026-08-05T22:30:20.199318",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "Uli9sLuzXlfz20APm3CnX",
+     "sectorKey": 67360,
+     "verbatimSourceKey": 347449240,
+     "namesIndexId": 9694820,
+     "identifier": [
+      "ipni:892808-1"
+     ],
+     "scientificName": "Zingiber officinale f. macrorhizonum",
+     "authorship": "(Makino) M.Hiroe",
+     "rank": "form",
+     "genus": "Zingiber",
+     "specificEpithet": "officinale",
+     "infraspecificEpithet": "macrorhizonum",
+     "combinationAuthorship": {
+      "authors": [
+       "M.Hiroe"
+      ]
+     },
+     "basionymAuthorship": {
+      "authors": [
+       "Makino"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "38d73abc-351a-4a4b-b619-45c97c9c97a1",
+     "origin": "source",
+     "type": "scientific",
+     "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:892808-1",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5D5GX",
+    "label": "Zingiber officinale f. macrorhizonum (Makino) M.Hiroe",
+    "labelHtml": "<i>Zingiber officinale</i> f. <i>macrorhizonum</i> (Makino) M.Hiroe"
+   },
+   {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5S67W",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449233,
+    "name": {
+     "created": "2026-08-05T22:30:20.199318",
+     "createdBy": 102,
+     "modified": "2026-08-05T22:30:20.199318",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "nuM5PWZUf0dj5OqVi3akx",
+     "sectorKey": 67360,
+     "verbatimSourceKey": 347449233,
+     "namesIndexId": 9694820,
+     "scientificName": "Zingiber officinale var. macrorhizonum",
+     "authorship": "Makino",
+     "rank": "variety",
+     "genus": "Zingiber",
+     "specificEpithet": "officinale",
+     "infraspecificEpithet": "macrorhizonum",
+     "combinationAuthorship": {
+      "authors": [
+       "Makino"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "1219f6e2-ebec-48a1-91ec-f54eb1c1d65a",
+     "origin": "source",
+     "type": "scientific",
+     "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:273364-4",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5D5GX",
+    "label": "Zingiber officinale var. macrorhizonum Makino",
+    "labelHtml": "<i>Zingiber officinale</i> var. <i>macrorhizonum</i> Makino"
+   }
+  ],
+  [
+   {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5T4XT",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449242,
+    "name": {
+     "created": "2026-08-05T22:30:20.199318",
+     "createdBy": 102,
+     "modified": "2026-08-05T22:30:20.199318",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "qVzlbKrgCM8F5_r-uvAUL2",
+     "sectorKey": 67360,
+     "verbatimSourceKey": 347449242,
+     "namesIndexId": 9694821,
+     "identifier": [
+      "ipni:892809-1"
+     ],
+     "scientificName": "Zingiber officinale f. rubens",
+     "authorship": "(Makino) M.Hiroe",
+     "rank": "form",
+     "genus": "Zingiber",
+     "specificEpithet": "officinale",
+     "infraspecificEpithet": "rubens",
+     "combinationAuthorship": {
+      "authors": [
+       "M.Hiroe"
+      ]
+     },
+     "basionymAuthorship": {
+      "authors": [
+       "Makino"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "38d73abc-351a-4a4b-b619-45c97c9c97a1",
+     "origin": "source",
+     "type": "scientific",
+     "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:892809-1",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5D5GX",
+    "label": "Zingiber officinale f. rubens (Makino) M.Hiroe",
+    "labelHtml": "<i>Zingiber officinale</i> f. <i>rubens</i> (Makino) M.Hiroe"
+   },
+   {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5S67X",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449235,
+    "name": {
+     "created": "2026-08-05T22:30:20.199318",
+     "createdBy": 102,
+     "modified": "2026-08-05T22:30:20.199318",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "OsZPZX9UShfl8GxjM_svs1",
+     "sectorKey": 67360,
+     "verbatimSourceKey": 347449235,
+     "namesIndexId": 9694821,
+     "scientificName": "Zingiber officinale var. rubens",
+     "authorship": "Makino",
+     "rank": "variety",
+     "genus": "Zingiber",
+     "specificEpithet": "officinale",
+     "infraspecificEpithet": "rubens",
+     "combinationAuthorship": {
+      "authors": [
+       "Makino"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "1219f6e2-ebec-48a1-91ec-f54eb1c1d65a",
+     "origin": "source",
+     "type": "scientific",
+     "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:273366-4",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5D5GX",
+    "label": "Zingiber officinale var. rubens Makino",
+    "labelHtml": "<i>Zingiber officinale</i> var. <i>rubens</i> Makino"
+   }
+  ],
+  [
+   {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5S67Y",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449236,
+    "name": {
+     "created": "2026-08-05T22:30:20.199318",
+     "createdBy": 102,
+     "modified": "2026-08-05T22:30:20.199318",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "7kCu9wNnnisb38Z4pu2G21",
+     "sectorKey": 67360,
+     "verbatimSourceKey": 347449236,
+     "namesIndexId": 9694822,
+     "identifier": [
+      "ipni:1001098-1"
+     ],
+     "scientificName": "Zingiber officinale var. rubrum",
+     "authorship": "Theilade",
+     "rank": "variety",
+     "genus": "Zingiber",
+     "specificEpithet": "officinale",
+     "infraspecificEpithet": "rubrum",
+     "combinationAuthorship": {
+      "authors": [
+       "Theilade"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "559b36cb-cace-43f2-a816-ff76ce9fea18",
+     "origin": "source",
+     "type": "scientific",
+     "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:1001098-1",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5D5GX",
+    "label": "Zingiber officinale var. rubrum Theilade",
+    "labelHtml": "<i>Zingiber officinale</i> var. <i>rubrum</i> Theilade"
+   }
+  ],
+  [
+   {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5S67Z",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449238,
+    "name": {
+     "created": "2026-08-05T22:30:20.199318",
+     "createdBy": 102,
+     "modified": "2026-08-05T22:30:20.199318",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "oZGLrEEGUjOZClQ_88VbZ",
+     "sectorKey": 67360,
+     "verbatimSourceKey": 347449238,
+     "namesIndexId": 9694823,
+     "scientificName": "Zingiber officinale var. sichuanense",
+     "authorship": "(Z.Y.Zhu, S.L.Zhang & S.X.Chen) Z.Y.Zhu, S.L.Zhang & S.X.Chen",
+     "rank": "variety",
+     "genus": "Zingiber",
+     "specificEpithet": "officinale",
+     "infraspecificEpithet": "sichuanense",
+     "combinationAuthorship": {
+      "authors": [
+       "Z.Y.Zhu",
+       "S.L.Zhang",
+       "S.X.Chen"
+      ]
+     },
+     "basionymAuthorship": {
+      "authors": [
+       "Z.Y.Zhu",
+       "S.L.Zhang",
+       "S.X.Chen"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "3c68790d-063c-45a3-8344-710ccdb52318",
+     "origin": "source",
+     "type": "scientific",
+     "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:273368-4",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5D5GX",
+    "label": "Zingiber officinale var. sichuanense (Z.Y.Zhu, S.L.Zhang & S.X.Chen) Z.Y.Zhu, S.L.Zhang & S.X.Chen",
+    "labelHtml": "<i>Zingiber officinale</i> var. <i>sichuanense</i> (Z.Y.Zhu, S.L.Zhang &amp; S.X.Chen) Z.Y.Zhu, S.L.Zhang &amp; S.X.Chen"
+   },
+   {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "5D5J7",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449214,
+    "name": {
+     "created": "2026-08-05T22:30:20.199318",
+     "createdBy": 102,
+     "modified": "2026-08-05T22:30:20.199318",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "lBbLET6I_CQEDC8-2eS_P0",
+     "sectorKey": 67360,
+     "verbatimSourceKey": 347449214,
+     "namesIndexId": 9694886,
+     "identifier": [
+      "ipni:982539-1"
+     ],
+     "scientificName": "Zingiber sichuanense",
+     "authorship": "Z.Y.Zhu, S.L.Zhang & S.X.Chen",
+     "rank": "species",
+     "genus": "Zingiber",
+     "specificEpithet": "sichuanense",
+     "combinationAuthorship": {
+      "authors": [
+       "Z.Y.Zhu",
+       "S.L.Zhang",
+       "S.X.Chen"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "7ccde0d1-daf8-4fbd-ad1e-13d434c95031",
+     "origin": "source",
+     "type": "scientific",
+     "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:982539-1",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5D5GX",
+    "label": "Zingiber sichuanense Z.Y.Zhu, S.L.Zhang & S.X.Chen",
+    "labelHtml": "<i>Zingiber sichuanense</i> Z.Y.Zhu, S.L.Zhang &amp; S.X.Chen"
+   }
+  ],
+  [
+   {
+    "created": "2026-08-05T22:30:20.199318",
+    "createdBy": 102,
+    "modified": "2026-08-05T22:30:20.199318",
+    "modifiedBy": 102,
+    "datasetKey": 317005,
+    "id": "8YCDH",
+    "sectorKey": 67360,
+    "verbatimSourceKey": 347449227,
+    "name": {
+     "created": "2026-08-05T22:30:20.199318",
+     "createdBy": 102,
+     "modified": "2026-08-05T22:30:20.199318",
+     "modifiedBy": 102,
+     "datasetKey": 317005,
+     "id": "mI6Ehp9sRbck4Sd3_cPi_",
+     "sectorKey": 67360,
+     "verbatimSourceKey": 347449227,
+     "namesIndexId": 9694885,
+     "identifier": [
+      "ipni:77248263-1"
+     ],
+     "scientificName": "Zingiber sianginensis",
+     "authorship": "Tatum & A.K.Das",
+     "rank": "species",
+     "genus": "Zingiber",
+     "specificEpithet": "sianginensis",
+     "combinationAuthorship": {
+      "authors": [
+       "Tatum",
+       "A.K.Das"
+      ]
+     },
+     "code": "botanical",
+     "publishedInId": "232d2f21-d6b6-4c6f-b6e5-b8390fff0bd6",
+     "origin": "source",
+     "type": "scientific",
+     "link": "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:77248263-1",
+     "parsed": true,
+     "notho": []
+    },
+    "status": "synonym",
+    "origin": "source",
+    "parentId": "5D5GX",
+    "label": "Zingiber sianginensis Tatum & A.K.Das",
+    "labelHtml": "<i>Zingiber sianginensis</i> Tatum &amp; A.K.Das"
+   }
+  ]
+ ]
+}

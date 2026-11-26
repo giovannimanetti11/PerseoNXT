@@ -1,0 +1,23 @@
+{
+ "header": {
+  "type": "esearch",
+  "version": "0.3"
+ },
+ "esearchresult": {
+  "count": "479",
+  "retmax": "8",
+  "retstart": "0",
+  "idlist": [
+   "42767407",
+   "42183789",
+   "42015754",
+   "42776175",
+   "43044392",
+   "42320776",
+   "42772744",
+   "43012770"
+  ],
+  "translationset": [],
+  "querytranslation": "\"Zingiber officinale\"[All Fields] AND (\"systematic review\"[Publication Type] OR \"meta-analysis\"[Publication Type] OR \"review\"[Publication Type])"
+ }
+}

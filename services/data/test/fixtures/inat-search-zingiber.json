@@ -1,0 +1,62 @@
+{
+ "total_results": 1,
+ "page": 1,
+ "per_page": 3,
+ "results": [
+  {
+   "id": 122971,
+   "rank": "species",
+   "rank_level": 10,
+   "iconic_taxon_id": 47126,
+   "ancestor_ids": [
+    48460,
+    47126,
+    211194,
+    47125,
+    47163,
+    48318,
+    52496,
+    1074962,
+    1255099,
+    122972,
+    1436479,
+    122971
+   ],
+   "is_active": true,
+   "name": "Zingiber officinale",
+   "parent_id": 1436479,
+   "ancestry": "48460/47126/211194/47125/47163/48318/52496/1074962/1255099/122972/1436479",
+   "extinct": false,
+   "provisional": false,
+   "default_photo": {
+    "id": 247973845,
+    "license_code": null,
+    "attribution": "(c) Nuwan Chathuranga, all rights reserved, uploaded by Nuwan Chathuranga",
+    "url": "https://static.inaturalist.org/photos/247973845/square.jpeg",
+    "original_dimensions": {
+     "height": 611,
+     "width": 600
+    },
+    "flags": [],
+    "attribution_name": "Nuwan Chathuranga",
+    "square_url": "https://static.inaturalist.org/photos/247973845/square.jpeg",
+    "medium_url": "https://static.inaturalist.org/photos/247973845/medium.jpeg"
+   },
+   "taxon_changes_count": 0,
+   "taxon_schemes_count": 2,
+   "observations_count": 2435,
+   "flag_counts": {
+    "resolved": 0,
+    "unresolved": 0
+   },
+   "current_synonymous_taxon_ids": null,
+   "atlas_id": null,
+   "complete_species_count": null,
+   "wikipedia_url": "http://en.wikipedia.org/wiki/Ginger",
+   "matched_term": "Zingiber officinale",
+   "iconic_taxon_name": "Plantae",
+   "preferred_common_name": "Zenzero",
+   "english_common_name": "Ginger"
+  }
+ ]
+}

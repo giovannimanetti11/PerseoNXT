@@ -1,0 +1,626 @@
+{
+ "header": {
+  "type": "esummary",
+  "version": "0.3"
+ },
+ "result": {
+  "uids": [
+   "30000912",
+   "37895122",
+   "32937665",
+   "21220003",
+   "15619562",
+   "10920504"
+  ],
+  "30000912": {
+   "uid": "30000912",
+   "pubdate": "2006",
+   "epubdate": "",
+   "source": "",
+   "authors": [],
+   "lastauthor": "",
+   "title": "Vervain.",
+   "sorttitle": "vervain",
+   "volume": "",
+   "issue": "",
+   "pages": "",
+   "lang": [
+    "eng"
+   ],
+   "nlmuniqueid": "",
+   "issn": "",
+   "essn": "",
+   "pubtype": [
+    "Review"
+   ],
+   "recordstatus": "PubMed",
+   "pubstatus": "ppublish",
+   "articleids": [
+    {
+     "idtype": "bookaccession",
+     "idtypen": 8,
+     "value": "NBK501852"
+    },
+    {
+     "idtype": "pubmed",
+     "idtypen": 1,
+     "value": "30000912"
+    }
+   ],
+   "history": [],
+   "references": [],
+   "attributes": [
+    "Has Abstract"
+   ],
+   "pmcrefcount": "",
+   "fulljournalname": "",
+   "elocationid": "",
+   "doctype": "chapter",
+   "srccontriblist": [],
+   "booktitle": "Drugs and Lactation Database (LactMed®)",
+   "medium": "Internet",
+   "edition": "",
+   "publisherlocation": "Bethesda (MD)",
+   "publishername": "National Institute of Child Health and Human Development",
+   "srcdate": "2006-",
+   "reportnumber": "",
+   "availablefromurl": "http://www.ncbi.nlm.nih.gov/books/NBK501852/",
+   "locationlabel": "",
+   "doccontriblist": [],
+   "docdate": "2024 Aug 15",
+   "bookname": "lactmed",
+   "chapter": "LM936",
+   "sortpubdate": "2024/08/15 00:00",
+   "sortfirstauthor": "",
+   "vernaculartitle": ""
+  },
+  "37895122": {
+   "uid": "37895122",
+   "pubdate": "2023 Oct 22",
+   "epubdate": "2023 Oct 22",
+   "source": "Int J Mol Sci",
+   "authors": [
+    {
+     "name": "Michalak M",
+     "authtype": "Author",
+     "clusterid": ""
+    }
+   ],
+   "lastauthor": "Michalak M",
+   "title": "Plant Extracts as Skin Care and Therapeutic Agents.",
+   "sorttitle": "plant extracts as skin care and therapeutic agents",
+   "volume": "24",
+   "issue": "20",
+   "pages": "",
+   "lang": [
+    "eng"
+   ],
+   "nlmuniqueid": "101092791",
+   "issn": "",
+   "essn": "1422-0067",
+   "pubtype": [
+    "Journal Article",
+    "Review"
+   ],
+   "recordstatus": "PubMed - indexed for MEDLINE",
+   "pubstatus": "3",
+   "articleids": [
+    {
+     "idtype": "pubmed",
+     "idtypen": 1,
+     "value": "37895122"
+    },
+    {
+     "idtype": "pmc",
+     "idtypen": 8,
+     "value": "PMC10607442"
+    },
+    {
+     "idtype": "pmcid",
+     "idtypen": 5,
+     "value": "pmc-id: PMC10607442;"
+    },
+    {
+     "idtype": "doi",
+     "idtypen": 3,
+     "value": "10.3390/ijms242015444"
+    },
+    {
+     "idtype": "pii",
+     "idtypen": 4,
+     "value": "ijms242015444"
+    }
+   ],
+   "history": [
+    {
+     "pubstatus": "received",
+     "date": "2023/09/29 00:00"
+    },
+    {
+     "pubstatus": "revised",
+     "date": "2023/10/16 00:00"
+    },
+    {
+     "pubstatus": "accepted",
+     "date": "2023/10/19 00:00"
+    },
+    {
+     "pubstatus": "medline",
+     "date": "2023/10/30 06:46"
+    },
+    {
+     "pubstatus": "pubmed",
+     "date": "2023/10/28 11:47"
+    },
+    {
+     "pubstatus": "entrez",
+     "date": "2023/10/28 01:19"
+    },
+    {
+     "pubstatus": "pmc-release",
+     "date": "2023/10/22 00:00"
+    }
+   ],
+   "references": [],
+   "attributes": [
+    "Has Abstract"
+   ],
+   "pmcrefcount": 301,
+   "fulljournalname": "International journal of molecular sciences",
+   "elocationid": "doi: 10.3390/ijms242015444",
+   "doctype": "citation",
+   "srccontriblist": [],
+   "booktitle": "",
+   "medium": "",
+   "edition": "",
+   "publisherlocation": "",
+   "publishername": "",
+   "srcdate": "",
+   "reportnumber": "",
+   "availablefromurl": "",
+   "locationlabel": "",
+   "doccontriblist": [],
+   "docdate": "",
+   "bookname": "",
+   "chapter": "",
+   "sortpubdate": "2023/10/22 00:00",
+   "sortfirstauthor": "Michalak M",
+   "vernaculartitle": ""
+  },
+  "32937665": {
+   "uid": "32937665",
+   "pubdate": "2020 Nov",
+   "epubdate": "2020 Sep 16",
+   "source": "Planta Med",
+   "authors": [
+    {
+     "name": "Kubica P",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Szopa A",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Dominiak J",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Luczkiewicz M",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Ekiert H",
+     "authtype": "Author",
+     "clusterid": ""
+    }
+   ],
+   "lastauthor": "Ekiert H",
+   "title": "Verbena officinalis (Common Vervain) - A Review on the Investigations of This Medicinally Important Plant Species.",
+   "sorttitle": "verbena officinalis common vervain a review on the investigations of this medicinally important plant species",
+   "volume": "86",
+   "issue": "17",
+   "pages": "1241-1257",
+   "lang": [
+    "eng"
+   ],
+   "nlmuniqueid": "0066751",
+   "issn": "0032-0943",
+   "essn": "1439-0221",
+   "pubtype": [
+    "Journal Article",
+    "Review"
+   ],
+   "recordstatus": "PubMed - indexed for MEDLINE",
+   "pubstatus": "256",
+   "articleids": [
+    {
+     "idtype": "pubmed",
+     "idtypen": 1,
+     "value": "32937665"
+    },
+    {
+     "idtype": "doi",
+     "idtypen": 3,
+     "value": "10.1055/a-1232-5758"
+    }
+   ],
+   "history": [
+    {
+     "pubstatus": "pubmed",
+     "date": "2020/09/17 06:00"
+    },
+    {
+     "pubstatus": "medline",
+     "date": "2020/11/27 06:00"
+    },
+    {
+     "pubstatus": "entrez",
+     "date": "2020/09/16 20:13"
+    }
+   ],
+   "references": [],
+   "attributes": [
+    "Has Abstract"
+   ],
+   "pmcrefcount": "",
+   "fulljournalname": "Planta medica",
+   "elocationid": "doi: 10.1055/a-1232-5758",
+   "doctype": "citation",
+   "srccontriblist": [],
+   "booktitle": "",
+   "medium": "",
+   "edition": "",
+   "publisherlocation": "",
+   "publishername": "",
+   "srcdate": "",
+   "reportnumber": "",
+   "availablefromurl": "",
+   "locationlabel": "",
+   "doccontriblist": [],
+   "docdate": "",
+   "bookname": "",
+   "chapter": "",
+   "sortpubdate": "2020/11/01 00:00",
+   "sortfirstauthor": "Kubica P",
+   "vernaculartitle": ""
+  },
+  "21220003": {
+   "uid": "21220003",
+   "pubdate": "2011 May 17",
+   "epubdate": "2011 Jan 8",
+   "source": "J Ethnopharmacol",
+   "authors": [
+    {
+     "name": "Duan K",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Yuan Z",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Guo W",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Meng Y",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Cui Y",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Kong D",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Zhang L",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Wang N",
+     "authtype": "Author",
+     "clusterid": ""
+    }
+   ],
+   "lastauthor": "Wang N",
+   "title": "LC-MS/MS determination and pharmacokinetic study of five flavone components after solvent extraction/acid hydrolysis in rat plasma after oral administration of Verbena officinalis L. extract.",
+   "sorttitle": "lc ms ms determination and pharmacokinetic study of five flavone components after solvent extraction acid hydrolysis in rat plasma after oral administration of verbena officinalis l extract",
+   "volume": "135",
+   "issue": "2",
+   "pages": "201-8",
+   "lang": [
+    "eng"
+   ],
+   "nlmuniqueid": "7903310",
+   "issn": "0378-8741",
+   "essn": "1872-7573",
+   "pubtype": [
+    "Journal Article",
+    "Research Support, Non-U.S. Gov't",
+    "Review"
+   ],
+   "recordstatus": "PubMed - indexed for MEDLINE",
+   "pubstatus": "256",
+   "articleids": [
+    {
+     "idtype": "pubmed",
+     "idtypen": 1,
+     "value": "21220003"
+    },
+    {
+     "idtype": "doi",
+     "idtypen": 3,
+     "value": "10.1016/j.jep.2011.01.002"
+    },
+    {
+     "idtype": "pii",
+     "idtypen": 4,
+     "value": "S0378-8741(11)00003-1"
+    }
+   ],
+   "history": [
+    {
+     "pubstatus": "received",
+     "date": "2010/04/21 00:00"
+    },
+    {
+     "pubstatus": "revised",
+     "date": "2010/12/18 00:00"
+    },
+    {
+     "pubstatus": "accepted",
+     "date": "2011/01/05 00:00"
+    },
+    {
+     "pubstatus": "entrez",
+     "date": "2011/01/12 06:00"
+    },
+    {
+     "pubstatus": "pubmed",
+     "date": "2011/01/12 06:00"
+    },
+    {
+     "pubstatus": "medline",
+     "date": "2011/09/08 06:00"
+    }
+   ],
+   "references": [],
+   "attributes": [
+    "Has Abstract"
+   ],
+   "pmcrefcount": "",
+   "fulljournalname": "Journal of ethnopharmacology",
+   "elocationid": "doi: 10.1016/j.jep.2011.01.002",
+   "doctype": "citation",
+   "srccontriblist": [],
+   "booktitle": "",
+   "medium": "",
+   "edition": "",
+   "publisherlocation": "",
+   "publishername": "",
+   "srcdate": "",
+   "reportnumber": "",
+   "availablefromurl": "",
+   "locationlabel": "",
+   "doccontriblist": [],
+   "docdate": "",
+   "bookname": "",
+   "chapter": "",
+   "sortpubdate": "2011/05/17 00:00",
+   "sortfirstauthor": "Duan K",
+   "vernaculartitle": ""
+  },
+  "15619562": {
+   "uid": "15619562",
+   "pubdate": "2005 Jan 15",
+   "epubdate": "",
+   "source": "J Ethnopharmacol",
+   "authors": [
+    {
+     "name": "Guarrera PM",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Forti G",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Marignoli S",
+     "authtype": "Author",
+     "clusterid": ""
+    }
+   ],
+   "lastauthor": "Marignoli S",
+   "title": "Ethnobotanical and ethnomedicinal uses of plants in the district of Acquapendente (Latium, Central Italy).",
+   "sorttitle": "ethnobotanical and ethnomedicinal uses of plants in the district of acquapendente latium central italy",
+   "volume": "96",
+   "issue": "3",
+   "pages": "429-44",
+   "lang": [
+    "eng"
+   ],
+   "nlmuniqueid": "7903310",
+   "issn": "0378-8741",
+   "essn": "",
+   "pubtype": [
+    "Journal Article",
+    "Research Support, Non-U.S. Gov't",
+    "Review"
+   ],
+   "recordstatus": "PubMed - indexed for MEDLINE",
+   "pubstatus": "4",
+   "articleids": [
+    {
+     "idtype": "pubmed",
+     "idtypen": 1,
+     "value": "15619562"
+    },
+    {
+     "idtype": "doi",
+     "idtypen": 3,
+     "value": "10.1016/j.jep.2004.09.014"
+    },
+    {
+     "idtype": "pii",
+     "idtypen": 4,
+     "value": "S0378-8741(04)00445-3"
+    }
+   ],
+   "history": [
+    {
+     "pubstatus": "received",
+     "date": "2003/11/06 00:00"
+    },
+    {
+     "pubstatus": "revised",
+     "date": "2004/07/13 00:00"
+    },
+    {
+     "pubstatus": "accepted",
+     "date": "2004/09/08 00:00"
+    },
+    {
+     "pubstatus": "pubmed",
+     "date": "2004/12/28 09:00"
+    },
+    {
+     "pubstatus": "medline",
+     "date": "2005/05/25 09:00"
+    },
+    {
+     "pubstatus": "entrez",
+     "date": "2004/12/28 09:00"
+    }
+   ],
+   "references": [],
+   "attributes": [
+    "Has Abstract"
+   ],
+   "pmcrefcount": "",
+   "fulljournalname": "Journal of ethnopharmacology",
+   "elocationid": "",
+   "doctype": "citation",
+   "srccontriblist": [],
+   "booktitle": "",
+   "medium": "",
+   "edition": "",
+   "publisherlocation": "",
+   "publishername": "",
+   "srcdate": "",
+   "reportnumber": "",
+   "availablefromurl": "",
+   "locationlabel": "",
+   "doccontriblist": [],
+   "docdate": "",
+   "bookname": "",
+   "chapter": "",
+   "sortpubdate": "2005/01/15 00:00",
+   "sortfirstauthor": "Guarrera PM",
+   "vernaculartitle": ""
+  },
+  "10920504": {
+   "uid": "10920504",
+   "pubdate": "2000 Apr-Jun",
+   "epubdate": "",
+   "source": "Ann Ital Med Int",
+   "authors": [
+    {
+     "name": "Argento A",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Tiraferri E",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Marzaloni M",
+     "authtype": "Author",
+     "clusterid": ""
+    }
+   ],
+   "lastauthor": "Marzaloni M",
+   "title": "[Oral anticoagulants and medicinal plants. An emerging interaction].",
+   "sorttitle": "oral anticoagulants and medicinal plants an emerging interaction",
+   "volume": "15",
+   "issue": "2",
+   "pages": "139-43",
+   "lang": [
+    "ita"
+   ],
+   "nlmuniqueid": "8806705",
+   "issn": "0393-9340",
+   "essn": "",
+   "pubtype": [
+    "English Abstract",
+    "Journal Article",
+    "Review"
+   ],
+   "recordstatus": "PubMed - indexed for MEDLINE",
+   "pubstatus": "4",
+   "articleids": [
+    {
+     "idtype": "pubmed",
+     "idtypen": 1,
+     "value": "10920504"
+    }
+   ],
+   "history": [
+    {
+     "pubstatus": "pubmed",
+     "date": "2000/08/02 11:00"
+    },
+    {
+     "pubstatus": "medline",
+     "date": "2000/09/19 11:01"
+    },
+    {
+     "pubstatus": "entrez",
+     "date": "2000/08/02 11:00"
+    }
+   ],
+   "references": [],
+   "attributes": [
+    "Has Abstract"
+   ],
+   "pmcrefcount": "",
+   "fulljournalname": "Annali italiani di medicina interna : organo ufficiale della Societa italiana di medicina interna",
+   "elocationid": "",
+   "doctype": "citation",
+   "srccontriblist": [],
+   "booktitle": "",
+   "medium": "",
+   "edition": "",
+   "publisherlocation": "",
+   "publishername": "",
+   "srcdate": "",
+   "reportnumber": "",
+   "availablefromurl": "",
+   "locationlabel": "",
+   "doccontriblist": [],
+   "docdate": "",
+   "bookname": "",
+   "chapter": "",
+   "sortpubdate": "2000/04/01 00:00",
+   "sortfirstauthor": "Argento A",
+   "vernaculartitle": "Anticoagulanti orali e piante medicinali. Una interazione emergente."
+  }
+ }
+}

@@ -1,0 +1,17 @@
+{
+ "head": {
+  "vars": [
+   "t"
+  ]
+ },
+ "results": {
+  "bindings": [
+   {
+    "t": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q161417"
+    }
+   }
+  ]
+ }
+}

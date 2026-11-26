@@ -1,0 +1,701 @@
+{
+ "offset": 0,
+ "limit": 1000,
+ "endOfRecords": true,
+ "results": [
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Ai-lia",
+   "language": "",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Akakaduro",
+   "language": "aka",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Chinchebre",
+   "language": "arg",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Cooking Ginger",
+   "language": "eng",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Garden Ginger",
+   "language": "eng",
+   "country": "GB",
+   "area": "eng",
+   "source": "TAXREF",
+   "sourceTaxonKey": 221835687
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Gember",
+   "language": "nld",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Ghimber",
+   "language": "ron",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Gingembre",
+   "language": "fra",
+   "area": "fra",
+   "source": "TAXREF",
+   "sourceTaxonKey": 221835687
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Gingembre officinal",
+   "language": "fra",
+   "country": "YT",
+   "area": "fra",
+   "source": "TAXREF",
+   "sourceTaxonKey": 221835687
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Gingembre officinal",
+   "language": "fra",
+   "country": "FR",
+   "area": "fra",
+   "source": "TAXREF",
+   "sourceTaxonKey": 221835687
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Gingembre officinal",
+   "language": "fra",
+   "country": "NC",
+   "area": "fra",
+   "source": "TAXREF",
+   "sourceTaxonKey": 221835687
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Gingembre officinal, Gingembre, Démon de minuit",
+   "language": "fra",
+   "country": "RE",
+   "area": "fra",
+   "source": "TAXREF",
+   "sourceTaxonKey": 221835687
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Ginger",
+   "language": "eng",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Gingiberi",
+   "language": "lat",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Gyömbér",
+   "language": "hun",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Harilik ingver",
+   "language": "est",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Ingefær",
+   "language": "nor",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Ingwar",
+   "language": "",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Ingwer",
+   "language": "deu",
+   "source": "GRIN Taxonomy",
+   "sourceTaxonKey": 101439808
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Ingwer",
+   "language": "deu",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Jahe",
+   "language": "ind",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Karüi",
+   "language": "",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Luya",
+   "language": "tgl",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Sakaï, Sakaï tani",
+   "language": "",
+   "country": "YT",
+   "area": "buc",
+   "source": "TAXREF",
+   "sourceTaxonKey": 221835687
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Sipadeh",
+   "language": "",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Tsingizo",
+   "language": "",
+   "country": "YT",
+   "area": "swb",
+   "source": "TAXREF",
+   "sourceTaxonKey": 221835687
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Zingiber",
+   "language": "lat",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "atalẹ̀",
+   "language": "yor",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "duduk",
+   "language": "",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "garden ginger",
+   "language": "eng",
+   "source": "Integrated Taxonomic Information System (ITIS)",
+   "sourceTaxonKey": 102228767
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "garden ginger",
+   "language": "eng",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "gengibre",
+   "language": "por",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "gengibre",
+   "language": "por",
+   "source": "Flora e Funga do Brasil - Lista Oficial",
+   "sourceTaxonKey": 114785145
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "gengibre",
+   "language": "por",
+   "source": "GRIN Taxonomy",
+   "sourceTaxonKey": 101439808
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "gingembre",
+   "language": "fra",
+   "source": "GRIN Taxonomy",
+   "sourceTaxonKey": 101439808
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "gingembre",
+   "language": "fra",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "ginger",
+   "language": "eng",
+   "source": "GRIN Taxonomy",
+   "sourceTaxonKey": 101439808
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "ginger",
+   "language": "",
+   "source": "NCBI Taxonomy",
+   "sourceTaxonKey": 103056752
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "imbir lekarski",
+   "language": "pol",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "ingefära",
+   "language": "swe",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "ingefära",
+   "language": "swe",
+   "source": "GRIN Taxonomy",
+   "sourceTaxonKey": 101439808
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "jengibre",
+   "language": "spa",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "jengibre",
+   "language": "spa",
+   "source": "GRIN Taxonomy",
+   "sourceTaxonKey": 101439808
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "jiang",
+   "language": "",
+   "source": "GRIN Taxonomy",
+   "sourceTaxonKey": 101439808
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "jiang",
+   "language": "zho",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "kesolrangebard",
+   "language": "",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "lab-itz",
+   "language": "",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "mausteinkivääri",
+   "language": "fin",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "saenggang",
+   "language": "",
+   "source": "GRIN Taxonomy",
+   "sourceTaxonKey": 101439808
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "saenggang",
+   "language": "kor",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "shita-a̱byin",
+   "language": "",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "shoga",
+   "language": "jpn",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "shoga",
+   "language": "",
+   "source": "GRIN Taxonomy",
+   "sourceTaxonKey": 101439808
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "sionga",
+   "language": "",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "tsanamidzi",
+   "language": "sna",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "zencefil",
+   "language": "tur",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "zenzero",
+   "language": "ita",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "zenzero",
+   "language": "ita",
+   "source": "GRIN Taxonomy",
+   "sourceTaxonKey": 101439808
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "zázvorovník lékařský",
+   "language": "ces",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "ægte ingefær",
+   "language": "dan",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "èna kina",
+   "language": "",
+   "country": "PF",
+   "area": "mqm",
+   "source": "TAXREF",
+   "sourceTaxonKey": 221835687
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Ђумбир / Ðumbir",
+   "language": "srp",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Імбир садовий",
+   "language": "ukr",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Имбирь аптечный",
+   "language": "rus",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Կոճապղպեղ",
+   "language": "hye",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "زنجبيل",
+   "language": "ara",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "अदरक",
+   "language": "hin",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "अदुवा",
+   "language": "nep",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "आले",
+   "language": "mar",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "আদা",
+   "language": "ben",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "அல்லம்",
+   "language": "tam",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "ஆர்த்தரகம்",
+   "language": "tam",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "இஞ்சி",
+   "language": "tam",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "சுக்கு",
+   "language": "tam",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "வேர்க்கம்பு",
+   "language": "tam",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "అల్లం",
+   "language": "tel",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "ඉඟුරු",
+   "language": "sin",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "ขิง",
+   "language": "tha",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "ショウガ",
+   "language": "jpn",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "姜",
+   "language": "zho",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "姜叶",
+   "language": "zho",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "姜炭",
+   "language": "zho",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "姜皮",
+   "language": "zho",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "干姜",
+   "language": "zho",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "炮姜",
+   "language": "zho",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "煨姜",
+   "language": "zho",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "生姜",
+   "language": "zho",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "生姜汁",
+   "language": "zho",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "生姜皮",
+   "language": "zho",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "薑",
+   "language": "zho",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "생강",
+   "language": "kor",
+   "source": "Catalogue of Life",
+   "sourceTaxonKey": 296358440
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "생강",
+   "language": "",
+   "source": "Korean Peninsula Flora",
+   "sourceTaxonKey": 124490313
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Ginger",
+   "language": "eng",
+   "source": "The IUCN Red List of Threatened Species",
+   "sourceTaxonKey": 176757202,
+   "preferred": true
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "Ginger",
+   "language": "eng",
+   "source": "Checklist Dutch Caribbean Species Register",
+   "sourceTaxonKey": 181858314,
+   "preferred": true
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "ingefära",
+   "language": "swe",
+   "country": "SE",
+   "source": "Dyntaxa. Svensk taxonomisk databas",
+   "sourceTaxonKey": 160025545,
+   "preferred": true
+  },
+  {
+   "taxonKey": 2757280,
+   "vernacularName": "common ginger",
+   "language": "eng",
+   "source": "World Register of Marine Species",
+   "sourceTaxonKey": 181182394,
+   "preferred": false
+  }
+ ]
+}

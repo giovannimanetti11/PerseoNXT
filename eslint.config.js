@@ -5,7 +5,7 @@ import vueParser from 'vue-eslint-parser'
 
 export default [
   {
-    ignores: ['node_modules/**', '.output/**', '.nuxt/**', 'dist/**', 'scripts/**', 'modules/**'],
+    ignores: ['node_modules/**', '.output/**', '.nuxt/**', 'dist/**', 'scripts/**', 'modules/**', 'services/**'],
   },
   ...pluginVue.configs['flat/recommended'],
   {

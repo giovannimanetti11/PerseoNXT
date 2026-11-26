@@ -1,0 +1,291 @@
+{
+ "version": "6.9",
+ "hitCount": 8,
+ "request": {
+  "queryString": "EXT_ID:42767407 OR EXT_ID:42183789 OR EXT_ID:42015754 OR EXT_ID:42776175 OR EXT_ID:43044392 OR EXT_ID:42320776 OR EXT_ID:42772744 OR EXT_ID:43012770",
+  "resultType": "lite",
+  "cursorMark": "*",
+  "pageSize": 100,
+  "sort": "",
+  "synonym": false
+ },
+ "resultList": {
+  "result": [
+   {
+    "id": "43044392",
+    "source": "MED",
+    "pmid": "43044392",
+    "doi": "10.1016/j.jaim.2026.101421",
+    "title": "Exploring the integration of Ayurveda in aquaculture: A scoping review.",
+    "authorString": "Allam R, Uma A, Kothainayagi B, Balasundar S, Hema Sundari C, Dixit R.",
+    "journalTitle": "J Ayurveda Integr Med",
+    "issue": "6",
+    "journalVolume": "17",
+    "pubYear": "2026",
+    "journalIssn": "0975-9476; 0976-2809; ",
+    "pageInfo": "101421",
+    "pubType": "review; journal article",
+    "isOpenAccess": "N",
+    "inEPMC": "N",
+    "inPMC": "N",
+    "citedByCount": 0,
+    "hasReferences": "Y",
+    "hasTextMinedTerms": "N",
+    "hasDbCrossReferences": "N",
+    "hasPDF": "N",
+    "hasBook": "N",
+    "hasSuppl": "N",
+    "hasLabsLinks": "N",
+    "hasTMAccessionNumbers": "N",
+    "firstPublicationDate": "2026-11-17",
+    "firstIndexDate": "2026-11-18"
+   },
+   {
+    "id": "42767407",
+    "source": "MED",
+    "pmid": "42767407",
+    "doi": "10.1016/j.jep.2026.122399",
+    "title": "Herbal medicine among vulnerable populations in Cameroon: a systematic review and meta-analysis with clinical, mechanistic, and global health perspectives.",
+    "authorString": "Mvogo Ottou PB, Beack Bayengue SS, Nkonlie Guimfack M, Tiekwe JE, Embolo Enyegue EL, Malieuze Nanfah MD, Koloko LB, Mansuri R, Koanga Mogtomo ML, Kojom Foko LP.",
+    "journalTitle": "J Ethnopharmacol",
+    "issue": "pt 1",
+    "journalVolume": "374",
+    "pubYear": "2027",
+    "journalIssn": "0378-8741; 1872-7573; ",
+    "pageInfo": "122399",
+    "pubType": "meta-analysis; systematic review; journal article",
+    "isOpenAccess": "N",
+    "inEPMC": "N",
+    "inPMC": "N",
+    "citedByCount": 0,
+    "hasReferences": "N",
+    "hasTextMinedTerms": "Y",
+    "hasDbCrossReferences": "N",
+    "hasPDF": "N",
+    "hasBook": "N",
+    "hasSuppl": "N",
+    "hasLabsLinks": "N",
+    "hasTMAccessionNumbers": "N",
+    "firstPublicationDate": "2026-09-21",
+    "firstIndexDate": "2026-09-22"
+   },
+   {
+    "id": "43012770",
+    "source": "MED",
+    "pmid": "43012770",
+    "pmcid": "PMC13727260",
+    "fullTextIdList": {
+     "fullTextId": [
+      "PMC13727260"
+     ]
+    },
+    "doi": "10.1097/md.0000000000051071",
+    "title": "Efficacy of ginger on chemotherapy-induced nausea and vomiting in breast cancer: A meta-analysis.",
+    "authorString": "Tian Y, Ma M, Wang Z.",
+    "journalTitle": "Medicine (Baltimore)",
+    "issue": "44",
+    "journalVolume": "105",
+    "pubYear": "2026",
+    "journalIssn": "0304-5412; 1536-5964; 0025-7974; ",
+    "pageInfo": "e51071",
+    "pubType": "meta-analysis; research-article; journal article",
+    "isOpenAccess": "Y",
+    "inEPMC": "Y",
+    "inPMC": "Y",
+    "citedByCount": 0,
+    "hasReferences": "Y",
+    "hasTextMinedTerms": "Y",
+    "hasDbCrossReferences": "N",
+    "hasPDF": "Y",
+    "hasBook": "N",
+    "hasSuppl": "N",
+    "hasLabsLinks": "N",
+    "hasTMAccessionNumbers": "Y",
+    "tmAccessionTypeList": {
+     "accessionType": [
+      "doi"
+     ]
+    },
+    "firstPublicationDate": "2026-10-01",
+    "firstIndexDate": "2026-11-12"
+   },
+   {
+    "id": "42772744",
+    "source": "MED",
+    "pmid": "42772744",
+    "pmcid": "PMC13753691",
+    "fullTextIdList": {
+     "fullTextId": [
+      "PMC13753691"
+     ]
+    },
+    "doi": "10.1002/ptr.70457",
+    "title": "Herbal Therapeutics in Osteoporosis: Mechanisms, Evidence, and Translational Potential.",
+    "authorString": "Vafadar Moradi E, Vossoughinia S, Yazdanpanah Z, Sobhani H, Jalali J, Ghasemzadeh Rahbardar M.",
+    "journalTitle": "Phytother Res",
+    "issue": "11",
+    "journalVolume": "40",
+    "pubYear": "2026",
+    "journalIssn": "0951-418x; 1099-1573; ",
+    "pageInfo": "6709-6747",
+    "pubType": "review-article; review; journal article",
+    "isOpenAccess": "Y",
+    "inEPMC": "Y",
+    "inPMC": "Y",
+    "citedByCount": 0,
+    "hasReferences": "Y",
+    "hasTextMinedTerms": "Y",
+    "hasDbCrossReferences": "N",
+    "hasPDF": "Y",
+    "hasBook": "N",
+    "hasSuppl": "N",
+    "hasLabsLinks": "Y",
+    "hasTMAccessionNumbers": "Y",
+    "tmAccessionTypeList": {
+     "accessionType": [
+      "doi"
+     ]
+    },
+    "firstPublicationDate": "2026-09-22",
+    "firstIndexDate": "2026-09-23"
+   },
+   {
+    "id": "42776175",
+    "source": "MED",
+    "pmid": "42776175",
+    "doi": "10.2478/acph-2026-0020",
+    "title": "A meta-analysis of the effects of &lt;i&gt;Zingiber officinale&lt;/i&gt; on metabolic indices among patients with type 2 diabetes.",
+    "authorString": "Li Q, Li M, Khan MU, Cai W.",
+    "journalTitle": "Acta Pharm",
+    "issue": "3",
+    "journalVolume": "76",
+    "pubYear": "2026",
+    "journalIssn": "1330-0075; 1846-9558; ",
+    "pageInfo": "1-18",
+    "pubType": "meta-analysis; journal article",
+    "isOpenAccess": "N",
+    "inEPMC": "N",
+    "inPMC": "N",
+    "citedByCount": 0,
+    "hasReferences": "N",
+    "hasTextMinedTerms": "Y",
+    "hasDbCrossReferences": "N",
+    "hasPDF": "N",
+    "hasBook": "N",
+    "hasSuppl": "N",
+    "hasLabsLinks": "N",
+    "hasTMAccessionNumbers": "N",
+    "firstPublicationDate": "2026-09-01",
+    "firstIndexDate": "2026-09-25"
+   },
+   {
+    "id": "42320776",
+    "source": "MED",
+    "pmid": "42320776",
+    "doi": "10.1016/j.jep.2026.122082",
+    "title": "Multi-herb formulations modulating gut microbiota: A systematic review and data-driven analysis.",
+    "authorString": "Cho MS, Lee IS, Kim J, Park JW, Kim J, Ko SJ.",
+    "journalTitle": "J Ethnopharmacol",
+    "journalVolume": "370",
+    "pubYear": "2026",
+    "journalIssn": "0378-8741; 1872-7573; ",
+    "pageInfo": "122082",
+    "pubType": "systematic review; journal article",
+    "isOpenAccess": "N",
+    "inEPMC": "N",
+    "inPMC": "N",
+    "citedByCount": 0,
+    "hasReferences": "Y",
+    "hasTextMinedTerms": "Y",
+    "hasDbCrossReferences": "N",
+    "hasPDF": "N",
+    "hasBook": "N",
+    "hasSuppl": "N",
+    "hasLabsLinks": "N",
+    "hasTMAccessionNumbers": "N",
+    "firstPublicationDate": "2026-06-19",
+    "firstIndexDate": "2026-06-20"
+   },
+   {
+    "id": "42183789",
+    "source": "MED",
+    "pmid": "42183789",
+    "pmcid": "PMC13202703",
+    "fullTextIdList": {
+     "fullTextId": [
+      "PMC13202703"
+     ]
+    },
+    "doi": "10.1080/13880209.2026.2667560",
+    "title": "Ginger-based formulations for allergic rhinitis disease: a systematic review and meta-analysis of experimental studies in animals and humans.",
+    "authorString": "Inpan R, Kantasa T, Hanprasertpong N, Na Takuathung M, Koonrungsesomboon N.",
+    "journalTitle": "Pharm Biol",
+    "issue": "1",
+    "journalVolume": "64",
+    "pubYear": "2026",
+    "journalIssn": "1388-0209; 1744-5116; ",
+    "pageInfo": "749-763",
+    "pubType": "meta-analysis; systematic review; review-article; journal article",
+    "isOpenAccess": "Y",
+    "inEPMC": "Y",
+    "inPMC": "Y",
+    "citedByCount": 0,
+    "hasReferences": "Y",
+    "hasTextMinedTerms": "Y",
+    "hasDbCrossReferences": "N",
+    "hasPDF": "Y",
+    "hasBook": "N",
+    "hasSuppl": "Y",
+    "hasLabsLinks": "N",
+    "hasTMAccessionNumbers": "Y",
+    "tmAccessionTypeList": {
+     "accessionType": [
+      "doi"
+     ]
+    },
+    "firstPublicationDate": "2026-05-25",
+    "firstIndexDate": "2026-05-25"
+   },
+   {
+    "id": "42015754",
+    "source": "MED",
+    "pmid": "42015754",
+    "pmcid": "PMC13108343",
+    "fullTextIdList": {
+     "fullTextId": [
+      "PMC13108343"
+     ]
+    },
+    "doi": "10.1080/20565623.2026.2657522",
+    "title": "Ginger-derived nanoparticles targeting NF-κB mediated inflammatory pathways: a systematic review of in vitro and in vivo evidence.",
+    "authorString": "Tri Wirattami A, Handono K, Handoko E, Nugrahenny D.",
+    "journalTitle": "Future Sci OA",
+    "issue": "1",
+    "journalVolume": "12",
+    "pubYear": "2026",
+    "journalIssn": "2056-5623",
+    "pageInfo": "2657522",
+    "pubType": "review-article; review; journal article",
+    "isOpenAccess": "Y",
+    "inEPMC": "Y",
+    "inPMC": "Y",
+    "citedByCount": 1,
+    "hasReferences": "Y",
+    "hasTextMinedTerms": "Y",
+    "hasDbCrossReferences": "N",
+    "hasPDF": "Y",
+    "hasBook": "N",
+    "hasSuppl": "Y",
+    "hasLabsLinks": "N",
+    "hasTMAccessionNumbers": "Y",
+    "tmAccessionTypeList": {
+     "accessionType": [
+      "doi"
+     ]
+    },
+    "firstPublicationDate": "2026-04-22",
+    "firstIndexDate": "2026-04-22"
+   }
+  ]
+ }
+}

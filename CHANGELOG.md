@@ -2,9 +2,10 @@
 
 All notable changes to this project are documented in this file.
 
-## [Unreleased]
+## [3.2.0] - 2026-11-26
 
 ### Added
+- Plant data service in `services/data` (alpha): collects open data on the published plants from GBIF, World Flora Online, Catalogue of Life, Wikidata, PubChem, PubMed, Europe PMC, ClinicalTrials.gov, iNaturalist, Wikipedia and Wikimedia Commons, normalizes and deduplicates it and serves it through one API
 - Monographs show open data from the plant data service (wikiherbalist-data): facts strip under the gallery, taxonomy with classification, synonyms and database links, common names from GBIF, Wikidata and iNaturalist, compound table with search (LOTUS via Wikidata, PubChem), "La ricerca in numeri" (PubMed counts by year, recent reviews, ClinicalTrials.gov studies), distribution next to the observations map, data sources and image credits
 - Gallery includes Wikimedia Commons and iNaturalist images (CC0, CC BY, CC BY-SA) with author and license
 - Sticky index next to the sections on desktop, collapsible on phones

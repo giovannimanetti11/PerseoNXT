@@ -1,0 +1,123 @@
+{
+ "batchcomplete": "",
+ "query": {
+  "pages": {
+   "2427502": {
+    "pageid": 2427502,
+    "ns": 6,
+    "title": "File:Eisenkraut, Passau.JPG",
+    "imagerepository": "local",
+    "imageinfo": [
+     {
+      "thumburl": "https://upload.wikimedia.org/wikipedia/commons/3/38/Eisenkraut%2C_Passau.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+      "thumbwidth": 640,
+      "thumbheight": 853,
+      "thumbattribs": {
+       "src": "https://upload.wikimedia.org/wikipedia/commons/3/38/Eisenkraut%2C_Passau.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+       "decoding": "async",
+       "loading": "lazy",
+       "width": 640,
+       "height": 853
+      },
+      "url": "https://upload.wikimedia.org/wikipedia/commons/3/38/Eisenkraut%2C_Passau.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "descriptionurl": "https://commons.wikimedia.org/wiki/File:Eisenkraut,_Passau.JPG",
+      "descriptionshorturl": "https://commons.wikimedia.org/wiki/Special:Redirect/page/2427502",
+      "extmetadata": {
+       "DateTime": {
+        "value": "2007-07-18 10:32:36",
+        "source": "mediawiki-metadata",
+        "hidden": ""
+       },
+       "ObjectName": {
+        "value": "Eisenkraut, Passau",
+        "source": "mediawiki-metadata"
+       },
+       "CommonsMetadataExtension": {
+        "value": 1.2,
+        "source": "extension",
+        "hidden": ""
+       },
+       "Categories": {
+        "value": "Verbena officinalis|Taken with Ricoh Caplio R5|Self-published work|Verbenaceae in Bavaria|Verbenaceae in the Northern Hemisphere in July|Lamiales in Bavaria in July|Files with coordinates missing SDC location of creation|Flora of LSG Kohlbruck",
+        "source": "commons-categories",
+        "hidden": ""
+       },
+       "Assessments": {
+        "value": "",
+        "source": "commons-categories",
+        "hidden": ""
+       },
+       "GPSLatitude": {
+        "value": "48.558764",
+        "source": "commons-desc-page"
+       },
+       "GPSLongitude": {
+        "value": "13.406585",
+        "source": "commons-desc-page"
+       },
+       "GPSMapDatum": {
+        "value": "WGS-84",
+        "source": "commons-desc-page",
+        "hidden": ""
+       },
+       "ImageDescription": {
+        "value": "Eisenkraut im Landschaftsschutzgebiet Kohlbruck in Passau",
+        "source": "commons-desc-page"
+       },
+       "DateTimeOriginal": {
+        "value": "2007-07-18",
+        "source": "commons-desc-page"
+       },
+       "Credit": {
+        "value": "<span class=\"int-own-work\">Self-photographed</span>",
+        "source": "commons-desc-page"
+       },
+       "Artist": {
+        "value": "<a href=\"//commons.wikimedia.org/wiki/User:Konrad_Lackerbeck\" title=\"User:Konrad Lackerbeck\">Konrad Lackerbeck</a>",
+        "source": "commons-desc-page"
+       },
+       "LicenseShortName": {
+        "value": "CC BY-SA 2.5",
+        "source": "commons-desc-page",
+        "hidden": ""
+       },
+       "UsageTerms": {
+        "value": "Creative Commons Attribution-Share Alike 2.5",
+        "source": "commons-desc-page"
+       },
+       "AttributionRequired": {
+        "value": "true",
+        "source": "commons-desc-page",
+        "hidden": ""
+       },
+       "Attribution": {
+        "value": "<a href=\"//commons.wikimedia.org/wiki/User:Konrad_Lackerbeck\" title=\"User:Konrad Lackerbeck\">Konrad Lackerbeck</a>",
+        "source": "commons-desc-page",
+        "hidden": ""
+       },
+       "LicenseUrl": {
+        "value": "https://creativecommons.org/licenses/by-sa/2.5",
+        "source": "commons-desc-page"
+       },
+       "Copyrighted": {
+        "value": "True",
+        "source": "commons-desc-page",
+        "hidden": ""
+       },
+       "Restrictions": {
+        "value": "",
+        "source": "commons-desc-page",
+        "hidden": ""
+       },
+       "License": {
+        "value": "cc-by-sa-2.5",
+        "source": "commons-templates",
+        "hidden": ""
+       }
+      }
+     }
+    ]
+   }
+  }
+ }
+}

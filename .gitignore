@@ -5,6 +5,7 @@
 *.md
 !README.md
 !CHANGELOG.md
+!services/data/docs/*.md
 
 #pm2
 

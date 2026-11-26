@@ -1,0 +1,997 @@
+{
+ "header": {
+  "type": "esummary",
+  "version": "0.3"
+ },
+ "result": {
+  "uids": [
+   "42767407",
+   "42183789",
+   "42015754",
+   "42776175",
+   "43044392",
+   "42320776",
+   "42772744",
+   "43012770"
+  ],
+  "42767407": {
+   "uid": "42767407",
+   "pubdate": "2027 Feb 10",
+   "epubdate": "2026 Sep 21",
+   "source": "J Ethnopharmacol",
+   "authors": [
+    {
+     "name": "Mvogo Ottou PB",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Beack Bayengue SS",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Nkonlie Guimfack M",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Tiekwe JE",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Embolo Enyegue EL",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Malieuze Nanfah MD",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Koloko LB",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Mansuri R",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Koanga Mogtomo ML",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Kojom Foko LP",
+     "authtype": "Author",
+     "clusterid": ""
+    }
+   ],
+   "lastauthor": "Kojom Foko LP",
+   "title": "Herbal medicine among vulnerable populations in Cameroon: a systematic review and meta-analysis with clinical, mechanistic, and global health perspectives.",
+   "sorttitle": "herbal medicine among vulnerable populations in cameroon a systematic review and meta analysis with clinical mechanistic and global health perspectives",
+   "volume": "374",
+   "issue": "Pt 1",
+   "pages": "122399",
+   "lang": [
+    "eng"
+   ],
+   "nlmuniqueid": "7903310",
+   "issn": "0378-8741",
+   "essn": "1872-7573",
+   "pubtype": [
+    "Journal Article",
+    "Systematic Review",
+    "Meta-Analysis"
+   ],
+   "recordstatus": "PubMed - indexed for MEDLINE",
+   "pubstatus": "256",
+   "articleids": [
+    {
+     "idtype": "pubmed",
+     "idtypen": 1,
+     "value": "42767407"
+    },
+    {
+     "idtype": "doi",
+     "idtypen": 3,
+     "value": "10.1016/j.jep.2026.122399"
+    },
+    {
+     "idtype": "pii",
+     "idtypen": 4,
+     "value": "S0378-8741(26)01254-7"
+    }
+   ],
+   "history": [
+    {
+     "pubstatus": "received",
+     "date": "2026/03/11 00:00"
+    },
+    {
+     "pubstatus": "revised",
+     "date": "2026/09/09 00:00"
+    },
+    {
+     "pubstatus": "accepted",
+     "date": "2026/09/18 00:00"
+    },
+    {
+     "pubstatus": "medline",
+     "date": "2026/11/16 00:34"
+    },
+    {
+     "pubstatus": "pubmed",
+     "date": "2026/09/21 23:33"
+    },
+    {
+     "pubstatus": "entrez",
+     "date": "2026/09/21 19:18"
+    }
+   ],
+   "references": [],
+   "attributes": [
+    "Has Abstract"
+   ],
+   "pmcrefcount": "",
+   "fulljournalname": "Journal of ethnopharmacology",
+   "elocationid": "doi: 10.1016/j.jep.2026.122399",
+   "doctype": "citation",
+   "srccontriblist": [],
+   "booktitle": "",
+   "medium": "",
+   "edition": "",
+   "publisherlocation": "",
+   "publishername": "",
+   "srcdate": "",
+   "reportnumber": "",
+   "availablefromurl": "",
+   "locationlabel": "",
+   "doccontriblist": [],
+   "docdate": "",
+   "bookname": "",
+   "chapter": "",
+   "sortpubdate": "2027/02/10 00:00",
+   "sortfirstauthor": "Mvogo Ottou PB",
+   "vernaculartitle": ""
+  },
+  "42183789": {
+   "uid": "42183789",
+   "pubdate": "2026 Dec",
+   "epubdate": "2026 May 25",
+   "source": "Pharm Biol",
+   "authors": [
+    {
+     "name": "Inpan R",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Kantasa T",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Hanprasertpong N",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Na Takuathung M",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Koonrungsesomboon N",
+     "authtype": "Author",
+     "clusterid": ""
+    }
+   ],
+   "lastauthor": "Koonrungsesomboon N",
+   "title": "Ginger-based formulations for allergic rhinitis disease: a systematic review and meta-analysis of experimental studies in animals and humans.",
+   "sorttitle": "ginger based formulations for allergic rhinitis disease a systematic review and meta analysis of experimental studies in animals and humans",
+   "volume": "64",
+   "issue": "1",
+   "pages": "749-763",
+   "lang": [
+    "eng"
+   ],
+   "nlmuniqueid": "9812552",
+   "issn": "1388-0209",
+   "essn": "1744-5116",
+   "pubtype": [
+    "Journal Article",
+    "Systematic Review",
+    "Meta-Analysis"
+   ],
+   "recordstatus": "PubMed - indexed for MEDLINE",
+   "pubstatus": "256",
+   "articleids": [
+    {
+     "idtype": "pubmed",
+     "idtypen": 1,
+     "value": "42183789"
+    },
+    {
+     "idtype": "pmc",
+     "idtypen": 8,
+     "value": "PMC13202703"
+    },
+    {
+     "idtype": "pmcid",
+     "idtypen": 5,
+     "value": "pmc-id: PMC13202703;"
+    },
+    {
+     "idtype": "doi",
+     "idtypen": 3,
+     "value": "10.1080/13880209.2026.2667560"
+    }
+   ],
+   "history": [
+    {
+     "pubstatus": "medline",
+     "date": "2026/05/25 12:35"
+    },
+    {
+     "pubstatus": "pubmed",
+     "date": "2026/05/25 12:34"
+    },
+    {
+     "pubstatus": "entrez",
+     "date": "2026/05/25 10:12"
+    },
+    {
+     "pubstatus": "pmc-release",
+     "date": "2026/05/25 00:00"
+    }
+   ],
+   "references": [],
+   "attributes": [
+    "Has Abstract"
+   ],
+   "pmcrefcount": 47,
+   "fulljournalname": "Pharmaceutical biology",
+   "elocationid": "doi: 10.1080/13880209.2026.2667560",
+   "doctype": "citation",
+   "srccontriblist": [],
+   "booktitle": "",
+   "medium": "",
+   "edition": "",
+   "publisherlocation": "",
+   "publishername": "",
+   "srcdate": "",
+   "reportnumber": "",
+   "availablefromurl": "",
+   "locationlabel": "",
+   "doccontriblist": [],
+   "docdate": "",
+   "bookname": "",
+   "chapter": "",
+   "sortpubdate": "2026/12/01 00:00",
+   "sortfirstauthor": "Inpan R",
+   "vernaculartitle": ""
+  },
+  "42015754": {
+   "uid": "42015754",
+   "pubdate": "2026 Dec",
+   "epubdate": "2026 Apr 22",
+   "source": "Future Sci OA",
+   "authors": [
+    {
+     "name": "Tri Wirattami A",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Handono K",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Handoko E",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Nugrahenny D",
+     "authtype": "Author",
+     "clusterid": ""
+    }
+   ],
+   "lastauthor": "Nugrahenny D",
+   "title": "Ginger-derived nanoparticles targeting NF-κB mediated inflammatory pathways: a systematic review of in vitro and in vivo evidence.",
+   "sorttitle": "ginger derived nanoparticles targeting nf b mediated inflammatory pathways a systematic review of in vitro and in vivo evidence",
+   "volume": "12",
+   "issue": "1",
+   "pages": "2657522",
+   "lang": [
+    "eng"
+   ],
+   "nlmuniqueid": "101665030",
+   "issn": "2056-5623",
+   "essn": "2056-5623",
+   "pubtype": [
+    "Journal Article",
+    "Review"
+   ],
+   "recordstatus": "PubMed",
+   "pubstatus": "256",
+   "articleids": [
+    {
+     "idtype": "pubmed",
+     "idtypen": 1,
+     "value": "42015754"
+    },
+    {
+     "idtype": "pmc",
+     "idtypen": 8,
+     "value": "PMC13108343"
+    },
+    {
+     "idtype": "pmcid",
+     "idtypen": 5,
+     "value": "pmc-id: PMC13108343;"
+    },
+    {
+     "idtype": "doi",
+     "idtypen": 3,
+     "value": "10.1080/20565623.2026.2657522"
+    }
+   ],
+   "history": [
+    {
+     "pubstatus": "medline",
+     "date": "2026/04/22 06:32"
+    },
+    {
+     "pubstatus": "pubmed",
+     "date": "2026/04/22 06:31"
+    },
+    {
+     "pubstatus": "entrez",
+     "date": "2026/04/22 03:42"
+    },
+    {
+     "pubstatus": "pmc-release",
+     "date": "2026/04/22 00:00"
+    }
+   ],
+   "references": [],
+   "attributes": [
+    "Has Abstract"
+   ],
+   "pmcrefcount": 38,
+   "fulljournalname": "Future science OA",
+   "elocationid": "doi: 10.1080/20565623.2026.2657522",
+   "doctype": "citation",
+   "srccontriblist": [],
+   "booktitle": "",
+   "medium": "",
+   "edition": "",
+   "publisherlocation": "",
+   "publishername": "",
+   "srcdate": "",
+   "reportnumber": "",
+   "availablefromurl": "",
+   "locationlabel": "",
+   "doccontriblist": [],
+   "docdate": "",
+   "bookname": "",
+   "chapter": "",
+   "sortpubdate": "2026/12/01 00:00",
+   "sortfirstauthor": "Tri Wirattami A",
+   "vernaculartitle": ""
+  },
+  "42776175": {
+   "uid": "42776175",
+   "pubdate": "2026 Sep 1",
+   "epubdate": "2026 Nov 24",
+   "source": "Acta Pharm",
+   "authors": [
+    {
+     "name": "Li Q",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Li M",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Khan MU",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Cai W",
+     "authtype": "Author",
+     "clusterid": ""
+    }
+   ],
+   "lastauthor": "Cai W",
+   "title": "A meta-analysis of the effects of Zingiber officinale on metabolic indices among patients with type 2 diabetes.",
+   "sorttitle": "meta analysis of the effects of zingiber officinale on metabolic indices among patients with type 2 diabetes",
+   "volume": "76",
+   "issue": "3",
+   "pages": "1-18",
+   "lang": [
+    "eng"
+   ],
+   "nlmuniqueid": "9303678",
+   "issn": "1330-0075",
+   "essn": "1846-9558",
+   "pubtype": [
+    "Journal Article",
+    "Meta-Analysis"
+   ],
+   "recordstatus": "PubMed - indexed for MEDLINE",
+   "pubstatus": "257",
+   "articleids": [
+    {
+     "idtype": "pubmed",
+     "idtypen": 1,
+     "value": "42776175"
+    },
+    {
+     "idtype": "doi",
+     "idtypen": 3,
+     "value": "10.2478/acph-2026-0020"
+    },
+    {
+     "idtype": "pii",
+     "idtypen": 4,
+     "value": "acph-2026-0020"
+    }
+   ],
+   "history": [
+    {
+     "pubstatus": "accepted",
+     "date": "2026/07/15 00:00"
+    },
+    {
+     "pubstatus": "medline",
+     "date": "2026/11/24 17:33"
+    },
+    {
+     "pubstatus": "pubmed",
+     "date": "2026/09/23 17:36"
+    },
+    {
+     "pubstatus": "entrez",
+     "date": "2026/09/23 11:08"
+    }
+   ],
+   "references": [],
+   "attributes": [
+    "Has Abstract"
+   ],
+   "pmcrefcount": "",
+   "fulljournalname": "Acta pharmaceutica (Zagreb, Croatia)",
+   "elocationid": "doi: 10.2478/acph-2026-0020",
+   "doctype": "citation",
+   "srccontriblist": [],
+   "booktitle": "",
+   "medium": "",
+   "edition": "",
+   "publisherlocation": "",
+   "publishername": "",
+   "srcdate": "",
+   "reportnumber": "",
+   "availablefromurl": "",
+   "locationlabel": "",
+   "doccontriblist": [],
+   "docdate": "",
+   "bookname": "",
+   "chapter": "",
+   "sortpubdate": "2026/11/24 00:00",
+   "sortfirstauthor": "Li Q",
+   "vernaculartitle": ""
+  },
+  "43044392": {
+   "uid": "43044392",
+   "pubdate": "2026 Nov 17",
+   "epubdate": "2026 Nov 17",
+   "source": "J Ayurveda Integr Med",
+   "authors": [
+    {
+     "name": "Allam R",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Uma A",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Kothainayagi B",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Balasundar S",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Hema Sundari C",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Dixit R",
+     "authtype": "Author",
+     "clusterid": ""
+    }
+   ],
+   "lastauthor": "Dixit R",
+   "title": "Exploring the integration of Ayurveda in aquaculture: A scoping review.",
+   "sorttitle": "exploring the integration of ayurveda in aquaculture a scoping review",
+   "volume": "17",
+   "issue": "6",
+   "pages": "101421",
+   "lang": [
+    "eng"
+   ],
+   "nlmuniqueid": "101551404",
+   "issn": "0975-9476",
+   "essn": "",
+   "pubtype": [
+    "Journal Article",
+    "Review"
+   ],
+   "recordstatus": "PubMed - as supplied by publisher",
+   "pubstatus": "10",
+   "articleids": [
+    {
+     "idtype": "pubmed",
+     "idtypen": 1,
+     "value": "43044392"
+    },
+    {
+     "idtype": "doi",
+     "idtypen": 3,
+     "value": "10.1016/j.jaim.2026.101421"
+    },
+    {
+     "idtype": "pii",
+     "idtypen": 4,
+     "value": "S0975-9476(26)00105-1"
+    }
+   ],
+   "history": [
+    {
+     "pubstatus": "received",
+     "date": "2026/05/18 00:00"
+    },
+    {
+     "pubstatus": "revised",
+     "date": "2026/07/04 00:00"
+    },
+    {
+     "pubstatus": "accepted",
+     "date": "2026/07/13 00:00"
+    },
+    {
+     "pubstatus": "medline",
+     "date": "2026/11/17 23:30"
+    },
+    {
+     "pubstatus": "pubmed",
+     "date": "2026/11/17 23:30"
+    },
+    {
+     "pubstatus": "entrez",
+     "date": "2026/11/17 18:11"
+    }
+   ],
+   "references": [],
+   "attributes": [
+    "Has Abstract"
+   ],
+   "pmcrefcount": "",
+   "fulljournalname": "Journal of Ayurveda and integrative medicine",
+   "elocationid": "doi: 10.1016/j.jaim.2026.101421",
+   "doctype": "citation",
+   "srccontriblist": [],
+   "booktitle": "",
+   "medium": "",
+   "edition": "",
+   "publisherlocation": "",
+   "publishername": "",
+   "srcdate": "",
+   "reportnumber": "",
+   "availablefromurl": "",
+   "locationlabel": "",
+   "doccontriblist": [],
+   "docdate": "",
+   "bookname": "",
+   "chapter": "",
+   "sortpubdate": "2026/11/17 00:00",
+   "sortfirstauthor": "Allam R",
+   "vernaculartitle": ""
+  },
+  "42320776": {
+   "uid": "42320776",
+   "pubdate": "2026 Nov 15",
+   "epubdate": "2026 Jun 19",
+   "source": "J Ethnopharmacol",
+   "authors": [
+    {
+     "name": "Cho MS",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Lee IS",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Kim J",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Park JW",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Kim J",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Ko SJ",
+     "authtype": "Author",
+     "clusterid": ""
+    }
+   ],
+   "lastauthor": "Ko SJ",
+   "title": "Multi-herb formulations modulating gut microbiota: A systematic review and data-driven analysis.",
+   "sorttitle": "multi herb formulations modulating gut microbiota a systematic review and data driven analysis",
+   "volume": "370",
+   "issue": "",
+   "pages": "122082",
+   "lang": [
+    "eng"
+   ],
+   "nlmuniqueid": "7903310",
+   "issn": "0378-8741",
+   "essn": "1872-7573",
+   "pubtype": [
+    "Journal Article",
+    "Systematic Review"
+   ],
+   "recordstatus": "PubMed - indexed for MEDLINE",
+   "pubstatus": "256",
+   "articleids": [
+    {
+     "idtype": "pubmed",
+     "idtypen": 1,
+     "value": "42320776"
+    },
+    {
+     "idtype": "doi",
+     "idtypen": 3,
+     "value": "10.1016/j.jep.2026.122082"
+    },
+    {
+     "idtype": "pii",
+     "idtypen": 4,
+     "value": "S0378-8741(26)00936-0"
+    }
+   ],
+   "history": [
+    {
+     "pubstatus": "received",
+     "date": "2026/04/02 00:00"
+    },
+    {
+     "pubstatus": "revised",
+     "date": "2026/05/28 00:00"
+    },
+    {
+     "pubstatus": "accepted",
+     "date": "2026/06/18 00:00"
+    },
+    {
+     "pubstatus": "medline",
+     "date": "2026/07/01 18:33"
+    },
+    {
+     "pubstatus": "pubmed",
+     "date": "2026/06/20 00:39"
+    },
+    {
+     "pubstatus": "entrez",
+     "date": "2026/06/19 19:36"
+    }
+   ],
+   "references": [],
+   "attributes": [
+    "Has Abstract"
+   ],
+   "pmcrefcount": "",
+   "fulljournalname": "Journal of ethnopharmacology",
+   "elocationid": "doi: 10.1016/j.jep.2026.122082",
+   "doctype": "citation",
+   "srccontriblist": [],
+   "booktitle": "",
+   "medium": "",
+   "edition": "",
+   "publisherlocation": "",
+   "publishername": "",
+   "srcdate": "",
+   "reportnumber": "",
+   "availablefromurl": "",
+   "locationlabel": "",
+   "doccontriblist": [],
+   "docdate": "",
+   "bookname": "",
+   "chapter": "",
+   "sortpubdate": "2026/11/15 00:00",
+   "sortfirstauthor": "Cho MS",
+   "vernaculartitle": ""
+  },
+  "42772744": {
+   "uid": "42772744",
+   "pubdate": "2026 Nov",
+   "epubdate": "2026 Sep 22",
+   "source": "Phytother Res",
+   "authors": [
+    {
+     "name": "Vafadar Moradi E",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Vossoughinia S",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Yazdanpanah Z",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Sobhani H",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Jalali J",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Ghasemzadeh Rahbardar M",
+     "authtype": "Author",
+     "clusterid": ""
+    }
+   ],
+   "lastauthor": "Ghasemzadeh Rahbardar M",
+   "title": "Herbal Therapeutics in Osteoporosis: Mechanisms, Evidence, and Translational Potential.",
+   "sorttitle": "herbal therapeutics in osteoporosis mechanisms evidence and translational potential",
+   "volume": "40",
+   "issue": "11",
+   "pages": "6709-6747",
+   "lang": [
+    "eng"
+   ],
+   "nlmuniqueid": "8904486",
+   "issn": "0951-418X",
+   "essn": "1099-1573",
+   "pubtype": [
+    "Journal Article",
+    "Review"
+   ],
+   "recordstatus": "PubMed - indexed for MEDLINE",
+   "pubstatus": "256",
+   "articleids": [
+    {
+     "idtype": "pubmed",
+     "idtypen": 1,
+     "value": "42772744"
+    },
+    {
+     "idtype": "pmc",
+     "idtypen": 8,
+     "value": "PMC13753691"
+    },
+    {
+     "idtype": "pmcid",
+     "idtypen": 5,
+     "value": "pmc-id: PMC13753691;"
+    },
+    {
+     "idtype": "doi",
+     "idtypen": 3,
+     "value": "10.1002/ptr.70457"
+    }
+   ],
+   "history": [
+    {
+     "pubstatus": "revised",
+     "date": "2026/04/18 00:00"
+    },
+    {
+     "pubstatus": "received",
+     "date": "2025/10/25 00:00"
+    },
+    {
+     "pubstatus": "accepted",
+     "date": "2026/09/15 00:00"
+    },
+    {
+     "pubstatus": "medline",
+     "date": "2026/11/11 11:47"
+    },
+    {
+     "pubstatus": "pubmed",
+     "date": "2026/09/22 23:33"
+    },
+    {
+     "pubstatus": "entrez",
+     "date": "2026/09/22 19:53"
+    },
+    {
+     "pubstatus": "pmc-release",
+     "date": "2026/11/11 00:00"
+    }
+   ],
+   "references": [],
+   "attributes": [
+    "Has Abstract"
+   ],
+   "pmcrefcount": 128,
+   "fulljournalname": "Phytotherapy research : PTR",
+   "elocationid": "doi: 10.1002/ptr.70457",
+   "doctype": "citation",
+   "srccontriblist": [],
+   "booktitle": "",
+   "medium": "",
+   "edition": "",
+   "publisherlocation": "",
+   "publishername": "",
+   "srcdate": "",
+   "reportnumber": "",
+   "availablefromurl": "",
+   "locationlabel": "",
+   "doccontriblist": [],
+   "docdate": "",
+   "bookname": "",
+   "chapter": "",
+   "sortpubdate": "2026/11/01 00:00",
+   "sortfirstauthor": "Vafadar Moradi E",
+   "vernaculartitle": ""
+  },
+  "43012770": {
+   "uid": "43012770",
+   "pubdate": "2026 Oct 30",
+   "epubdate": "",
+   "source": "Medicine (Baltimore)",
+   "authors": [
+    {
+     "name": "Tian Y",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Ma M",
+     "authtype": "Author",
+     "clusterid": ""
+    },
+    {
+     "name": "Wang Z",
+     "authtype": "Author",
+     "clusterid": ""
+    }
+   ],
+   "lastauthor": "Wang Z",
+   "title": "Efficacy of ginger on chemotherapy-induced nausea and vomiting in breast cancer: A meta-analysis.",
+   "sorttitle": "efficacy of ginger on chemotherapy induced nausea and vomiting in breast cancer a meta analysis",
+   "volume": "105",
+   "issue": "44",
+   "pages": "e51071",
+   "lang": [
+    "eng"
+   ],
+   "nlmuniqueid": "2985248R",
+   "issn": "0025-7974",
+   "essn": "1536-5964",
+   "pubtype": [
+    "Journal Article",
+    "Meta-Analysis"
+   ],
+   "recordstatus": "PubMed - indexed for MEDLINE",
+   "pubstatus": "4",
+   "articleids": [
+    {
+     "idtype": "pubmed",
+     "idtypen": 1,
+     "value": "43012770"
+    },
+    {
+     "idtype": "pmc",
+     "idtypen": 8,
+     "value": "PMC13727260"
+    },
+    {
+     "idtype": "pmcid",
+     "idtypen": 5,
+     "value": "pmc-id: PMC13727260;"
+    },
+    {
+     "idtype": "doi",
+     "idtypen": 3,
+     "value": "10.1097/MD.0000000000051071"
+    },
+    {
+     "idtype": "pii",
+     "idtypen": 4,
+     "value": "00005792-202610300-00068"
+    }
+   ],
+   "history": [
+    {
+     "pubstatus": "received",
+     "date": "2024/08/29 00:00"
+    },
+    {
+     "pubstatus": "accepted",
+     "date": "2026/09/23 00:00"
+    },
+    {
+     "pubstatus": "medline",
+     "date": "2026/11/11 11:38"
+    },
+    {
+     "pubstatus": "pubmed",
+     "date": "2026/11/11 11:37"
+    },
+    {
+     "pubstatus": "entrez",
+     "date": "2026/11/11 10:39"
+    },
+    {
+     "pubstatus": "pmc-release",
+     "date": "2026/10/30 00:00"
+    }
+   ],
+   "references": [],
+   "attributes": [
+    "Has Abstract"
+   ],
+   "pmcrefcount": 40,
+   "fulljournalname": "Medicine",
+   "elocationid": "doi: 10.1097/MD.0000000000051071",
+   "doctype": "citation",
+   "srccontriblist": [],
+   "booktitle": "",
+   "medium": "",
+   "edition": "",
+   "publisherlocation": "",
+   "publishername": "",
+   "srcdate": "",
+   "reportnumber": "",
+   "availablefromurl": "",
+   "locationlabel": "",
+   "doccontriblist": [],
+   "docdate": "",
+   "bookname": "",
+   "chapter": "",
+   "sortpubdate": "2026/10/30 00:00",
+   "sortfirstauthor": "Tian Y",
+   "vernaculartitle": ""
+  }
+ }
+}

@@ -1,0 +1,30 @@
+{
+ "PropertyTable": {
+  "Properties": [
+   {
+    "CID": 681,
+    "MolecularFormula": "C8H11NO2",
+    "MolecularWeight": "153.18",
+    "InChIKey": "VYFYYTLLBUKUHU-UHFFFAOYSA-N",
+    "IUPACName": "4-(2-aminoethyl)benzene-1,2-diol",
+    "Title": "Dopamine"
+   },
+   {
+    "CID": 442793,
+    "MolecularFormula": "C17H26O4",
+    "MolecularWeight": "294.4",
+    "InChIKey": "NLDDIKRKFXEWBK-AWEZNQCLSA-N",
+    "IUPACName": "(5S)-5-hydroxy-1-(4-hydroxy-3-methoxyphenyl)decan-3-one",
+    "Title": "(6)-Gingerol"
+   },
+   {
+    "CID": 5281794,
+    "MolecularFormula": "C17H24O3",
+    "MolecularWeight": "276.4",
+    "InChIKey": "OQWKEEOHDMUXEO-BQYQJAHWSA-N",
+    "IUPACName": "(E)-1-(4-hydroxy-3-methoxyphenyl)dec-4-en-3-one",
+    "Title": "Shogaol"
+   }
+  ]
+ }
+}

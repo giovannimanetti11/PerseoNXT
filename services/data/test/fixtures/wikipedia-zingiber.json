@@ -1,0 +1,49 @@
+{
+ "type": "standard",
+ "title": "Zingiber officinale",
+ "displaytitle": "<span lang=\"it\" dir=\"ltr\"><span class=\"mw-page-title-main\">Zingiber officinale</span></span>",
+ "namespace": {
+  "id": 0,
+  "text": ""
+ },
+ "wikibase_item": "Q35625",
+ "titles": {
+  "canonical": "Zingiber_officinale",
+  "normalized": "Zingiber officinale",
+  "display": "<span lang=\"it\" dir=\"ltr\"><span class=\"mw-page-title-main\">Zingiber officinale</span></span>"
+ },
+ "pageid": 102968,
+ "thumbnail": {
+  "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Zingiber_officinale_1123783_%28cropped%29.jpg/330px-Zingiber_officinale_1123783_%28cropped%29.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "width": 330,
+  "height": 431
+ },
+ "originalimage": {
+  "source": "https://upload.wikimedia.org/wikipedia/commons/c/cf/Zingiber_officinale_1123783_%28cropped%29.jpg?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "width": 1050,
+  "height": 1370
+ },
+ "lang": "it",
+ "dir": "ltr",
+ "revision": "150492795",
+ "tid": "5b2013ed-4529-11f1-9e43-d1fcb4cddad9",
+ "timestamp": "2026-05-01T06:45:35Z",
+ "description": "specie di pianta della famiglia Zingiberaceae",
+ "description_source": "central",
+ "content_urls": {
+  "desktop": {
+   "page": "https://it.wikipedia.org/wiki/Zingiber_officinale",
+   "revisions": "https://it.wikipedia.org/wiki/Zingiber_officinale?action=history",
+   "edit": "https://it.wikipedia.org/wiki/Zingiber_officinale?action=edit",
+   "talk": "https://it.wikipedia.org/wiki/Discussione:Zingiber_officinale"
+  },
+  "mobile": {
+   "page": "https://it.wikipedia.org/wiki/Zingiber_officinale",
+   "revisions": "https://it.wikipedia.org/wiki/Special:History/Zingiber_officinale",
+   "edit": "https://it.wikipedia.org/wiki/Zingiber_officinale?action=edit",
+   "talk": "https://it.wikipedia.org/wiki/Discussione:Zingiber_officinale"
+  }
+ },
+ "extract": "Lo zenzero è una pianta erbacea delle Zingiberaceae originaria dell'Estremo Oriente.",
+ "extract_html": "<p>Lo <b>zenzero</b> è una pianta erbacea delle Zingiberaceae originaria dell'Estremo Oriente.</p>"
+}

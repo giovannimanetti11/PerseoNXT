@@ -1,0 +1,580 @@
+{
+ "totalCount": 236,
+ "studies": [
+  {
+   "protocolSection": {
+    "identificationModule": {
+     "nctId": "NCT07190495",
+     "briefTitle": "Ginger to Prevent Nausea and Vomiting After Laparoscopic Cholecystectomy"
+    },
+    "statusModule": {
+     "overallStatus": "RECRUITING",
+     "startDateStruct": {
+      "date": "2025-07-05"
+     }
+    },
+    "conditionsModule": {
+     "conditions": [
+      "Postoperative Nausea and Vomiting",
+      "Laparoscopic Cholecystectomy"
+     ]
+    },
+    "designModule": {
+     "studyType": "INTERVENTIONAL",
+     "phases": [
+      "PHASE4"
+     ],
+     "enrollmentInfo": {
+      "count": 102
+     }
+    }
+   }
+  },
+  {
+   "protocolSection": {
+    "identificationModule": {
+     "nctId": "NCT06792812",
+     "briefTitle": "The Impact of Ginger Mouthwash on the Pregnant Women With Stress and Gingivitis"
+    },
+    "statusModule": {
+     "overallStatus": "COMPLETED",
+     "startDateStruct": {
+      "date": "2025-01-25"
+     }
+    },
+    "conditionsModule": {
+     "conditions": [
+      "Mouth Diseases",
+      "Bleeding Gum",
+      "Stress"
+     ]
+    },
+    "designModule": {
+     "studyType": "INTERVENTIONAL",
+     "phases": [
+      "PHASE2"
+     ],
+     "enrollmentInfo": {
+      "count": 45
+     }
+    }
+   }
+  },
+  {
+   "protocolSection": {
+    "identificationModule": {
+     "nctId": "NCT06787222",
+     "briefTitle": "Effectiveness and Safety of Zingiber Officinale Transdermal Patch for Acne Vulgaris; Study of Interleukin 1 and Skin Microbiome"
+    },
+    "statusModule": {
+     "overallStatus": "ACTIVE_NOT_RECRUITING",
+     "startDateStruct": {
+      "date": "2024-11-03"
+     }
+    },
+    "conditionsModule": {
+     "conditions": [
+      "Acne Vulgaris"
+     ]
+    },
+    "designModule": {
+     "studyType": "INTERVENTIONAL",
+     "phases": [
+      "PHASE2",
+      "PHASE3"
+     ],
+     "enrollmentInfo": {
+      "count": 26
+     }
+    }
+   }
+  },
+  {
+   "protocolSection": {
+    "identificationModule": {
+     "nctId": "NCT02524002",
+     "briefTitle": "Enhanced vs. Routine Clear Liquid Intake in Labor"
+    },
+    "statusModule": {
+     "overallStatus": "COMPLETED",
+     "startDateStruct": {
+      "date": "2014-08"
+     }
+    },
+    "conditionsModule": {
+     "conditions": [
+      "Abnormal Labor",
+      "Failed Induction of Labor",
+      "Ketosis"
+     ]
+    },
+    "designModule": {
+     "studyType": "INTERVENTIONAL",
+     "phases": [
+      "NA"
+     ],
+     "enrollmentInfo": {
+      "count": 76
+     }
+    }
+   }
+  },
+  {
+   "protocolSection": {
+    "identificationModule": {
+     "nctId": "NCT02470845",
+     "briefTitle": "Trial of Tian Jiu Therapy for Allergic Rhinitis"
+    },
+    "statusModule": {
+     "overallStatus": "COMPLETED",
+     "startDateStruct": {
+      "date": "2014-07"
+     }
+    },
+    "conditionsModule": {
+     "conditions": [
+      "Allergic Rhinitis (AR)"
+     ]
+    },
+    "designModule": {
+     "studyType": "INTERVENTIONAL",
+     "phases": [
+      "NA"
+     ],
+     "enrollmentInfo": {
+      "count": 136
+     }
+    }
+   }
+  },
+  {
+   "protocolSection": {
+    "identificationModule": {
+     "nctId": "NCT06150469",
+     "briefTitle": "Efficacy of Inhaled Aromatherapy on Nausea and Vomiting in Hematological Malignancies"
+    },
+    "statusModule": {
+     "overallStatus": "RECRUITING",
+     "startDateStruct": {
+      "date": "2024-04-17"
+     }
+    },
+    "conditionsModule": {
+     "conditions": [
+      "Hematological Malignancies"
+     ]
+    },
+    "designModule": {
+     "studyType": "INTERVENTIONAL",
+     "phases": [
+      "NA"
+     ],
+     "enrollmentInfo": {
+      "count": 286
+     }
+    }
+   }
+  },
+  {
+   "protocolSection": {
+    "identificationModule": {
+     "nctId": "NCT04769193",
+     "briefTitle": "A Clinical Trial Evaluating the Efficacy of a Skin Cream in Improving Facial Appearance and Skin Elasticity"
+    },
+    "statusModule": {
+     "overallStatus": "COMPLETED",
+     "startDateStruct": {
+      "date": "2021-01-27"
+     }
+    },
+    "conditionsModule": {
+     "conditions": [
+      "Atrophy, Hemifacial",
+      "Elastosis",
+      "Photoaging"
+     ]
+    },
+    "designModule": {
+     "studyType": "INTERVENTIONAL",
+     "phases": [
+      "NA"
+     ],
+     "enrollmentInfo": {
+      "count": 35
+     }
+    }
+   }
+  },
+  {
+   "protocolSection": {
+    "identificationModule": {
+     "nctId": "NCT04345549",
+     "briefTitle": "Ayurveda Self-Management for Flu Like Symptoms During the Covid-19 Outbreak"
+    },
+    "statusModule": {
+     "overallStatus": "COMPLETED",
+     "startDateStruct": {
+      "date": "2020-02-26"
+     }
+    },
+    "conditionsModule": {
+     "conditions": [
+      "Flu Like Symptom",
+      "Flu Like Illness"
+     ]
+    },
+    "designModule": {
+     "studyType": "INTERVENTIONAL",
+     "phases": [
+      "NA"
+     ],
+     "enrollmentInfo": {
+      "count": 18
+     }
+    }
+   }
+  },
+  {
+   "protocolSection": {
+    "identificationModule": {
+     "nctId": "NCT03089593",
+     "briefTitle": "Thermogenic Effect of Ginger"
+    },
+    "statusModule": {
+     "overallStatus": "COMPLETED",
+     "startDateStruct": {
+      "date": "2017-03-27"
+     }
+    },
+    "conditionsModule": {
+     "conditions": [
+      "Healthy Volunteers"
+     ]
+    },
+    "designModule": {
+     "studyType": "INTERVENTIONAL",
+     "phases": [
+      "NA"
+     ],
+     "enrollmentInfo": {
+      "count": 20
+     }
+    }
+   }
+  },
+  {
+   "protocolSection": {
+    "identificationModule": {
+     "nctId": "NCT04457947",
+     "briefTitle": "Exploring Aromatherapy Intervention in Acute Care"
+    },
+    "statusModule": {
+     "overallStatus": "UNKNOWN",
+     "startDateStruct": {
+      "date": "2020-09"
+     }
+    },
+    "conditionsModule": {
+     "conditions": [
+      "Pregnant Women",
+      "Surgical Patients"
+     ]
+    },
+    "designModule": {
+     "studyType": "OBSERVATIONAL",
+     "enrollmentInfo": {
+      "count": 40
+     }
+    }
+   }
+  },
+  {
+   "protocolSection": {
+    "identificationModule": {
+     "nctId": "NCT04478630",
+     "briefTitle": "The Effects of Inhaled Aromatherapy on Chemotherapy Induced Nausea (CINV) and Vomiting"
+    },
+    "statusModule": {
+     "overallStatus": "TERMINATED",
+     "startDateStruct": {
+      "date": "2021-08-30"
+     }
+    },
+    "conditionsModule": {
+     "conditions": [
+      "Nausea",
+      "Vomiting"
+     ]
+    },
+    "designModule": {
+     "studyType": "INTERVENTIONAL",
+     "phases": [
+      "NA"
+     ],
+     "enrollmentInfo": {
+      "count": 12
+     }
+    }
+   }
+  },
+  {
+   "protocolSection": {
+    "identificationModule": {
+     "nctId": "NCT06157034",
+     "briefTitle": "Prokinetic Effect of Selected Nutraceuticals"
+    },
+    "statusModule": {
+     "overallStatus": "COMPLETED",
+     "startDateStruct": {
+      "date": "2021-07-15"
+     }
+    },
+    "conditionsModule": {
+     "conditions": [
+      "Pulmonary Tuberculosis",
+      "Gastro-Intestinal Disorder"
+     ]
+    },
+    "designModule": {
+     "studyType": "INTERVENTIONAL",
+     "phases": [
+      "NA"
+     ],
+     "enrollmentInfo": {
+      "count": 200
+     }
+    }
+   }
+  },
+  {
+   "protocolSection": {
+    "identificationModule": {
+     "nctId": "NCT07155876",
+     "briefTitle": "Exploring the Effect of Aromatherapy"
+    },
+    "statusModule": {
+     "overallStatus": "COMPLETED",
+     "startDateStruct": {
+      "date": "2025-10-15"
+     }
+    },
+    "conditionsModule": {
+     "conditions": [
+      "Anxiety",
+      "Labor Pain",
+      "Nausea and Vomiting"
+     ]
+    },
+    "designModule": {
+     "studyType": "INTERVENTIONAL",
+     "phases": [
+      "NA"
+     ],
+     "enrollmentInfo": {
+      "count": 138
+     }
+    }
+   }
+  },
+  {
+   "protocolSection": {
+    "identificationModule": {
+     "nctId": "NCT07398885",
+     "briefTitle": "Assessing the Impact of Herbal Supplement on Fatigue and Disease Activity in SLE: Results From an 8-Week Randomized Trial"
+    },
+    "statusModule": {
+     "overallStatus": "COMPLETED",
+     "startDateStruct": {
+      "date": "2024-07-01"
+     }
+    },
+    "conditionsModule": {
+     "conditions": [
+      "System; Lupus Erythematosus"
+     ]
+    },
+    "designModule": {
+     "studyType": "INTERVENTIONAL",
+     "phases": [
+      "NA"
+     ],
+     "enrollmentInfo": {
+      "count": 59
+     }
+    }
+   }
+  },
+  {
+   "protocolSection": {
+    "identificationModule": {
+     "nctId": "NCT01915966",
+     "briefTitle": "Efficacy Study of a Ginger and Cardamom Gelatin for Xerostomy in Terminally Ill Patients"
+    },
+    "statusModule": {
+     "overallStatus": "COMPLETED",
+     "startDateStruct": {
+      "date": "2013-04"
+     }
+    },
+    "conditionsModule": {
+     "conditions": [
+      "Xerostomia",
+      "Salivary Gland Diseases",
+      "Mouth Diseases"
+     ]
+    },
+    "designModule": {
+     "studyType": "INTERVENTIONAL",
+     "phases": [
+      "NA"
+     ],
+     "enrollmentInfo": {
+      "count": 32
+     }
+    }
+   }
+  },
+  {
+   "protocolSection": {
+    "identificationModule": {
+     "nctId": "NCT02576808",
+     "briefTitle": "Study of Efficacy and Safety of Ginger Extract Compared With Loratadine for Treatment of Allergic Rhinitis"
+    },
+    "statusModule": {
+     "overallStatus": "COMPLETED",
+     "startDateStruct": {
+      "date": "2015-10"
+     }
+    },
+    "conditionsModule": {
+     "conditions": [
+      "Rhinitis,Allergic"
+     ]
+    },
+    "designModule": {
+     "studyType": "INTERVENTIONAL",
+     "phases": [
+      "PHASE2"
+     ],
+     "enrollmentInfo": {
+      "count": 80
+     }
+    }
+   }
+  },
+  {
+   "protocolSection": {
+    "identificationModule": {
+     "nctId": "NCT00676975",
+     "briefTitle": "The Efficacy of Tradition Chinese Medicine in Patients With Irritable Bowel Syndrome"
+    },
+    "statusModule": {
+     "overallStatus": "COMPLETED",
+     "startDateStruct": {
+      "date": "2008-05-26"
+     }
+    },
+    "conditionsModule": {
+     "conditions": [
+      "Irritable Bowel Syndrome"
+     ]
+    },
+    "designModule": {
+     "studyType": "INTERVENTIONAL",
+     "phases": [
+      "PHASE2"
+     ],
+     "enrollmentInfo": {
+      "count": 104
+     }
+    }
+   }
+  },
+  {
+   "protocolSection": {
+    "identificationModule": {
+     "nctId": "NCT07469475",
+     "briefTitle": "Effect of a Daily Supplement on Plasma PAI-1 Levels"
+    },
+    "statusModule": {
+     "overallStatus": "ACTIVE_NOT_RECRUITING",
+     "startDateStruct": {
+      "date": "2026-02-24"
+     }
+    },
+    "conditionsModule": {
+     "conditions": [
+      "Aging",
+      "Endothelial Dysfunction",
+      "Senescence"
+     ]
+    },
+    "designModule": {
+     "studyType": "INTERVENTIONAL",
+     "phases": [
+      "PHASE1",
+      "PHASE2"
+     ],
+     "enrollmentInfo": {
+      "count": 35
+     }
+    }
+   }
+  },
+  {
+   "protocolSection": {
+    "identificationModule": {
+     "nctId": "NCT06482671",
+     "briefTitle": "Primary Care dySpEpsia rikkuNshiTo"
+    },
+    "statusModule": {
+     "overallStatus": "RECRUITING",
+     "startDateStruct": {
+      "date": "2024-10-01"
+     }
+    },
+    "conditionsModule": {
+     "conditions": [
+      "Dyspepsia and Other Specified Disorders of Function of Stomach",
+      "Postprandial Distress Syndrome"
+     ]
+    },
+    "designModule": {
+     "studyType": "INTERVENTIONAL",
+     "phases": [
+      "PHASE3"
+     ],
+     "enrollmentInfo": {
+      "count": 100
+     }
+    }
+   }
+  },
+  {
+   "protocolSection": {
+    "identificationModule": {
+     "nctId": "NCT05612009",
+     "briefTitle": "Assessment of Different Imaging Systems for Dental Plaque Scoring"
+    },
+    "statusModule": {
+     "overallStatus": "COMPLETED",
+     "startDateStruct": {
+      "date": "2021-05-17"
+     }
+    },
+    "conditionsModule": {
+     "conditions": [
+      "Dental Plaque Imaging Methods"
+     ]
+    },
+    "designModule": {
+     "studyType": "OBSERVATIONAL",
+     "enrollmentInfo": {
+      "count": 60
+     }
+    }
+   }
+  }
+ ],
+ "nextPageToken": "ZVNj7o2Elu8o3lpySsCopL7umpOQJJxtYPSj2f0W"
+}

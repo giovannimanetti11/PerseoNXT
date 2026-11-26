@@ -1,0 +1,49 @@
+{
+ "type": "standard",
+ "title": "Verbena officinalis",
+ "displaytitle": "<span lang=\"it\" dir=\"ltr\"><span class=\"mw-page-title-main\">Verbena officinalis</span></span>",
+ "namespace": {
+  "id": 0,
+  "text": ""
+ },
+ "wikibase_item": "Q161417",
+ "titles": {
+  "canonical": "Verbena_officinalis",
+  "normalized": "Verbena officinalis",
+  "display": "<span lang=\"it\" dir=\"ltr\"><span class=\"mw-page-title-main\">Verbena officinalis</span></span>"
+ },
+ "pageid": 1542900,
+ "thumbnail": {
+  "source": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/38/Eisenkraut%2C_Passau.JPG/330px-Eisenkraut%2C_Passau.JPG?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail",
+  "width": 330,
+  "height": 440
+ },
+ "originalimage": {
+  "source": "https://upload.wikimedia.org/wikipedia/commons/3/38/Eisenkraut%2C_Passau.JPG?utm_source=it.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled",
+  "width": 960,
+  "height": 1280
+ },
+ "lang": "it",
+ "dir": "ltr",
+ "revision": "150497561",
+ "tid": "178dd149-4552-11f1-937b-4c9ea29f6f0d",
+ "timestamp": "2026-05-01T11:37:11Z",
+ "description": "specie di pianta della famiglia Verbenaceae",
+ "description_source": "central",
+ "content_urls": {
+  "desktop": {
+   "page": "https://it.wikipedia.org/wiki/Verbena_officinalis",
+   "revisions": "https://it.wikipedia.org/wiki/Verbena_officinalis?action=history",
+   "edit": "https://it.wikipedia.org/wiki/Verbena_officinalis?action=edit",
+   "talk": "https://it.wikipedia.org/wiki/Discussione:Verbena_officinalis"
+  },
+  "mobile": {
+   "page": "https://it.wikipedia.org/wiki/Verbena_officinalis",
+   "revisions": "https://it.wikipedia.org/wiki/Special:History/Verbena_officinalis",
+   "edit": "https://it.wikipedia.org/wiki/Verbena_officinalis?action=edit",
+   "talk": "https://it.wikipedia.org/wiki/Discussione:Verbena_officinalis"
+  }
+ },
+ "extract": "Verbena officinalis L., 1753 è un'erba perenne appartenente alla famiglia delle Verbenaceae.",
+ "extract_html": "<p><i><b>Verbena officinalis</b></i> <small>L., 1753</small> è un'erba perenne appartenente alla famiglia delle Verbenaceae.</p>"
+}
