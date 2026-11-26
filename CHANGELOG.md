@@ -4,6 +4,8 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+## [3.1.1] - 2026-11-26
+
 ### Changed
 - Google Analytics measurement ID read from `NUXT_PUBLIC_GA_ID` at build time instead of being hardcoded in `nuxt.config.ts`; without it the GA scripts are omitted
 
