@@ -33,7 +33,7 @@
         </thead>
         <tbody>
           <tr v-for="compound in items" :key="compound.inchikey || compound.wikidataId || compound.name" class="border-t border-gray-100">
-            <td class="py-2.5 pl-4 pr-4 align-top text-gray-900">{{ compound.name }}</td>
+            <td class="py-2.5 pl-4 pr-4 align-top text-gray-900 [overflow-wrap:anywhere]">{{ compound.name }}</td>
             <td class="py-2.5 pr-4 align-top whitespace-nowrap text-gray-700">
               <template v-for="(part, index) in formulaParts(compound.formula)" :key="index"><sub v-if="part.sub">{{ part.text }}</sub><template v-else>{{ part.text }}</template></template>
             </td>
