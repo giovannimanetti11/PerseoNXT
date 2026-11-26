@@ -42,6 +42,9 @@ body {
 /* -------------------------------------------------------------------------
    WordPress content (monographs, glossary, blog). Markup comes from the
    editor, so it is styled by element rather than with utility classes.
+   Lists, links, images and tables are scoped to .rich-content (the HTML
+   rendered by RichContent): the sections also hold components such as tag
+   and name lists, which must not get bullets or link colors.
    ------------------------------------------------------------------------- */
 
 .content-section h2 {
@@ -64,45 +67,41 @@ body {
   margin-top: 10px;
 }
 
-.content-section a {
+.rich-content a {
   color: #036297;
 }
 
-.content-section a:hover {
+.rich-content a:hover {
   color: #5E9EF4;
 }
 
-.content-section a.source-link {
-  color: inherit;
-}
-
-.content-section img {
+.rich-content img {
   margin: 10px auto;
   border-radius: 15px;
   box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
 }
 
-.content-section ul {
+.rich-content ul {
   margin: 10px 0;
   padding-left: 10px;
 }
 
-.content-section ul li {
+.rich-content ul li {
   margin-top: 5px;
   margin-left: 25px;
   list-style-type: disc;
 }
 
-.content-section ul li ul li {
+.rich-content ul li ul li {
   list-style-type: circle;
 }
 
-.content-section ol {
+.rich-content ol {
   padding-left: 15px;
   list-style-type: decimal;
 }
 
-.content-section table {
+.rich-content table {
   border-collapse: collapse;
   width: 100%;
   max-width: 800px;
@@ -110,31 +109,31 @@ body {
   box-shadow: 0 0 10px rgb(0 0 0 / 0.1);
 }
 
-.content-section table th {
+.rich-content table th {
   background-color: #333;
   color: #fff;
 }
 
-.content-section table th,
-.content-section table td {
+.rich-content table th,
+.rich-content table td {
   text-align: left;
   padding: 8px;
   border: 1px solid #555;
 }
 
-.content-section table tr:nth-child(even) {
+.rich-content table tr:nth-child(even) {
   background-color: #ddd;
 }
 
-.content-section table tr:hover {
+.rich-content table tr:hover {
   background-color: #bbb;
 }
 
-.content-section table td:first-child {
+.rich-content table td:first-child {
   font-weight: bold;
 }
 
-.content-section figcaption,
+.rich-content figcaption,
 .wp-caption-text {
   color: gray;
   font-style: italic;
@@ -149,42 +148,42 @@ body {
 }
 
 /* Tables inserted with the "post-table" class: stacked cards on phones */
-.content-section .post-table {
+.rich-content .post-table {
   font-size: 15px;
   box-shadow: none;
 }
 
-.content-section .post-table th,
-.content-section .post-table td {
+.rich-content .post-table th,
+.rich-content .post-table td {
   border: 1px solid #ddd;
   word-break: break-word;
 }
 
-.content-section .post-table th {
+.rich-content .post-table th {
   background-color: #f4f4f4;
   color: inherit;
 }
 
 @media screen and (max-width: 768px) {
-  .content-section .post-table thead {
+  .rich-content .post-table thead {
     display: none;
   }
 
-  .content-section .post-table,
-  .content-section .post-table tbody,
-  .content-section .post-table tr,
-  .content-section .post-table td {
+  .rich-content .post-table,
+  .rich-content .post-table tbody,
+  .rich-content .post-table tr,
+  .rich-content .post-table td {
     display: block;
     width: 100%;
   }
 
-  .content-section .post-table tr {
+  .rich-content .post-table tr {
     margin-bottom: 16px;
     border-bottom: 2px solid #ccc;
     padding: 6px 0;
   }
 
-  .content-section .post-table td {
+  .rich-content .post-table td {
     position: relative;
     padding: 6px 8px 6px 50%;
     margin-bottom: 6px;
@@ -193,7 +192,7 @@ body {
     min-height: 28px;
   }
 
-  .content-section .post-table td::before {
+  .rich-content .post-table td::before {
     content: attr(data-label);
     position: absolute;
     top: 6px;

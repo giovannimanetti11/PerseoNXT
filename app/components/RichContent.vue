@@ -1,5 +1,5 @@
 <template>
-  <div ref="container" @mouseover="onHover" @mouseleave="scheduleHide" @click="onClick" v-html="html"></div>
+  <div ref="container" class="rich-content" @mouseover="onHover" @mouseleave="scheduleHide" @click="onClick" v-html="html"></div>
 
   <ClientOnly>
     <Teleport to="body">

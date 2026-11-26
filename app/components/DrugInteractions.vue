@@ -8,7 +8,7 @@
           :href="interactions.emaMonografiaUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="source-link text-xs font-medium px-3 py-1 rounded-full bg-blu text-white hover:bg-celeste transition-colors"
+          class="text-xs font-medium px-3 py-1 rounded-full bg-blu text-white hover:bg-celeste transition-colors"
         >
           Documento EMA (PDF)
         </a>
@@ -17,7 +17,7 @@
           :href="interactions.emaPageUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="source-link text-xs font-medium px-3 py-1 rounded-full border border-blu text-blu hover:bg-blu hover:text-white transition-colors"
+          class="text-xs font-medium px-3 py-1 rounded-full border border-blu text-blu hover:bg-blu hover:text-white transition-colors"
         >
           Pagina EMA
         </a>
@@ -28,7 +28,7 @@
           :href="interactions.drugscomUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="source-link text-xs font-medium px-3 py-1 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
+          class="text-xs font-medium px-3 py-1 rounded-full bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors"
         >
           Fonte: Drugs.com
         </a>

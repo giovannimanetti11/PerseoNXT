@@ -6,7 +6,10 @@
         <PlantInfo :plant="plant" />
       </div>
       <div class="w-full md:w-3/5 flex flex-col order-1 md:order-2 mb-8 md:mb-0">
-        <PlantGallery class="md:mr-16 mb-8" :featured="plant.featuredImage" :additional="plant.additionalImages" />
+        <!-- Block wrapper: the gallery floats right, which a flex parent would ignore. -->
+        <div class="md:mr-16 mb-8">
+          <PlantGallery :featured="plant.featuredImage" :additional="plant.additionalImages" />
+        </div>
         <LazyObservationsMap v-if="plant.nomeScientifico" :nome-scientifico="plant.nomeScientifico" class="mt-8 md:mt-0 pb-4" />
       </div>
     </section>
