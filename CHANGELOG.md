@@ -4,6 +4,21 @@ All notable changes to this project are documented in this file.
 
 ## [Unreleased]
 
+### Added
+- Monographs show open data from the plant data service (wikiherbalist-data): facts strip under the gallery, taxonomy with classification, synonyms and database links, common names from GBIF, Wikidata and iNaturalist, compound table with search (LOTUS via Wikidata, PubChem), "La ricerca in numeri" (PubMed counts by year, recent reviews, ClinicalTrials.gov studies), distribution next to the observations map, data sources and image credits
+- Gallery includes Wikimedia Commons and iNaturalist images (CC0, CC BY, CC BY-SA) with author and license
+- Sticky index next to the sections on desktop, collapsible on phones
+- Server proxy `/api/plant-data/[slug]` and `/api/plant-data/[slug]/compounds`, URL from `PLANT_DATA_URL`
+
+### Changed
+- Classification, synonyms and the PubMed count moved from the monograph header to the new sections; `/api/taxonomy` and `/api/pubmed-count` removed
+
+### Fixed
+- Bullets and indentation on tag and name lists: WordPress list, link, heading and paragraph styles apply to the editorial text only
+- Monograph gallery pushed to the middle of the page
+- Client assets carry a build id in their file name: a chunk that kept its name after a CSS change was served stale by Cloudflare with the previous stylesheet
+- Long words and URLs in editorial text no longer widen the page on phones
+
 ## [3.1.1] - 2026-11-26
 
 ### Changed
