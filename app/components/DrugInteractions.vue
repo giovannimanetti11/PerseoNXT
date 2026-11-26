@@ -1,5 +1,5 @@
 <template>
-  <NumberedSection heading="Interazioni con farmaci" :number="number" extra-class="w-11/12 post-section-interazioni">
+  <NumberedSection heading="Interazioni con farmaci" :number="number" :extra-class="`${width} post-section-interazioni`">
     <div class="mt-4 md:mt-8">
       <div v-if="isEma" class="flex flex-wrap items-center gap-3 mb-4">
         <span class="text-xs font-medium px-3 py-1 rounded-full bg-verde text-white">Fonte: EMA HMPC</span>
@@ -47,7 +47,12 @@
 <script setup lang="ts">
 import type { DrugInteractions } from '#shared/types/content'
 
-const props = defineProps<{ interactions: DrugInteractions; number: number }>()
+const props = withDefaults(defineProps<{
+  interactions: DrugInteractions
+  number: number
+  /** Width classes of the section. */
+  width?: string
+}>(), { width: 'w-11/12' })
 
 const isEma = computed(() => props.interactions.source === 'ema_assessment' || props.interactions.source === 'ema_monograph')
 </script>

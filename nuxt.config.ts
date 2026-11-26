@@ -77,6 +77,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     wpGraphqlUrl: process.env.GRAPHQL_ENDPOINT || process.env.WP_BASE_URL || 'https://admin.wikiherbalist.com/graphql',
     pubmedApiKey: process.env.PUBMED_API_KEY || '',
+    // Plant data service (wikiherbalist-data), reachable only from the server.
+    plantDataUrl: process.env.PLANT_DATA_URL || 'http://127.0.0.1:4010',
     algoliaAccessPassword: process.env.ALGOLIA_ACCESS_PASSWORD || '',
     algoliaAccessPasswordHash: process.env.ALGOLIA_ACCESS_PASSWORD_HASH || '',
     algoliaWriteApiKey: process.env.ALGOLIA_WRITE_API_KEY || '',

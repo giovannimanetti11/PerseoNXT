@@ -67,12 +67,6 @@ export interface BlogPage extends ContentPageBase {
   excerpt: string
 }
 
-export interface TaxonomyInfo {
-  basionym: string
-  synonyms: string[]
-  classification: { rank: string; name: string; link: string }[]
-}
-
 export interface SearchRecord {
   objectID: string
   title: string
