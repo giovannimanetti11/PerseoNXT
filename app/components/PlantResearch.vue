@@ -143,10 +143,10 @@
       <div v-if="shown.length < matching || expanded" class="mt-3 flex flex-wrap items-center gap-3 text-xs text-gray-500">
         <button
           v-if="shown.length < matching" type="button" :disabled="loading"
-          class="rounded-full bg-blu text-white font-bold px-4 py-1.5 hover:bg-celeste disabled:opacity-60 transition"
+          class="py-2 px-4 bg-white shadow text-blu border rounded-lg hover:bg-blu hover:text-white transition duration-300 text-sm disabled:opacity-60"
           @click="showMore"
         >
-          {{ loading ? 'Caricamento…' : `Mostra altri (${formatNumber(matching - shown.length)})` }}
+          {{ loading ? 'Caricamento…' : `Mostra altri studi (${formatNumber(matching - shown.length)})` }}
         </button>
         <button v-if="expanded" type="button" class="font-bold text-blu hover:text-celeste" @click="collapse">Mostra meno</button>
         <span>{{ formatNumber(shown.length) }} di {{ formatNumber(matching) }}</span>
