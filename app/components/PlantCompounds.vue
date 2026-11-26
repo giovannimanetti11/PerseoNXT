@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="min-w-0">
     <div class="mt-8 flex flex-wrap items-end justify-between gap-3">
       <div class="min-w-0">
         <h3 class="text-lg font-bold text-celeste">Composti segnalati in letteratura</h3>

@@ -14,9 +14,27 @@ const analyticsScripts = GA_MEASUREMENT_ID
     ]
   : []
 
+// Unique per build. Client chunks keep their name when only the CSS they load
+// changes, and Cloudflare serves /_nuxt/* as immutable: a reused name kept the
+// previous stylesheet alive in production (26/11/2026). The build id in every
+// client file name makes each deploy publish new URLs.
+const BUILD_ID = Date.now().toString(36)
+
 export default defineNuxtConfig({
   compatibilityDate: '2026-11-01',
   devtools: { enabled: false },
+
+  hooks: {
+    'vite:extendConfig'(config, { isClient }) {
+      if (!isClient) return
+      const output = config.build?.rollupOptions?.output
+      for (const options of Array.isArray(output) ? output : output ? [output] : []) {
+        options.entryFileNames = `_nuxt/[hash]-${BUILD_ID}.js`
+        options.chunkFileNames = `_nuxt/[hash]-${BUILD_ID}.js`
+        options.assetFileNames = `_nuxt/[name].[hash]-${BUILD_ID}[extname]`
+      }
+    },
+  },
   ssr: true,
 
   modules: [

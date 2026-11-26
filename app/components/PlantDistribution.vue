@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="min-w-0">
     <div class="mt-6 grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
       <LazyObservationsMap :nome-scientifico="scientificName" class="!w-full !mt-0" />
       <div v-if="distribution" class="bg-white rounded-xl p-4 self-start">

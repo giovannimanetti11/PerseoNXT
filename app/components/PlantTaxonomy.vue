@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="min-w-0">
     <div class="mt-6 flex flex-wrap items-baseline gap-3">
       <p class="py-2 px-4 bg-white text-blu rounded-xl text-sm md:text-base">
         <span class="italic">{{ taxonomy?.acceptedName ?? scientificName }}</span>
-        <template v-if="taxonomy?.authorship"> {{ taxonomy.authorship }}</template>
+        <span v-if="taxonomy?.authorship" class="ml-1">{{ taxonomy.authorship }}</span>
       </p>
       <p v-if="taxonomy?.family" class="text-sm text-gray-600">Famiglia <span class="italic">{{ taxonomy.family }}</span></p>
     </div>
@@ -22,7 +22,7 @@
 
       <p v-if="taxonomy.basionym" class="mt-6 text-sm">
         <span class="font-bold">Basionimo</span>:
-        <span class="italic">{{ taxonomy.basionym.canonical }}</span> {{ taxonomy.basionym.authorship }}
+        <span class="italic">{{ taxonomy.basionym.canonical }}</span><span v-if="taxonomy.basionym.authorship" class="ml-1">{{ taxonomy.basionym.authorship }}</span>
       </p>
 
       <template v-if="taxonomy.synonyms.length">
@@ -31,7 +31,7 @@
         </h3>
         <ul class="mt-3 grid gap-2 md:grid-cols-2 xl:grid-cols-3">
           <li v-for="synonym in visibleSynonyms" :key="synonym.canonical" class="bg-white rounded-xl px-4 py-2.5 text-sm flex items-baseline justify-between gap-3">
-            <span class="min-w-0"><span class="italic">{{ synonym.canonical }}</span> <span class="text-gray-500">{{ synonym.authorship }}</span></span>
+            <span class="min-w-0"><span class="italic">{{ synonym.canonical }}</span><span v-if="synonym.authorship" class="text-gray-500 ml-1">{{ synonym.authorship }}</span></span>
             <span class="flex gap-1 shrink-0">
               <span v-for="source in sourcesOf(synonym.sources)" :key="source" class="text-[10px] font-bold text-blu bg-ghiaccio rounded px-1.5 py-0.5">{{ source }}</span>
             </span>

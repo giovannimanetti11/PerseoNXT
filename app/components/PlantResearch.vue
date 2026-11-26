@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="min-w-0">
     <template v-if="literature">
       <div class="mt-6 grid gap-2 grid-cols-1 md:grid-cols-3">
         <div v-for="stat in stats" :key="stat.label" class="bg-white rounded-xl px-4 py-3">

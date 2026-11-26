@@ -1,5 +1,5 @@
 <template>
-  <div class="grid gap-4 md:grid-cols-2 mt-4">
+  <div class="min-w-0 grid gap-4 md:grid-cols-2 mt-4">
     <div v-if="parts.length" class="bg-white/60 rounded-xl p-4">
       <h3 class="text-sm font-bold uppercase tracking-wider text-gray-500">Parti usate</h3>
       <ul class="mt-3 flex flex-wrap gap-2">
